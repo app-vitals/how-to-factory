@@ -11,6 +11,8 @@ Repo: app-vitals/how-to-factory (private for now; MIT + public later). Focus: **
 - Stack: TypeScript/Bun. ACP = Agent Client Protocol, backed by Claude Code. Sample result lives in this repo.
 - Lesson order is chosen one at a time; only the universal component map needs to be decent now.
 
+- Component and skill names are not canonical: everyone's plan/dev-task will differ and may be named differently (e.g. feature-dev). Show what other factories call them.
+
 ## Design
 Repo layout:
 - `README.md` pitch; `docs/components.md` living vendor-neutral component map (derived from intel `software-factory-components`), each component linked to candidate lessons
@@ -46,3 +48,4 @@ HITL scan: HWF-2.3 only (`.claude/**`). CI workflow in 1.1 uses no `secrets.*`.
 - Skills location: defaulted to `factory/skills/` canonical + HITL link into `.claude/skills` (CLI blocks agent writes to `.claude/**`).
 - Harness/loop unqueued: so they can be built on camera.
 - Matrix sourcing: first-party docs only, because factorymode has a history of fabricated citations.
+- Naming: added 'also called' to components doc, 'what they call it' to matrix, 'names for this' to template; skill names are renameable sample names.
