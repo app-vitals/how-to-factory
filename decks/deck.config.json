@@ -1,0 +1,13 @@
+{
+  "$comment": "Limits are stricter-than-source defaults (see decks/DIAGRAMS.md). Tune here; scripts/check-decks.ts reads this file.",
+  "maxBullets": 3,
+  "maxBulletWords": 8,
+  "maxTitleWords": 8,
+  "maxCaptionWords": 12,
+  "maxVisualBlocks": 2,
+  "maxDiagramsPerSlide": 1,
+  "maxDiagramNodes": 8,
+  "maxNodeLabelWords": 3,
+  "safeZone": { "widthPct": 22, "heightPct": 30 },
+  "visualExemptKinds": ["title", "demo"]
+}

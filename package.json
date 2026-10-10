@@ -6,7 +6,8 @@
     "typecheck": "tsc --noEmit",
     "test": "bun test",
     "check:landscape": "bun scripts/check-landscape.ts",
-    "render:landscape": "bun scripts/render-landscape.ts"
+    "render:landscape": "bun scripts/render-landscape.ts",
+    "check:decks": "bun scripts/check-decks.ts"
   },
   "devDependencies": {
     "@types/bun": "1.4.2",
