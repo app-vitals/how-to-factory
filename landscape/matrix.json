@@ -1,0 +1,340 @@
+{
+  "components": [
+    {
+      "id": "intake",
+      "label": "Intake"
+    },
+    {
+      "id": "planning",
+      "label": "Planning / task queue"
+    },
+    {
+      "id": "execution",
+      "label": "Execution"
+    }
+  ],
+  "products": [
+    {
+      "id": "devin",
+      "name": "Devin",
+      "kind": "factory",
+      "allowedHosts": [
+        "devin.ai"
+      ],
+      "cells": {
+        "intake": {
+          "name": "Linear integration (assign ticket, playbook label, @mention)",
+          "summary": "A Linear ticket can be assigned to Devin, tagged with a playbook label such as !plan, !implement, !triage or !review, or Devin can be @mentioned in a comment, each of which starts a session.",
+          "sourceUrl": "https://docs.devin.ai/integrations/linear.md",
+          "asOf": "2026-10-10"
+        },
+        "planning": {
+          "omitted": "The Linear page lists a !plan playbook label but does not describe a planning feature; no dedicated planning page found in the docs index."
+        },
+        "execution": {
+          "name": "session",
+          "summary": "A Devin session comes with a Shell, an IDE (VSCode environment loaded with your repos) and a Browser that you can watch or take over, plus a read-only Side Chat for asking questions without interrupting the work.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-session-tools.md",
+          "asOf": "2026-10-10"
+        }
+      },
+      "demoable": {
+        "kind": "free-tier",
+        "summary": "The Free self-serve plan lists limited Devin usage, plus access to Devin Review and DeepWiki.",
+        "sourceUrl": "https://docs.devin.ai/admin/billing/self-serve.md",
+        "asOf": "2026-10-10"
+      },
+      "destination": {
+        "summary": "unknown"
+      }
+    },
+    {
+      "id": "factory",
+      "name": "Factory (Droid)",
+      "kind": "factory",
+      "allowedHosts": [
+        "factory.com",
+        "factory.ai"
+      ],
+      "cells": {
+        "intake": {
+          "omitted": "The fetched Droid CLI overview describes terminal launch only; no first-party intake integration page was verified."
+        },
+        "planning": {
+          "omitted": "The overview says Droid plans, implements, tests and reviews end to end but names no separate planning feature."
+        },
+        "execution": {
+          "name": "Droid (Missions, Exec Mode)",
+          "summary": "Droid CLI runs interactively in the terminal; multi-agent Missions are launched with /missions or droid exec --mission, scoped tasks can be delegated to Custom Droids via /droids, and Exec Mode (droid exec) runs headless in scripts and CI/CD.",
+          "sourceUrl": "https://docs.factory.com/cli/getting-started/overview",
+          "asOf": "2026-10-10"
+        }
+      },
+      "demoable": {
+        "kind": "unknown"
+      },
+      "destination": {
+        "summary": "unknown"
+      }
+    },
+    {
+      "id": "copilot",
+      "name": "GitHub Copilot coding agent",
+      "kind": "factory",
+      "allowedHosts": [
+        "docs.github.com",
+        "github.com"
+      ],
+      "cells": {
+        "intake": {
+          "name": "Copilot cloud agent",
+          "summary": "Work can be started from the agents panel, a conversation, or an issue or pull request on GitHub.com; code scanning alerts from security campaigns can also be assigned to it.",
+          "sourceUrl": "https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent",
+          "asOf": "2026-10-10"
+        },
+        "planning": {
+          "omitted": "No first-party planning page verified; the about page only mentions asking an agent to plan in chat."
+        },
+        "execution": {
+          "name": "Copilot cloud agent",
+          "summary": "It works in an ephemeral cloud development environment rather than your local IDE, where it can edit files and run tests and linters.",
+          "sourceUrl": "https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent",
+          "asOf": "2026-10-10"
+        }
+      },
+      "demoable": {
+        "kind": "unknown"
+      },
+      "destination": {
+        "summary": "unknown"
+      }
+    },
+    {
+      "id": "openhands",
+      "name": "OpenHands",
+      "kind": "factory",
+      "allowedHosts": [
+        "openhands.dev",
+        "all-hands.dev",
+        "github.com"
+      ],
+      "cells": {
+        "intake": {
+          "name": "conversation",
+          "summary": "In OpenHands Cloud's Slack app, a new conversation starts by mentioning @openhands in a new message or a thread in any Slack channel.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/cloud/slack-installation.md",
+          "asOf": "2026-10-10"
+        },
+        "planning": {
+          "omitted": "The key-features page fetched mentions no planning feature."
+        },
+        "execution": {
+          "name": "sandbox",
+          "summary": "A sandbox is the environment where OpenHands runs commands, edits files and starts servers; providers are Docker (recommended), Process (unsafe but fast) and Remote.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/sandboxes/overview.md",
+          "asOf": "2026-10-10"
+        }
+      },
+      "demoable": {
+        "kind": "oss-self-host",
+        "summary": "The GitHub repository states an MIT license and says agents can be run locally, in Docker, on VMs, or anywhere an agent server backend runs.",
+        "sourceUrl": "https://github.com/OpenHands/OpenHands",
+        "asOf": "2026-10-10"
+      },
+      "destination": {
+        "summary": "unknown"
+      }
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "kind": "factory",
+      "allowedHosts": [
+        "cursor.com"
+      ],
+      "cells": {
+        "intake": {
+          "name": "Cloud agents",
+          "summary": "Cloud agents can be started from Cursor for iOS, Cursor Web, Cursor Desktop, Slack via @cursor, @cursor comments on GitHub or Bitbucket PRs, Linear, or the API.",
+          "sourceUrl": "https://cursor.com/docs/background-agent",
+          "asOf": "2026-10-10"
+        },
+        "planning": {
+          "name": "Plan Mode",
+          "summary": "Plan Mode has the agent ask clarifying questions, research the codebase and produce an implementation plan you can review and edit before any code is written.",
+          "sourceUrl": "https://cursor.com/docs/agent/planning",
+          "asOf": "2026-10-10"
+        },
+        "execution": {
+          "name": "Cloud agents",
+          "summary": "Cloud agents run in isolated VMs in the cloud with full development environments (cloned repos, installed dependencies, secrets, startup commands, network access).",
+          "sourceUrl": "https://cursor.com/docs/background-agent",
+          "asOf": "2026-10-10"
+        }
+      },
+      "demoable": {
+        "kind": "paid",
+        "summary": "The docs say Cloud Agents require a paid Cursor plan and are charged at API pricing for the selected model.",
+        "sourceUrl": "https://cursor.com/docs/background-agent",
+        "asOf": "2026-10-10"
+      },
+      "destination": {
+        "summary": "unknown"
+      }
+    },
+    {
+      "id": "codegen",
+      "name": "Codegen",
+      "kind": "factory",
+      "allowedHosts": [
+        "codegen.com"
+      ],
+      "cells": {
+        "intake": {
+          "name": "code agents",
+          "summary": "Per the overview, work can be started through the Slack integration, the Linear integration, or programmatically with the Python SDK/API.",
+          "sourceUrl": "https://docs.codegen.com/introduction/overview",
+          "asOf": "2026-10-10"
+        },
+        "planning": {
+          "omitted": "No dedicated planning page found in the docs index."
+        },
+        "execution": {
+          "name": "code agents",
+          "summary": "The overview says agents can safely run code, install dependencies and test changes in isolated environments, and can create branches, commit code and review PRs.",
+          "sourceUrl": "https://docs.codegen.com/introduction/overview",
+          "asOf": "2026-10-10"
+        }
+      },
+      "demoable": {
+        "kind": "unknown"
+      },
+      "destination": {
+        "summary": "unknown"
+      }
+    },
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "kind": "factory",
+      "allowedHosts": [
+        "claude.com",
+        "code.claude.com",
+        "docs.claude.com"
+      ],
+      "cells": {
+        "intake": {
+          "name": "surfaces",
+          "summary": "Claude Code runs from the terminal, IDE extensions, a desktop app and the web; a bug report can also be routed from Slack by mentioning @Claude to get a pull request back, and GitHub Actions or GitLab CI/CD can automate PR review and issue triage.",
+          "sourceUrl": "https://code.claude.com/docs/en/overview",
+          "asOf": "2026-10-10"
+        },
+        "planning": {
+          "name": "plan mode",
+          "summary": "In plan mode Claude reads files and proposes a plan but makes no edits until you approve; start it with --permission-mode plan or Shift+Tab.",
+          "sourceUrl": "https://code.claude.com/docs/en/common-workflows",
+          "asOf": "2026-10-10"
+        },
+        "execution": {
+          "name": "session",
+          "summary": "Claude Code reads the codebase, edits files and runs commands in a session; subagents and background agents can run work in parallel, and claude -p runs non-interactively for CI.",
+          "sourceUrl": "https://code.claude.com/docs/en/overview",
+          "asOf": "2026-10-10"
+        }
+      },
+      "demoable": {
+        "kind": "unknown"
+      },
+      "destination": {
+        "summary": "The overview points to parallel subagents, background agents, scheduled Routines and the Agent SDK for custom orchestration.",
+        "sourceUrl": "https://code.claude.com/docs/en/overview",
+        "asOf": "2026-10-10"
+      }
+    },
+    {
+      "id": "linear",
+      "name": "Linear",
+      "kind": "task-queue",
+      "allowedHosts": [
+        "linear.app"
+      ],
+      "cells": {
+        "intake": {
+          "omitted": "Not covered by the page fetched for this slice."
+        },
+        "planning": {
+          "name": "Issues, Projects, Cycles",
+          "summary": "Issues are Linear's fundamental unit of work; Projects group issues around a shared outcome, and Cycles are a team's repeating planning period.",
+          "sourceUrl": "https://linear.app/docs/conceptual-model",
+          "asOf": "2026-10-10"
+        },
+        "execution": {
+          "omitted": "A task queue is not an executor."
+        }
+      },
+      "demoable": {
+        "kind": "unknown"
+      },
+      "destination": {
+        "summary": "unknown"
+      }
+    },
+    {
+      "id": "jira",
+      "name": "Jira",
+      "kind": "task-queue",
+      "allowedHosts": [
+        "atlassian.com"
+      ],
+      "cells": {
+        "intake": {
+          "omitted": "Not covered by the page fetched for this slice."
+        },
+        "planning": {
+          "name": "Work items (formerly issues)",
+          "summary": "Work items are the building blocks of Jira and can represent a story, bug, task or another work type.",
+          "sourceUrl": "https://support.atlassian.com/jira-software-cloud/docs/what-is-an-issue/",
+          "asOf": "2026-10-10"
+        },
+        "execution": {
+          "omitted": "A task queue is not an executor."
+        }
+      },
+      "demoable": {
+        "kind": "unknown"
+      },
+      "destination": {
+        "summary": "unknown"
+      }
+    },
+    {
+      "id": "github-issues",
+      "name": "GitHub Issues",
+      "kind": "task-queue",
+      "allowedHosts": [
+        "docs.github.com",
+        "github.com"
+      ],
+      "cells": {
+        "intake": {
+          "omitted": "Not covered by the page fetched for this slice."
+        },
+        "planning": {
+          "name": "Issues, sub-issues, Projects",
+          "summary": "Issues track bugs, features and ideas; sub-issues add hierarchies between issues, and Projects is integrated with issues to plan and track a team's work.",
+          "sourceUrl": "https://docs.github.com/en/issues/tracking-your-work-with-issues/learning-about-issues/about-issues",
+          "asOf": "2026-10-10"
+        },
+        "execution": {
+          "omitted": "A task queue is not an executor."
+        }
+      },
+      "demoable": {
+        "kind": "unknown"
+      },
+      "destination": {
+        "summary": "unknown"
+      }
+    }
+  ]
+}
