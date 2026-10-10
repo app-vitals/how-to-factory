@@ -29,3 +29,9 @@ A JSON array of todos:
 
 `todos.schema.ts` exports `validateTodos(input): string[]` (empty = valid) and `parseTodos(input): Todo[]`
 (throws). Tests: `bun test factory`.
+
+## Claude Code discovery
+
+`.claude/skills` is a relative symlink to `../factory/skills`, so the `plan` and `dev-task` skills
+load in a Claude Code session opened in this repo. On systems without symlink support (e.g. Windows
+without developer mode), replace the link with a copy: `rm .claude/skills && cp -r factory/skills .claude/skills`.
