@@ -49,3 +49,4 @@ HITL scan: HWF-2.3 only (`.claude/**`). CI workflow in 1.1 uses no `secrets.*`.
 - Harness/loop unqueued: so they can be built on camera.
 - Matrix sourcing: first-party docs only, because factorymode has a history of fabricated citations.
 - Naming: added 'also called' to components doc, 'what they call it' to matrix, 'names for this' to template; skill names are renameable sample names.
+- Repo hygiene (added after HWF-1.1): no deploy pipeline needed (content repo; /shipwright:merge only, deploy cron off). gitleaks run as a pinned binary, not gitleaks-action, to avoid a net-new org license secret. Branch protection/merge settings are HITL because the agent PAT gets 403 on those endpoints. allow_auto_merge stays off (bundle gate).
