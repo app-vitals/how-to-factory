@@ -1,0 +1,131 @@
+/* Lesson deck framework. Dark by default; every colour is a CSS variable so the theme is swappable.
+   Brand tokens (--sw-*) are the Shipwright Harness tokens used by the decks in app-vitals/intel. */
+:root {
+  color-scheme: dark;
+  --sw-color-bg-base: #080e1e;
+  --sw-color-bg-raised: #0f172a;
+  --sw-color-bg-overlay: #1e293b;
+  --sw-color-border-muted: #334155;
+  --sw-color-border-strong: #475569;
+  --sw-color-brand-default: #34c77b;
+  --sw-color-brand-soft: #0f2d1e;
+  --sw-color-support-blue: #4f8ef7;
+  --sw-color-support-cyan: #22d3ee;
+  --sw-color-support-violet: #8b5cf6;
+  --sw-color-text-heading: #ffffff;
+  --sw-color-text-body: rgba(255, 255, 255, 0.8);
+  --sw-color-text-muted: rgba(255, 255, 255, 0.5);
+  --sw-color-state-warning: #f5b544;
+  --sw-font-display: "Space Grotesk", system-ui, sans-serif;
+  --sw-font-body: "General Sans", "DM Sans", system-ui, sans-serif;
+  --sw-font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --sw-radius-md: 10px;
+
+  /* Face-cam safe zone: bottom-right corner kept clear on every slide. Keep in sync with deck.config.json. */
+  --facecam-w: 22%;
+  --facecam-h: 30%;
+
+  /* Legend: one style per kind, identical in every deck. */
+  --kind-human: var(--sw-color-state-warning);
+  --kind-agent: var(--sw-color-brand-default);
+  --kind-store: var(--sw-color-support-blue);
+  --kind-external: var(--sw-color-text-muted);
+  --kind-job: var(--sw-color-support-violet);
+}
+
+* { box-sizing: border-box; }
+html { scroll-snap-type: y mandatory; overflow-y: scroll; background: var(--sw-color-bg-base); }
+body { margin: 0; font-family: var(--sw-font-body); color: var(--sw-color-text-body); font-size: clamp(18px, 1.6vw, 30px); }
+
+.slide { position: relative; height: 100vh; scroll-snap-align: start; overflow: hidden; background: var(--sw-color-bg-base); }
+.slide-inner {
+  height: 100%; padding: 5vh 4vw 4vh; display: grid; gap: 2vh 2vw;
+  grid-template-columns: 1fr var(--facecam-w);
+  grid-template-rows: auto 1fr var(--facecam-h);
+}
+.slide-title { grid-column: 1 / -1; grid-row: 1; margin: 0; font: 700 2.2em/1.1 var(--sw-font-display); color: var(--sw-color-text-heading); }
+.slide-body { grid-column: 1; grid-row: 2 / 4; display: flex; flex-direction: column; gap: 2vh; min-height: 0; justify-content: center; }
+.slide-aside { grid-column: 2; grid-row: 2; align-self: start; }
+.facecam-zone { grid-column: 2; grid-row: 3; } /* intentionally empty: keep clear */
+.caption { margin: 0; color: var(--sw-color-text-muted); font-size: 0.8em; }
+.bullets { margin: 0; padding-left: 1.1em; font-size: 1.1em; line-height: 1.5; }
+.bullets li::marker { color: var(--sw-color-brand-default); }
+code, pre { font-family: var(--sw-font-mono); }
+.eyebrow { font: 500 0.7em var(--sw-font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--sw-color-brand-default); }
+
+/* Title + DEMO cue + exercise */
+.slide-title-slide .slide-inner, .slide-demo .slide-inner { align-content: center; }
+.slide-title-slide .slide-title { font-size: 3.6em; }
+.slide-demo .slide-body { align-items: flex-start; }
+.demo-label { font: 700 6em/1 var(--sw-font-display); color: var(--sw-color-brand-default); letter-spacing: -0.02em; }
+.slide-exercise .eyebrow { color: var(--kind-job); }
+
+/* Visual blocks */
+.visual { background: var(--sw-color-bg-raised); border: 1px solid var(--sw-color-border-muted); border-radius: var(--sw-radius-md); padding: 2vh 2vw; }
+.diagram { display: flex; flex-direction: column; gap: 2vh; }
+.flow { display: flex; align-items: center; gap: 1vw; flex-wrap: wrap; }
+.arrow { color: var(--sw-color-text-muted); font-size: 1.4em; }
+.arrow::before { content: "\2192"; }
+.arrow-down::before { content: "\2193"; }
+.diagram svg { width: 100%; height: auto; max-height: 52vh; }
+.diagram svg text { fill: var(--sw-color-text-heading); font: 500 15px var(--sw-font-body); text-anchor: middle; dominant-baseline: central; }
+.diagram svg .lane-label { fill: var(--sw-color-text-muted); text-anchor: start; font-size: 13px; }
+.diagram svg .link { stroke: var(--sw-color-text-muted); stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+.diagram svg .lane { fill: none; stroke: var(--sw-color-border-muted); stroke-dasharray: 4 4; }
+.grid-arch { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.4vh 1vw; }
+.grid-stack { display: flex; flex-direction: column; gap: 1vh; }
+.ba { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1vw; align-items: center; }
+.ba-label { font: 500 0.7em var(--sw-font-mono); color: var(--sw-color-text-muted); text-transform: uppercase; }
+
+/* Nodes: shape + colour per kind (the legend). State classes implement the factory map's signalling. */
+.node { padding: 0.7em 1em; border: 2px solid var(--kind-agent); border-radius: var(--sw-radius-md); color: var(--sw-color-text-heading); text-align: center; background: var(--sw-color-bg-overlay); }
+.node-human { border-color: var(--kind-human); border-radius: 999px; }
+.node-agent { border-color: var(--kind-agent); }
+.node-store { border-color: var(--kind-store); border-radius: 10px / 22px; }
+.node-external { border-color: var(--kind-external); border-style: dashed; }
+.node-job { border-color: var(--kind-job); border-left-width: 8px; }
+svg .node-human rect, svg .node-agent rect, svg .node-store rect, svg .node-external rect, svg .node-job rect { fill: var(--sw-color-bg-overlay); stroke-width: 2; }
+svg .node-human rect { stroke: var(--kind-human); rx: 22; }
+svg .node-agent rect { stroke: var(--kind-agent); rx: 8; }
+svg .node-store rect { stroke: var(--kind-store); rx: 8; }
+svg .node-external rect { stroke: var(--kind-external); stroke-dasharray: 5 4; rx: 8; }
+svg .node-job rect { stroke: var(--kind-job); rx: 8; stroke-width: 4; }
+svg .node { padding: 0; border: 0; background: none; }
+.is-built { background: var(--sw-color-brand-soft); }
+.is-active { box-shadow: 0 0 0 4px var(--sw-glow-brand, rgba(52, 199, 123, 0.35)); background: var(--sw-color-brand-soft); transform: scale(1.04); }
+.is-planned { opacity: 0.35; border-style: dashed; }
+svg .is-planned { opacity: 0.35; }
+svg .is-active rect { stroke-width: 4; }
+
+.legend { display: flex; gap: 1.2vw; flex-wrap: wrap; font-size: 0.6em; color: var(--sw-color-text-muted); }
+.legend-item::before { content: ""; display: inline-block; width: 1.4em; height: 0.9em; margin-right: 0.4em; vertical-align: middle; border: 2px solid; border-radius: 4px; }
+.legend-human::before { border-color: var(--kind-human); border-radius: 999px; }
+.legend-agent::before { border-color: var(--kind-agent); }
+.legend-store::before { border-color: var(--kind-store); border-radius: 4px / 8px; }
+.legend-external::before { border-color: var(--kind-external); border-style: dashed; }
+.legend-job::before { border-color: var(--kind-job); border-left-width: 6px; }
+
+/* Tables, options grid, stat tiles, 2x2 */
+.comp-table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
+.comp-table th, .comp-table td { border-bottom: 1px solid var(--sw-color-border-muted); padding: 0.6em 0.8em; text-align: left; }
+.comp-table th { color: var(--sw-color-brand-default); font-family: var(--sw-font-display); }
+.options-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4vw; }
+.option { border: 1px solid var(--sw-color-border-strong); border-radius: var(--sw-radius-md); padding: 1em; }
+.option h3 { margin: 0 0 0.3em; color: var(--sw-color-text-heading); font: 600 1em var(--sw-font-display); }
+.option .pick { font-size: 0.75em; color: var(--sw-color-text-muted); }
+.stat-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4vw; text-align: center; }
+.stat { font: 700 2.6em/1 var(--sw-font-display); color: var(--sw-color-brand-default); }
+.stat-label { font-size: 0.75em; color: var(--sw-color-text-muted); }
+.matrix { display: grid; grid-template-columns: auto 1fr 1fr; grid-template-rows: 1fr 1fr auto; gap: 0.8vh 0.8vw; }
+.matrix .cell { border: 1px solid var(--sw-color-border-muted); border-radius: var(--sw-radius-md); padding: 1em; min-height: 9vh; display: grid; place-items: center; color: var(--sw-color-text-heading); }
+.matrix .axis { font: 500 0.7em var(--sw-font-mono); color: var(--sw-color-text-muted); display: grid; place-items: center; }
+.matrix .axis-y { writing-mode: vertical-rl; transform: rotate(180deg); }
+
+/* Counter + guides */
+#counter { position: fixed; top: 1.5vh; right: 1.5vw; font: 500 0.6em var(--sw-font-mono); color: var(--sw-color-text-muted); z-index: 10; }
+.show-guides .slide::after {
+  content: "face-cam safe zone"; position: absolute; right: 0; bottom: 0; width: var(--facecam-w); height: var(--facecam-h);
+  border: 3px dashed #f87171; background: rgba(248, 113, 113, 0.18); color: #f87171; font: 500 0.7em var(--sw-font-mono);
+  display: grid; place-items: center; pointer-events: none; z-index: 5;
+}
+@media print { html { scroll-snap-type: none; } .slide { page-break-after: always; } }
