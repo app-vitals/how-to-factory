@@ -81,10 +81,9 @@ export function checkReadmeFresh(data: Landscape, readme: string): string[] {
 if (import.meta.main) {
   const data = JSON.parse(readFileSync("landscape/matrix.json", "utf8")) as Landscape;
   const today = new Date().toISOString().slice(0, 10);
-  const errors = [
-    ...validateLandscape(data, today),
-    ...checkReadmeFresh(data, readFileSync("landscape/README.md", "utf8")),
-  ];
+  const errors = validateLandscape(data, today);
+  // Rendering assumes a structurally valid matrix; only check freshness once validation passes.
+  if (!errors.length) errors.push(...checkReadmeFresh(data, readFileSync("landscape/README.md", "utf8")));
   if (errors.length) {
     for (const e of errors) console.error(`landscape: ${e}`);
     process.exit(1);
