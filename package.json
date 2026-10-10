@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "bun test"
+    "test": "bun test",
+    "check:landscape": "bun scripts/check-landscape.ts",
+    "render:landscape": "bun scripts/render-landscape.ts"
   },
   "devDependencies": {
     "@types/bun": "1.4.2",
