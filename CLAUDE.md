@@ -19,6 +19,13 @@ the standard.
 - `bun run typecheck` — `tsc --noEmit`
 - `bun test` — run tests
 
+## CI checks
+
+- `CI / check` — typecheck + tests (`.github/workflows/ci.yml`)
+- `pr-title-lint / Conventional-Commit PR title` — PR title must be a Conventional Commit; types: feat fix perf revert docs refactor test build ci chore (`pr-title-lint.yml`)
+- `secret-scan / gitleaks secret scan` — pinned gitleaks binary over the PR/push commit range (`secret-scan.yml`)
+- Renovate (`renovate.json`) keeps bun deps and GitHub Action SHA pins current; enabling the app is a human step.
+
 TypeScript on Bun. Strict mode. Conventional commit prefixes (`feat:`, `fix:`, `docs:`, `chore:`).
 
 ## Rules
