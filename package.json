@@ -1,0 +1,17 @@
+{
+  "name": "how-to-factory",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "check:landscape": "bun scripts/check-landscape.ts",
+    "render:landscape": "bun scripts/render-landscape.ts",
+    "check:decks": "bun scripts/check-decks.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "1.4.2",
+    "typescript": "^5.6.0"
+  }
+}

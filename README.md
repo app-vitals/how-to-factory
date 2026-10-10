@@ -26,3 +26,7 @@ and inputs, not a syllabus.
 ## Status
 
 Early. The component map and lesson backlog are in place. Lessons, a sample factory and a landscape comparison are coming.
+
+## License
+
+[MIT](LICENSE) © 2026 App Vitals
