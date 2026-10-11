@@ -20,12 +20,12 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">Factory map: three parts today</h2>
+      <h2 class="slide-title">Factory map: what we touch today</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="factory-map">
           <div class="grid-arch">
             <div class="node node-human is-active">Intake</div><div class="node node-agent is-active">Planning</div><div class="node node-agent is-active">Execution</div><div class="node node-agent is-planned">Verification</div>
-            <div class="node node-agent is-planned">Review</div><div class="node node-external is-planned">Release</div><div class="node node-job is-planned">Loop</div><div class="node node-human is-planned">Chat</div>
+            <div class="node node-agent is-planned">Review</div><div class="node node-external is-planned">Release</div><div class="node node-job is-active">Loop</div><div class="node node-human is-planned">Chat</div>
           </div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div>
@@ -42,7 +42,7 @@
           <div class="flow"><div class="node node-human">Spec</div><span class="arrow"></span><div class="node node-agent">Plan skill</div><span class="arrow"></span><div class="node node-store">Todo list</div><span class="arrow"></span><div class="node node-agent">Dev-task skill</div><span class="arrow"></span><div class="node node-external">Pull request</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div>
-        <p class="caption">Two markdown skills and one JSON file.</p>
+        <p class="caption">Two skills, one JSON file, one loop.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -51,7 +51,7 @@
     <div class="slide-inner">
       <h2 class="slide-title">DEMO</h2>
       <div class="slide-body">
-        <div class="demo-label">DEMO: plain Claude Code</div>
+        <div class="demo-label">DEMO: plain agent (ours: Claude Code)</div>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -61,7 +61,7 @@
       <h2 class="slide-title">The simplest factory is a chat</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="simplest-flow">
-          <div class="flow"><div class="node node-human">You</div><span class="arrow"></span><div class="node node-agent">Claude Code</div><span class="arrow"></span><div class="node node-external">Diff</div></div>
+          <div class="flow"><div class="node node-human">You</div><span class="arrow"></span><div class="node node-agent">Coding agent</div><span class="arrow"></span><div class="node node-external">Diff</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div>
         <p class="caption">It works. You just repeat the process every time.</p>
@@ -74,29 +74,9 @@
       <h2 class="slide-title">Skills are just markdown files</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="layered-stack">
-          <div class="grid-stack"><div class="node node-human">Your request</div><div class="node node-agent">Skill file</div><div class="node node-agent">Claude Code</div><div class="node node-external">Git and GitHub</div></div>
+          <div class="grid-stack"><div class="node node-human">Your request</div><div class="node node-agent">Skill file</div><div class="node node-agent">Coding agent</div><div class="node node-external">Git and GitHub</div></div>
         </div>
         <p class="caption">Numbered steps the agent follows each time.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Names are your choice</h2>
-      <div class="slide-body">
-        <div class="visual">
-          <table class="comp-table">
-            <thead><tr><th>Who</th><th>Planning</th><th>Execution</th></tr></thead>
-            <tbody>
-              <tr><td>This sample</td><td>plan</td><td>dev-task</td></tr>
-              <tr><td>Claude Code</td><td>plan mode</td><td>session</td></tr>
-              <tr><td>Cursor</td><td>Plan Mode</td><td>Cloud agents</td></tr>
-              <tr><td>OpenHands</td><td>unsourced</td><td>sandbox</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="caption">Sources and dates in options.md.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -105,7 +85,7 @@
     <div class="slide-inner">
       <h2 class="slide-title">DEMO</h2>
       <div class="slide-body">
-        <div class="demo-label">DEMO: the plan skill</div>
+        <div class="demo-label">DEMO: plan skill (ours; yours can differ)</div>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -127,7 +107,7 @@
     <div class="slide-inner">
       <h2 class="slide-title">DEMO</h2>
       <div class="slide-body">
-        <div class="demo-label">DEMO: the todo list</div>
+        <div class="demo-label">DEMO: todo list (ours; yours can differ)</div>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -136,35 +116,27 @@
     <div class="slide-inner">
       <h2 class="slide-title">DEMO</h2>
       <div class="slide-body">
-        <div class="demo-label">DEMO: the dev-task skill</div>
+        <div class="demo-label">DEMO: dev-task (ours; yours can differ)</div>
       </div>
       <div class="facecam-zone"></div>
     </div>
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">Preview: the harness</h2>
+      <h2 class="slide-title">The loop runs the rest</h2>
       <div class="slide-body">
-        <div class="visual diagram" data-diagram="architecture-containers">
-          <div class="grid-arch">
-            <div class="node node-human is-planned">Chat message</div><div class="node node-agent is-planned">Harness</div><div class="node node-agent is-planned">Agent runtime</div><div class="node node-job is-planned">Cron loop</div>
-            <div class="node node-agent is-built">Plan skill</div><div class="node node-agent is-built">Dev-task skill</div><div class="node node-store is-built">Todo list</div><div class="node node-external is-built">GitHub</div>
-          </div>
+        <div class="visual diagram" data-diagram="loop">
+          <svg viewBox="0 0 640 300" role="img" aria-label="Loop diagram"><defs><marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0 0 L10 4 L0 8 z" fill="rgba(255,255,255,0.5)"/></marker></defs>
+            <g class="node node-job"><rect x="245" y="10" width="150" height="46"/><text x="320.0" y="33">Pick ready todo</text></g>
+            <g class="node node-agent"><rect x="480" y="127" width="140" height="46"/><text x="550.0" y="150">Run agent</text></g>
+            <g class="node node-store"><rect x="245" y="244" width="150" height="46"/><text x="320.0" y="267">Re-read todos</text></g>
+            <g class="node node-job"><rect x="20" y="127" width="140" height="46"/><text x="90.0" y="150">Stop if none</text></g>
+            <path class="link" d="M395 33 Q550 40 550 127"/><path class="link" d="M550 173 Q550 262 395 267"/>
+            <path class="link" d="M245 267 Q90 262 90 173"/><path class="link" d="M90 127 Q90 40 245 33"/>
+          </svg>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div>
-        <p class="caption">Built on camera in later lessons; nothing here is pre-built.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Same job, another factory</h2>
-      <div class="slide-body">
-        <div class="visual options-grid">
-          <div class="option"><h3>OpenHands</h3><div class="pick">Pick this if you want MIT and self-host</div></div><div class="option"><h3>Devin</h3><div class="pick">Pick this if you want a free tier</div></div><div class="option"><h3>Cursor</h3><div class="pick">Pick this if you have a paid plan</div></div>
-        </div>
-        <p class="caption">Same spec in, pull request out.</p>
+        <p class="caption">Repeat while a todo is ready.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -173,7 +145,40 @@
     <div class="slide-inner">
       <h2 class="slide-title">DEMO</h2>
       <div class="slide-body">
-        <div class="demo-label">DEMO: same job elsewhere</div>
+        <div class="demo-label">DEMO: the loop (ours; yours can differ)</div>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">You review and merge</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="review-merge">
+          <div class="flow"><div class="node node-job">Loop</div><span class="arrow"></span><div class="node node-external">Open PRs</div><span class="arrow"></span><div class="node node-human">You review</div><span class="arrow"></span><div class="node node-human">You merge</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">No automated review, merge or verification gate yet.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Names are your choice</h2>
+      <div class="slide-body">
+        <div class="visual">
+          <table class="comp-table">
+            <thead><tr><th>Who</th><th>Planning</th><th>Execution</th></tr></thead>
+            <tbody>
+              <tr><td>This sample</td><td>plan</td><td>dev-task</td></tr>
+              <tr><td>Claude Code</td><td>plan mode</td><td>session</td></tr>
+              <tr><td>Cursor</td><td>Plan Mode</td><td>Cloud agents</td></tr>
+              <tr><td>OpenHands</td><td>n/a</td><td>sandbox</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="caption">Sources and dates in options.md.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -196,9 +201,9 @@
       <div class="slide-body">
         <div class="eyebrow">Exercise</div>
         <div class="visual diagram" data-diagram="exercise-steps">
-          <div class="flow"><div class="node node-agent">Plan skill</div><span class="arrow"></span><div class="node node-store">Todo file</div><span class="arrow"></span><div class="node node-agent">Dev skill</div></div>
+          <div class="flow"><div class="node node-agent">Plan</div><span class="arrow"></span><div class="node node-store">Todo file</div><span class="arrow"></span><div class="node node-agent">Dev-task</div><span class="arrow"></span><div class="node node-job">Loop</div></div>
         </div>
-        <ul class="bullets"><li>Claude Code and Bun only</li><li>Name your skills anything</li></ul>
+        <ul class="bullets"><li>Any agent, any language</li><li>Name the parts anything</li></ul>
       </div>
       <div class="facecam-zone"></div>
     </div>

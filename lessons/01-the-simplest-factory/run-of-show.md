@@ -5,14 +5,14 @@ The single filming sequence: slide range, then demo, then slide range. Slide num
 
 | # | Slides | Demo beat | Script step | Notes |
 |---|---|---|---|---|
-| 1 | 1-3 | | 1-2 | Factory map, then what we build. Say the ACP harness and loop are built later, on camera |
-| 2 | 4 | DEMO plain Claude Code | 3 | Empty scratch repo, one small change |
-| 3 | 5-7 | | Names for this | Skills are markdown; say plan and dev-task are just sample names; names table |
-| 4 | 8 | DEMO the plan skill | 4 | Install skill, run on a two-sentence spec |
-| 5 | 9 | | 5 | Todo status flow |
-| 6 | 10 | DEMO the todo list | 5 | Open todos.json, run `bun test factory` |
-| 7 | 11 | DEMO the dev-task skill | 6 | One todo to worktree to PR; then step 7, check PR and todo |
-| 8 | 12 | | 8 | Harness preview, slides only |
-| 9 | 13 | | 9 | Pick which factory to run (options grid) |
-| 10 | 14 | DEMO same job elsewhere | 9 | Same spec in another factory; do not rank |
-| 11 | 15-16 | | Exercise hand-off | Where factories take it, then the exercise |
+| 1 | 1-3 | | 1 | Factory map (planning, execution and loop glow), then what we build. Say `factory/` is our demo, not the standard |
+| 2 | 4 | DEMO plain agent | 2 | Empty scratch repo, one small change |
+| 3 | 5-6 | | 3 | The simplest factory is a chat; skills are markdown. Concept first, then "our demo", then "yours can differ" |
+| 4 | 7 | DEMO the plan skill | 3 | Run on a two-sentence spec, write `factory/todos.json` |
+| 5 | 8 | | 3 | Todo status flow |
+| 6 | 9 | DEMO the todo list | 3 | Open todos.json, show one entry's fields |
+| 7 | 10 | DEMO the dev-task skill | 4 | One todo to worktree to PR; check PR and todo status |
+| 8 | 11 | | 5 | The loop diagram: pick ready todo, run agent, re-read, stop when none |
+| 9 | 12 | DEMO the loop | 5 | `bun factory/loop.ts`, ends with open PRs |
+| 10 | 13-14 | | 6 | You review and merge; say what is deliberately missing. Names table is a sourced slide, not a demo |
+| 11 | 15-16 | | 7 | Where factories take it, then the exercise hand-off |
