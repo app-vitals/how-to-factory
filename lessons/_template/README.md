@@ -2,6 +2,7 @@
 
 > Template. Copy `lessons/_template/` to `lessons/NN-<slug>/` and fill every section. Delete this note.
 > Rules for facts about other products: first-party source URL plus an as-of date, or leave it out.
+> Pattern for every part: the concept (tool-neutral), then "In our demo we use ...", then "Yours can be anything".
 
 **Component taught:** <which component from [docs/components.md](../../docs/components.md)>
 **Video:** <YouTube link, added after publishing>
@@ -17,7 +18,10 @@ others call it `<alt>`, `<alt>` (see [options.md](options.md)). Call yours whate
 
 ## The simplest thing that works
 
-<The smallest version a single person can run today. No harness, no schedule.>
+<The smallest version a single person can run today. No harness, no schedule. Tool-neutral: describe what it does, not which product does it.>
+
+- **In our demo we use:** <the concrete choice from `factory/`, linked. One line; a demo choice, never a requirement.>
+- **Yours can be anything:** <the kinds of tool, language or runner that would do the same job.>
 
 ## Build steps
 

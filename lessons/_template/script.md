@@ -6,13 +6,14 @@ Every demo beat in [run-of-show.md](run-of-show.md) points at a numbered step he
 ## Talking points
 
 1. <Opening: what we build and why>
-2. <Concept>
+2. <Concept, tool-neutral>
+3. <In our demo we use ... (a demo choice, not a requirement). Yours can be anything.>
 
 ## Demo beats
 
 Number steps continuously so run-of-show can reference them.
 
-3. **DEMO <name>.** <What to type, what to show, what the viewer should notice.>
+4. **DEMO <name>.** <What to type, what to show, what the viewer should notice.>
 
 ## Names for this
 
