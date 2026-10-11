@@ -2,6 +2,9 @@
 
 The sample software factory, grown lesson by lesson. Deliberately minimal.
 
+**`factory/` is the demo; the lessons stay tool-neutral.** Bun and Claude Code are what this demo uses, not what you
+need. Each lesson part goes concept first, then "in our demo we use...", then "yours can be anything".
+
 ## Skills
 
 - `skills/plan/SKILL.md` — turns a short spec into entries in `factory/todos.json`.

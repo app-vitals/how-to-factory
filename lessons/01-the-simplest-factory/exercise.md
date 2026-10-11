@@ -1,30 +1,37 @@
-# Exercise: build your own plan and dev-task
+# Exercise: build your own plan, dev-task and loop
 
-**Goal:** a repo of your own where one command turns a short spec into todos, and a second turns one todo into a
-committed branch (and a PR if you have a remote).
-**You need:** Claude Code and Bun. Git comes with your machine. A GitHub remote and `gh` are optional.
+**Goal:** a repo of your own where a short spec becomes a todo list, one todo becomes a committed branch (and a PR if
+you have a remote), and a loop does that for every ready todo.
+**You need:** an AI coding agent of your choice that can run headlessly, any language and test runner, and git. A
+GitHub remote and `gh` are optional.
 
-## Steps
+Our demo uses Bun and Claude Code; you do not need either. Describe the outcomes in whatever tools you picked.
 
-1. Make a scratch project: `mkdir my-factory && cd my-factory && git init && bun init -y`, then make one commit.
-2. Write a planning skill as a markdown file. Name it whatever you like (`plan`, `breakdown`, `feature-dev`).
-   Use [`factory/skills/plan/SKILL.md`](../../factory/skills/plan/SKILL.md) as a reference, not a template to copy.
-   It should turn a short spec into entries in `todos.json`.
-3. Decide your todo fields. Minimum: id, title, acceptance criteria, status, dependencies, branch.
-4. Ask Claude Code to write a small Bun test that validates `todos.json` against your fields.
-5. Write an execution skill. Reference: [`factory/skills/dev-task/SKILL.md`](../../factory/skills/dev-task/SKILL.md).
-   It takes one todo id, makes a git worktree on a new branch, does the work, runs `bun test`, commits, and updates
-   the todo's status. If you have a remote and `gh`, open a PR; if not, stop at the committed branch.
-6. Put both skills where Claude Code reads skills (`.claude/skills/<name>/SKILL.md` in your project).
-7. Run your planning skill on a two-sentence spec of your own, then your execution skill on the first todo.
+## Outcomes
+
+1. A scratch project under git with one commit and at least one passing test.
+2. A planning step (skill, prompt, script; name it whatever you like) that turns a short spec into a todo list file
+   with, at minimum: id, title, acceptance criteria, status, dependencies, branch.
+3. A check that the todo list file is valid (any language, any test runner).
+4. An execution step that takes one todo id, works it on its own branch in a separate worktree or equivalent
+   isolation, runs the project's tests, commits, and updates the todo's status. If you have a remote and `gh`, it
+   opens a PR; if not, it stops at the committed branch.
+5. A loop that runs the execution step on the first pending todo whose dependencies are done, and repeats until none
+   is ready. It stops on the first todo that does not end with an open PR or done.
+6. You review and merge the results yourself.
+
+Use [`factory/skills/plan/SKILL.md`](../../factory/skills/plan/SKILL.md),
+[`factory/skills/dev-task/SKILL.md`](../../factory/skills/dev-task/SKILL.md) and
+[`factory/loop.ts`](../../factory/loop.ts) as references, not templates to copy.
 
 ## Done when
 
-- [ ] `todos.json` exists and your Bun test passes
-- [ ] your execution skill produced a commit on its own branch in a separate worktree
-- [ ] your skill names are ones you chose
+- [ ] your todo list file exists and your validity check passes
+- [ ] your execution step produced a commit on its own branch in separate isolation
+- [ ] your loop worked at least two todos in dependency order
+- [ ] your names are ones you chose
 
 ## Go further on your own
 
-- Add a dependency between two todos and make the execution skill refuse a blocked one.
-- Compare your skill text with what another factory in [options.md](options.md) calls the same stage.
+- Make the execution step refuse a todo whose dependencies are not done.
+- Compare your planning step's wording with what another factory in [options.md](options.md) calls the same stage.

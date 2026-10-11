@@ -3,6 +3,7 @@
 Names are not canonical. All claims below are paraphrases of first-party pages, copied from
 [`landscape/matrix.json`](../../landscape/matrix.json) (rendered in [landscape/README.md](../../landscape/README.md)).
 As of 2026-10-10 for every row. Re-check before filming.
+These appear on slides only; the lesson does not run other products live.
 
 ## What other factories call it
 
@@ -25,9 +26,9 @@ As of 2026-10-10 for every row. Re-check before filming.
 | Issue or PR on GitHub | Copilot cloud agent | your work is on GitHub | [about](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent) |
 | You type it | Claude Code terminal | you are one person | [overview](https://code.claude.com/docs/en/overview) |
 
-## Demoable for the "same job" segment
+## Other factories at a glance (a sourced slide, not a live demo)
 
-| Product | Demoable because | Source |
+| Product | Access, as stated by the vendor | Source |
 |---|---|---|
 | OpenHands | repo states an MIT license and says agents can run locally or in Docker | [GitHub](https://github.com/OpenHands/OpenHands) |
 | Devin | the Free self-serve plan lists limited Devin usage | [billing](https://docs.devin.ai/admin/billing/self-serve.md) |
