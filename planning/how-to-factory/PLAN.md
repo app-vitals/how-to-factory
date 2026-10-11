@@ -92,3 +92,4 @@ Breaking-change safety: additions and in-place doc edits only; safe to deploy st
 - Loop stays out of ACP/chat/schedule; those are "where factories take it".
 - Headless launch flags and allow-list must be verified against first-party docs before writing.
 - Other-lessons audit (3.4) runs against the backlog, template, components doc and README, since lesson 1 is the only lesson.
+- HWF-3.2: lesson 1 text rewritten around the loop. The deck and run-of-show still follow the old step numbering until HWF-3.3.

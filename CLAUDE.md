@@ -37,6 +37,9 @@ TypeScript on Bun. Strict mode. Conventional commit prefixes (`feat:`, `fix:`, `
   source URL and an as-of date, or it is left out. Do not fabricate citations.
 - **Names are not canonical.** Skills and components (plan, dev-task, ...) go by different
   names in different factories; present ours as examples, never as the standard.
+- **`factory/` is the demo; lessons stay tool-neutral.** Each lesson part is the concept first (tool-neutral), then
+  "in our demo we use...", then "yours can be anything". Bun and Claude Code are demo choices, never requirements;
+  exercises list outcomes and name no required tool.
 - Lessons show a simple version first, then where other factories take the concept. Describe
   destinations, never prescribe them.
 
