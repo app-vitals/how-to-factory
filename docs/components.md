@@ -12,6 +12,8 @@ you and your team.
 **On sources.** This doc makes no claims about specific commercial products. Product-by-product
 comparisons live in the landscape matrix, where every cell carries a source URL and an as-of date.
 Where this doc mentions Shipwright, it is describing App Vitals' own factory, as one example among several.
+Nothing here requires a particular agent, language, runner or hosting choice; the "Also called" lists and examples
+name products only as illustrations.
 
 **How to read each entry.** What it is, why it exists, the simplest version that works, and the range of
 implementations you will see as factories grow. The range is a map of what exists, and nothing in it

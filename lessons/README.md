@@ -7,6 +7,9 @@ idea, then shows where different factories take it.
 Shipwright and the "origins" posts are background material and inputs, not a syllabus or a prescribed order.
 Component and skill names in lessons are sample names, so call yours whatever you like.
 
+Entries are options that plug into the loop, not steps. They assume no particular agent, language, runner or
+order, and a lesson may build any of them with whatever toolchain the student uses.
+
 ## Intake / spec
 - Turn a chat conversation into a written spec file
 - Accept work from an issue or ticket instead of a prompt

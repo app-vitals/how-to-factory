@@ -5,5 +5,5 @@ The single filming sequence: slide range, then demo, then slide range. Slide num
 
 | # | Slides | Demo beat | Script step | Notes |
 |---|---|---|---|---|
-| 1 | 1-3 | | 1-2 | |
-| 2 | 4 | DEMO <name> | 3 | |
+| 1 | 1-3 | | 1-3 | |
+| 2 | 4 | DEMO <name> | 4 | |

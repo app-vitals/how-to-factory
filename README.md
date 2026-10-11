@@ -25,7 +25,7 @@ and inputs, not a syllabus.
 
 ## Status
 
-Early. The component map and lesson backlog are in place. Lessons, a sample factory and a landscape comparison are coming.
+Early. The lessons are tool-neutral: the sample factory in `factory/` shows one concrete toolchain, and yours can use any agent, language or runner. The component map and lesson backlog are in place. Lessons, a sample factory and a landscape comparison are coming.
 
 ## License
 
