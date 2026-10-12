@@ -11,7 +11,7 @@ the end-to-end run is lesson 2.
 | # | Slides | Demo beat | Script step | Notes |
 |---|---|---|---|---|
 | 1 | 1-4 | | 1-3 | Title, factory map (plan, dev-task and loop glow), what the human does, what we build. Say `factory/` is our demo, not the standard |
-| 2 | 5-6 | | 4 | Plan concept (inputs, steps, outputs), then "how the field differs". Say "no planning feature in their docs", never "has none" |
+| 2 | 5-6 | | 4 | Plan concept (inputs, steps, outputs), then "how the field differs". Say "no sourced planning stage", never "has none" |
 | 3 | 7-8 | | 4 | Task-card slide (title, description, acceptance criteria, depends on; size is one PR each), then why each part. Say dependencies are our choice, not the field's. Slides, not a demo |
 | 4 | 9 | DEMO write the plan skill | 4 | Write `factory/skills/plan/SKILL.md` on camera. Do not run it |
 | 5 | 10-11 | | 5 | Dev-task concept (claim, code, verify, deliver, record; the PR opens only after verification passes), then how the field differs |
