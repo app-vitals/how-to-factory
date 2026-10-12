@@ -57,7 +57,7 @@ code, pre { font-family: var(--sw-font-mono); }
 .slide-title-slide .slide-inner, .slide-demo .slide-inner { align-content: center; }
 .slide-title-slide .slide-title { font-size: 3.6em; }
 .slide-demo .slide-body { align-items: flex-start; }
-.demo-label { font: 700 6em/1 var(--sw-font-display); color: var(--sw-color-brand-default); letter-spacing: -0.02em; }
+.demo-label { font: 700 3em/1 var(--sw-font-display); color: var(--sw-color-brand-default); letter-spacing: -0.02em; }
 .slide-exercise .eyebrow { color: var(--kind-job); }
 
 /* Visual blocks */
