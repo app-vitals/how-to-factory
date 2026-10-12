@@ -11,12 +11,13 @@ Our demo uses Bun and Claude Code; you do not need either. Describe the outcomes
 
 1. A scratch project under git with one commit and at least one passing test.
 2. A planning step (skill, prompt, script; name it whatever you like) whose input is your conversation with your
-   agent about the work (or a file you point it at) and that produces a todo list file with, at minimum: id, title, acceptance criteria, status, dependencies, branch.
+   agent about the work (or a file you point it at) and that produces a task list file with, at minimum: id, title, description, acceptance criteria, dependencies. Each task is small enough for one PR.
 3. A check that the todo list file is valid (any language, any test runner).
-4. An execution step that takes one todo id, works it on its own branch in a separate worktree or equivalent
-   isolation, runs the project's tests, commits, and updates the todo's status. If you have a remote and `gh`, it
+4. An execution step that takes one task id, claims it (marks it in progress), creates its own branch in a separate
+   worktree or equivalent isolation, implements it, verifies it (the task's acceptance criteria plus the project's
+   tests), commits, and records the task's outcome. It opens a PR only after verification passes. If you have a remote and `gh`, it
    opens a PR; if not, it stops at the committed branch.
-5. A loop that runs the execution step on the first pending todo whose dependencies are done, and repeats until none
+5. A loop that gives each task a starting state (pending) and runs the execution step on the first pending todo whose dependencies are done, and repeats until none
    is ready. It stops on the first todo that does not end with an open PR or done.
 6. You review and merge the results yourself.
 
