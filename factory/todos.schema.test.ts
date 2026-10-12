@@ -8,7 +8,6 @@ const todo = (over: Record<string, unknown> = {}) => ({
   acceptanceCriteria: ["it works"],
   status: "pending",
   dependencies: [],
-  branch: "feat/t-1",
   ...over,
 });
 
@@ -19,9 +18,13 @@ describe("validateTodos", () => {
   });
 
   test("rejects a missing field", () => {
-    const { branch: _omit, ...rest } = todo();
+    const { title: _omit, ...rest } = todo();
     const errors = validateTodos([rest]);
-    expect(errors.some((e) => e.includes('"branch"'))).toBe(true);
+    expect(errors.some((e) => e.includes('"title"'))).toBe(true);
+  });
+
+  test("ignores an extra branch key", () => {
+    expect(validateTodos([todo({ branch: "feat/t-1" })])).toEqual([]);
   });
 
   test("rejects a bad status", () => {

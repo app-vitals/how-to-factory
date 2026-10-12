@@ -9,7 +9,6 @@ const todo = (id: string, status: TodoStatus = "pending", dependencies: string[]
   acceptanceCriteria: [],
   status,
   dependencies,
-  branch: `feat/${id}`,
 });
 
 describe("pickNext", () => {
