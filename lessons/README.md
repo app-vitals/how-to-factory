@@ -47,7 +47,17 @@ order, and a lesson may build any of them with whatever toolchain the student us
 ## Feedback / maintenance
 - Schedule a scan and turn findings into tasks
 - Triage errors from an error tracker automatically
-- Track a quality metric, not just spend
+- Track throughput and cycle time on a dashboard
+- Track rework and merge rate, not just spend
+
+## Observability / ops
+- Read a run transcript to see why the agent did what it did
+- Keep a run log of what each tick did
+- Track token and cost spend per task and per day
+- Detect a stalled loop (stuck claims, growing queue age)
+- Alert when the factory goes quiet
+- Run the factory itself: secrets, sandboxing, rolling out a new agent image
+- Write an on-call runbook for an agent
 
 ## Memory / learning
 - Write an instructions file and improve it from corrections

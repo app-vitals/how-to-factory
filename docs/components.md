@@ -90,7 +90,7 @@ is a recommended order.
 - **What it is:** the loop that watches what the factory produced and what production is doing, and turns findings into new work.
 - **Why it exists:** a factory that only builds new things accumulates breakage and drift. Feedback closes the loop.
 - **Simplest version:** a scheduled job that runs a scan and lists findings for you.
-- **Range:** usage and spend dashboards; error-tracker triage that files tasks; dependency and security scans; duplicate-code or convention-drift scans; quality metrics such as cycle time, merge rate and rework ratio.
+- **Range:** usage and spend dashboards; error-tracker triage that files tasks; dependency and security scans; duplicate-code or convention-drift scans; quality metrics such as cycle time, merge rate and rework ratio; factory-health observability such as run logs, session transcripts, stall detection and alerts when the factory goes quiet; the operations of running the factory itself, such as secrets handling, sandboxing, staged rollouts and on-call.
 - **Shipwright example:** scheduled scans for errors, security, convention drift and duplication that report and then queue tasks.
 
 ## 9. Memory / learning
