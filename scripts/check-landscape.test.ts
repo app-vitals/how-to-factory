@@ -4,19 +4,20 @@ import { checkReadmeFresh, validateLandscape } from "./check-landscape.ts";
 import { renderLandscape } from "./render-landscape.ts";
 import type { Cell, Landscape } from "./landscape-types.ts";
 
-const TODAY = "2026-10-10";
+const TODAY = "2026-10-12";
 
 const cell = (over: Partial<Cell> = {}): Cell => ({
   name: "Thing",
   summary: "Does a thing.",
   sourceUrl: "https://docs.example.com/thing",
-  asOf: "2026-10-10",
+  asOf: "2026-10-12",
   ...over,
 });
 
 const make = (over: Partial<Cell> = {}): Landscape => ({
   components: [
     { id: "intake", label: "Intake" },
+    { id: "loop", label: "What starts the next run" },
     { id: "planning", label: "Planning / task queue" },
     { id: "execution", label: "Execution" },
   ],
@@ -28,6 +29,7 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
       allowedHosts: ["example.com"],
       cells: {
         intake: cell(over),
+        loop: cell(),
         planning: { omitted: "no first-party page found" },
         execution: cell(),
       },
@@ -48,7 +50,7 @@ describe("validateLandscape", () => {
     expect(validateLandscape(make({ asOf: "" }), TODAY).join()).toContain("asOf");
   });
   test("rejects malformed and impossible and future dates", () => {
-    for (const asOf of ["10/10/2026", "2026-1-5", "2026-02-31", "2026-10-11"]) {
+    for (const asOf of ["10/10/2026", "2026-1-5", "2026-02-31", "2026-10-13"]) {
       expect(validateLandscape(make({ asOf }), TODAY).join()).toContain("asOf");
     }
   });
@@ -72,6 +74,11 @@ describe("validateLandscape", () => {
     const e = make();
     e.products[0]!.cells.planning = { omitted: "" };
     expect(validateLandscape(e, TODAY).join()).toContain("planning");
+  });
+  test("missing loop cell fails validation", () => {
+    const d = make();
+    delete (d.products[0]!.cells as Record<string, unknown>).loop;
+    expect(validateLandscape(d, TODAY).join()).toContain("cell loop: missing");
   });
   test("demoable non-unknown needs source and date; bad kind fails", () => {
     const d = make();

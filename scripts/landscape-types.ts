@@ -1,4 +1,4 @@
-export type ComponentId = "intake" | "planning" | "execution";
+export type ComponentId = "intake" | "loop" | "planning" | "execution";
 
 /** A sourced claim. `name` is the product's own name for the capability. */
 export interface Cell {
