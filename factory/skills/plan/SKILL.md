@@ -1,15 +1,16 @@
 ---
 name: plan
-description: Turn a short spec into todos in factory/todos.json (illustrative name; rename freely)
+description: Turn the conversation context into todos in factory/todos.json (illustrative name; rename freely)
 ---
 
 # Plan
 
 Illustrative skill name — other factories call this `feature-dev`, `breakdown`, etc. Rename freely.
 
-Given a short spec (text from the user or a file), produce todo entries in `factory/todos.json`.
+Run by a human, interactively; it is not part of the loop. The input is the conversation context (what the human
+and agent just explored together), or a file if the human points at one. Produce todo entries in `factory/todos.json`.
 
-1. Read the spec and skim the repo enough to know where the work lands.
+1. Read the conversation context (or the file the human named) and skim the repo enough to know where the work lands.
 2. Split the work into small todos, each deliverable as one PR.
 3. For each todo, write an entry with these fields: `id` (unique), `title`, `description`,
    `acceptanceCriteria` (checkable statements), `status` (`pending`), `dependencies` (ids of

@@ -7,7 +7,7 @@ need. Each lesson part goes concept first, then "in our demo we use...", then "y
 
 ## Skills
 
-- `skills/plan/SKILL.md` — turns a short spec into entries in `factory/todos.json`.
+- `skills/plan/SKILL.md` — turns the conversation context (or a file the human points at) into entries in `factory/todos.json`; a human triggers it interactively, it is not part of the loop.
 - `skills/dev-task/SKILL.md` — takes one todo id, works it in a git worktree, opens a PR, marks the todo.
 
 > **The names are illustrative.** `plan` and `dev-task` are sample names only. Other factories
