@@ -33,7 +33,7 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
        the queue's state, introduced in the loop section. The branch is derived by dev-task; it only becomes a real
        concern with parallel work, which is a later lesson.
    - How the field differs (slide, [options.md](options.md)): Claude Code and Cursor document a planning mode in the
-     session; for the other products the matrix has no sourced planning stage. Say "no sourced planning stage",
+     session; for the other products we found no planning stage. Say "no planning stage found",
      never "has none".
    - In our demo we use a markdown skill, [`factory/skills/plan/SKILL.md`](../../factory/skills/plan/SKILL.md),
      writing [`factory/todos.json`](../../factory/README.md). DEMO: write the skill on camera. Do not run it.
