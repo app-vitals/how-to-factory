@@ -1,43 +1,60 @@
 # Script: The simplest factory
 
 Narrated by Dan over the slides (face cam bottom right). Slides hold labels; this file holds the words.
-Demo beats are numbered steps; [run-of-show.md](run-of-show.md) points at them. Seven beats.
+Demo beats are numbered steps; [run-of-show.md](run-of-show.md) points at them. Every demo is build-only: we write
+the skill or the loop on camera and run nothing. The end-to-end run is lesson 2.
 
 Framing rule for every part: the concept first (tool-neutral), then "in our demo we use...", then "yours can be
-anything". Bun and Claude Code are our demo choices, never requirements.
+anything". Bun and Claude Code are our demo choices, never requirements. For plan, dev-task and the loop, each
+concept covers inputs, steps and outputs generalized across factories, then a "how the field differs" slide
+(sourced, from [options.md](options.md)), then the build-only demo.
 
-1. **What a factory is and what we build.** A factory turns a request into a reviewed change. Show the factory map
-   slide: eleven components in [docs/components.md](../../docs/components.md), today we touch planning and
-   execution, plus a loop. We build the most basic version of each, live. Nothing here is the standard; `factory/`
-   is our demo.
-2. **DEMO plain agent.** In an empty scratch repo, ask an AI coding agent (ours is Claude Code) for a small change
-   (e.g. "add a `greet(name)` function with a test"). Let it plan and edit. Point out: this works, and it is the
-   simplest factory. What is missing is repeatability: you re-explain the process every time.
-3. **DEMO plan, then the todo list.**
-   - Concept: a request becomes small todos with acceptance criteria and dependencies.
-   - In our demo we use a markdown skill, [`factory/skills/plan/SKILL.md`](../../factory/skills/plan/SKILL.md).
-     Run it on a two-sentence spec and show it write `factory/todos.json`; open the file and show one entry's
-     fields (see [`factory/README.md`](../../factory/README.md)).
-   - Yours can be anything: a pasted prompt, a planning mode, a person.
-   - One line: trackers and issues are the usual queue; `todos.json` is the portable stand-in.
-4. **DEMO dev-task on one todo.**
-   - Concept: one todo, worked in isolation, checked, ending in a pull request and a recorded status.
-   - In our demo we use [`factory/skills/dev-task/SKILL.md`](../../factory/skills/dev-task/SKILL.md). Run it on one
-     todo id. Narrate: status goes to `in_progress`, a worktree is created, tests run, a PR opens, status becomes
-     `pr_open`.
+1. **What a factory is, and the factory map.** A factory turns a request into a reviewed change. Show the factory
+   map slide: eleven components in [docs/components.md](../../docs/components.md), today we touch planning and
+   execution, plus a loop. Nothing here is the standard; `factory/` is our demo.
+2. **What the human does.** Three things: chat and explore with your own agent, run the plan, review the PRs.
+   The chat is part of plan, not a separate demo: you and the agent talk the work through, then you run plan and its
+   input is that conversation. Everything between plan and the PRs runs without you.
+3. **What we build.** Slide of the parts: Chat, Plan, Todo list, Loop, Dev-task, PRs, You review. Plan is
+   human-triggered and interactive; the loop triggers dev-task, once per todo.
+4. **Plan: concept, then DEMO write the plan skill.**
+   - Concept: inputs are the conversation context (or a file you point at), steps are split into small todos with
+     acceptance criteria and dependencies, output is a todo list that outlives the session. Generalized, every
+     factory has some version of this.
+   - How the field differs (slide, [options.md](options.md)): Claude Code and Cursor document a planning mode in the
+     session; for the other products the matrix has no sourced planning stage. Say "no sourced planning stage",
+     never "has none".
+   - In our demo we use a markdown skill, [`factory/skills/plan/SKILL.md`](../../factory/skills/plan/SKILL.md),
+     writing [`factory/todos.json`](../../factory/README.md). DEMO: write the skill on camera. Do not run it.
+   - Yours can be anything: a pasted prompt, a planning mode, a person. Trackers and issues are the usual queue;
+     `todos.json` is the portable stand-in. Show one entry's fields on the todo list schema slide (a slide, not a
+     demo).
+5. **Dev-task: concept, then DEMO write the dev-task skill.**
+   - Concept: inputs are one todo, steps are work it in isolation and check it, outputs are a pull request and a
+     recorded status. Dev-task is triggered by the loop, not by you.
+   - How the field differs (slide): the shape is common; the environment and trigger differ (sessions, cloud VMs,
+     sandboxes).
+   - In our demo we use [`factory/skills/dev-task/SKILL.md`](../../factory/skills/dev-task/SKILL.md). DEMO: write
+     the skill on camera. Do not run it on a todo.
    - Yours can be anything: any agent, language, test runner or isolation method.
-5. **DEMO the loop runs the rest.**
-   - Concept: while a todo is ready, run execution on it; stop when none is or one fails.
-   - In our demo we use [`factory/loop.ts`](../../factory/loop.ts) (`bun factory/loop.ts`): pick the next `pending`
-     todo whose dependencies are `done`, run the agent headlessly, re-read the file, repeat. Show it ending with open
-     PRs.
+6. **The loop: concept, then DEMO write the loop.**
+   - Concept: inputs are the todo list, steps are pick the next ready todo, run dev-task on it, re-read the list,
+     repeat; output is a stream of open PRs. It stops when none is ready or one fails.
+   - How the field differs (slide): most products start each session from a human or an event or schedule you
+     configure; the loop is our choice.
+   - In our demo we use [`factory/loop.ts`](../../factory/loop.ts) (Bun). DEMO: write the loop on camera. Do not
+     run it.
    - Yours can be anything: a shell loop, a cron job, a queue worker; the agent command is configuration.
-6. **You review and merge.** Open the PRs and the updated todos. You review and merge them yourself; nothing in this
-   factory does it for you. Say what is deliberately missing: no automated review, no merge, no verification gate
-   beyond the project's own tests. Those are later components, and the loop picks them up in an order we leave open.
-   **Names slide:** `plan` and `dev-task` are just the names used in this sample. Show the "what other factories
-   call it" table (from [options.md](options.md), a sourced slide, not a live demo): Claude Code and Cursor say plan
-   mode, Cursor and Copilot say cloud agent, OpenHands says sandbox. Name yours anything.
-7. **Exercise hand-off.** Point at [exercise.md](exercise.md): build your own plan, dev-task and loop in your own
-   repo, with an AI coding agent and language of your choice. Closing line: later components get picked up by the
-   loop, and the order is left open.
+7. **Why we loop (our opinion, say so).** This is our view, not a standard. A plan as a file survives the session.
+   One todo per run limits the blast radius. The loop removes the human as the bottleneck. The human stays at plan
+   and at PR review.
+8. **How it all works together (slide only).** One slide, nothing run. Contrast our flow with the alternative where
+   a human or an event starts each session. Do not claim other products cannot loop; the sources only say what they
+   document.
+9. **Names, and where factories take it.** `plan` and `dev-task` are just the names used in this sample. Show the
+   "what other factories call it" table (from [options.md](options.md), a sourced slide): Claude Code and Cursor
+   say plan mode, Cursor and Copilot say cloud agent, OpenHands says sandbox. Name yours anything. Say what is
+   deliberately missing: no automated review, no merge, no verification gate beyond the project's own tests.
+10. **Next lesson and exercise.** Next lesson we run it end to end, then the loop builds the next feature. The
+    exercise ([exercise.md](exercise.md)) has you build your own plan, dev-task and loop and run them end to end
+    yourself, with an agent and language of your choice.

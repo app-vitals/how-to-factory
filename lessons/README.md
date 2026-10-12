@@ -15,7 +15,7 @@ order, and a lesson may build any of them with whatever toolchain the student us
 - Accept work from an issue or ticket instead of a prompt
 
 ## Planning / decomposition
-- Break a spec into small tasks with dependencies
+- Break a conversation or spec into small tasks with dependencies
 - Keep tasks in a durable queue instead of a chat window
 - Estimate task size and pick a model tier per task
 
