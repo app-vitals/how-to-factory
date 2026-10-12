@@ -10,7 +10,6 @@ export interface Todo {
   acceptanceCriteria: string[];
   status: TodoStatus;
   dependencies: string[];
-  branch: string;
 }
 
 const isString = (v: unknown): v is string => typeof v === "string" && v.trim() !== "";
@@ -29,7 +28,7 @@ export function validateTodos(input: unknown): string[] {
       return;
     }
     const t = raw as Record<string, unknown>;
-    for (const f of ["id", "title", "description", "branch"]) {
+    for (const f of ["id", "title", "description"]) {
       if (!isString(t[f])) errors.push(`${at}: "${f}" must be a non-empty string`);
     }
     if (!isStringArray(t.acceptanceCriteria)) errors.push(`${at}: "acceptanceCriteria" must be an array of strings`);
