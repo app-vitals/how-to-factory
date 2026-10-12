@@ -7,7 +7,7 @@ need. Each lesson part goes concept first, then "in our demo we use...", then "y
 
 ## Skills
 
-- `skills/plan/SKILL.md` — turns the conversation context (or a file the human points at) into entries in `factory/todos.json`; a human triggers it interactively, it is not part of the loop.
+- `skills/plan/SKILL.md` — turns the conversation context (or a file the human points at) into task entries in `factory/todos.json`; a human triggers it interactively, it is not part of the loop.
 - `skills/dev-task/SKILL.md` — takes one todo id, works it in a git worktree, opens a PR, marks the todo.
 
 > **The names are illustrative.** `plan` and `dev-task` are sample names only. Other factories
@@ -20,15 +20,23 @@ The skills are plain markdown with no dependency on any particular harness or wo
 
 A JSON array of todos:
 
+What `plan` decides:
+
 | Field | Type | Notes |
 |---|---|---|
 | `id` | string | unique, e.g. `T-1` |
 | `title` | string | short summary |
-| `description` | string | what to build and why |
-| `acceptanceCriteria` | string[] | checkable statements |
-| `status` | `pending` \| `in_progress` \| `pr_open` \| `done` \| `blocked` | |
+| `description` | string | what to build, why, and what is out of scope |
+| `acceptanceCriteria` | string[] | checks the agent can run or inspect |
 | `dependencies` | string[] | ids of other todos that must be `done` first; each must exist |
-| `branch` | string | git branch for the work, e.g. `feat/t-1` |
+
+What the factory tracks:
+
+| Field | Type | Notes |
+|---|---|---|
+| `status` | `pending` \| `in_progress` \| `pr_open` \| `done` \| `blocked` | bookkeeping; `plan` writes `pending`, `dev-task` moves it |
+
+The branch is not stored; `dev-task` derives it as `feat/<id-lowercase>`.
 
 `todos.schema.ts` exports `validateTodos(input): string[]` (empty = valid) and `parseTodos(input): Todo[]`
 (throws). Tests: `bun test factory`.
