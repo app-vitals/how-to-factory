@@ -17,22 +17,34 @@ factories call the same jobs `feature-dev`, `implement`, `build`, `breakdown` an
 ## The concept
 
 A software factory turns a request into a reviewed change without you typing every step. Lesson 1 builds the first
-half of that and stops at an open pull request: **planning** (a request becomes small, checkable todos),
+half of that and stops at an open pull request: **planning** (a conversation becomes small, checkable todos),
 **execution** (one agent does one todo in isolation and opens a pull request) and a **loop** (repeat until no todo
 is ready). A human reviews and merges.
 
+## What the human does
+
+Three things: chat and explore with your own agent, run the plan, review the PRs. The chat is part of plan, not a
+separate step: plan's input is that conversation. After plan, the loop runs dev-task per todo without you.
+
 ## The simplest thing that works
 
-An AI coding agent and a terminal. You type the request, read the result and open the PR yourself. Everything else
-in this lesson is that same flow with the repeated parts written down once and a loop to run them.
+An AI coding agent and a terminal. You talk the work through, read the result and open the PR yourself. Everything
+else in this lesson is that same flow with the repeated parts written down once and a loop to run them.
 
 ## The parts
 
+Each part goes concept first (inputs, steps, outputs, generalized across factories), then how the field differs
+([options.md](options.md)), then a build-only demo: we write the skill or loop on camera and run nothing. Running
+it end to end is lesson 2.
+
 ### Plan
 
-- **Concept:** turn a short request into a list of small todos, each with acceptance criteria and dependencies.
+- **Concept:** inputs are the conversation context (or a file); steps split it into small todos with acceptance
+  criteria and dependencies; the output is a todo list that outlives the session. Human-triggered and interactive.
+- **How the field differs:** Claude Code and Cursor document a planning mode in the session; for other products the
+  matrix has no sourced planning stage.
 - **In our demo we use:** a markdown skill, [`factory/skills/plan/SKILL.md`](../../factory/skills/plan/SKILL.md),
-  that writes [`factory/todos.json`](../../factory/README.md).
+  that writes [`factory/todos.json`](../../factory/README.md). Demo: we write the skill.
 - **Yours can be anything:** a prompt you paste, a planning mode, a script, a person filling in a spreadsheet.
 
 Trackers and issues are the usual place a queue lives. `todos.json` is the portable stand-in so the lesson works
@@ -40,27 +52,43 @@ without an account anywhere.
 
 ### Dev-task
 
-- **Concept:** take one todo, work it in isolation, check it, open a pull request, record the new status.
+- **Concept:** inputs are one todo; steps are work it in isolation, check it, open a pull request; outputs are the
+  PR and a recorded status. The loop triggers it, not you.
+- **How the field differs:** the shape is common; the environment and trigger differ.
 - **In our demo we use:** a second markdown skill,
-  [`factory/skills/dev-task/SKILL.md`](../../factory/skills/dev-task/SKILL.md), run in a git worktree.
+  [`factory/skills/dev-task/SKILL.md`](../../factory/skills/dev-task/SKILL.md), run in a git worktree. Demo: we
+  write the skill.
 - **Yours can be anything:** any agent, any language, any test runner, any way of isolating the work.
 
 ### The loop
 
-- **Concept:** while a todo is ready, run execution on it; stop when none is or when one fails to reach an open PR.
+- **Concept:** inputs are the todo list; steps are pick the next ready todo, run dev-task, re-read, repeat; the
+  output is open PRs. It stops when none is ready or one fails to reach an open PR.
+- **How the field differs:** most products start each session from a human or an event or schedule you configure.
 - **In our demo we use:** [`factory/loop.ts`](../../factory/loop.ts), a short Bun script that picks the next
-  `pending` todo whose dependencies are `done` and runs the agent headlessly on it.
+  `pending` todo whose dependencies are `done` and runs the agent headlessly on it. Demo: we write the loop.
 - **Yours can be anything:** a shell `while` loop, a cron job, a queue worker. The agent command is configuration.
+
+## Why we loop
+
+This is our opinion, not a standard. A plan kept as a file survives the session. One todo per run limits the blast
+radius. The loop removes the human as the bottleneck, while the human stays at plan and at PR review.
+
+## How it all works together
+
+A slide only, nothing run: our flow (human plans, loop runs dev-task, human reviews) contrasted with the
+alternative where a human or an event starts each session.
 
 ## Build steps
 
 Numbers match [script.md](script.md).
 
-1. Start with a plain agent on a tiny task (step 2).
-2. Write the plan skill and read the todo list it produces (step 3).
-3. Write the dev-task skill and run it on one todo (step 4).
-4. Run the loop over the rest, ending at open PRs (step 5).
-5. Review and merge them yourself (step 6).
+1. Factory map, what the human does, what we build (steps 1-3).
+2. Write the plan skill (step 4).
+3. Write the dev-task skill (step 5).
+4. Write the loop (step 6).
+5. Why we loop, how it works together, names (steps 7-9).
+6. Next lesson: run it end to end (step 10).
 
 ## How the field does it
 
