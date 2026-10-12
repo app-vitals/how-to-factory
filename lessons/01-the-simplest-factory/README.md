@@ -17,7 +17,7 @@ factories call the same jobs `feature-dev`, `implement`, `build`, `breakdown` an
 ## The concept
 
 A software factory turns a request into a reviewed change without you typing every step. Lesson 1 builds the first
-half of that and stops at an open pull request: **planning** (a conversation becomes small, checkable todos),
+half of that and stops at an open pull request: **planning** (a conversation becomes small, checkable tasks),
 **execution** (one agent does one todo in isolation and opens a pull request) and a **loop** (repeat until no todo
 is ready). A human reviews and merges.
 
@@ -39,8 +39,15 @@ it end to end is lesson 2.
 
 ### Plan
 
-- **Concept:** inputs are the conversation context (or a file); steps split it into small todos with acceptance
-  criteria and dependencies; the output is a todo list that outlives the session. Human-triggered and interactive.
+- **Concept:** inputs are the conversation context (or a file); steps split it into small tasks; the output is a
+  task list that outlives the session. Human-triggered and interactive.
+- **What a task contains:** four parts. A *title* (a handle for skimming the queue). A *description* (what, why and
+  what is out of scope), because the agent has no memory of your conversation. *Acceptance criteria* (checks the
+  agent can run or inspect), because they tell it when it is done and give verify something to pass or fail.
+  *Dependencies* (which tasks come first), so the loop can pick an order; sourcing for this part is thin, see
+  [options.md](options.md). Size is a rule, not a field: small enough for one PR. Status is the queue's state
+  (introduced with the loop), and the branch is derived by dev-task (a real concern once work runs in parallel,
+  a later lesson).
 - **How the field differs:** Claude Code and Cursor document a planning mode in the session; for other products the
   matrix has no sourced planning stage.
 - **In our demo we use:** a markdown skill, [`factory/skills/plan/SKILL.md`](../../factory/skills/plan/SKILL.md),
@@ -52,8 +59,10 @@ without an account anywhere.
 
 ### Dev-task
 
-- **Concept:** inputs are one todo; steps are work it in isolation, check it, open a pull request; outputs are the
-  PR and a recorded status. The loop triggers it, not you.
+- **Concept:** inputs are one task; outputs are a pull request and a recorded status. The loop triggers it, not
+  you. Five steps: **claim** (mark in progress, isolate), **code**, **verify** (acceptance checks plus the
+  project's tests, typecheck and lint, fixed until they pass), **deliver** (commit, PR), **record** (status; blocked
+  with a reason if verify cannot pass). Verify gates the PR.
 - **How the field differs:** the shape is common; the environment and trigger differ.
 - **In our demo we use:** a second markdown skill,
   [`factory/skills/dev-task/SKILL.md`](../../factory/skills/dev-task/SKILL.md), run in a git worktree. Demo: we
@@ -62,8 +71,9 @@ without an account anywhere.
 
 ### The loop
 
-- **Concept:** inputs are the todo list; steps are pick the next ready todo, run dev-task, re-read, repeat; the
-  output is open PRs. It stops when none is ready or one fails to reach an open PR.
+- **Concept:** inputs are the task list; steps are pick the next ready task, run dev-task, re-read, repeat; the
+  output is open PRs. It stops when none is ready or one fails to reach an open PR. Status lives here: it is the
+  queue's state, written by dev-task and read by the loop.
 - **How the field differs:** most products start each session from a human or an event or schedule you configure.
 - **In our demo we use:** [`factory/loop.ts`](../../factory/loop.ts), a short Bun script that picks the next
   `pending` todo whose dependencies are `done` and runs the agent headlessly on it. Demo: we write the loop.
@@ -104,7 +114,7 @@ Sources, quotes and as-of dates: [options.md](options.md). Full matrix: [landsca
 
 ## Where factories take it
 
-Described, not prescribed. Factories in the matrix point toward: work queues in a tracker (Linear, Jira, GitHub
+Described, not prescribed. Factories point toward: work queues in a tracker (Linear, Jira, GitHub
 Issues), isolated cloud sandboxes per task, and parallel agents or scheduled runs. Later components get picked up by
 the loop, in an order that is left open.
 

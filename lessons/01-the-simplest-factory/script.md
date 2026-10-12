@@ -7,7 +7,7 @@ the skill or the loop on camera and run nothing. The end-to-end run is lesson 2.
 Framing rule for every part: the concept first (tool-neutral), then "in our demo we use...", then "yours can be
 anything". Bun and Claude Code are our demo choices, never requirements. For plan, dev-task and the loop, each
 concept covers inputs, steps and outputs generalized across factories, then a "how the field differs" slide
-(sourced, from [options.md](options.md)), then the build-only demo.
+(from [options.md](options.md)), then the build-only demo.
 
 1. **What a factory is, and the factory map.** A factory turns a request into a reviewed change. Show the factory
    map slide: eleven components in [docs/components.md](../../docs/components.md), today we touch planning and
@@ -18,28 +18,42 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
 3. **What we build.** Slide of the parts: Chat, Plan, Todo list, Loop, Dev-task, PRs, You review. Plan is
    human-triggered and interactive; the loop triggers dev-task, once per todo.
 4. **Plan: concept, then DEMO write the plan skill.**
-   - Concept: inputs are the conversation context (or a file you point at), steps are split into small todos with
-     acceptance criteria and dependencies, output is a todo list that outlives the session. Generalized, every
-     factory has some version of this.
+   - Concept: inputs are the conversation context (or a file you point at), steps are split into small tasks,
+     output is a task list that outlives the session. Generalized, every factory has some version of this.
+   - What a task needs, and why (a slide before the demo; sources in [options.md](options.md)). Four parts:
+     **title**, **description**, **acceptance criteria**, **dependencies**.
+     - Title: a short handle so a human skimming the queue knows what it is.
+     - Description: what to build, why, and what is out of scope. The agent starts each task with no memory of the
+       conversation, so the description is all the context it gets.
+     - Acceptance criteria: checks the agent can run or inspect, not intentions. This is the strongest agreement
+       across the sources, because it is what lets the agent know it is done and lets verify (below) pass or fail.
+     - Dependencies: which tasks must finish first, so the loop can pick an order. Say plainly that the sourcing
+       here is thin (Spec Kit marks independent tasks `[P]`); the case is our own reasoning, not an industry norm.
+     - Size is a rule, not a field: each task is small enough to deliver as one PR. Status is not plan output; it is
+       the queue's state, introduced in the loop section. The branch is derived by dev-task; it only becomes a real
+       concern with parallel work, which is a later lesson.
    - How the field differs (slide, [options.md](options.md)): Claude Code and Cursor document a planning mode in the
      session; for the other products the matrix has no sourced planning stage. Say "no sourced planning stage",
      never "has none".
    - In our demo we use a markdown skill, [`factory/skills/plan/SKILL.md`](../../factory/skills/plan/SKILL.md),
      writing [`factory/todos.json`](../../factory/README.md). DEMO: write the skill on camera. Do not run it.
    - Yours can be anything: a pasted prompt, a planning mode, a person. Trackers and issues are the usual queue;
-     `todos.json` is the portable stand-in. Show one entry's fields on the todo list schema slide (a slide, not a
-     demo).
+     `todos.json` is the portable stand-in. Show one task's four parts on a task-card slide (a slide, not a demo).
 5. **Dev-task: concept, then DEMO write the dev-task skill.**
-   - Concept: inputs are one todo, steps are work it in isolation and check it, outputs are a pull request and a
-     recorded status. Dev-task is triggered by the loop, not by you.
+   - Concept: inputs are one task, outputs are a pull request and a recorded status. Dev-task is triggered by the
+     loop, not by you. Five steps: **claim** (mark it in progress and isolate the work), **code** (implement against
+     the description and criteria), **verify** (run the acceptance checks plus the project's tests, typecheck and
+     lint; fix until they pass), **deliver** (commit and open the PR), **record** (set the status; blocked with a
+     reason if verification cannot pass). Verify gates the PR: nothing is delivered until it passes.
    - How the field differs (slide): the shape is common; the environment and trigger differ (sessions, cloud VMs,
      sandboxes).
    - In our demo we use [`factory/skills/dev-task/SKILL.md`](../../factory/skills/dev-task/SKILL.md). DEMO: write
      the skill on camera. Do not run it on a todo.
    - Yours can be anything: any agent, language, test runner or isolation method.
 6. **The loop: concept, then DEMO write the loop.**
-   - Concept: inputs are the todo list, steps are pick the next ready todo, run dev-task on it, re-read the list,
-     repeat; output is a stream of open PRs. It stops when none is ready or one fails.
+   - Concept: inputs are the task list, steps are pick the next ready task, run dev-task on it, re-read the list,
+     repeat; output is a stream of open PRs. It stops when none is ready or one fails. Here status shows up: it is
+     the queue's state (pending, in progress, PR open, done, blocked), written by dev-task and read by the loop.
    - How the field differs (slide): most products start each session from a human or an event or schedule you
      configure; the loop is our choice.
    - In our demo we use [`factory/loop.ts`](../../factory/loop.ts) (Bun). DEMO: write the loop on camera. Do not
