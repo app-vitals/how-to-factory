@@ -65,10 +65,10 @@
       <h2 class="slide-title">Plan: inputs, steps, outputs</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="plan-io">
-          <div class="flow"><div class="node node-human">Conversation</div><span class="arrow"></span><div class="node node-agent">Split into todos</div><span class="arrow"></span><div class="node node-store">Todo list</div></div>
+          <div class="flow"><div class="node node-human">Conversation</div><span class="arrow"></span><div class="node node-agent">Split into tasks</div><span class="arrow"></span><div class="node node-store">Todo list</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div>
-        <p class="caption">Acceptance criteria and dependencies on every todo.</p>
+        <p class="caption">Acceptance criteria and dependencies on every task.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -80,10 +80,35 @@
         <div class="visual">
           <table class="comp-table">
             <thead><tr><th>Who</th><th>Planning (as of 2026-10-10)</th></tr></thead>
-            <tbody><tr><td>Claude Code</td><td>plan mode, in the session</td></tr><tr><td>Cursor</td><td>Plan Mode, plan you edit</td></tr><tr><td>Others in the matrix</td><td>no sourced planning stage</td></tr><tr><td>This sample</td><td>plan skill writes todos.json</td></tr></tbody>
+            <tbody><tr><td>Claude Code</td><td>plan mode, in the session</td></tr><tr><td>Cursor</td><td>Plan Mode, plan you edit</td></tr><tr><td>Devin, Copilot, OpenHands, Codegen</td><td>no planning feature in their docs</td></tr><tr><td>This sample</td><td>plan skill writes todos.json</td></tr></tbody>
           </table>
         </div>
-        <p class="caption">Sources and dates in options.md.</p>
+        <p class="caption">Links in the video description.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">What a plan outputs: tasks</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="task-card">
+          <div class="flow"><div class="node node-store">Title</div><div class="node node-store">Description</div><div class="node node-store">Acceptance criteria</div><div class="node node-store">Depends on</div></div>
+        </div>
+        <p class="caption">One task card. Each task is small enough for one PR.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Why each part</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="task-why">
+          <div class="flow"><div class="node node-store">Small task</div><span class="arrow"></span><div class="node node-agent">Agent works</div><span class="arrow"></span><div class="node node-external">One PR</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <ul class="bullets"><li>Description: the agent starts with no memory</li><li>Criteria: checks the agent can run</li><li>Depends on: our choice, not the field's</li></ul>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -99,28 +124,13 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">The todo list schema</h2>
-      <div class="slide-body">
-        <div class="visual">
-          <table class="comp-table">
-            <thead><tr><th>Field</th><th>Holds</th></tr></thead>
-            <tbody><tr><td>id, title</td><td>which todo</td></tr><tr><td>description, acceptanceCriteria</td><td>what done means</td></tr><tr><td>status, dependencies</td><td>where it is, what blocks it</td></tr><tr><td>branch</td><td>where the work lives</td></tr></tbody>
-          </table>
-        </div>
-        <p class="caption">One entry in todos.json. Yours can differ.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
       <h2 class="slide-title">Dev-task: inputs, steps, outputs</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="devtask-io">
-          <div class="flow"><div class="node node-store">One todo</div><span class="arrow"></span><div class="node node-agent">Work and check</div><span class="arrow"></span><div class="node node-external">Pull request</div><span class="arrow"></span><div class="node node-store">Status recorded</div></div>
+          <div class="flow"><div class="node node-store">One task</div><span class="arrow"></span><div class="node node-agent">Claim</div><span class="arrow"></span><div class="node node-agent">Code</div><span class="arrow"></span><div class="node node-agent">Verify</div><span class="arrow"></span><div class="node node-external">Deliver</div><span class="arrow"></span><div class="node node-store">Record</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div>
-        <p class="caption">The loop triggers it, not you.</p>
+        <p class="caption">The PR opens only after verification passes.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -157,7 +167,8 @@
           <div class="flow"><div class="node node-store">Todo list</div><span class="arrow"></span><div class="node node-job">Pick, run, repeat</div><span class="arrow"></span><div class="node node-external">Open PRs</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div>
-        <p class="caption">Stops when none is ready or one fails.</p>
+        <p class="caption">Status is the queue's state. Stops when none is ready.</p>
+        <ul class="bullets"><li>pending: waiting its turn</li><li>in_progress: being worked now</li><li>pr_open: PR waiting for review</li></ul>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -172,7 +183,7 @@
             <tbody><tr><td>Claude Code</td><td>schedule, API call or GitHub event</td></tr><tr><td>Cursor</td><td>schedule, event or webhook</td></tr><tr><td>Devin</td><td>Slack, webhook, ticket or schedule</td></tr><tr><td>This sample</td><td>our choice: a script loop</td></tr></tbody>
           </table>
         </div>
-        <p class="caption">Sources and dates in options.md.</p>
+        <p class="caption">Links in the video description.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -219,10 +230,10 @@
         <div class="visual">
           <table class="comp-table">
             <thead><tr><th>Who</th><th>Planning</th><th>Execution</th></tr></thead>
-            <tbody><tr><td>This sample</td><td>plan</td><td>dev-task</td></tr><tr><td>Claude Code</td><td>plan mode</td><td>session</td></tr><tr><td>Cursor</td><td>Plan Mode</td><td>Cloud agents</td></tr><tr><td>OpenHands</td><td>not sourced</td><td>sandbox</td></tr></tbody>
+            <tbody><tr><td>This sample</td><td>plan</td><td>dev-task</td></tr><tr><td>Claude Code</td><td>plan mode</td><td>session</td></tr><tr><td>Cursor</td><td>Plan Mode</td><td>Cloud agents</td></tr><tr><td>OpenHands</td><td>no planning docs found</td><td>sandbox</td></tr></tbody>
           </table>
         </div>
-        <p class="caption">Sources and dates in options.md.</p>
+        <p class="caption">Links in the video description.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
