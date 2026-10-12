@@ -5,6 +5,10 @@
       "label": "Intake"
     },
     {
+      "id": "loop",
+      "label": "What starts the next run"
+    },
+    {
       "id": "planning",
       "label": "Planning / task queue"
     },
@@ -27,6 +31,12 @@
           "summary": "A Linear ticket can be assigned to Devin, tagged with a playbook label such as !plan, !implement, !triage or !review, or Devin can be @mentioned in a comment, each of which starts a session.",
           "sourceUrl": "https://docs.devin.ai/integrations/linear.md",
           "asOf": "2026-10-10"
+        },
+        "loop": {
+          "name": "Automations",
+          "summary": "Automations wire external events (Slack messages, GitHub webhooks, Linear ticket updates, schedules and custom webhooks) to Devin sessions that start automatically; a schedule trigger is either recurring (cron-based) or one-time.",
+          "sourceUrl": "https://docs.devin.ai/product-guides/automations.md",
+          "asOf": "2026-10-12"
         },
         "planning": {
           "omitted": "The Linear page lists a !plan playbook label but does not describe a planning feature; no dedicated planning page found in the docs index."
@@ -60,6 +70,12 @@
         "intake": {
           "omitted": "The fetched Droid CLI overview describes terminal launch only; no first-party intake integration page was verified."
         },
+        "loop": {
+          "name": "Automations (Trigger)",
+          "summary": "An automation's trigger is what starts a run: a schedule, a Slack message, a GitHub event, or an HTTP POST to the automation's webhook URL.",
+          "sourceUrl": "https://docs.factory.com/software-factory/automations.md",
+          "asOf": "2026-10-12"
+        },
         "planning": {
           "omitted": "The overview says Droid plans, implements, tests and reviews end to end but names no separate planning feature."
         },
@@ -91,6 +107,12 @@
           "summary": "Work can be started from the agents panel, a conversation, or an issue or pull request on GitHub.com; code scanning alerts from security campaigns can also be assigned to it.",
           "sourceUrl": "https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent",
           "asOf": "2026-10-10"
+        },
+        "loop": {
+          "name": "Automations",
+          "summary": "Automations let you define a task once and have Copilot cloud agent run it on a schedule or in response to repository events.",
+          "sourceUrl": "https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent",
+          "asOf": "2026-10-12"
         },
         "planning": {
           "omitted": "No first-party planning page verified; the about page only mentions asking an agent to plan in chat."
@@ -125,6 +147,12 @@
           "sourceUrl": "https://docs.openhands.dev/openhands/usage/cloud/slack-installation.md",
           "asOf": "2026-10-10"
         },
+        "loop": {
+          "name": "Automations",
+          "summary": "Automations schedule AI-powered tasks that run automatically on a cron schedule (for example every Monday at 9 AM); each run gets a fresh sandbox.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/automations/overview.md",
+          "asOf": "2026-10-12"
+        },
         "planning": {
           "omitted": "The key-features page fetched mentions no planning feature."
         },
@@ -158,6 +186,12 @@
           "summary": "Cloud agents can be started from Cursor for iOS, Cursor Web, Cursor Desktop, Slack via @cursor, @cursor comments on GitHub or Bitbucket PRs, Linear, or the API.",
           "sourceUrl": "https://cursor.com/docs/background-agent",
           "asOf": "2026-10-10"
+        },
+        "loop": {
+          "name": "Automations (triggers)",
+          "summary": "Automations run cloud agents in the background, either on a schedule (preset or cron expression) or in response to events from GitHub, GitLab, Slack, Linear and more; a webhook trigger gives a private HTTP endpoint that starts a run when posted to.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent/automations",
+          "asOf": "2026-10-12"
         },
         "planning": {
           "name": "Plan Mode",
@@ -196,6 +230,9 @@
           "sourceUrl": "https://docs.codegen.com/introduction/overview",
           "asOf": "2026-10-10"
         },
+        "loop": {
+          "omitted": "The overview and the triggering page fetched describe manual, Web UI/CLI and API invocation and PR-driven auto-triggers only; no schedule or queue-driven start verified."
+        },
         "planning": {
           "omitted": "No dedicated planning page found in the docs index."
         },
@@ -228,6 +265,12 @@
           "summary": "Claude Code runs from the terminal, IDE extensions, a desktop app and the web; a bug report can also be routed from Slack by mentioning @Claude to get a pull request back, and GitHub Actions or GitLab CI/CD can automate PR review and issue triage.",
           "sourceUrl": "https://code.claude.com/docs/en/overview",
           "asOf": "2026-10-10"
+        },
+        "loop": {
+          "name": "Routines",
+          "summary": "A routine is a saved Claude Code configuration that runs automatically on a schedule (recurring or one-off), from an HTTP POST to its API endpoint, or in response to GitHub events, on Anthropic-managed cloud infrastructure.",
+          "sourceUrl": "https://code.claude.com/docs/en/routines",
+          "asOf": "2026-10-12"
         },
         "planning": {
           "name": "plan mode",
@@ -262,6 +305,9 @@
         "intake": {
           "omitted": "Not covered by the page fetched for this slice."
         },
+        "loop": {
+          "omitted": "Not covered by the page fetched for this slice."
+        },
         "planning": {
           "name": "Issues, Projects, Cycles",
           "summary": "Issues are Linear's fundamental unit of work; Projects group issues around a shared outcome, and Cycles are a team's repeating planning period.",
@@ -288,6 +334,9 @@
       ],
       "cells": {
         "intake": {
+          "omitted": "Not covered by the page fetched for this slice."
+        },
+        "loop": {
           "omitted": "Not covered by the page fetched for this slice."
         },
         "planning": {
@@ -317,6 +366,9 @@
       ],
       "cells": {
         "intake": {
+          "omitted": "Not covered by the page fetched for this slice."
+        },
+        "loop": {
           "omitted": "Not covered by the page fetched for this slice."
         },
         "planning": {
