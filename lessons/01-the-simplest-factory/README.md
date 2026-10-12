@@ -69,7 +69,8 @@ Numbers match [script.md](script.md).
 | Plan mode in your coding agent | Claude Code, Cursor | you want a plan you approve before edits |
 | Ticket assigned to an agent | Devin via Linear, Copilot cloud agent | work already lives in a tracker |
 | Chat mention starts a run | OpenHands, Cursor via Slack | your team lives in chat |
-| Markdown skills plus a todo file (this lesson) | sample `plan` / `dev-task` | you want it forkable and tool-neutral |
+| What starts the next unit of work: a schedule or event you configure | Claude Code Routines, Cursor, Devin, Copilot, OpenHands | you want work to start without you typing |
+| Markdown skills plus a todo file (this lesson) | sample `plan` / `dev-task` | you want it forkable and tool-neutral; our loop script starts the next todo (our choice) |
 
 Sources, quotes and as-of dates: [options.md](options.md). Full matrix: [landscape](../../landscape/README.md).
 
