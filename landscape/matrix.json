@@ -25,12 +25,12 @@
       "label": "How it keeps going until it passes"
     },
     {
-      "id": "loop-across",
-      "label": "Loop: next task by itself"
+      "id": "loop-starts-next",
+      "label": "What starts the next task"
     },
     {
-      "id": "loop-drive",
-      "label": "Loop: who drives"
+      "id": "loop-includes-plan",
+      "label": "Plan runs inside the loop?"
     }
   ],
   "products": [
@@ -80,19 +80,15 @@
           "asOf": "2026-10-13",
           "short": "In the prompt + Auto-fix"
         },
-        "loop-across": {
+        "loop-starts-next": {
           "name": "Automations",
           "summary": "An automation fires on a trigger (schedule, ticket, GitHub, Slack or webhook) and starts a session with a saved prompt. A finished session choosing the next ticket by itself is not documented.",
           "sourceUrl": "https://docs.devin.ai/product-guides/automations.md",
           "asOf": "2026-10-13",
-          "short": "Triggers start sessions; next-ticket pick undocumented"
+          "short": "A schedule + An event or label (Automations)"
         },
-        "loop-drive": {
-          "name": "Automations",
-          "summary": "The page says events start sessions automatically, without a person tagging Devin, once a person has created the automation.",
-          "sourceUrl": "https://docs.devin.ai/product-guides/automations.md",
-          "asOf": "2026-10-13",
-          "short": "Automated after setup"
+        "loop-includes-plan": {
+          "omitted": "Pages checked: Automations, Linear, Jira, Using Playbooks, gallery bulk-plan-backlog and prd-to-tickets (docs.devin.ai). None states whether a plan step runs inside the automation loop, or whether a person approves one first."
         }
       },
       "demoable": {
@@ -156,19 +152,19 @@
           "asOf": "2026-10-13",
           "short": "Hook (script blocks finishing)"
         },
-        "loop-across": {
+        "loop-starts-next": {
           "name": "Mission orchestrator",
-          "summary": "After each feature or milestone finishes, the orchestrator reviews progress and starts the next work from the plan.",
+          "summary": "After each feature or milestone finishes, the orchestrator starts the next work from the plan. Separately, scheduled automations (for example the \"Ticket to PR\" starter, every 15 minutes) pick up ready tickets.",
           "sourceUrl": "https://docs.factory.com/missions/overview",
           "asOf": "2026-10-13",
-          "short": "Orchestrator starts next feature after each"
+          "short": "A finished run + A schedule (Missions, automations)"
         },
-        "loop-drive": {
-          "name": "Mission orchestrator",
-          "summary": "After approval an orchestrator manages execution; the person can pause it and talk to it to recover.",
+        "loop-includes-plan": {
+          "name": "Missions plan approval",
+          "summary": "A Mission's plan is built with the person and must be approved before execution starts; the docs describe the orchestrator working from that plan and do not describe it re-planning during execution.",
           "sourceUrl": "https://docs.factory.com/missions/overview",
           "asOf": "2026-10-13",
-          "short": "Automated; person can pause"
+          "short": "No: plan approved before it runs"
         }
       },
       "demoable": {
@@ -217,19 +213,15 @@
           "asOf": "2026-10-13",
           "short": "Hook (script blocks finishing)"
         },
-        "loop-across": {
-          "name": "Agentic Workflows work queue (gh-aw)",
-          "summary": "On the gh-aw site (GitHub Next), a native work queue holds work as a dependency graph; the scheduler picks eligible work and a task waits for its predecessors' results. Copilot automations are documented only as trigger-started runs, not as picking the next ready issue.",
-          "sourceUrl": "https://github.github.com/gh-aw/reference/work-queue/",
+        "loop-starts-next": {
+          "name": "Copilot automations",
+          "summary": "A saved task runs when a trigger fires: a recurring schedule, an issue created, a pull request opened, or a pull request synchronized. Picking the next ready issue by itself is not documented for automations.",
+          "sourceUrl": "https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-automations",
           "asOf": "2026-10-13",
-          "short": "gh-aw work queue; Copilot automations: not documented"
+          "short": "A schedule + An event or label (automations)"
         },
-        "loop-drive": {
-          "name": "Agentic Workflows work queue (gh-aw)",
-          "summary": "Automated once the producer, dispatcher and worker workflows are published on the default branch.",
-          "sourceUrl": "https://github.github.com/gh-aw/guides/deploy-work-queue/",
-          "asOf": "2026-10-13",
-          "short": "Automated once workflows are published"
+        "loop-includes-plan": {
+          "omitted": "Pages checked: About automations, Creating automations, Managing rationale and approvals, Using cloud agent on GitHub (docs.github.com). None states whether a plan step runs inside the automation loop or is approved before it."
         }
       },
       "demoable": {
@@ -291,19 +283,19 @@
           "asOf": "2026-10-13",
           "short": "Goal (SDK run_goal)"
         },
-        "loop-across": {
+        "loop-starts-next": {
           "name": "Software Factory",
           "summary": "Four automations poll every 5 minutes. GitHub labels and statuses are the queue, and the next labeled issue is taken at the next poll.",
           "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md",
           "asOf": "2026-10-13",
-          "short": "Polls labeled issues every 5 minutes"
+          "short": "An event or label (5-minute poll)"
         },
-        "loop-drive": {
-          "name": "Software Factory",
-          "summary": "Automated after a person turns on the four automations and files the issues.",
+        "loop-includes-plan": {
+          "name": "Software Factory triage",
+          "summary": "The triage automation runs on the same 5-minute poll: it prioritizes issues, checks dependencies and establishes acceptance criteria before applying the ready-for-dev label, which triggers the developer automation. No person approves in between.",
           "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md",
           "asOf": "2026-10-13",
-          "short": "Automated once a person sets it up"
+          "short": "Yes: triage automation"
         }
       },
       "demoable": {
@@ -362,19 +354,19 @@
           "asOf": "2026-10-13",
           "short": "Hook + Auto-fix"
         },
-        "loop-across": {
+        "loop-starts-next": {
           "name": "Automations",
           "summary": "A trigger (schedule, source-control, Slack, webhook, Linear event) starts a cloud agent with a saved prompt. One run starting the next is not documented as chaining.",
           "sourceUrl": "https://cursor.com/docs/cloud-agent/automations.md",
           "asOf": "2026-10-13",
-          "short": "Triggers start runs; chaining not documented"
+          "short": "A schedule + An event or label (Automations)"
         },
-        "loop-drive": {
-          "name": "Automations",
-          "summary": "Automated after a person creates and activates the automation.",
-          "sourceUrl": "https://cursor.com/docs/cloud-agent/automations.md",
+        "loop-includes-plan": {
+          "name": "Projects coordinator",
+          "summary": "The Project coordinator plans the work, delegates it to agents and brings the finished work back; with subscriptions it delegates a fix each time a bug is posted. The page does not say whether each event gets a fresh plan or whether a plan needs approval.",
+          "sourceUrl": "https://cursor.com/docs/agent/projects",
           "asOf": "2026-10-13",
-          "short": "Automated after setup"
+          "short": "Yes: Project coordinator plans and delegates"
         }
       },
       "demoable": {
@@ -435,19 +427,19 @@
           "asOf": "2026-10-13",
           "short": "Goal"
         },
-        "loop-across": {
+        "loop-starts-next": {
           "name": "Agent teams",
           "summary": "In an agent team, a teammate that finishes a task picks up the next unassigned, unblocked task from the shared list on its own. Experimental and off by default.",
           "sourceUrl": "https://code.claude.com/docs/en/agent-teams.md",
           "asOf": "2026-10-13",
-          "short": "Agent teams self-claim next task (experimental)"
+          "short": "A finished run (agent team self-claim)"
         },
-        "loop-drive": {
+        "loop-includes-plan": {
           "name": "Agent teams",
-          "summary": "Automated after a person starts the team.",
+          "summary": "The team lead creates the tasks in the shared task list (with dependencies) and teammates work through them. The page does not say a person approves that task list first.",
           "sourceUrl": "https://code.claude.com/docs/en/agent-teams.md",
           "asOf": "2026-10-13",
-          "short": "Automated once a person starts the team"
+          "short": "Yes: team lead writes the task list"
         }
       },
       "demoable": {
