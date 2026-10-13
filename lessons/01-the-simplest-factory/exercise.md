@@ -32,7 +32,7 @@ Use [`factory/skills/plan/SKILL.md`](../../factory/skills/plan/SKILL.md),
 - [ ] your loop worked at least two todos in dependency order
 - [ ] your names are ones you chose
 
-You build all three pieces and run them end to end yourself. For a guided end-to-end run, see lesson 2.
+You build all three pieces and run them end to end yourself. Later lessons use the factory you build here to build the rest.
 
 ## Go further on your own
 

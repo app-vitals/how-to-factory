@@ -2,7 +2,7 @@
 
 Narrated by Dan over the slides (face cam bottom right). Slides hold labels; this file holds the words.
 Demo beats are numbered steps; [run-of-show.md](run-of-show.md) points at them. Every demo is build-only: we write
-the skill or the loop on camera and run nothing. The end-to-end run is lesson 2.
+the skill or the loop on camera and run nothing. From here, each later lesson adds a component from the factory map and builds it with this factory.
 
 Framing rule for every part: the concept first (tool-neutral), then "in our demo we use...", then "yours can be
 anything". Bun and Claude Code are our demo choices, never requirements. For plan, dev-task and the loop, each
@@ -107,6 +107,10 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
    deliberately missing: no automated review, no merge, no verification gate beyond the project's own tests. In our sample the
    agent runs the checks and decides it is done; other factories add an independent judge (another model, a script,
    a person). That is the verification lesson.
-10. **Next lesson and exercise.** Next lesson we run it end to end, then the loop builds the next feature. The
+   Then the destinations slide: each option extends one piece we built (Plan: a tracker holds the queue; Dev-task: each
+   task in its own environment; Loop: several at once, or on a schedule; Checks: another model or a script judges
+   done). Say: later, not next. From here our factory builds its own parts. Sources are in [options.md](options.md).
+10. **Next lesson and exercise.** From here our factory builds its own next parts: each lesson adds a component from the factory map, we plan the
+    feature, the loop runs dev-task on the tasks, and a person reviews the PRs. The order is open; promise nothing. The
     exercise ([exercise.md](exercise.md)) has you build your own plan, dev-task and loop and run them end to end
     yourself, with an agent and language of your choice.
