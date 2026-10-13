@@ -1,5 +1,10 @@
 # Field grid: lesson 1 draft
 
+> **Superseded, under rework.** This draft is superseded. Two of its observations are known to be wrong: that only
+> Factory Missions moves on to the next task by itself, and that plan is always human-approved. The per-product files
+> are being redone against each vendor's full docs index (session `lesson1-field-grid-redo`). Do not rely on the
+> conclusions below.
+
 Draft research for Dan to review before any slide or matrix restructure. Scope is lesson 1 only: plan, dev-task, loop.
 Every cell is a short paraphrase of the per-product file linked in its row, which holds the first-party URLs and the
 fetch date for each claim. Cells that say "not documented" are kept as the per-product files have them. Names are each
