@@ -73,10 +73,17 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
    - Concept: inputs are the task list, steps are pick the next ready task, run dev-task on it, re-read the list,
      repeat; output is a stream of open PRs. It stops when none is ready or one fails. Here status shows up: it is
      the queue's state (pending, in progress, PR open, done, blocked), written by dev-task and read by the loop.
-   - How the field differs (slide, [options.md](options.md)): moving on to the next task by itself splits the field.
-     Factory's orchestrator, OpenHands (polling labeled issues every 5 minutes) and Claude Code (agent teams,
-     experimental) document it. Devin and Cursor document event or schedule starts, not a finished run picking
-     the next task; Copilot automations document trigger starts and the gh-aw work queue documents picking the next task. Say "document", never "cannot": the sources only say what they document. The loop is our choice.
+   - How the field differs (slide, [options.md](options.md)): once set up, most run without a person starting each
+     task, so "who drives" is not a column; it barely separates anyone. The field differs on two questions. First,
+     what starts the next task: a finished run (Factory's orchestrator, Claude Code agent teams, experimental) or a
+     schedule or event (OpenHands polling labeled issues every 5 minutes; Cursor, Copilot and Devin automations).
+     Devin, Cursor and Copilot document trigger starts, not a finished run picking the next task. Second, whether plan
+     runs inside the loop: OpenHands (its triage automation), Claude Code agent teams (the lead writes the task list)
+     and Cursor Projects (the coordinator plans and delegates) do; Factory has a person approve the plan before the
+     Mission runs. Link back to the plan slide's [approval column](options.md#plan): ours runs plan first, which is where the human
+     approval lives. Devin and Copilot say nothing either way ("not in their docs"). Do not add a column for a person
+     stepping in between tasks; that is a later lesson. Say "document", never "cannot": the sources only say what they
+     document. The loop is our choice.
    - In our demo we use [`factory/loop.ts`](../../factory/loop.ts) (Bun). DEMO: write the loop on camera. Do not
      run it.
    - Yours can be anything: a shell loop, a cron job, a queue worker; the agent command is configuration.
