@@ -11,8 +11,8 @@ the end-to-end run is lesson 2.
 | # | Slides | Demo beat | Script step | Notes |
 |---|---|---|---|---|
 | 1 | 1-4 | | 1-3 | Title, factory map (plan, dev-task and loop glow), what the human does, what we build. Say `factory/` is our demo, not the standard |
-| 2 | 5-6 | | 4 | Plan concept (inputs, steps, outputs), then "how the field differs" (six factories: plan output and who drives). Say "not in their docs" for a blank, never "has none" |
-| 3 | 7-8 | | 4 | Task-card slide (title, description, acceptance criteria, depends on; size is one PR each), then why each part. Say dependencies let a task wait for another, so tasks stay small. Slides, not a demo |
+| 2 | 5 | | 4 | Plan concept (inputs, steps, outputs). Slide only |
+| 3 | 6-8 | | 4 | Task-card slide (title, description, acceptance criteria, depends on; size is one PR each), then why each part, then "how the field differs" (six factories, three yes/no questions: a person approves or edits first, tasks outlive the chat, criteria and dependencies). Say dependencies let a task wait for another, so tasks stay small. Say "not in their docs" for a blank, never "has none". Slides, not a demo |
 | 4 | 9 | DEMO write the plan skill | 4 | Write `factory/skills/plan/SKILL.md` on camera. Do not run it |
 | 5 | 10-11 | | 5 | Dev-task concept (isolate, code, verify, deliver; status is recorded in deliver; the PR opens only after verification passes; claim is for the parallel-work lesson), then how the field differs (what judges a task done; same prompt-to-PR shape everywhere) |
 | 6 | 12 | DEMO write the dev-task skill | 5 | Write `factory/skills/dev-task/SKILL.md` on camera. Do not run it on a task |

@@ -75,21 +75,6 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">Plan: how the field differs</h2>
-      <div class="slide-body">
-        <div class="visual">
-          <table class="comp-table">
-            <thead><tr><th>Who</th><th>Plan output (as of 2026-10-13)</th><th>Who drives</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>Ask Devin: prompt that starts a session</td><td>Linear: Human or Automated; Ask Devin unstated</td></tr><tr><td>Factory</td><td>Mission plan: features grouped in milestones</td><td>Human approves</td></tr><tr><td>OpenHands</td><td>Issue labeled ready-for-dev</td><td>Automated triage; Human writes the issue</td></tr><tr><td>Cursor</td><td>Editable plan; saved to home or workspace</td><td>Plan Mode: Human approves</td></tr><tr><td>GitHub Copilot</td><td>Plan shown for review; no task split documented</td><td>Human approves</td></tr><tr><td>Claude Code</td><td>Editable plan; task split not in their docs</td><td>Plan mode: Human approves</td></tr><tr><td>This sample</td><td>todos.json entries</td><td>Human, in chat</td></tr></tbody>
-          </table>
-        </div>
-        <p class="caption">Links in the video description.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
       <h2 class="slide-title">What a plan outputs: tasks</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="task-card">
@@ -109,6 +94,21 @@
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div>
         <ul class="bullets"><li>Description: the agent starts with no memory</li><li>Criteria: checks the agent can run</li><li>Depends on: order, so tasks stay small</li></ul>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Plan: how the field differs</h2>
+      <div class="slide-body">
+        <div class="visual">
+          <table class="comp-table">
+            <thead><tr><th>Who (as of 2026-10-13)</th><th>A person approves or edits first</th><th>Tasks outlive the chat</th><th>Criteria and dependencies</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>not in their docs</td><td>Yes: Linear tickets and ticket comments</td><td>Mixed: example tickets carry both; Ask Devin unstated</td></tr><tr><td>Factory</td><td>Yes: approve or keep iterating</td><td>Yes: Spec Mode can save a file</td><td>Mixed: Missions criteria; dependencies not in their docs</td></tr><tr><td>OpenHands</td><td>No: triage runs automatically</td><td>Yes: GitHub issue labeled ready-for-dev</td><td>Yes: triage checks dependencies and criteria</td></tr><tr><td>Cursor</td><td>Yes: edit the plan, then Build</td><td>Yes: plan file; Save to workspace</td><td>not in their docs</td></tr><tr><td>GitHub Copilot</td><td>Yes: review and iterate on the plan</td><td>not in their docs</td><td>not in their docs</td></tr><tr><td>Claude Code</td><td>Yes: edit it, approve, or keep planning</td><td>Yes: agent teams task list on disk</td><td>Mixed: agent teams have dependencies; criteria undocumented</td></tr><tr><td>This sample</td><td>Yes: you shape it in chat</td><td>Yes: todos.json</td><td>Yes: criteria and dependencies in each task</td></tr></tbody>
+          </table>
+        </div>
+        <p class="caption">Links in the video description.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
