@@ -181,7 +181,7 @@ export function checkDeckHtml(html: string, cfg: DeckConfig, file = "deck"): Vio
 
     const visible = decodeEntities(textOf(slide)).replace(/\s+/g, " ").toLowerCase();
     for (const word of cfg.forbiddenWords) {
-      if (visible.includes(word.toLowerCase())) fail("forbidden-word", `viewer-facing text contains forbidden word "${word}"`);
+      if (containsPhrase(visible, word)) fail("forbidden-word", `viewer-facing text contains forbidden word "${word}"`);
     }
 
     for (const e of all) {
@@ -189,6 +189,11 @@ export function checkDeckHtml(html: string, cfg: DeckConfig, file = "deck"): Vio
     }
   });
   return out;
+}
+
+function containsPhrase(text: string, phrase: string): boolean {
+  const escaped = phrase.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(?<![\\p{L}\\p{N}])${escaped}(?![\\p{L}\\p{N}])`, "u").test(text);
 }
 
 export function loadConfig(root: string): DeckConfig {

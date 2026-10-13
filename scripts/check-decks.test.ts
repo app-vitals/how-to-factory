@@ -119,6 +119,11 @@ describe("forbidden words", () => {
     expect(rules(deck(slide(`<div class="visual"><table><tr><td>Not   Documented</td></tr></table></div>`)))).toEqual(["forbidden-word"]);
   });
 
+  test("matches whole phrases only, not substrings", () => {
+    expect(rules(deck(slide(`<ul><li>We outsourced the matrixes</li></ul>${VISUAL}`)))).toEqual([]);
+    expect(rules(deck(slide(`<ul><li>It was sourced locally</li></ul>${VISUAL}`)))).toEqual(["forbidden-word"]);
+  });
+
   test("passes a clean deck", () => {
     expect(rules(deck(slide(`<ul><li>plain words</li></ul>${VISUAL}`)))).toEqual([]);
   });
