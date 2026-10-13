@@ -18,7 +18,7 @@ factories call the same jobs `feature-dev`, `implement`, `build`, `breakdown` an
 
 A software factory turns a request into a reviewed change without you typing every step. Lesson 1 builds the first
 half of that and stops at an open pull request: **planning** (a conversation becomes small, checkable tasks),
-**execution** (one agent does one todo in isolation and opens a pull request) and a **loop** (repeat until no todo
+**execution** (one agent does one todo on its own branch and opens a pull request) and a **loop** (repeat until no todo
 is ready). A human reviews and merges.
 
 ## What the human does
@@ -61,7 +61,7 @@ without an account anywhere.
 ### Dev-task
 
 - **Concept:** inputs are one task; outputs are a pull request and a recorded status. The loop triggers it, not
-  you. Four steps: **isolate** (its own branch in a worktree, so main stays clean), **code**, **verify**
+  you. Four steps: **branch** (its own branch in a worktree, so main stays clean), **code**, **verify**
   (acceptance checks plus the project's tests, typecheck and lint, fixed until they pass), **deliver** (commit, push,
   PR, and record the status: `pr_open` once verify passes, blocked with a reason otherwise). Verify gates the PR.
   Claiming a task (locks, heartbeats) is a multi-agent concern and comes back in the parallel-work lesson.
@@ -71,7 +71,7 @@ without an account anywhere.
 - **In our demo we use:** a second markdown skill,
   [`factory/skills/dev-task/SKILL.md`](../../factory/skills/dev-task/SKILL.md), run in a git worktree. Demo: we
   write the skill.
-- **Yours can be anything:** any agent, any language, any test runner, any way of isolating the work.
+- **Yours can be anything:** any agent, any language, any test runner, any way of keeping the work off main.
 
 ### The loop
 

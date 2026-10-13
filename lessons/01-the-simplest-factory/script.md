@@ -52,7 +52,7 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
      `todos.json` is the portable stand-in. Show one task's four parts on a task-card slide (a slide, not a demo).
 5. **Dev-task: concept, then DEMO write the dev-task skill.**
    - Concept: inputs are one task, outputs are a pull request and a recorded status. Dev-task is triggered by the
-     loop, not by you. Four steps: **isolate** (its own branch in a worktree, so main stays clean), **code** (implement
+     loop, not by you. Four steps: **branch** (its own branch in a worktree, so main stays clean), **code** (implement
      against the description and criteria), **verify** (run the acceptance checks plus the project's tests,
      typecheck and lint; fix until they pass), **deliver** (commit, push, open the PR and record the status: `pr_open`
      once verification passes, blocked with a reason otherwise). Verify gates the PR: nothing is delivered until it
@@ -65,7 +65,7 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
      gate the PR.
    - In our demo we use [`factory/skills/dev-task/SKILL.md`](../../factory/skills/dev-task/SKILL.md). DEMO: write
      the skill on camera. Do not run it on a todo.
-   - Yours can be anything: any agent, language, test runner or isolation method.
+   - Yours can be anything: any agent, language, test runner or way of keeping the work off main.
 6. **The loop: concept, then DEMO write the loop.**
    - Concept: inputs are the task list, steps are pick the next ready task, run dev-task on it, re-read the list,
      repeat; output is a stream of open PRs. It stops when none is ready or one fails. Here status shows up: it is
