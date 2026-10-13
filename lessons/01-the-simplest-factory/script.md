@@ -41,8 +41,9 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
      automatically; a person writes the issue. Do tasks outlive the chat? The field splits between a plan you approve
      and tasks in a queue, and the same product often has both surfaces: Claude Code plan mode vs agent teams (task list
      on disk), Cursor Plan Mode (a plan file) vs Projects, OpenHands triage (issues labeled ready-for-dev), Devin
-     (Linear tickets). Do the tasks carry criteria and dependencies? Only OpenHands triage and Factory Missions
-     document acceptance criteria, and only OpenHands triage and Claude Code agent teams document dependencies. Say
+     (Linear tickets). Do the tasks carry criteria and dependencies? OpenHands triage, Factory Missions and Devin's
+     example tickets (an example, not a guaranteed format) document acceptance criteria; OpenHands triage, Claude Code
+     agent teams and Devin's example tickets document dependencies. Say
      "not in their docs" only for omitted cells (Devin approval, Copilot persistence and contents, Cursor contents);
      elsewhere say what the cell says, including "not documented" where the page says so.
    - In our demo we use a markdown skill, [`factory/skills/plan/SKILL.md`](../../factory/skills/plan/SKILL.md),
