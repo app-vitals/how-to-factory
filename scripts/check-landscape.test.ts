@@ -12,6 +12,7 @@ const cell = (over: Partial<Cell> = {}): Cell => ({
   sourceUrl: "https://docs.example.com/thing",
   asOf: "2026-10-12",
   short: "Does a thing",
+  chip: "Thing",
   ...over,
 });
 
@@ -37,14 +38,14 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
       cells: {
         "plan-name": cell(),
         "execute-name": cell(),
-        "plan-hitl": cell(over),
-        "plan-persist": cell(),
-        "plan-contents": cell(),
-        "verify-judge": cell(),
+        "plan-hitl": cell({ chip: "✓", ...over }),
+        "plan-persist": cell({ chip: "✗" }),
+        "plan-contents": cell({ chip: "◐" }),
+        "verify-judge": cell({ chip: "Check + Model" }),
         "verify-runs-app": { omitted: "no page found; checked docs index and quickstart" },
-        "verify-keeps-going": cell(),
-        "loop-starts-next": cell(),
-        "loop-includes-plan": cell(),
+        "verify-keeps-going": cell({ chip: "Goal" }),
+        "loop-starts-next": cell({ chip: "Finished run" }),
+        "loop-includes-plan": cell({ chip: "✓" }),
       },
       demoable: { kind: "unknown" },
       destination: { summary: "unknown" },
@@ -119,6 +120,46 @@ describe("validateLandscape", () => {
       "9 words",
     );
   });
+  test("chip is required on every populated cell", () => {
+    expect(validateLandscape(make({ chip: "" }), TODAY).join()).toContain("missing chip");
+    const d = make();
+    delete (factory(d).cells["plan-name"] as Partial<Cell>).chip;
+    expect(validateLandscape(d, TODAY).join()).toContain("plan-name: missing chip");
+    const e = make();
+    queue(e).queue = cell({ chip: "" });
+    expect(validateLandscape(e, TODAY).join()).toContain("q queue: missing chip");
+  });
+  test("mark chips must be one of ✓ ✗ ◐", () => {
+    for (const chip of ["✓", "✗", "◐"]) expect(validateLandscape(make({ chip }), TODAY)).toEqual([]);
+    for (const chip of ["Yes", "✓✓", "✓ + ✗", "x"])
+      expect(validateLandscape(make({ chip }), TODAY).join()).toContain("plan-hitl: chip");
+  });
+  test("label chips must come from the component's set, at most two", () => {
+    const withJudge = (chip: string) => {
+      const d = make();
+      factory(d).cells["verify-judge"] = cell({ chip });
+      return validateLandscape(d, TODAY).join();
+    };
+    expect(withJudge("Person")).toBe("");
+    expect(withJudge("Check + Agent")).toBe("");
+    expect(withJudge("Goal")).toContain('label "Goal" must be one of');
+    expect(withJudge("Check + Model + Agent")).toContain("3 labels (max 2)");
+    const d = make();
+    factory(d).cells["loop-starts-next"] = cell({ chip: "Hook" });
+    expect(validateLandscape(d, TODAY).join()).toContain("loop-starts-next: chip label");
+  });
+  test("name chips are at most 3 words", () => {
+    const withName = (chip: string) => {
+      const d = make();
+      factory(d).cells["execute-name"] = cell({ chip });
+      return validateLandscape(d, TODAY).join();
+    };
+    expect(withName("Issue to PR")).toBe("");
+    expect(withName("Issue to PR automation")).toContain("4 words (max 3)");
+    const d = make();
+    queue(d).queue = cell({ chip: "one two three four" });
+    expect(validateLandscape(d, TODAY).join()).toContain("q queue: chip is 4 words");
+  });
   test("task-queue product needs a sourced queue cell", () => {
     const d = make();
     delete (queue(d) as Partial<TaskQueueProduct>).queue;
@@ -159,6 +200,7 @@ describe("README freshness", () => {
     const out = renderLandscape(make());
     expect(out).toContain("no page found; checked docs index and quickstart");
     expect(out).toContain("https://docs.example.com/thing");
+    expect(out).toContain("◐ **Thing**");
   });
 });
 

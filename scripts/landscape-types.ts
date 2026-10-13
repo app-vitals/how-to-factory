@@ -4,6 +4,38 @@ export type ComponentId = (typeof COMPONENT_IDS)[number];
 /** Longest `short` a slide cell may carry, in words. */
 export const SHORT_MAX_WORDS = 8;
 
+/** Longest `name` chip, in words. */
+export const CHIP_NAME_MAX_WORDS = 3;
+
+/** Most labels a labels chip may join with " + ". */
+export const CHIP_MAX_LABELS = 2;
+
+export const CHIP_MARKS = ["✓", "✗", "◐"] as const;
+
+export type ChipRule =
+  | { kind: "mark"; allowed: readonly string[] }
+  | { kind: "labels"; allowed: readonly string[] }
+  | { kind: "name" };
+
+const MARK: ChipRule = { kind: "mark", allowed: CHIP_MARKS };
+
+/** The chip format each component's cells must follow. */
+export const CHIP_RULES: Record<ComponentId, ChipRule> = {
+  "plan-name": { kind: "name" },
+  "execute-name": { kind: "name" },
+  "plan-hitl": MARK,
+  "plan-persist": MARK,
+  "plan-contents": MARK,
+  "verify-judge": { kind: "labels", allowed: ["Check", "Model", "Agent", "Person"] },
+  "verify-runs-app": MARK,
+  "verify-keeps-going": { kind: "labels", allowed: ["Goal", "Hook", "Auto-fix", "Prompt", "Autopilot"] },
+  "loop-starts-next": { kind: "labels", allowed: ["Event", "Schedule", "Finished run", "Person"] },
+  "loop-includes-plan": MARK,
+};
+
+/** Task-queue products have no component; their `queue` cell chip is the product's own term. */
+export const QUEUE_CHIP_RULE: ChipRule = { kind: "name" };
+
 /** A sourced claim. `name` is the product's own name for the capability. */
 export interface Cell {
   /** The product's own name for the stage/feature, or the literal "unknown". */
@@ -14,6 +46,8 @@ export interface Cell {
   asOf: string;
   /** The text a slide cell shows: at most SHORT_MAX_WORDS words; names the surface when a product has two. */
   short: string;
+  /** The compact mark, labels or name a slide cell shows; its format is set per component by CHIP_RULES. */
+  chip: string;
 }
 
 /** A component we could not source; listed in the README, never guessed. */
