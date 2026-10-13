@@ -52,6 +52,7 @@ the diagram vocabulary in `decks/DIAGRAMS.md`.
 
 - Max 3 bullets per slide, 8 words per bullet, 8 words in a title; no prose paragraphs (a caption of at most 12 words is
   allowed); one idea per slide; at most 2 visual blocks; every content slide has a visual (title and DEMO slides exempt).
+- Viewer-facing text never contains internal jargon: `matrix`, `options.md`, `sourced`, `not documented` (list: `forbiddenWords` in `decks/deck.config.json`; comments and attributes are ignored).
 - Diagrams: max 8 nodes, node labels at most 3 words, one diagram per slide, one question per diagram; HTML/CSS or inline
   SVG only; use the shared legend (human, agent, store/queue, external, scheduled job).
 - Keep the bottom-right face-cam safe zone (22% x 30%) clear; check with `?guides`.

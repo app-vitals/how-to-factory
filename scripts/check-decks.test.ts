@@ -108,6 +108,27 @@ describe("check-decks exemptions and exclusions", () => {
   });
 });
 
+describe("forbidden words", () => {
+  test("fails with the slide and word named", () => {
+    const v = checkDeckHtml(deck(slide(VISUAL), slide(`<ul><li>See the Options.md file</li></ul>${VISUAL}`)), cfg);
+    expect(v.map((x) => [x.slide, x.rule])).toEqual([[2, "forbidden-word"]]);
+    expect(v[0]?.message).toContain("options.md");
+  });
+
+  test("matches multi-word phrases case-insensitively, including table cells", () => {
+    expect(rules(deck(slide(`<div class="visual"><table><tr><td>Not   Documented</td></tr></table></div>`)))).toEqual(["forbidden-word"]);
+  });
+
+  test("passes a clean deck", () => {
+    expect(rules(deck(slide(`<ul><li>plain words</li></ul>${VISUAL}`)))).toEqual([]);
+  });
+
+  test("ignores comments, attributes, scripts and styles", () => {
+    const body = `<!-- matrix sourced --><ul><li>fine</li></ul><div class="visual matrix" title="sourced"><table><tr><td>x</td></tr></table></div><script>var matrix=1</script><style>.matrix{}</style>`;
+    expect(rules(deck(slide(body)))).toEqual([]);
+  });
+});
+
 describe("check-decks over the repo", () => {
   test("the template passes", async () => {
     const { violations, files } = await checkDecks(ROOT);

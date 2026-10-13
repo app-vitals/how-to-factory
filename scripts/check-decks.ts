@@ -15,6 +15,7 @@ export interface DeckConfig {
   maxNodeLabelWords: number;
   safeZone: { widthPct: number; heightPct: number };
   visualExemptKinds: string[];
+  forbiddenWords: string[];
 }
 
 export interface Violation {
@@ -83,9 +84,10 @@ function textOf(e: El, skip: (el: El) => boolean = () => false): string {
 
 const ENTITIES: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"', nbsp: " ", "#39": "'" };
 
+const decodeEntities = (text: string) => text.replace(/&(#?\w+);/g, (_, n: string) => ENTITIES[n] ?? " ");
+
 export function wordCount(text: string): number {
-  const decoded = text.replace(/&(#?\w+);/g, (_, n: string) => ENTITIES[n] ?? " ");
-  return decoded.split(/\s+/).filter((t) => /[\p{L}\p{N}]/u.test(t)).length;
+  return decodeEntities(text).split(/\s+/).filter((t) => /[\p{L}\p{N}]/u.test(t)).length;
 }
 
 const isVisual = (e: El) => hasClass(e, "visual");
@@ -175,6 +177,11 @@ export function checkDeckHtml(html: string, cfg: DeckConfig, file = "deck"): Vio
         const w = wordCount(textOf(node));
         if (w > cfg.maxNodeLabelWords) fail("node-label-words", `node label "${textOf(node).trim()}" has ${w} words (max ${cfg.maxNodeLabelWords})`);
       }
+    }
+
+    const visible = decodeEntities(textOf(slide)).replace(/\s+/g, " ").toLowerCase();
+    for (const word of cfg.forbiddenWords) {
+      if (visible.includes(word.toLowerCase())) fail("forbidden-word", `viewer-facing text contains forbidden word "${word}"`);
     }
 
     for (const e of all) {
