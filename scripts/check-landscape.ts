@@ -1,6 +1,17 @@
 import { readFileSync } from "node:fs";
 import { renderLandscape } from "./render-landscape.ts";
-import { COMPONENT_IDS, DEMOABLE_KINDS, SHORT_MAX_WORDS, type Cell, type Landscape } from "./landscape-types.ts";
+import {
+  CHIP_MAX_LABELS,
+  CHIP_NAME_MAX_WORDS,
+  CHIP_RULES,
+  COMPONENT_IDS,
+  DEMOABLE_KINDS,
+  QUEUE_CHIP_RULE,
+  SHORT_MAX_WORDS,
+  type Cell,
+  type ChipRule,
+  type Landscape,
+} from "./landscape-types.ts";
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -33,6 +44,23 @@ function checkSource(url: unknown, hosts: string[]): string | null {
   return null;
 }
 
+function checkChip(chip: unknown, rule: ChipRule): string | null {
+  if (blank(chip)) return "missing chip";
+  const c = chip as string;
+  if (c !== c.trim()) return `chip "${c}" has leading or trailing whitespace`;
+  if (rule.kind === "mark")
+    return rule.allowed.includes(c) ? null : `chip "${c}" must be one of ${rule.allowed.join(" ")}`;
+  if (rule.kind === "labels") {
+    const labels = c.split(" + ");
+    if (labels.length > CHIP_MAX_LABELS) return `chip "${c}" has ${labels.length} labels (max ${CHIP_MAX_LABELS})`;
+    const bad = labels.filter((l) => !rule.allowed.includes(l));
+    return bad.length ? `chip label "${bad[0]}" must be one of ${rule.allowed.join(", ")}` : null;
+  }
+  return wordCount(c) > CHIP_NAME_MAX_WORDS
+    ? `chip is ${wordCount(c)} words (max ${CHIP_NAME_MAX_WORDS})`
+    : null;
+}
+
 /** Returns a list of human-readable problems; empty means valid. `today` is YYYY-MM-DD. */
 export function validateLandscape(data: Landscape, today: string): string[] {
   const errors: string[] = [];
@@ -50,17 +78,18 @@ export function validateLandscape(data: Landscape, today: string): string[] {
 
     // Naming rule: `name` must be non-empty. The literal "unknown" is the only
     // allowed placeholder, for when the source gives no product-specific name.
-    const checkCell = (where: string, cell: Cell) => {
+    const checkCell = (where: string, cell: Cell, chipRule: ChipRule) => {
       at(where, blank(cell.name) ? "missing name (use \"unknown\" if the source has none)" : null);
       sourced(where, cell);
       if (blank(cell.short)) at(where, "missing short");
       else if (wordCount(cell.short) > SHORT_MAX_WORDS)
         at(where, `short is ${wordCount(cell.short)} words (max ${SHORT_MAX_WORDS})`);
+      at(where, checkChip(cell.chip, chipRule));
     };
 
     if (p.kind === "task-queue") {
       if (!p.queue) errors.push(`${p.id} queue: missing`);
-      else checkCell("queue", p.queue);
+      else checkCell("queue", p.queue, QUEUE_CHIP_RULE);
     } else {
       for (const c of data.components) {
         const cell = p.cells?.[c.id];
@@ -70,7 +99,7 @@ export function validateLandscape(data: Landscape, today: string): string[] {
         } else if ("omitted" in cell) {
           at(where, blank(cell.omitted) ? "omitted needs a reason" : null);
         } else {
-          checkCell(where, cell);
+          checkCell(where, cell, CHIP_RULES[c.id]);
         }
       }
     }

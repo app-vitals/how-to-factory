@@ -10,7 +10,7 @@ const link = (url?: string, asOf?: string) =>
 
 function renderCell(c: Cell | OmittedCell): string {
   if (isOmitted(c)) return `_omitted_`;
-  return `**${esc(c.name)}**: ${esc(c.summary)}${link(c.sourceUrl, c.asOf)}`;
+  return `${esc(c.chip)} **${esc(c.name)}**: ${esc(c.summary)}${link(c.sourceUrl, c.asOf)}`;
 }
 
 function renderTable(label: string, products: Product[], columns: string[], cols: (p: Product) => string[]): string[] {
@@ -80,13 +80,22 @@ export function renderLandscape(data: Landscape): string {
     "   or the literal `unknown` if its docs give none), `summary` (a paraphrase of the page),",
     "   `sourceUrl` (https, on a host listed in the product's `allowedHosts`), `asOf`",
     "   (`YYYY-MM-DD`, the day you fetched the page), and `short` (at most 8 words, the text a",
-    "   slide cell shows; name the surface when a product has two). Factories carry one cell per",
-    "   component; task-queue products carry one `queue` cell.",
-    "2. `demoable` and `destination` need the same source and date unless they are explicitly",
+    "   slide cell shows; name the surface when a product has two), and `chip` (the compact text a",
+    "   slide cell shows, in the format below). Factories carry one cell per component; task-queue",
+    "   products carry one `queue` cell. Omitted cells have no chip; slides show `–` for them.",
+    "2. `chip` format by component:",
+    "   - Marks (`plan-hitl`, `plan-persist`, `plan-contents`, `verify-runs-app`, `loop-includes-plan`):",
+    "     exactly one of `✓` (yes), `✗` (no, only where a cited page states it), `◐` (partly or mixed).",
+    "   - Labels, one or two joined by ` + `: `verify-judge` from Check, Model, Agent, Person;",
+    "     `verify-keeps-going` from Goal, Hook, Auto-fix, Prompt, Autopilot; `loop-starts-next` from",
+    "     Event, Schedule, Finished run, Person.",
+    "   - Names (`plan-name`, `execute-name`, and a task-queue `queue` cell): the product's own term,",
+    "     at most 3 words, never a docs page title.",
+    "3. `demoable` and `destination` need the same source and date unless they are explicitly",
     "   `unknown` (`kind: \"unknown\"` / `summary: \"unknown\"`).",
-    "3. If you cannot find a first-party page that supports a cell, replace it with",
+    "4. If you cannot find a first-party page that supports a cell, replace it with",
     "   `{ \"omitted\": \"reason\" }`; the reason names the pages checked. Never fill a cell from memory.",
-    "4. Run `bun scripts/render-landscape.ts` to regenerate this file, then",
+    "5. Run `bun scripts/render-landscape.ts` to regenerate this file, then",
     "   `bun scripts/check-landscape.ts` (also run in CI) to validate.",
     "",
   );
