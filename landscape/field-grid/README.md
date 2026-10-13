@@ -58,13 +58,13 @@ that are filled but carry an "X not documented" aside are counted separately as 
 | PLAN | output | 2 (Copilot, OpenHands) | 1 (Devin) | Differs: plan view, Mission Control, editable plan, spec file |
 | PLAN | who drives | **3** (Devin, Copilot, OpenHands) | 0 | Where documented, always Human approves |
 | DEV-TASK | input | 0 | 0 | Mostly the same: a written prompt or issue; criteria advised by Devin, Copilot, Claude Code |
-| DEV-TASK | step | 1 (OpenHands) | 2 (Cursor, Factory: which checks run) | Mostly the same: build, test, iterate |
+| DEV-TASK | step | 1 (OpenHands) | 1 (Cursor: which checks run) | Mostly the same: build, test, iterate |
 | DEV-TASK | output | 0 | 2 (Factory, OpenHands: PR not documented) | Mostly the same: a PR or branch |
 | DEV-TASK | who drives | 1 (Devin) | 0 | Differs: Human (OpenHands, Copilot, Claude Code) vs Automated (Cursor, Factory) |
 | LOOP | input | 0 | 0 | Mostly the same: schedule or event triggers |
-| LOOP | step | 0 | 6 (continuing to a next task by itself is undocumented or stated as not happening for Devin, OpenHands, Cursor, Copilot, Claude Code) | Differs: only Factory Missions documents moving on by itself |
+| LOOP | step | 0 | 5 (continuing to a next task by itself is undocumented or stated as not happening for Devin, OpenHands, Cursor, Copilot, Claude Code) | Differs: only Factory Missions documents moving on by itself |
 | LOOP | output | 1 (Copilot) | 0 | Differs, depending on the prompt |
-| LOOP | who drives | 0 | 2 (Devin, OpenHands: only the start) | Mostly the same: Automated for the start |
+| LOOP | who drives | 0 | 3 (Devin, OpenHands, Copilot: only the start) | Mostly the same: Automated for the start |
 
 **Flagged for rework (more than two blanks):** PLAN / who drives (3 blanks). PLAN / output has two, at the limit.
 Counting partials too, PLAN / step and LOOP / step are effectively undocumented on the questions the lesson cares about
