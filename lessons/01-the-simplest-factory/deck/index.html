@@ -179,11 +179,11 @@
       <div class="slide-body">
         <div class="visual">
           <table class="comp-table">
-            <thead><tr><th>Who</th><th>Next task by itself (as of 2026-10-13)</th><th>Who drives</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>Triggers start sessions; next-ticket pick not in their docs</td><td>Automated after setup</td></tr><tr><td>Factory</td><td>Orchestrator starts next feature after each</td><td>Automated; person can pause</td></tr><tr><td>OpenHands</td><td>Polls labeled issues every 5 minutes</td><td>Automated once a person sets it up</td></tr><tr><td>Cursor</td><td>Triggers start runs; chaining not in their docs</td><td>Automated after setup</td></tr><tr><td>GitHub Copilot</td><td>gh-aw work queue; Copilot automations: not in their docs</td><td>Automated once workflows are published</td></tr><tr><td>Claude Code</td><td>Agent teams self-claim next task (experimental)</td><td>Automated once a person starts the team</td></tr><tr><td>This sample</td><td>Script picks the next ready todo</td><td>Automated (script)</td></tr></tbody>
+            <thead><tr><th>Who (as of 2026-10-13)</th><th>What starts the next task</th><th>Plan runs inside the loop</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>A schedule + An event or label (Automations)</td><td>not in their docs</td></tr><tr><td>Factory</td><td>A finished run + A schedule (Missions, automations)</td><td>No: plan approved before it runs</td></tr><tr><td>OpenHands</td><td>An event or label (5-minute poll)</td><td>Yes: triage automation</td></tr><tr><td>Cursor</td><td>A schedule + An event or label (Automations)</td><td>Yes: Project coordinator plans and delegates</td></tr><tr><td>GitHub Copilot</td><td>A schedule + An event or label (automations)</td><td>not in their docs</td></tr><tr><td>Claude Code</td><td>A finished run (agent team self-claim)</td><td>Yes: team lead writes the task list</td></tr><tr><td>This sample</td><td>A finished run (the script loops)</td><td>No: you run plan first</td></tr></tbody>
           </table>
         </div>
-        <p class="caption">Links in the video description.</p>
+        <p class="caption">Once set up, most run without a person starting each task.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
