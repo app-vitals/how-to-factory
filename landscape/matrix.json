@@ -1,6 +1,14 @@
 {
   "components": [
     {
+      "id": "plan-name",
+      "label": "What they call the planning step"
+    },
+    {
+      "id": "execute-name",
+      "label": "What they call the working step"
+    },
+    {
       "id": "plan-hitl",
       "label": "A person approves or edits first"
     },
@@ -42,6 +50,20 @@
         "devin.ai"
       ],
       "cells": {
+        "plan-name": {
+          "name": "Ask Devin",
+          "summary": "The docs page says to use Ask Devin to ask questions about your codebase, plan tasks, and generate high-context sessions. The page does not mention the !plan playbook.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/ask-devin.md",
+          "asOf": "2026-10-13",
+          "short": "Ask Devin"
+        },
+        "execute-name": {
+          "name": "Devin session",
+          "summary": "The docs tell people to start one Devin session for each verifiable sub-task, so the session is the unit in which Devin works a task.",
+          "sourceUrl": "https://docs.devin.ai/essential-guidelines/instructing-devin-effectively.md",
+          "asOf": "2026-10-13",
+          "short": "Devin session"
+        },
         "plan-hitl": {
           "omitted": "Pages checked: Ask Devin, Linear, Jira, Using Playbooks, gallery bulk-plan-backlog and prd-to-tickets (docs.devin.ai). They describe a person working with Devin in conversation or Devin posting plan comments with open questions, but none states whether a person must approve or edit the plan before work starts."
         },
@@ -110,6 +132,20 @@
         "factory.ai"
       ],
       "cells": {
+        "plan-name": {
+          "name": "Spec Mode",
+          "summary": "The Interaction Modes page offers Spec Mode, which plans before implementation: Droid investigates and proposes a plan before any code changes. Missions, a separate mode, coordinate larger multi-feature work with an orchestrator.",
+          "sourceUrl": "https://docs.factory.com/autonomy-and-safety/specification-mode",
+          "asOf": "2026-10-13",
+          "short": "Spec Mode"
+        },
+        "execute-name": {
+          "name": "Worker session",
+          "summary": "In a Mission, each feature gets a fresh worker session with clean context, and the page uses 'workers' for the same thing.",
+          "sourceUrl": "https://factory.com/news/missions",
+          "asOf": "2026-10-13",
+          "short": "Mission worker session"
+        },
         "plan-hitl": {
           "name": "Specification Mode",
           "summary": "Droid researches read-only and proposes a plan; nothing is edited until the person approves, and the person can approve or keep iterating on it. In Missions, execution starts once the plan is approved.",
@@ -183,6 +219,16 @@
         "github.com"
       ],
       "cells": {
+        "plan-name": {
+          "omitted": "Pages checked: Research, plan and iterate; About Copilot cloud agent; the 2026-04-01 changelog post (docs.github.com, github.blog). They describe asking for a plan before changes, but none names the planning feature; 'Research, plan and iterate' is a how-to page title."
+        },
+        "execute-name": {
+          "name": "Copilot cloud agent",
+          "summary": "The docs say Copilot cloud agent can research a repository, plan changes, and implement them in the background.",
+          "sourceUrl": "https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent",
+          "asOf": "2026-10-13",
+          "short": "Copilot cloud agent"
+        },
         "plan-hitl": {
           "name": "Research, plan and iterate",
           "summary": "The cloud agent shows a plan before making changes; the person reviews it and iterates with follow-up prompts until it matches their intent, then asks it to implement. In Copilot CLI plan mode the person chooses to accept the plan before autopilot starts.",
@@ -241,6 +287,20 @@
         "github.com"
       ],
       "cells": {
+        "plan-name": {
+          "name": "GitHub Issue Triage",
+          "summary": "The Software Factory page names the triage automation GitHub Issue Triage: it prioritizes issues, checks dependencies and establishes acceptance criteria before applying ready-for-dev.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md",
+          "asOf": "2026-10-13",
+          "short": "GitHub Issue Triage automation"
+        },
+        "execute-name": {
+          "name": "GitHub Issue to PR",
+          "summary": "The Software Factory page names the developer automation GitHub Issue to PR; it watches the ready-for-dev trigger label and opens pull requests.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md",
+          "asOf": "2026-10-13",
+          "short": "GitHub Issue to PR automation"
+        },
         "plan-hitl": {
           "name": "Software Factory triage",
           "summary": "The triage agent runs as an automation that checks every 5 minutes: it prioritizes issues, checks dependencies, establishes acceptance criteria, then applies the ready-for-dev label. The page describes no step where a person approves or edits the result; the person writes the issues and acceptance criteria beforehand.",
@@ -316,6 +376,20 @@
         "cursor.com"
       ],
       "cells": {
+        "plan-name": {
+          "name": "Plan Mode",
+          "summary": "The Plan Mode page says Plan Mode creates detailed implementation plans before writing any code.",
+          "sourceUrl": "https://cursor.com/docs/agent/plan-mode",
+          "asOf": "2026-10-13",
+          "short": "Plan Mode"
+        },
+        "execute-name": {
+          "name": "Cloud Agents",
+          "summary": "The Cloud Agents page describes cloud agents as running in isolated VMs with full development environments instead of on your local machine.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent",
+          "asOf": "2026-10-13",
+          "short": "Cloud agent"
+        },
         "plan-hitl": {
           "name": "Plan Mode",
           "summary": "The agent writes a plan that the person reviews and edits in chat or as markdown, then clicks Build when satisfied. If it is not right, the docs advise reverting and refining the plan rather than patching a bad build with follow-ups.",
@@ -389,6 +463,20 @@
         "docs.claude.com"
       ],
       "cells": {
+        "plan-name": {
+          "name": "Plan mode",
+          "summary": "The permission modes page describes plan mode: Claude researches and proposes changes without editing source, entered with Shift+Tab or a /plan prefix.",
+          "sourceUrl": "https://code.claude.com/docs/en/permission-modes.md",
+          "asOf": "2026-10-13",
+          "short": "Plan mode"
+        },
+        "execute-name": {
+          "name": "Session",
+          "summary": "The docs describe each Claude Code conversation as a session, with its own context window, where Claude gathers context, acts and verifies.",
+          "sourceUrl": "https://code.claude.com/docs/en/how-claude-code-works.md",
+          "asOf": "2026-10-13",
+          "short": "Claude Code session"
+        },
         "plan-hitl": {
           "name": "Plan mode",
           "summary": "Claude writes a plan and does not edit source files until it is approved. The person can open the plan in a text editor (Ctrl+G) and edit it; approving offers three choices: continue in auto mode, continue approving each edit, or keep planning.",
