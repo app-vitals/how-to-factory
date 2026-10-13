@@ -44,8 +44,8 @@ it end to end is lesson 2.
 - **What a task contains:** four parts. A *title* (a handle for skimming the queue). A *description* (what, why and
   what is out of scope), because the agent has no memory of your conversation. *Acceptance criteria* (checks the
   agent can run or inspect), because they tell it when it is done and give verify something to pass or fail.
-  *Dependencies* (which tasks come first), so the loop can pick an order; sourcing for this part is thin, see
-  [options.md](options.md). Size is a rule, not a field: small enough for one PR. Status is the queue's state
+  *Dependencies* (which tasks must finish before another can run), so the plan can cut smaller tasks and the loop can
+  order them; see Kiro and Spec Kit in [options.md](options.md). Size is a rule, not a field: small enough for one PR. Status is the queue's state
   (introduced with the loop), and the branch is derived by dev-task (a real concern once work runs in parallel,
   a later lesson).
 - **How the field differs:** Claude Code and Cursor document a planning mode in the session; for other products the
@@ -60,9 +60,10 @@ without an account anywhere.
 ### Dev-task
 
 - **Concept:** inputs are one task; outputs are a pull request and a recorded status. The loop triggers it, not
-  you. Five steps: **claim** (mark in progress, isolate), **code**, **verify** (acceptance checks plus the
-  project's tests, typecheck and lint, fixed until they pass), **deliver** (commit, PR), **record** (status; blocked
-  with a reason if verify cannot pass). Verify gates the PR.
+  you. Four steps: **isolate** (its own branch in a worktree, so main stays clean), **code**, **verify**
+  (acceptance checks plus the project's tests, typecheck and lint, fixed until they pass), **deliver** (commit, push,
+  PR, and record the status: `pr_open` once verify passes, blocked with a reason otherwise). Verify gates the PR.
+  Claiming a task (locks, heartbeats) is a multi-agent concern and comes back in the parallel-work lesson.
 - **How the field differs:** the shape is common; the environment and trigger differ.
 - **In our demo we use:** a second markdown skill,
   [`factory/skills/dev-task/SKILL.md`](../../factory/skills/dev-task/SKILL.md), run in a git worktree. Demo: we
@@ -117,6 +118,12 @@ Sources, quotes and as-of dates: [options.md](options.md). Full matrix: [landsca
 Described, not prescribed. Factories point toward: work queues in a tracker (Linear, Jira, GitHub
 Issues), isolated cloud sandboxes per task, and parallel agents or scheduled runs. Later components get picked up by
 the loop, in an order that is left open.
+
+## What belongs in lesson 1
+
+The test: does a single agent need it to turn one conversation into reviewed PRs end to end? If yes, it is here: plan
+(tasks with a description, acceptance criteria and dependencies), dev-task, the loop, and you planning and reviewing.
+The rest is where factories take it, covered in later lessons.
 
 ## Exercise and go further
 

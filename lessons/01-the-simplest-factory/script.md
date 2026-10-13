@@ -27,8 +27,9 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
        conversation, so the description is all the context it gets.
      - Acceptance criteria: checks the agent can run or inspect, not intentions. This is the strongest agreement
        across the sources, because it is what lets the agent know it is done and lets verify (below) pass or fail.
-     - Dependencies: which tasks must finish first, so the loop can pick an order. Say plainly that the sourcing
-       here is thin (Spec Kit marks independent tasks `[P]`); the case is our own reasoning, not an industry norm.
+     - Dependencies: a task must finish before another can execute. That is what lets the plan cut smaller
+       tasks and what the loop orders by. Kiro documents a dependency graph with parallel waves and Spec Kit marks
+       independent tasks `[P]` ([options.md](options.md)).
      - Size is a rule, not a field: each task is small enough to deliver as one PR. Status is not plan output; it is
        the queue's state, introduced in the loop section. The branch is derived by dev-task; it only becomes a real
        concern with parallel work, which is a later lesson.
@@ -41,10 +42,12 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
      `todos.json` is the portable stand-in. Show one task's four parts on a task-card slide (a slide, not a demo).
 5. **Dev-task: concept, then DEMO write the dev-task skill.**
    - Concept: inputs are one task, outputs are a pull request and a recorded status. Dev-task is triggered by the
-     loop, not by you. Five steps: **claim** (mark it in progress and isolate the work), **code** (implement against
-     the description and criteria), **verify** (run the acceptance checks plus the project's tests, typecheck and
-     lint; fix until they pass), **deliver** (commit and open the PR), **record** (set the status; blocked with a
-     reason if verification cannot pass). Verify gates the PR: nothing is delivered until it passes.
+     loop, not by you. Four steps: **isolate** (its own branch in a worktree, so main stays clean), **code** (implement
+     against the description and criteria), **verify** (run the acceptance checks plus the project's tests,
+     typecheck and lint; fix until they pass), **deliver** (commit, push, open the PR and record the status: `pr_open`
+     once verification passes, blocked with a reason otherwise). Verify gates the PR: nothing is delivered until it
+     passes. Say claim (locks, heartbeats, stale claims) is a multi-agent concern; it comes back in the parallel-work
+     lesson.
    - How the field differs (slide): the shape is common; the environment and trigger differ (sessions, cloud VMs,
      sandboxes).
    - In our demo we use [`factory/skills/dev-task/SKILL.md`](../../factory/skills/dev-task/SKILL.md). DEMO: write

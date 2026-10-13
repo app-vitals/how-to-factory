@@ -85,16 +85,19 @@ the sources describe as a product feature.
 Each row is a paraphrase of a first-party page, fetched and read on 2026-10-12. Only what the fetched page says is
 listed; a claim the page did not support was dropped.
 
-| Product | What it says a task needs | Source (as of 2026-10-12) |
+| Product | What it says a task needs | Source (as of 2026-10-12 unless stated) |
 |---|---|---|
 | GitHub Copilot coding agent | a clear description of the problem or work, complete acceptance criteria for what a good solution looks like (for example, whether there should be unit tests), and directions about which files need to change | [best practices](https://docs.github.com/en/copilot/how-tos/agents/copilot-coding-agent/best-practices-for-using-copilot-to-work-on-tasks) |
 | Devin | be as specific as possible, give the repo and broader purpose as context, define clear success criteria, and split work into verifiable sub-tasks, one session each | [instructing Devin effectively](https://docs.devin.ai/essential-guidelines/instructing-devin-effectively) |
 | Claude Code | give it a check it can run (tests, a build, a linter) so it can verify its own work; the most useful specs name the files and interfaces involved, state what is out of scope, and end with an end-to-end verification step | [best practices](https://code.claude.com/docs/en/best-practices) |
 | Anthropic (long-running agents) | a feature list where each entry has a description, verification steps and a `passes` flag the agent edits only by changing its status; JSON chosen because the model is less likely to overwrite it than Markdown (published 2025-11-26) | [effective harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) |
-| Spec Kit | its tasks command marks independent tasks `[P]` and outlines safe parallel groups | [spec-driven.md](https://github.com/github/spec-kit/blob/main/spec-driven.md) |
+| Spec Kit | its tasks command marks independent tasks `[P]` and outlines safe parallel groups | [spec-driven.md](https://github.com/github/spec-kit/blob/main/spec-driven.md), as of 2026-10-13 |
+| Kiro | builds a dependency graph of the tasks in `tasks.md` and groups independent tasks into waves; tasks in a wave run concurrently, waves run in order | [specs](https://kiro.dev/docs/specs/), as of 2026-10-13 |
 
-Evidence for **dependencies** is thin: Spec Kit's `[P]` marker is the only first-party mention found, and it is one
-sentence. The case for dependencies in this lesson is our own reasoning (the loop needs an order). Size is not a
+**Dependencies** exist so a task can wait until another finishes. That ordering is what lets the plan cut small tasks
+and what the loop orders by. Kiro documents a dependency graph with parallel waves, and Spec Kit marks independent
+tasks `[P]`. Neither page was found to say more than that here (for example, Kiro's page does not address tracing
+tasks to requirements, so we do not claim it). Size is not a
 field in any of these; Copilot's page stresses well-scoped tasks and Devin's says split into verifiable sub-tasks, so
 we treat size as a rule (one PR), not a field.
 
