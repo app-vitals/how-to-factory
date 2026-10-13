@@ -27,6 +27,10 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
        conversation, so the description is all the context it gets.
      - Acceptance criteria: checks the agent can run or inspect, not intentions. This is the strongest agreement
        across the sources, because it is what lets the agent know it is done and lets verify (below) pass or fail.
+     - Worked example (say it over the task-card slide): a task "add a `greet(name)` function" with two criteria.
+       `greet('Ada')` returns `Hello, Ada`; `greet('')` is rejected with an error. Each criterion becomes a check
+       the agent can run, here a test: one asserts the greeting, one asserts the error. The plan writes the
+       criteria as checks; dev-task runs them in its verify step.
      - Dependencies: a task must finish before another can execute. That is what lets the plan cut smaller
        tasks and what the loop orders by. Kiro documents a dependency graph with parallel waves and Spec Kit marks
        independent tasks `[P]` ([options.md](options.md)).
@@ -56,7 +60,8 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
      against the description and criteria), **verify** (run the acceptance checks plus the project's tests,
      typecheck and lint; fix until they pass), **deliver** (commit, push, open the PR and record the status: `pr_open`
      once verification passes, blocked with a reason otherwise). Verify gates the PR: nothing is delivered until it
-     passes. Say claim (locks, heartbeats, stale claims) is a multi-agent concern; it comes back in the parallel-work
+     passes. If verify fails, the task is set blocked with a
+     reason and the loop stops on it; that is how the loop knows something went wrong. Say claim (locks, heartbeats, stale claims) is a multi-agent concern; it comes back in the parallel-work
      lesson.
    - How the field differs (slide, [options.md](options.md)): the prompt-to-PR flow is the same shape in every
      factory, and running tests and linters and retrying are common to most (caption). The one thing the slide shows
@@ -71,7 +76,8 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
    - Yours can be anything: any agent, language, test runner or way of keeping the work off main.
 6. **The loop: concept, then DEMO write the loop.**
    - Concept: inputs are the task list, steps are pick the next ready task, run dev-task on it, re-read the list,
-     repeat; output is a stream of open PRs. It stops when none is ready or one fails. Here status shows up: it is
+     repeat; output is a stream of open PRs. It stops when none is ready or one fails: a task that
+     failed verify is blocked with a reason, and the loop stops on it. Here status shows up: it is
      the queue's state (pending, in progress, PR open, done, blocked), written by dev-task and read by the loop.
    - How the field differs (slide, [options.md](options.md)): once set up, most run without a person starting each
      task, so "who drives" is not a column; it barely separates anyone. The field differs on two questions. First,
@@ -98,7 +104,9 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
    and Cursor say Plan mode, Factory says Spec Mode, Devin says Ask Devin, OpenHands says GitHub Issue Triage; for
    execution Devin says Devin session, Cursor says cloud agent, Copilot says Copilot cloud agent. Copilot's planning
    cell reads "no name in their docs". Say nothing the cells do not source. Name yours anything. Say what is
-   deliberately missing: no automated review, no merge, no verification gate beyond the project's own tests.
+   deliberately missing: no automated review, no merge, no verification gate beyond the project's own tests. In our sample the
+   agent runs the checks and decides it is done; other factories add an independent judge (another model, a script,
+   a person). That is the verification lesson.
 10. **Next lesson and exercise.** Next lesson we run it end to end, then the loop builds the next feature. The
     exercise ([exercise.md](exercise.md)) has you build your own plan, dev-task and loop and run them end to end
     yourself, with an agent and language of your choice.

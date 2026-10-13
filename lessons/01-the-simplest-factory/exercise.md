@@ -11,7 +11,7 @@ Our demo uses Bun and Claude Code; you do not need either. Describe the outcomes
 
 1. A scratch project under git with one commit and at least one passing test.
 2. A planning step (skill, prompt, script; name it whatever you like) whose input is your conversation with your
-   agent about the work (or a file you point it at) and that produces a task list file with, at minimum: id, title, description, acceptance criteria, dependencies. Each task is small enough for one PR.
+   agent about the work (or a file you point it at) and that produces a task list file with, at minimum: id, title, description, acceptance criteria, dependencies. Write the acceptance criteria as checks you can run. Each task is small enough for one PR.
 3. A check that the todo list file is valid (any language, any test runner).
 4. An execution step that takes one task id, works on its own branch (a separate worktree keeps
    your checkout clean), implements it, verifies it (the task's acceptance criteria plus the project's
