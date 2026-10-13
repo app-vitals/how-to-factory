@@ -34,11 +34,11 @@ Surface: OpenHands Automations.
 | --- | --- | --- | --- |
 | input | A natural-language prompt plus a schedule and timezone (for example daily, weekly or every few hours) | https://docs.openhands.dev/openhands/usage/automations/overview | 2026-10-13 |
 | step | At each scheduled time the agent runs the prompt using the configured model, secrets, integrations and git credentials; the QA-changes page also lists event-driven automations (a PR opened, ready for review, or labeled) | https://docs.openhands.dev/openhands/usage/automations/overview ; https://docs.openhands.dev/openhands/usage/use-cases/qa-changes | 2026-10-13 |
-| output | Whatever the prompt asks for (a Slack post, a saved report, a GitHub issue); the conversation is saved to review later. The page says there is no automatic chaining into a following task | https://docs.openhands.dev/openhands/usage/automations/overview | 2026-10-13 |
-| who drives | Automated for the start; each run is a separate execution | https://docs.openhands.dev/openhands/usage/automations/overview | 2026-10-13 |
+| output | Whatever the prompt asks for (a Slack post, a saved report, a GitHub issue); the conversation is saved to review later. Chaining into a following task is not documented on this page | https://docs.openhands.dev/openhands/usage/automations/overview | 2026-10-13 |
+| who drives | Automated for the start; the page describes each automation as a scheduled conversation and does not document how runs relate to each other | https://docs.openhands.dev/openhands/usage/automations/overview | 2026-10-13 |
 
 ## Not documented
 
 - PLAN: everything; none of the pages fetched describes a planning step or plan artifact.
 - DEV-TASK: what the agent verifies before replying and what it delivers (PR, diff or branch) from a Slack conversation.
-- LOOP: moving to a next task on its own (the automations page says runs are not chained).
+- LOOP: moving to a next task on its own (not documented: the automations page does not say whether runs are chained).
