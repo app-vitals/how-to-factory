@@ -21,6 +21,19 @@ is a recommended order.
 
 ---
 
+## The four bands
+
+The components group into four bands. Each lesson zooms into one band of the map.
+
+- **Work in:** Intake, Planning.
+- **Work done:** Execution, Verification, Review, Release.
+- **Keeps it moving:** Coordination / loop, Chat interface.
+- **Keeps it safe and healthy:** Governance, Feedback / maintenance, Memory / learning.
+
+Entries marked **(proposed)** are candidate additions or splits that are not final; see the notes at the end.
+
+---
+
 ## 1. Intake / spec
 
 - **Also called:** requirements, ticket, brief, PRD, issue, prompt.
@@ -29,6 +42,15 @@ is a recommended order.
 - **Simplest version:** you type the request into a chat session.
 - **Range:** a markdown spec file in the repo; an issue template; an assigned ticket in a tracker; a Q&A session that produces a spec; webhooks from chat, email or monitoring; a structured form.
 - **Shipwright example:** an interactive session that turns a conversation into a product spec file.
+
+## 1b. Triage and readiness (proposed)
+
+- **Also called:** triage, prioritization, grooming, readiness check, definition of ready, dedupe.
+- **What it is:** the step between Intake and Planning where incoming work is prioritized, deduplicated and checked for dependencies and acceptance criteria before it is marked ready.
+- **Why it exists:** not everything that arrives should be built, or built now. Unready work wastes an agent run and a reviewer's time.
+- **Simplest version:** you skim the request list and pick the one that is clear enough to start.
+- **Range:** a human sorting a backlog; a checklist a ticket must satisfy before it gets a "ready" label; automatic duplicate detection; dependency checks that hold work until its prerequisites land; an agent that scores, merges and rejects incoming requests.
+- **Shipwright example:** a task becomes eligible only when its dependencies are satisfied, and tasks that need a person are flagged instead of started.
 
 ## 2. Planning / decomposition
 
@@ -47,6 +69,15 @@ is a recommended order.
 - **Simplest version:** one agent, one task, on a branch, ending in a pull request.
 - **Range:** your own working tree; a git worktree per task; a container or VM per task; one agent versus several in parallel; test-first prompts; sub-agents for research or review inside the task.
 - **Shipwright example:** a task command claims one task, works in a worktree and opens a PR, never touching the main branch.
+
+## 3b. Execution environment (proposed)
+
+- **Also called:** sandbox, runner, workspace, dev environment, isolation.
+- **What it is:** the place an agent's work runs: the machine or container, its filesystem checkout, its network access and the secrets it can see.
+- **Why it exists:** an agent that can run code can also break things. Where it runs sets how much damage a mistake or a bad instruction can do.
+- **Simplest version:** your own laptop and working tree.
+- **Range:** a git worktree per task; a container or VM per task; a sandbox with restricted network access; short-lived credentials injected only into the environment that needs them; a hosted runner pool. Today this is one bullet in Execution's range, and this entry would split it out.
+- **Shipwright example:** each task runs in its own git worktree, with credentials supplied through the agent's environment configuration.
 
 ## 4. Verification
 
@@ -84,6 +115,8 @@ is a recommended order.
 - **Range:** permission prompts; an allow-list of tools; a policy file read by every phase; tasks flagged as needing a human; audit trails beyond the PR diff; formal compliance programs for organizations that need them.
 - **Shipwright example:** one policy file controlling review posting, merge rights and autonomy, plus a task flag that routes work to a person.
 
+**Sub-topic (proposed): security and access.** Who and what may touch the factory: which credentials an agent holds, what each token may read or write, which tools and networks are reachable, and how access is revoked. It is a note under Governance rather than a separate component, and it overlaps with the execution environment.
+
 ## 8. Feedback / maintenance
 
 - **Also called:** observability, patrols, metrics, error triage, entropy scans, tech-debt sweeps.
@@ -93,10 +126,21 @@ is a recommended order.
 - **Range:** usage and spend dashboards; error-tracker triage that files tasks; dependency and security scans; duplicate-code or convention-drift scans; quality metrics such as cycle time, merge rate and rework ratio; factory-health observability such as run logs, session transcripts, stall detection and alerts when the factory goes quiet; the operations of running the factory itself, such as secrets handling, sandboxing, staged rollouts and on-call.
 - **Shipwright example:** scheduled scans for errors, security, convention drift and duplication that report and then queue tasks.
 
+**Sub-section: Observability / ops.** Kept as a labelled sub-section of this component, not a component of its own. It covers factory-health observability (run logs, session transcripts, stall detection, alerts when the factory goes quiet) and the operations of running the factory itself (secrets handling, sandboxing, staged rollouts, on-call). `lessons/README.md` carries the same sub-section under its own Observability / ops heading.
+
+## 9a. Instructions and standards (proposed)
+
+- **Also called:** instructions, rules, standards, CLAUDE.md, AGENTS.md, skills, conventions, style guide.
+- **What it is:** the standards file, skills and rules a factory reads from day one: how the code is written, what commands to run, what to never do. Split out of Memory / learning.
+- **Why it exists:** an agent that starts every session knowing the house rules makes fewer avoidable mistakes. This is written before any mistake happens, unlike learning from corrections.
+- **Simplest version:** one markdown instructions file in the repo that the agent reads each session.
+- **Range:** a single instructions file; per-directory rules; a library of reusable skills; shared standards enforced by checks as well as read by agents; organization-wide defaults with per-project overrides.
+- **Shipwright example:** a project instructions file plus a shared principles file that execution, planning and review all read.
+
 ## 9. Memory / learning
 
 - **Also called:** instructions, rules, CLAUDE.md, AGENTS.md, notes, knowledge, skills.
-- **What it is:** how the factory keeps what it learned so the next session starts smarter.
+- **What it is:** how the factory keeps what it learned from corrections and past sessions so the next session starts smarter. Day-one standards are split out as Instructions and standards (proposed).
 - **Why it exists:** each agent session starts fresh. Without durable memory, you correct the same mistake every week.
 - **Simplest version:** a markdown instructions file in the repo that the agent reads each session, and that you edit when it gets something wrong.
 - **Range:** hand-written instructions; agent-proposed edits to those files; per-user or per-project memory stores; reusable skills; a periodic job that mines past sessions for recurring lessons.
@@ -110,6 +154,15 @@ is a recommended order.
 - **Simplest version:** you pick the next task and start the agent.
 - **Range:** manual launch; a shell loop; a cron tick that picks the oldest ready item and dispatches the matching phase; per-phase schedulers; a coordinator agent assigning to specialist agents; parallel workers pulling from a shared queue.
 - **Shipwright example:** a recurring tick merges candidates from each phase and dispatches exactly one, oldest first.
+
+## 10b. Multi-agent coordination (proposed)
+
+- **Also called:** delegation, orchestration, claims, swarm, parallel runs, fan-out.
+- **What it is:** how several agents share work without colliding: who takes which task, how a task is claimed, how results come back. Split from the loop, which stays "what starts the next task".
+- **Why it exists:** once more than one agent runs at a time, two can pick the same task or edit the same files. Someone has to decide who owns what.
+- **Simplest version:** one agent at a time, so there is nothing to coordinate.
+- **Range:** a lead agent delegating to sub-agents; a claim on a task in a shared queue, with a heartbeat so abandoned claims are released; parallel workers on separate branches; specialist agents per phase; limits on how many run at once.
+- **Shipwright example:** a task is claimed atomically before work starts, with a heartbeat that lets a stale claim be reclaimed.
 
 ## 11. Chat interface
 
@@ -126,4 +179,6 @@ is a recommended order.
 
 - The components overlap and blur. Many factories merge two or three into one command or one agent. That is fine.
 - The order above is a rough flow of work and not a build order. Start wherever your pain is.
-- The list is living. If you find a component that is missing, or a better way to carve this up, change it.
+- The list is living. If you find a component that is missing, or a better way to carve this up, change it. Entries marked (proposed) are not final: they may be merged back, renamed or dropped.
+- The bands are a reading aid, and a component can serve more than one band.
+- Observability / ops is kept as a labelled sub-section of Feedback / maintenance, in this doc and in `lessons/README.md`, and not promoted to a component. If it grows enough to need its own lesson series, promote it then.
