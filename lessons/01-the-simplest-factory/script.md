@@ -51,8 +51,8 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
      once verification passes, blocked with a reason otherwise). Verify gates the PR: nothing is delivered until it
      passes. Say claim (locks, heartbeats, stale claims) is a multi-agent concern; it comes back in the parallel-work
      lesson.
-   - How the field differs (slide, [options.md](options.md)): what judges a task done differs. Devin and Copilot run
-     tests, lint and type checks (Copilot's page does not document how the results gate the PR); Factory runs
+   - How the field differs (slide, [options.md](options.md)): what judges a task done differs. Devin runs
+     tests, lint and type checks, and Copilot runs tests and linters (Copilot's page does not document how the results gate the PR); Factory runs
      validation workers at the end of each milestone; OpenHands' SDK and Claude Code's `/goal` use a judge model;
      Cursor's agent builds and tests itself with no fixed gate. Ours is the project's own tests and checks, and they
      gate the PR.
@@ -65,8 +65,8 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
      the queue's state (pending, in progress, PR open, done, blocked), written by dev-task and read by the loop.
    - How the field differs (slide, [options.md](options.md)): moving on to the next task by itself splits the field.
      Factory's orchestrator, OpenHands (polling labeled issues every 5 minutes) and Claude Code (agent teams,
-     experimental) document it. Devin, Cursor and Copilot document event or schedule starts, not a finished run picking
-     the next task. Say "document", never "cannot": the sources only say what they document. The loop is our choice.
+     experimental) document it. Devin and Cursor document event or schedule starts, not a finished run picking
+     the next task; Copilot automations document trigger starts and the gh-aw work queue documents picking the next task. Say "document", never "cannot": the sources only say what they document. The loop is our choice.
    - In our demo we use [`factory/loop.ts`](../../factory/loop.ts) (Bun). DEMO: write the loop on camera. Do not
      run it.
    - Yours can be anything: a shell loop, a cron job, a queue worker; the agent command is configuration.

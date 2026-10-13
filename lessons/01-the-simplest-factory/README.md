@@ -65,7 +65,7 @@ without an account anywhere.
   (acceptance checks plus the project's tests, typecheck and lint, fixed until they pass), **deliver** (commit, push,
   PR, and record the status: `pr_open` once verify passes, blocked with a reason otherwise). Verify gates the PR.
   Claiming a task (locks, heartbeats) is a multi-agent concern and comes back in the parallel-work lesson.
-- **How the field differs:** what judges a task done differs: tests, lint and type checks (Devin, Copilot), validation
+- **How the field differs:** what judges a task done differs: tests, lint and type checks (Devin), tests and linters (Copilot), validation
   workers at each milestone end (Factory), a judge model (OpenHands SDK, Claude Code `/goal`), or the agent itself
   (Cursor). See [options.md](options.md).
 - **In our demo we use:** a second markdown skill,
@@ -80,7 +80,7 @@ without an account anywhere.
   queue's state, written by dev-task and read by the loop.
 - **How the field differs:** moving on to the next task by itself splits the field. Factory, OpenHands and Claude Code
   document it (Factory's orchestrator, OpenHands polling labeled issues, Claude Code agent teams, experimental);
-  Devin, Cursor and Copilot document event or schedule starts. See [options.md](options.md).
+  Devin and Cursor document event or schedule starts; Copilot automations document trigger starts and the gh-aw work queue documents picking the next task. See [options.md](options.md).
 - **In our demo we use:** [`factory/loop.ts`](../../factory/loop.ts), a short Bun script that picks the next
   `pending` todo whose dependencies are `done` and runs the agent headlessly on it. Demo: we write the loop.
 - **Yours can be anything:** a shell `while` loop, a cron job, a queue worker. The agent command is configuration.
