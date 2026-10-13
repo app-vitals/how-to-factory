@@ -1,0 +1,15 @@
+# Pre-filming checklist: Lesson NN
+
+> Copy next to the lesson. Definition of done from [docs/lesson-playbook.md](../../docs/lesson-playbook.md). Tick every box before filming.
+
+- [ ] Brief ([brief.md](brief.md)) agreed before work was queued
+- [ ] `bun test` passes
+- [ ] `bun scripts/check-decks.ts` passes
+- [ ] `bun scripts/check-landscape.ts` passes
+- [ ] Forbidden-words grep is clean in the deck, script and run-of-show: "matrix", "options.md", "sourced", "not documented" (a blank reads "not in their docs")
+- [ ] Every claim about another product has a first-party URL and an as-of date; dates re-checked
+- [ ] All links resolve
+- [ ] Factory map slide highlights the component taught
+- [ ] Slide count about 18 to 20; same vendors in the same order on every comparison slide, plus a "This sample" row
+- [ ] Demo run through once on a scratch repo (skills and loop); filming demo is build-only unless the lesson is about running
+- [ ] Exercise run by following only its text; outcomes listed, no required tool
