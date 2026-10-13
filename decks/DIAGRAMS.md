@@ -51,6 +51,15 @@ only; no diagram libraries. Mark the diagram element with `data-diagram` and eve
 4. **Swimlane / sequence**: handoffs between human, agent, task store and GitHub.
 5. **Layered stack** (`.grid-stack`): things that sit on top of each other.
 6. **Comparison table** (`.comp-table`) and **options grid** (`.options-grid`, "pick this if"): how other factories do it.
+   - **Marks and chips, not sentences.** Comparison cells hold only a mark (✓ yes, ✗ no, ◐ partly, – not in their docs),
+     a chip label from the landscape matrix's `chip` field (e.g. Check, Model, Schedule + Event) or a short own-term name
+     (at most 3 words). No sentences or parenthetical qualifiers; those stay in `options.md` and the script.
+   - **Header and legend.** Header column 1 reads `Checked MM/YYYY`, the month and year of the latest `asOf` among the
+     table's cells (the data keeps ISO dates). A table that uses marks gets a one-line `.legend` under it:
+     `✓ yes  ✗ no  ◐ partly  – not in their docs`.
+   - **Takeaway titles.** Title states what to notice (at most 8 words) and is checked against the chips before it ships.
+   - **Adaptive options grid.** `.options-grid` uses `repeat(auto-fit, minmax(8em, 1fr))`, so 1-4 boxes share one row at
+     any option count (at most 4). Each box is a short heading plus one short phrase, no repeated text.
 7. **2x2 matrix** (`.matrix`): trade-offs between two axes.
 8. **Before / after** (`.ba`).
 

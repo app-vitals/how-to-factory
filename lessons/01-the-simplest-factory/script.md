@@ -37,8 +37,9 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
      - Size is a rule, not a field: each task is small enough to deliver as one PR. Status is not plan output; it is
        the queue's state, introduced in the loop section. The branch is derived by dev-task; it only becomes a real
        concern with parallel work, which is a later lesson.
-   - How the field differs (slide, [options.md](options.md)): three questions, each answered from the cells and nothing
-     more. Does a person approve or edit the plan first? Approval is the gate form of human in the loop. When the person
+   - How the field differs (slide, [options.md](options.md)): takeaway "Few plans carry criteria and dependencies"; the
+     slide is marks only (✓ yes, ✗ no, ◐ partly, – not in their docs) under a "Checked 10/2026" header. Three questions, each
+     answered from the cells and nothing more. Does a person approve or edit the plan first? Approval is the gate form of human in the loop. When the person
      is not satisfied, the docs describe editing and iterating, not dropping the plan: Cursor (edit the plan, then
      Build), Copilot (review and iterate until it matches intent) and Claude Code (edit the plan, approve, or keep
      planning; no source edits until approved). Factory also approves or keeps iterating. OpenHands triage runs
@@ -63,7 +64,8 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
      passes. If verify fails, the task is set blocked with a
      reason and the loop stops on it; that is how the loop knows something went wrong. Say claim (locks, heartbeats, stale claims) is a multi-agent concern; it comes back in the parallel-work
      lesson.
-   - How the field differs (slide, [options.md](options.md)): the prompt-to-PR flow is the same shape in every
+   - How the field differs (slide, [options.md](options.md)): takeaway "Most use a check to judge done"; one column of
+     chips (Check, Model, Agent, Person). The prompt-to-PR flow is the same shape in every
      factory, and running tests and linters and retrying are common to most (caption). The one thing the slide shows
      is who decides it is done, and the answer is a category, not yes/no: a check (Devin and Copilot run tests,
      lint and type checks; Cursor's repository CI judges its cloud auto-fix; Copilot's page does not document how
@@ -79,7 +81,8 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
      repeat; output is a stream of open PRs. It stops when none is ready or one fails: a task that
      failed verify is blocked with a reason, and the loop stops on it. Here status shows up: it is
      the queue's state (pending, in progress, PR open, done, blocked), written by dev-task and read by the loop.
-   - How the field differs (slide, [options.md](options.md)): once set up, most run without a person starting each
+   - How the field differs (slide, [options.md](options.md)): takeaway "Only some loops plan for themselves"; chips for
+     what starts the next task, marks for plan inside the loop. Once set up, most run without a person starting each
      task, so "who drives" is not a column; it barely separates anyone. The field differs on two questions. First,
      what starts the next task: a finished run (Factory's orchestrator, Claude Code agent teams, experimental) or a
      schedule or event (OpenHands polling labeled issues every 5 minutes; Cursor, Copilot and Devin automations).
@@ -100,10 +103,10 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
    a human or an event starts each session. Do not claim other products cannot loop; the sources only say what they
    document.
 9. **Names, and where factories take it.** `plan` and `dev-task` are only this sample's names. Show the product term
-   in each cell of the Planning and Execution columns (from [options.md](options.md), a sourced slide): Claude Code
+   in each cell of the Planning and Execution columns (from [options.md](options.md)); takeaway "Same jobs, different names": Claude Code
    and Cursor say Plan mode, Factory says Spec Mode, Devin says Ask Devin, OpenHands says GitHub Issue Triage; for
    execution Devin says Devin session, Cursor says cloud agent, Copilot says Copilot cloud agent. Copilot's planning
-   cell reads "no name in their docs". Say nothing the cells do not source. Name yours anything. Say what is
+   cell is "–" (no name in their docs). Say nothing the cells do not source. Name yours anything. Say what is
    deliberately missing: no automated review, no merge, no verification gate beyond the project's own tests. In our sample the
    agent runs the checks and decides it is done; other factories add an independent judge (another model, a script,
    a person). That is the verification lesson.
