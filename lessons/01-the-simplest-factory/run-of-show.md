@@ -16,7 +16,7 @@ the end-to-end run is lesson 2.
 | 4 | 9 | DEMO write the plan skill | 4 | Write `factory/skills/plan/SKILL.md` on camera. Do not run it |
 | 5 | 10-11 | | 5 | Dev-task concept (branch, code, verify, deliver; status is recorded in deliver; the PR opens only after verification passes; claim is for the parallel-work lesson), then how the field differs (one column, who decides it's done: a check, another model, or the agent itself; the prompt-to-PR flow is the same shape everywhere) |
 | 6 | 12 | DEMO write the dev-task skill | 5 | Write `factory/skills/dev-task/SKILL.md` on camera. Do not run it on a task |
-| 7 | 13-14 | | 6 | Loop concept (introduces status: pending, in_progress, pr_open as the queue's state), then how the field differs (does it move to the next task by itself, and who drives) |
+| 7 | 13-14 | | 6 | Loop concept (introduces status: pending, in_progress, pr_open as the queue's state), then how the field differs (what starts the next task, and whether plan runs inside the loop) |
 | 8 | 15 | DEMO write the loop | 6 | Write `factory/loop.ts` on camera. Do not run it |
 | 9 | 16 | | 7 | Why we loop: say it is our opinion, not a standard |
 | 10 | 17 | | 8 | How it works together: our flow vs a human or event starting each session. Slide only |
