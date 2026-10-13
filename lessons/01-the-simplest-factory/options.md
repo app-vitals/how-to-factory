@@ -2,83 +2,52 @@
 
 Names are not canonical. All claims below are paraphrases of first-party pages, copied from
 [`landscape/matrix.json`](../../landscape/matrix.json) (rendered in [landscape/README.md](../../landscape/README.md)).
-As of 2026-10-10 for every row. Re-check before filming.
+Each cell carries its own as-of date. Re-check before filming.
 These appear on slides only; the lesson does not run other products live.
-
-## What other factories call it
-
-| Product | Planning | Execution | Source |
-|---|---|---|---|
-| Claude Code | plan mode | session | [plan mode](https://code.claude.com/docs/en/common-workflows), [overview](https://code.claude.com/docs/en/overview) |
-| Cursor | Plan Mode | Cloud agents | [planning](https://cursor.com/docs/agent/planning), [cloud agents](https://cursor.com/docs/background-agent) |
-| OpenHands | (not sourced) | sandbox | [sandboxes](https://docs.openhands.dev/openhands/usage/sandboxes/overview.md) |
-| GitHub Copilot coding agent | (not sourced) | Copilot cloud agent | [about](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent) |
-| Devin | (not sourced) | session | [session tools](https://docs.devin.ai/work-with-devin/devin-session-tools.md) |
-| Linear | Issues, Projects, Cycles | n/a (a queue, not an executor) | [conceptual model](https://linear.app/docs/conceptual-model) |
-| This sample | `plan` | `dev-task` | [factory/skills](../../factory/skills/) |
-
-## What starts the next unit of work
-
-Copied from the `loop` cells of the matrix, as of 2026-10-12. In this sample the loop is our choice: a script that
-picks the next ready todo ([`factory/loop.ts`](../../factory/loop.ts)). Cells the matrix omits are listed as not sourced.
-
-| Product | What starts a run | Source |
-|---|---|---|
-| Claude Code | Routines: a schedule (recurring or one-off), an HTTP POST to the routine's API endpoint, or GitHub events | [routines](https://code.claude.com/docs/en/routines) |
-| Cursor | Automations: a schedule (preset or cron), events from GitHub, GitLab, Slack, Linear and more, or a webhook | [automations](https://cursor.com/docs/cloud-agent/automations) |
-| Devin | Automations: Slack messages, GitHub webhooks, Linear ticket updates, schedules (cron or one-time) and custom webhooks | [automations](https://docs.devin.ai/product-guides/automations.md) |
-| GitHub Copilot coding agent | Automations: a task defined once, run on a schedule or on repository events | [about](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent) |
-| OpenHands | Automations: AI tasks run on a cron schedule, each run in a fresh sandbox | [automations](https://docs.openhands.dev/openhands/usage/automations/overview.md) |
-| Factory (Droid) | Automation trigger: a schedule, a Slack message, a GitHub event, or an HTTP POST to a webhook | [automations](https://docs.factory.com/software-factory/automations.md) |
-| Codegen | not sourced (the pages fetched describe manual, Web UI/CLI, API and PR-driven starts only) | n/a |
-| Linear, Jira, GitHub Issues | not sourced (queues, not executors) | n/a |
-| This sample | **our choice:** `loop.ts` runs while a todo is ready, one todo per run, stopping at the first failure | [factory/loop.ts](../../factory/loop.ts) |
 
 ## How the field differs
 
-Three short tables, one per part. Same sources and as-of dates as the matrix; "not sourced" means the matrix has no
-first-party page for it, not that the product lacks it.
+One table per concept, copied cell for cell from [`landscape/matrix.json`](../../landscape/matrix.json): the bold text is
+the product's own name for the capability, then a paraphrase of its first-party page, the source URL and the as-of date.
+Names are not canonical. A cell says "not documented" only where the page itself says so; the matrix has no omitted
+cells, so nothing here is "not in their docs". The last row of each table is the sample in `factory/`, sourced to our own
+files. Task-queue products (Linear, Jira, GitHub Issues) are not compared here; they are where a queue lives, not an agent.
 
-### Plan (as of 2026-10-10)
+### Plan
 
-| Product | Planning | Source |
+| Product | Plan output | Plan: who drives |
 |---|---|---|
-| Claude Code | plan mode: proposes a plan, no edits until you approve, in the session | [common workflows](https://code.claude.com/docs/en/common-workflows) |
-| Cursor | Plan Mode: asks questions, researches, produces a plan you review and edit before code is written | [planning](https://cursor.com/docs/agent/planning) |
-| Devin | no sourced planning stage | n/a |
-| GitHub Copilot coding agent | no sourced planning stage | n/a |
-| OpenHands | no sourced planning stage | n/a |
-| Codegen | no sourced planning stage | n/a |
-| Factory (Droid) | no sourced planning stage | n/a |
-| This sample | `plan` skill writes the plan to `factory/todos.json`, so it persists outside any session | [factory/skills/plan](../../factory/skills/plan/SKILL.md) |
+| Devin | **Ask Devin**: In Ask Devin the person scopes and breaks down the task in conversation with Devin, which writes a context-rich prompt that starts an Agent session. The page does not say the breakdown carries acceptance criteria or dependencies. ([source](https://docs.devin.ai/work-with-devin/ask-devin.md), as of 2026-10-13) | **Linear integration**: With Linear, a person starts the work by assigning the ticket, tagging a playbook label or @mentioning Devin (Human), or a Linear automation trigger starts it without manual assignment (Automated). For Ask Devin the page does not label who drives. ([source](https://docs.devin.ai/integrations/linear.md), as of 2026-10-13) |
+| Factory (Droid) | **Missions**: Droid builds a structured plan of features grouped into milestones; once the person approves it, the Mission enters Mission Control. Dependency edges between features are not documented. ([source](https://docs.factory.com/missions/overview), as of 2026-10-13) | **Missions**: Mission execution starts once the person approves the plan. ([source](https://docs.factory.com/missions/overview), as of 2026-10-13) |
+| GitHub Copilot coding agent | **Research, plan and iterate**: The cloud agent shows a plan in the conversation for review before any changes. Splitting a plan into separate tasks with acceptance criteria and dependencies is not documented. ([source](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/research-plan-iterate), as of 2026-10-13) | **Research, plan and iterate**: The person reviews the plan and iterates until it matches their intent before the agent implements it. ([source](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/research-plan-iterate), as of 2026-10-13) |
+| OpenHands | **Software Factory triage**: A triage agent prioritizes issues, checks their dependencies and establishes acceptance criteria, then applies the ready-for-dev label. A separate task list or plan file is not documented. ([source](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), as of 2026-10-13) | **Software Factory triage**: The triage step is an automation that checks every 5 minutes (Automated); a person writes the issue. ([source](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), as of 2026-10-13) |
+| Cursor | **Plan Mode**: The plan is editable and opens as a virtual file saved by default in the home directory; Save to workspace moves it into the repo. A plan that splits into tasks with criteria and dependencies is not documented as a format. ([source](https://cursor.com/help/ai-features/plan-mode.md), as of 2026-10-13) | **Plan Mode**: The person clicks Build when satisfied with the plan. ([source](https://cursor.com/docs/agent/plan-mode.md), as of 2026-10-13) |
+| Claude Code | **Plan mode**: Claude reads the code and writes a plan the person can open in an editor and edit before approving. Splitting the plan into separate tasks with acceptance criteria or dependencies is not documented for plan mode. ([source](https://code.claude.com/docs/en/permission-modes.md), as of 2026-10-13) | **Plan mode**: Source files are not edited until the person approves the plan. ([source](https://code.claude.com/docs/en/permission-modes.md), as of 2026-10-13) |
+| This sample | `plan` skill writes a task list to `factory/todos.json`, outside any session ([source](../../factory/skills/plan/SKILL.md)) | Human: you talk the work through, then run the skill ([source](../../factory/skills/plan/SKILL.md)) |
 
-### Dev-task (as of 2026-10-10)
+### Dev-task
 
-The shape is common: one task, worked in an isolated environment, checked, handed back as changes. The differences are
-the environment and what triggers it.
+| Product | Verify: what judges done |
+|---|---|
+| Devin | **unknown**: Devin runs existing tests, lint and type checks in its own environment and iterates until tests pass before submitting a PR. Which checks run is set by the prompt, playbook or repo skill, not by a fixed pipeline. ([source](https://docs.devin.ai/essential-guidelines/sdlc-integration.md), as of 2026-10-13) |
+| Factory (Droid) | **Validation workers**: Validation workers run at the end of each milestone, verifying its work, and Missions validate their own work by exercising the running application. ([source](https://docs.factory.com/missions/planning), as of 2026-10-13) |
+| GitHub Copilot coding agent | **Cloud agent session**: The agent works in its own GitHub Actions environment, where it runs tests and linters to validate changes. How the results decide whether it keeps going before opening the PR is not documented. ([source](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents), as of 2026-10-13) |
+| OpenHands | **Goal Completion Loop**: In the SDK, a second judge LLM audits the transcript for evidence, such as test output, that proves the objective is complete. The Issue to PR automation lists running tests as a step but does not document what happens when they fail. ([source](https://docs.openhands.dev/sdk/guides/convo-goal.md), as of 2026-10-13) |
+| Cursor | **Cloud Agents**: The cloud agent can build, test and interact with the changed software, and can control a desktop and browser. The docs say an agent that cannot run tests cannot close the loop. A fixed pre-delivery gate that always runs is not documented. ([source](https://cursor.com/docs/cloud-agent), as of 2026-10-13) |
+| Claude Code | **/goal**: After every turn a separate small model checks the condition; if it is not met, Claude starts another turn. The evaluator runs no commands and reads no files, so the condition must be something the transcript shows, such as a test result. ([source](https://code.claude.com/docs/en/goal.md), as of 2026-10-13) |
+| This sample | The `dev-task` skill's verify step: the task's acceptance checks plus the project's tests, typecheck and lint, fixed until they pass; it gates the PR ([source](../../factory/skills/dev-task/SKILL.md)) |
 
-| Product | Environment | Source |
+### Loop
+
+| Product | Loop: next task by itself | Loop: who drives |
 |---|---|---|
-| Claude Code | a session; subagents and background agents in parallel; `claude -p` for CI | [overview](https://code.claude.com/docs/en/overview) |
-| Cursor | cloud agents in isolated VMs with a full development environment | [background agents](https://cursor.com/docs/background-agent) |
-| Devin | a session with shell, IDE and browser | [session tools](https://docs.devin.ai/work-with-devin/devin-session-tools.md) |
-| GitHub Copilot coding agent | an ephemeral cloud development environment | [about](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent) |
-| OpenHands | a sandbox (Docker, Process or Remote) | [sandboxes](https://docs.openhands.dev/openhands/usage/sandboxes/overview.md) |
-| Codegen | isolated environments where agents run code and open PRs | [overview](https://docs.codegen.com/introduction/overview) |
-| Factory (Droid) | CLI, Missions and headless Exec Mode | [overview](https://docs.factory.com/cli/getting-started/overview) |
-| This sample | the `dev-task` skill in a git worktree | [factory/skills/dev-task](../../factory/skills/dev-task/SKILL.md) |
-
-### Loop (as of 2026-10-12)
-
-Most of these products start each session from a human or an event (a mention, a ticket, a webhook, a schedule),
-as the table above shows. Running a queue to exhaustion with a script is our choice for this sample, not something
-the sources describe as a product feature.
-
-| Product | Starts from | Source |
-|---|---|---|
-| Claude Code, Cursor, Devin, Copilot, OpenHands, Factory (Droid) | a human, or an event or schedule you configure | see "What starts the next unit of work" |
-| Codegen | not sourced | n/a |
-| This sample | our choice: `loop.ts` picks the next ready todo | [factory/loop.ts](../../factory/loop.ts) |
+| Devin | **Automations**: An automation fires on a trigger (schedule, ticket, GitHub, Slack or webhook) and starts a session with a saved prompt. A finished session choosing the next ticket by itself is not documented. ([source](https://docs.devin.ai/product-guides/automations.md), as of 2026-10-13) | **Automations**: The page says events start sessions automatically, without a person tagging Devin, once a person has created the automation. ([source](https://docs.devin.ai/product-guides/automations.md), as of 2026-10-13) |
+| Factory (Droid) | **Mission orchestrator**: After each feature or milestone finishes, the orchestrator reviews progress and starts the next work from the plan. ([source](https://docs.factory.com/missions/overview), as of 2026-10-13) | **Mission orchestrator**: After approval an orchestrator manages execution; the person can pause it and talk to it to recover. ([source](https://docs.factory.com/missions/overview), as of 2026-10-13) |
+| GitHub Copilot coding agent | **Agentic Workflows work queue (gh-aw)**: On the gh-aw site (GitHub Next), a native work queue holds work as a dependency graph; the scheduler picks eligible work and a task waits for its predecessors' results. Copilot automations are documented only as trigger-started runs, not as picking the next ready issue. ([source](https://github.github.com/gh-aw/reference/work-queue/), as of 2026-10-13) | **Agentic Workflows work queue (gh-aw)**: Automated once the producer, dispatcher and worker workflows are published on the default branch. ([source](https://github.github.com/gh-aw/guides/deploy-work-queue/), as of 2026-10-13) |
+| OpenHands | **Software Factory**: Four automations poll every 5 minutes. GitHub labels and statuses are the queue, and the next labeled issue is taken at the next poll. ([source](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), as of 2026-10-13) | **Software Factory**: Automated after a person turns on the four automations and files the issues. ([source](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), as of 2026-10-13) |
+| Cursor | **Automations**: A trigger (schedule, source-control, Slack, webhook, Linear event) starts a cloud agent with a saved prompt. One run starting the next is not documented as chaining. ([source](https://cursor.com/docs/cloud-agent/automations.md), as of 2026-10-13) | **Automations**: Automated after a person creates and activates the automation. ([source](https://cursor.com/docs/cloud-agent/automations.md), as of 2026-10-13) |
+| Claude Code | **Agent teams**: In an agent team, a teammate that finishes a task picks up the next unassigned, unblocked task from the shared list on its own. Experimental and off by default. ([source](https://code.claude.com/docs/en/agent-teams.md), as of 2026-10-13) | **Agent teams**: Automated after a person starts the team. ([source](https://code.claude.com/docs/en/agent-teams.md), as of 2026-10-13) |
+| This sample | `loop.ts` picks the next pending todo whose dependencies are done and runs the agent on it, stopping at the first failure ([source](../../factory/loop.ts)) | Automated once you start the script ([source](../../factory/loop.ts)) |
 
 ## What a good task contains
 
@@ -100,15 +69,6 @@ tasks `[P]`. Neither page was found to say more than that here (for example, Kir
 tasks to requirements, so we do not claim it). Size is not a
 field in any of these; Copilot's page stresses well-scoped tasks and Devin's says split into verifiable sub-tasks, so
 we treat size as a rule (one PR), not a field.
-
-## How work enters (intake)
-
-| Approach | Example | Pick this if | Source |
-|---|---|---|---|
-| Chat mention | OpenHands Slack app; Cursor via Slack | your team lives in chat | [OpenHands](https://docs.openhands.dev/openhands/usage/cloud/slack-installation.md), [Cursor](https://cursor.com/docs/background-agent) |
-| Ticket assignment | Devin via Linear | work already lives in a tracker | [Devin + Linear](https://docs.devin.ai/integrations/linear.md) |
-| Issue or PR on GitHub | Copilot cloud agent | your work is on GitHub | [about](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent) |
-| You type it | Claude Code terminal | you are one person | [overview](https://code.claude.com/docs/en/overview) |
 
 ## Other factories at a glance (a sourced slide, not a live demo)
 

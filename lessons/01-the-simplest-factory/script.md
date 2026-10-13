@@ -33,9 +33,12 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
      - Size is a rule, not a field: each task is small enough to deliver as one PR. Status is not plan output; it is
        the queue's state, introduced in the loop section. The branch is derived by dev-task; it only becomes a real
        concern with parallel work, which is a later lesson.
-   - How the field differs (slide, [options.md](options.md)): Claude Code and Cursor document a planning mode in the
-     session; for the other products we found no planning stage. Say "no planning stage found",
-     never "has none".
+   - How the field differs (slide, [options.md](options.md)): the plan splits into a plan you approve and tasks in a
+     queue. Claude Code (plan mode), Cursor (Plan Mode), Copilot (research, plan and iterate) and Factory (Missions)
+     show a plan the person approves before work starts; OpenHands works from issues in a queue, where a triage
+     automation checks dependencies and acceptance criteria and labels the issue ready. Say what the pages say:
+     Copilot, Claude Code and Cursor do not document splitting the plan into tasks with criteria and dependencies,
+     which is different from saying they cannot. The matrix has no omitted cells, so never say "not in their docs".
    - In our demo we use a markdown skill, [`factory/skills/plan/SKILL.md`](../../factory/skills/plan/SKILL.md),
      writing [`factory/todos.json`](../../factory/README.md). DEMO: write the skill on camera. Do not run it.
    - Yours can be anything: a pasted prompt, a planning mode, a person. Trackers and issues are the usual queue;
@@ -48,8 +51,11 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
      once verification passes, blocked with a reason otherwise). Verify gates the PR: nothing is delivered until it
      passes. Say claim (locks, heartbeats, stale claims) is a multi-agent concern; it comes back in the parallel-work
      lesson.
-   - How the field differs (slide): the shape is common; the environment and trigger differ (sessions, cloud VMs,
-     sandboxes).
+   - How the field differs (slide, [options.md](options.md)): what judges a task done differs. Devin and Copilot run
+     tests, lint and type checks (Copilot's page does not document how the results gate the PR); Factory runs
+     validation workers at the end of each milestone; OpenHands' SDK and Claude Code's `/goal` use a judge model;
+     Cursor's agent builds and tests itself with no fixed gate. Ours is the project's own tests and checks, and they
+     gate the PR.
    - In our demo we use [`factory/skills/dev-task/SKILL.md`](../../factory/skills/dev-task/SKILL.md). DEMO: write
      the skill on camera. Do not run it on a todo.
    - Yours can be anything: any agent, language, test runner or isolation method.
@@ -57,8 +63,10 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
    - Concept: inputs are the task list, steps are pick the next ready task, run dev-task on it, re-read the list,
      repeat; output is a stream of open PRs. It stops when none is ready or one fails. Here status shows up: it is
      the queue's state (pending, in progress, PR open, done, blocked), written by dev-task and read by the loop.
-   - How the field differs (slide): most products start each session from a human or an event or schedule you
-     configure; the loop is our choice.
+   - How the field differs (slide, [options.md](options.md)): moving on to the next task by itself splits the field.
+     Factory's orchestrator, OpenHands (polling labeled issues every 5 minutes) and Claude Code (agent teams,
+     experimental) document it. Devin, Cursor and Copilot document event or schedule starts, not a finished run picking
+     the next task. Say "document", never "cannot": the sources only say what they document. The loop is our choice.
    - In our demo we use [`factory/loop.ts`](../../factory/loop.ts) (Bun). DEMO: write the loop on camera. Do not
      run it.
    - Yours can be anything: a shell loop, a cron job, a queue worker; the agent command is configuration.
@@ -69,8 +77,9 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
    a human or an event starts each session. Do not claim other products cannot loop; the sources only say what they
    document.
 9. **Names, and where factories take it.** `plan` and `dev-task` are just the names used in this sample. Show the
-   "what other factories call it" table (from [options.md](options.md), a sourced slide): Claude Code and Cursor
-   say plan mode, Cursor and Copilot say cloud agent, OpenHands says sandbox. Name yours anything. Say what is
+   product names for each cell (from [options.md](options.md), a sourced slide): Claude Code and Cursor say plan mode,
+   Factory says Missions and a mission orchestrator, Devin says Ask Devin and Automations, OpenHands says Software
+   Factory. Name yours anything. Say what is
    deliberately missing: no automated review, no merge, no verification gate beyond the project's own tests.
 10. **Next lesson and exercise.** Next lesson we run it end to end, then the loop builds the next feature. The
     exercise ([exercise.md](exercise.md)) has you build your own plan, dev-task and loop and run them end to end
