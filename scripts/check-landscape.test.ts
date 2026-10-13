@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { checkReadmeFresh, validateLandscape } from "./check-landscape.ts";
 import { renderLandscape } from "./render-landscape.ts";
-import type { Cell, Landscape } from "./landscape-types.ts";
+import type { Cell, FactoryProduct, Landscape, TaskQueueProduct } from "./landscape-types.ts";
 
 const TODAY = "2026-10-12";
 
@@ -11,15 +11,17 @@ const cell = (over: Partial<Cell> = {}): Cell => ({
   summary: "Does a thing.",
   sourceUrl: "https://docs.example.com/thing",
   asOf: "2026-10-12",
+  short: "Does a thing",
   ...over,
 });
 
 const make = (over: Partial<Cell> = {}): Landscape => ({
   components: [
-    { id: "intake", label: "Intake" },
-    { id: "loop", label: "What starts the next run" },
-    { id: "planning", label: "Planning / task queue" },
-    { id: "execution", label: "Execution" },
+    { id: "plan-output", label: "Plan output" },
+    { id: "plan-drive", label: "Plan: who drives" },
+    { id: "verify", label: "Verify" },
+    { id: "loop-across", label: "Loop across" },
+    { id: "loop-drive", label: "Loop: who drives" },
   ],
   products: [
     {
@@ -28,16 +30,29 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
       kind: "factory",
       allowedHosts: ["example.com"],
       cells: {
-        intake: cell(over),
-        loop: cell(),
-        planning: { omitted: "no first-party page found" },
-        execution: cell(),
+        "plan-output": cell(over),
+        "plan-drive": cell(),
+        verify: { omitted: "no page found; checked docs index and quickstart" },
+        "loop-across": cell(),
+        "loop-drive": cell(),
       },
+      demoable: { kind: "unknown" },
+      destination: { summary: "unknown" },
+    },
+    {
+      id: "q",
+      name: "Queue",
+      kind: "task-queue",
+      allowedHosts: ["example.com"],
+      queue: cell(),
       demoable: { kind: "unknown" },
       destination: { summary: "unknown" },
     },
   ],
 });
+
+const factory = (d: Landscape) => d.products[0] as FactoryProduct;
+const queue = (d: Landscape) => d.products[1] as TaskQueueProduct;
 
 describe("validateLandscape", () => {
   test("accepts valid data", () => {
@@ -69,16 +84,41 @@ describe("validateLandscape", () => {
   });
   test("component must be cell or omitted with reason", () => {
     const d = make();
-    delete (d.products[0]!.cells as Record<string, unknown>).execution;
-    expect(validateLandscape(d, TODAY).join()).toContain("execution");
+    delete (factory(d).cells as Record<string, unknown>)["loop-drive"];
+    expect(validateLandscape(d, TODAY).join()).toContain("cell loop-drive: missing");
     const e = make();
-    e.products[0]!.cells.planning = { omitted: "" };
-    expect(validateLandscape(e, TODAY).join()).toContain("planning");
+    factory(e).cells.verify = { omitted: "" };
+    expect(validateLandscape(e, TODAY).join()).toContain("cell verify");
   });
-  test("missing loop cell fails validation", () => {
+  test("every component cell is required for a factory", () => {
+    for (const id of ["plan-output", "plan-drive", "verify", "loop-across", "loop-drive"]) {
+      const d = make();
+      delete (factory(d).cells as Record<string, unknown>)[id];
+      expect(validateLandscape(d, TODAY).join()).toContain(`cell ${id}: missing`);
+    }
+  });
+  test("retired components are rejected", () => {
     const d = make();
-    delete (d.products[0]!.cells as Record<string, unknown>).loop;
-    expect(validateLandscape(d, TODAY).join()).toContain("cell loop: missing");
+    d.components = [{ id: "intake" as never, label: "Intake" }];
+    expect(validateLandscape(d, TODAY).join()).toContain("components must be");
+  });
+  test("short is required and at most 8 words", () => {
+    expect(validateLandscape(make({ short: "" }), TODAY).join()).toContain("missing short");
+    expect(validateLandscape(make({ short: "one two three four five six seven eight" }), TODAY)).toEqual([]);
+    expect(validateLandscape(make({ short: "one two three four five six seven eight nine" }), TODAY).join()).toContain(
+      "9 words",
+    );
+  });
+  test("task-queue product needs a sourced queue cell", () => {
+    const d = make();
+    delete (queue(d) as Partial<TaskQueueProduct>).queue;
+    expect(validateLandscape(d, TODAY).join()).toContain("q queue: missing");
+    const e = make();
+    queue(e).queue = cell({ short: "" });
+    expect(validateLandscape(e, TODAY).join()).toContain("q queue: missing short");
+    const g = make();
+    queue(g).queue = cell({ sourceUrl: "https://evil.com/x" });
+    expect(validateLandscape(g, TODAY).join()).toContain("allowed");
   });
   test("demoable non-unknown needs source and date; bad kind fails", () => {
     const d = make();
@@ -107,7 +147,7 @@ describe("README freshness", () => {
   });
   test("renders omitted cells and sources", () => {
     const out = renderLandscape(make());
-    expect(out).toContain("no first-party page found");
+    expect(out).toContain("no page found; checked docs index and quickstart");
     expect(out).toContain("https://docs.example.com/thing");
   });
 });
@@ -115,14 +155,14 @@ describe("README freshness", () => {
 describe("real data", () => {
   const data = JSON.parse(readFileSync("landscape/matrix.json", "utf8")) as Landscape;
   test("is valid", () => {
-    expect(validateLandscape(data, TODAY)).toEqual([]);
+    expect(validateLandscape(data, new Date().toISOString().slice(0, 10))).toEqual([]);
   });
   test("README is up to date", () => {
     expect(checkReadmeFresh(data, readFileSync("landscape/README.md", "utf8"))).toEqual([]);
   });
   test("covers lesson-1 products", () => {
     expect(data.products.map((p) => p.id).sort()).toEqual(
-      ["claude-code", "codegen", "copilot", "cursor", "devin", "factory", "github-issues", "jira", "linear", "openhands"].sort(),
+      ["claude-code", "copilot", "cursor", "devin", "factory", "github-issues", "jira", "linear", "openhands"].sort(),
     );
   });
 });

@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import type { Cell, Landscape, OmittedCell, Product } from "./landscape-types.ts";
+import type { Cell, Landscape, OmittedCell, Product, TaskQueueProduct } from "./landscape-types.ts";
 
 const esc = (s: string) => s.replace(/\|/g, "\\|").replace(/\n/g, " ");
 
@@ -13,9 +13,9 @@ function renderCell(c: Cell | OmittedCell): string {
   return `**${esc(c.name)}**: ${esc(c.summary)}${link(c.sourceUrl, c.asOf)}`;
 }
 
-function renderTable(label: string, products: Product[], data: Landscape): string[] {
+function renderTable(label: string, products: Product[], columns: string[], cols: (p: Product) => string[]): string[] {
   if (products.length === 0) return [];
-  const header = ["Product", ...data.components.map((c) => c.label), "Demoable", "Where it takes it"];
+  const header = ["Product", ...columns, "Demoable", "Where it takes it"];
   const lines = [
     `### ${label}`,
     "",
@@ -29,8 +29,7 @@ function renderTable(label: string, products: Product[], data: Landscape): strin
     const dest = p.destination;
     const destOut =
       dest.summary === "unknown" ? "unknown" : `${esc(dest.summary)}${link(dest.sourceUrl, dest.asOf)}`;
-    const cols = data.components.map((c) => renderCell(p.cells[c.id]));
-    lines.push(`| ${[esc(p.name), ...cols, demo, destOut].join(" | ")} |`);
+    lines.push(`| ${[esc(p.name), ...cols(p), demo, destOut].join(" | ")} |`);
   }
   lines.push("");
   return lines;
@@ -42,36 +41,50 @@ export function renderLandscape(data: Landscape): string {
     "",
     "# Landscape: factories x components",
     "",
-    "How other products handle the components covered in lesson 1 (intake, what starts the next run,",
-    "planning / task queue, execution). Each cell is a paraphrase of a first-party page, with its source URL and the date",
-    "it was fetched. Cells we could not source are omitted, not guessed.",
+    "How other products handle the components covered in lesson 1: what the plan produces, who drives the plan,",
+    "what judges a task done, whether the loop moves on to the next task by itself, and who drives that loop. Each cell is",
+    "a paraphrase of a first-party page, with its source URL and the date it was fetched. Cells we could not source are",
+    "omitted, not guessed. Task-queue options are not compared per component; they get one Queue column.",
     "",
     "**Names are not canonical.** The bold text in each cell is the product's own name for the",
     "capability, taken from its docs. The same stage goes by different names in different factories.",
     "",
-    ...renderTable("Factories and coding agents", data.products.filter((p) => p.kind === "factory"), data),
-    ...renderTable("Task-queue options", data.products.filter((p) => p.kind === "task-queue"), data),
+    ...renderTable(
+      "Factories and coding agents",
+      data.products.filter((p) => p.kind === "factory"),
+      data.components.map((c) => c.label),
+      (p) => (p.kind === "factory" ? data.components.map((c) => renderCell(p.cells[c.id])) : []),
+    ),
+    ...renderTable(
+      "Task-queue options",
+      data.products.filter((p): p is TaskQueueProduct => p.kind === "task-queue"),
+      ["Queue"],
+      (p) => (p.kind === "task-queue" ? [renderCell(p.queue)] : []),
+    ),
     "## Omitted cells",
     "",
   ];
   const omitted: string[] = [];
   for (const p of data.products)
-    for (const c of data.components) {
-      const cell = p.cells[c.id];
-      if (isOmitted(cell)) omitted.push(`- ${p.name} / ${c.label}: ${cell.omitted}`);
-    }
+    if (p.kind === "factory")
+      for (const c of data.components) {
+        const cell = p.cells[c.id];
+        if (isOmitted(cell)) omitted.push(`- ${p.name} / ${c.label}: ${cell.omitted}`);
+      }
   out.push(...(omitted.length ? omitted : ["None."]), "");
   out.push(
     "## Updating",
     "",
     "1. Edit `landscape/matrix.json`. Every populated cell needs `name` (the product's own term,",
     "   or the literal `unknown` if its docs give none), `summary` (a paraphrase of the page),",
-    "   `sourceUrl` (https, on a host listed in the product's `allowedHosts`), and `asOf`",
-    "   (`YYYY-MM-DD`, the day you fetched the page).",
+    "   `sourceUrl` (https, on a host listed in the product's `allowedHosts`), `asOf`",
+    "   (`YYYY-MM-DD`, the day you fetched the page), and `short` (at most 8 words, the text a",
+    "   slide cell shows; name the surface when a product has two). Factories carry one cell per",
+    "   component; task-queue products carry one `queue` cell.",
     "2. `demoable` and `destination` need the same source and date unless they are explicitly",
     "   `unknown` (`kind: \"unknown\"` / `summary: \"unknown\"`).",
     "3. If you cannot find a first-party page that supports a cell, replace it with",
-    "   `{ \"omitted\": \"reason\" }`. Never fill a cell from memory.",
+    "   `{ \"omitted\": \"reason\" }`; the reason names the pages checked. Never fill a cell from memory.",
     "4. Run `bun scripts/render-landscape.ts` to regenerate this file, then",
     "   `bun scripts/check-landscape.ts` (also run in CI) to validate.",
     "",

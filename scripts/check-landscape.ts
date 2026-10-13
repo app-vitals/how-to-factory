@@ -1,10 +1,12 @@
 import { readFileSync } from "node:fs";
 import { renderLandscape } from "./render-landscape.ts";
-import { DEMOABLE_KINDS, type Landscape } from "./landscape-types.ts";
+import { COMPONENT_IDS, DEMOABLE_KINDS, SHORT_MAX_WORDS, type Cell, type Landscape } from "./landscape-types.ts";
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 const blank = (s: unknown) => typeof s !== "string" || s.trim() === "";
+
+const wordCount = (s: string) => s.trim().split(/\s+/).length;
 
 function checkDate(asOf: unknown, today: string): string | null {
   if (blank(asOf)) return "missing asOf";
@@ -34,6 +36,8 @@ function checkSource(url: unknown, hosts: string[]): string | null {
 /** Returns a list of human-readable problems; empty means valid. `today` is YYYY-MM-DD. */
 export function validateLandscape(data: Landscape, today: string): string[] {
   const errors: string[] = [];
+  const ids = (data.components ?? []).map((c) => c.id).join();
+  if (ids !== COMPONENT_IDS.join()) errors.push(`components must be [${COMPONENT_IDS.join(", ")}], got [${ids}]`);
   for (const p of data.products ?? []) {
     const at = (where: string, msg: string | null) => msg && errors.push(`${p.id} ${where}: ${msg}`);
     if (!p.allowedHosts?.length) errors.push(`${p.id}: allowedHosts must be non-empty`);
@@ -44,18 +48,30 @@ export function validateLandscape(data: Landscape, today: string): string[] {
       at(where, checkDate(o.asOf, today));
     };
 
-    for (const c of data.components) {
-      const cell = p.cells?.[c.id];
-      const where = `cell ${c.id}`;
-      if (!cell) {
-        errors.push(`${p.id} ${where}: missing (use { "omitted": "reason" } if unsourced)`);
-      } else if ("omitted" in cell) {
-        at(where, blank(cell.omitted) ? "omitted needs a reason" : null);
-      } else {
-        // Naming rule: `name` must be non-empty. The literal "unknown" is the only
-        // allowed placeholder, for when the source gives no product-specific name.
-        at(where, blank(cell.name) ? "missing name (use \"unknown\" if the source has none)" : null);
-        sourced(where, cell);
+    // Naming rule: `name` must be non-empty. The literal "unknown" is the only
+    // allowed placeholder, for when the source gives no product-specific name.
+    const checkCell = (where: string, cell: Cell) => {
+      at(where, blank(cell.name) ? "missing name (use \"unknown\" if the source has none)" : null);
+      sourced(where, cell);
+      if (blank(cell.short)) at(where, "missing short");
+      else if (wordCount(cell.short) > SHORT_MAX_WORDS)
+        at(where, `short is ${wordCount(cell.short)} words (max ${SHORT_MAX_WORDS})`);
+    };
+
+    if (p.kind === "task-queue") {
+      if (!p.queue) errors.push(`${p.id} queue: missing`);
+      else checkCell("queue", p.queue);
+    } else {
+      for (const c of data.components) {
+        const cell = p.cells?.[c.id];
+        const where = `cell ${c.id}`;
+        if (!cell) {
+          errors.push(`${p.id} ${where}: missing (use { "omitted": "reason" } if unsourced)`);
+        } else if ("omitted" in cell) {
+          at(where, blank(cell.omitted) ? "omitted needs a reason" : null);
+        } else {
+          checkCell(where, cell);
+        }
       }
     }
 
