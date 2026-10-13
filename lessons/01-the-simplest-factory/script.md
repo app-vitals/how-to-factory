@@ -58,11 +58,14 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
      once verification passes, blocked with a reason otherwise). Verify gates the PR: nothing is delivered until it
      passes. Say claim (locks, heartbeats, stale claims) is a multi-agent concern; it comes back in the parallel-work
      lesson.
-   - How the field differs (slide, [options.md](options.md)): what judges a task done differs. Devin runs
-     tests, lint and type checks, and Copilot runs tests and linters (Copilot's page does not document how the results gate the PR); Factory runs
-     validation workers at the end of each milestone; OpenHands' SDK and Claude Code's `/goal` use a judge model;
-     Cursor's agent builds and tests itself with no fixed gate. Ours is the project's own tests and checks, and they
-     gate the PR.
+   - How the field differs (slide, [options.md](options.md)): the prompt-to-PR flow is the same shape in every
+     factory, and running tests and linters and retrying are common to most (caption). The one thing the slide shows
+     is who decides it is done, and the answer is a category, not yes/no: a check (Devin and Copilot run tests,
+     lint and type checks; Cursor's repository CI judges its cloud auto-fix; Copilot's page does not document how
+     results gate the PR), another model (Factory's validation workers; OpenHands' SDK goal loop), a check plus
+     another model (Claude Code's `/goal`), or the agent itself. Ours is the agent itself, running the project's own
+     checks, and they gate the PR. Say that how factories verify in depth is the verification lesson. Say only what
+     the cells source.
    - In our demo we use [`factory/skills/dev-task/SKILL.md`](../../factory/skills/dev-task/SKILL.md). DEMO: write
      the skill on camera. Do not run it on a todo.
    - Yours can be anything: any agent, language, test runner or way of keeping the work off main.
