@@ -42,6 +42,7 @@ TypeScript on Bun. Strict mode. Conventional commit prefixes (`feat:`, `fix:`, `
   exercises list outcomes and name no required tool.
 - Lessons show a simple version first, then where other factories take the concept. Describe
   destinations, never prescribe them.
+- **Follow the lesson playbook** (`docs/lesson-playbook.md`): scoping rule, lesson brief, research, work-queue rules, checklist.
 
 ## Deck rules
 

@@ -49,6 +49,8 @@ See [exercise.md](exercise.md).
 
 ## Files
 
+- [brief.md](brief.md): the one-page lesson brief, agreed before any work is queued (see the [lesson playbook](../../docs/lesson-playbook.md))
+- [checklist.md](checklist.md): the pre-filming checklist / definition of done
 - [script.md](script.md): talking points and demo beats, numbered
 - [options.md](options.md): how other factories do it, with sources
 - [exercise.md](exercise.md): the student exercise
