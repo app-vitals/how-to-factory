@@ -23,8 +23,8 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
     { id: "verify-judge", label: "Who decides it's done" },
     { id: "verify-runs-app", label: "Runs the app itself" },
     { id: "verify-keeps-going", label: "How it keeps going until it passes" },
-    { id: "loop-across", label: "Loop across" },
-    { id: "loop-drive", label: "Loop: who drives" },
+    { id: "loop-starts-next", label: "What starts the next task" },
+    { id: "loop-includes-plan", label: "Plan runs inside the loop?" },
   ],
   products: [
     {
@@ -39,8 +39,8 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
         "verify-judge": cell(),
         "verify-runs-app": { omitted: "no page found; checked docs index and quickstart" },
         "verify-keeps-going": cell(),
-        "loop-across": cell(),
-        "loop-drive": cell(),
+        "loop-starts-next": cell(),
+        "loop-includes-plan": cell(),
       },
       demoable: { kind: "unknown" },
       destination: { summary: "unknown" },
@@ -90,14 +90,14 @@ describe("validateLandscape", () => {
   });
   test("component must be cell or omitted with reason", () => {
     const d = make();
-    delete (factory(d).cells as Record<string, unknown>)["loop-drive"];
-    expect(validateLandscape(d, TODAY).join()).toContain("cell loop-drive: missing");
+    delete (factory(d).cells as Record<string, unknown>)["loop-includes-plan"];
+    expect(validateLandscape(d, TODAY).join()).toContain("cell loop-includes-plan: missing");
     const e = make();
     factory(e).cells["verify-runs-app"] = { omitted: "" };
     expect(validateLandscape(e, TODAY).join()).toContain("cell verify-runs-app");
   });
   test("every component cell is required for a factory", () => {
-    for (const id of ["plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-across", "loop-drive"]) {
+    for (const id of ["plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan"]) {
       const d = make();
       delete (factory(d).cells as Record<string, unknown>)[id];
       expect(validateLandscape(d, TODAY).join()).toContain(`cell ${id}: missing`);
