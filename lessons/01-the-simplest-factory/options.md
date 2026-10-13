@@ -28,15 +28,15 @@ files. Task-queue products (Linear, Jira, GitHub Issues) are not compared here; 
 
 ### Dev-task
 
-| Product | Verify: what judges done |
+| Product | Who decides it's done |
 |---|---|
-| Devin | **unknown**: Devin runs existing tests, lint and type checks in its own environment and iterates until tests pass before submitting a PR. Which checks run is set by the prompt, playbook or repo skill, not by a fixed pipeline. ([source](https://docs.devin.ai/essential-guidelines/sdlc-integration.md), as of 2026-10-13) |
+| Devin | **unknown**: Devin runs existing tests, lint and type checks in its own environment before submitting a PR. Which checks run is set by the prompt, playbook or repo skill, not by a fixed pipeline. ([source](https://docs.devin.ai/essential-guidelines/sdlc-integration.md), as of 2026-10-13) |
 | Factory (Droid) | **Validation workers**: Validation workers run at the end of each milestone, verifying its work, and Missions validate their own work by exercising the running application. ([source](https://docs.factory.com/missions/planning), as of 2026-10-13) |
 | GitHub Copilot coding agent | **Cloud agent session**: The agent works in its own GitHub Actions environment, where it runs tests and linters to validate changes. How the results decide whether it keeps going before opening the PR is not documented. ([source](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents), as of 2026-10-13) |
 | OpenHands | **Goal Completion Loop**: In the SDK, a second judge LLM audits the transcript for evidence, such as test output, that proves the objective is complete. The Issue to PR automation lists running tests as a step but does not document what happens when they fail. ([source](https://docs.openhands.dev/sdk/guides/convo-goal.md), as of 2026-10-13) |
-| Cursor | **Cloud Agents**: The cloud agent can build, test and interact with the changed software, and can control a desktop and browser. The docs say an agent that cannot run tests cannot close the loop. A fixed pre-delivery gate that always runs is not documented. ([source](https://cursor.com/docs/cloud-agent), as of 2026-10-13) |
-| Claude Code | **/goal**: After every turn a separate small model checks the condition; if it is not met, Claude starts another turn. The evaluator runs no commands and reads no files, so the condition must be something the transcript shows, such as a test result. ([source](https://code.claude.com/docs/en/goal.md), as of 2026-10-13) |
-| This sample | The `dev-task` skill's verify step: the task's acceptance checks plus the project's tests, typecheck and lint, fixed until they pass; it gates the PR ([source](../../factory/skills/dev-task/SKILL.md)) |
+| Cursor | **CI auto-fix**: Cloud agents automatically try to fix CI failures in PRs they create, and the repository's own CI checks are the judge. A fixed pre-delivery gate that always runs is not documented. ([source](https://cursor.com/docs/cloud-agent/capabilities.md), as of 2026-10-13) |
+| Claude Code | **/goal**: After every turn a separate small model checks the condition. The evaluator runs no commands and reads no files, so the condition must be something the transcript shows, such as a test result the agent's own check produced. ([source](https://code.claude.com/docs/en/goal.md), as of 2026-10-13) |
+| This sample | A check + the agent itself: the `dev-task` skill's verify step has the agent run the task's acceptance checks plus the project's tests, typecheck and lint, and fix until they pass; it gates the PR ([source](../../factory/skills/dev-task/SKILL.md)) |
 
 ### Loop
 
