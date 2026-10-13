@@ -100,13 +100,14 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">Plan: how the field differs</h2>
+      <h2 class="slide-title">Few plans carry criteria and dependencies</h2>
       <div class="slide-body">
         <div class="visual">
           <table class="comp-table">
-            <thead><tr><th>Who (as of 2026-10-13)</th><th>A person approves or edits first</th><th>Tasks outlive the chat</th><th>Criteria and dependencies</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>not in their docs</td><td>Yes: Linear tickets and ticket comments</td><td>Mixed: example tickets carry both; Ask Devin unstated</td></tr><tr><td>Factory</td><td>Yes: approve or keep iterating</td><td>Yes: Spec Mode can save a file</td><td>Mixed: Missions criteria; dependencies not in their docs</td></tr><tr><td>OpenHands</td><td>No: triage runs automatically</td><td>Yes: GitHub issue labeled ready-for-dev</td><td>Yes: triage checks dependencies and criteria</td></tr><tr><td>Cursor</td><td>Yes: edit the plan, then Build</td><td>Yes: plan file; Save to workspace</td><td>not in their docs</td></tr><tr><td>GitHub Copilot</td><td>Yes: review and iterate on the plan</td><td>not in their docs</td><td>not in their docs</td></tr><tr><td>Claude Code</td><td>Yes: edit it, approve, or keep planning</td><td>Yes: agent teams task list on disk</td><td>Mixed: agent teams have dependencies; criteria undocumented</td></tr><tr><td>This sample</td><td>Yes: you shape it in chat</td><td>Yes: todos.json</td><td>Yes: criteria and dependencies in each task</td></tr></tbody>
+            <thead><tr><th>Checked 10/2026</th><th>Person approves first</th><th>Tasks outlive the chat</th><th>Criteria + dependencies</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>–</td><td>✓</td><td>◐</td></tr><tr><td>Factory</td><td>✓</td><td>✓</td><td>◐</td></tr><tr><td>OpenHands</td><td>✗</td><td>✓</td><td>✓</td></tr><tr><td>Cursor</td><td>✓</td><td>✓</td><td>–</td></tr><tr><td>GitHub Copilot</td><td>✓</td><td>–</td><td>–</td></tr><tr><td>Claude Code</td><td>✓</td><td>✓</td><td>◐</td></tr><tr><td>This sample</td><td>✓</td><td>✓</td><td>✓</td></tr></tbody>
           </table>
+          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
         </div>
         <p class="caption">Links in the video description.</p>
       </div>
@@ -137,12 +138,12 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">Dev-task: how the field differs</h2>
+      <h2 class="slide-title">Most use a check to judge done</h2>
       <div class="slide-body">
         <div class="visual">
           <table class="comp-table">
-            <thead><tr><th>Who (as of 2026-10-13)</th><th>Who decides it's done</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>A check (tests, lint, type checks)</td></tr><tr><td>Factory</td><td>Another model (Mission validation workers)</td></tr><tr><td>OpenHands</td><td>Another model (SDK goal loop)</td></tr><tr><td>Cursor</td><td>A check (CI, for cloud auto-fix)</td></tr><tr><td>GitHub Copilot</td><td>A check (tests and linters)</td></tr><tr><td>Claude Code</td><td>A check + another model (/goal)</td></tr><tr><td>This sample</td><td>A check + the agent itself</td></tr></tbody>
+            <thead><tr><th>Checked 10/2026</th><th>Who decides it's done</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>Check</td></tr><tr><td>Factory</td><td>Agent</td></tr><tr><td>OpenHands</td><td>Model</td></tr><tr><td>Cursor</td><td>Check</td></tr><tr><td>GitHub Copilot</td><td>Check</td></tr><tr><td>Claude Code</td><td>Check + Model</td></tr><tr><td>This sample</td><td>Check + Agent</td></tr></tbody>
           </table>
         </div>
         <p class="caption">The prompt-to-PR flow is the same shape in every factory.</p>
@@ -175,13 +176,14 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">The loop: how the field differs</h2>
+      <h2 class="slide-title">Only some loops plan for themselves</h2>
       <div class="slide-body">
         <div class="visual">
           <table class="comp-table">
-            <thead><tr><th>Who (as of 2026-10-13)</th><th>What starts the next task</th><th>Plan runs inside the loop</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>A schedule + An event or label (Automations)</td><td>not in their docs</td></tr><tr><td>Factory</td><td>A finished run + A schedule (Missions, automations)</td><td>No: plan approved before it runs</td></tr><tr><td>OpenHands</td><td>An event or label (5-minute poll)</td><td>Yes: triage automation</td></tr><tr><td>Cursor</td><td>A schedule + An event or label (Automations)</td><td>Yes: Project coordinator plans and delegates</td></tr><tr><td>GitHub Copilot</td><td>A schedule + An event or label (automations)</td><td>not in their docs</td></tr><tr><td>Claude Code</td><td>A finished run (agent team self-claim)</td><td>Yes: team lead writes the task list</td></tr><tr><td>This sample</td><td>A finished run (the script loops)</td><td>No: you run plan first</td></tr></tbody>
+            <thead><tr><th>Checked 10/2026</th><th>What starts the next task</th><th>Plan runs inside the loop</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>Schedule + Event</td><td>–</td></tr><tr><td>Factory</td><td>Finished run + Schedule</td><td>✗</td></tr><tr><td>OpenHands</td><td>Event</td><td>✓</td></tr><tr><td>Cursor</td><td>Schedule + Event</td><td>✓</td></tr><tr><td>GitHub Copilot</td><td>Schedule + Event</td><td>–</td></tr><tr><td>Claude Code</td><td>Finished run</td><td>✓</td></tr><tr><td>This sample</td><td>Finished run</td><td>✗</td></tr></tbody>
           </table>
+          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
         </div>
         <p class="caption">Once set up, most run without a person starting each task.</p>
       </div>
@@ -225,12 +227,12 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">Names are your choice</h2>
+      <h2 class="slide-title">Same jobs, different names</h2>
       <div class="slide-body">
         <div class="visual">
           <table class="comp-table">
-            <thead><tr><th>Who</th><th>Planning</th><th>Execution</th></tr></thead>
-            <tbody><tr><td>This sample</td><td>plan</td><td>dev-task</td></tr><tr><td>Devin</td><td>Ask Devin</td><td>Devin session</td></tr><tr><td>Factory</td><td>Spec Mode</td><td>Mission worker session</td></tr><tr><td>OpenHands</td><td>GitHub Issue Triage automation</td><td>GitHub Issue to PR automation</td></tr><tr><td>Cursor</td><td>Plan Mode</td><td>Cloud agent</td></tr><tr><td>GitHub Copilot</td><td>no name in their docs</td><td>Copilot cloud agent</td></tr><tr><td>Claude Code</td><td>Plan mode</td><td>Claude Code session</td></tr></tbody>
+            <thead><tr><th>Checked 10/2026</th><th>Planning</th><th>Execution</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>Ask Devin</td><td>Devin session</td></tr><tr><td>Factory</td><td>Spec Mode</td><td>Worker session</td></tr><tr><td>OpenHands</td><td>GitHub Issue Triage</td><td>Issue to PR</td></tr><tr><td>Cursor</td><td>Plan Mode</td><td>Cloud agent</td></tr><tr><td>GitHub Copilot</td><td>–</td><td>Copilot cloud agent</td></tr><tr><td>Claude Code</td><td>Plan mode</td><td>Claude Code session</td></tr><tr><td>This sample</td><td>plan</td><td>dev-task</td></tr></tbody>
           </table>
         </div>
         <p class="caption">Links in the video description.</p>
@@ -243,7 +245,7 @@
       <h2 class="slide-title">Where factories take it</h2>
       <div class="slide-body">
         <div class="visual options-grid">
-          <div class="option"><h3>Plan: a tracker holds the queue</h3><div class="pick">Linear, Jira or GitHub Issues hold the work</div></div><div class="option"><h3>Dev-task: each task in its own environment</h3><div class="pick">Each task runs in an isolated VM</div></div><div class="option"><h3>Loop: several at once, or on a schedule</h3><div class="pick">Parallel agents; scheduled runs</div></div><div class="option"><h3>Checks: another model or a script judges done</h3><div class="pick">Another model or a script judges done</div></div>
+          <div class="option"><h3>Plan</h3><div class="pick">A tracker holds the queue</div></div><div class="option"><h3>Dev-task</h3><div class="pick">Each task in its own VM</div></div><div class="option"><h3>Loop</h3><div class="pick">Several at once, or scheduled</div></div><div class="option"><h3>Checks</h3><div class="pick">Another model or script judges done</div></div>
         </div>
         <p class="caption">Later, not next. From here our factory builds its own parts.</p>
       </div>
