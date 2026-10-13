@@ -18,6 +18,38 @@ order, and a lesson may build any of them with whatever toolchain the student us
 - Break a conversation or spec into small tasks with dependencies
 - Keep tasks in a durable queue instead of a chat window
 - Estimate task size and pick a model tier per task
+- Spec to plan: what a plan session does, in four activities plus two extras (outline below)
+
+### Spec to plan (outline)
+
+A plan session turns an approved spec into a queue of tasks. One way to cut it:
+
+1. **Understand** - clarify the ask, explore the code, find similar features to reuse, decide where the solution goes.
+2. **Decide** - flag complexity risks; list breaking changes with their consumers, and any added constraint that needs
+   a backfill first; research when the approach is unclear; get the design approved before slicing.
+3. **Prove** - plan testing and verification: which test layers apply, and what each task adds or retires.
+4. **Slice** - small shippable tasks with dependencies; bundle tightly coupled ones into one PR; flag work only a human
+   can do; optionally estimate size and pick a model tier.
+
+Two extras: a standards file the plan reads first, and an approval point between design and tasks.
+
+Shipwright's plan session is one worked example of this shape, not the standard; other factories name and order the steps
+differently.
+
+#### How the field does it
+
+Each claim is from the product's own page, fetched 2026-10-13.
+
+- Cursor Plan Mode (https://cursor.com/docs/agent/planning, as of 2026-10-13): the agent asks clarifying questions,
+  researches the codebase, and produces a plan you can review and edit through chat or markdown files; plans are saved by
+  default in your home directory.
+- Claude Code best practices (https://code.claude.com/docs/en/best-practices, as of 2026-10-13): a four-phase workflow
+  of explore, plan, implement, commit; for larger features, have the agent interview you and write a spec first; if you
+  could describe the diff in one sentence, skip the plan.
+- Kiro specs (https://kiro.dev/docs/specs/, as of 2026-10-13): feature specs hold requirements with acceptance
+  criteria, a design that includes a testing strategy, and tasks, over which Kiro builds a dependency graph.
+- Spec Kit (https://github.com/github/spec-kit, as of 2026-10-13): a command sequence of constitution, specify, plan,
+  tasks, implement, then converge, repeating implement and converge until convergence reports Converged.
 
 ## Execution
 - Run one task in an isolated git worktree and open a PR
