@@ -1,4 +1,4 @@
-export const COMPONENT_IDS = ["plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan"] as const;
+export const COMPONENT_IDS = ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan"] as const;
 export type ComponentId = (typeof COMPONENT_IDS)[number];
 
 /** Longest `short` a slide cell may carry, in words. */

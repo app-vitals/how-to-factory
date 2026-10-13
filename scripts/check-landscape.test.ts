@@ -17,6 +17,8 @@ const cell = (over: Partial<Cell> = {}): Cell => ({
 
 const make = (over: Partial<Cell> = {}): Landscape => ({
   components: [
+    { id: "plan-name", label: "What they call the planning step" },
+    { id: "execute-name", label: "What they call the working step" },
     { id: "plan-hitl", label: "Plan: person approves" },
     { id: "plan-persist", label: "Plan: tasks outlive chat" },
     { id: "plan-contents", label: "Plan: criteria and dependencies" },
@@ -33,6 +35,8 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
       kind: "factory",
       allowedHosts: ["example.com"],
       cells: {
+        "plan-name": cell(),
+        "execute-name": cell(),
         "plan-hitl": cell(over),
         "plan-persist": cell(),
         "plan-contents": cell(),
@@ -97,7 +101,7 @@ describe("validateLandscape", () => {
     expect(validateLandscape(e, TODAY).join()).toContain("cell verify-runs-app");
   });
   test("every component cell is required for a factory", () => {
-    for (const id of ["plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan"]) {
+    for (const id of ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan"]) {
       const d = make();
       delete (factory(d).cells as Record<string, unknown>)[id];
       expect(validateLandscape(d, TODAY).join()).toContain(`cell ${id}: missing`);
