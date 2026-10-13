@@ -50,6 +50,23 @@ files. Task-queue products (Linear, Jira, GitHub Issues) are not compared here; 
 | Claude Code | **Agent teams**: In an agent team, a teammate that finishes a task picks up the next unassigned, unblocked task from the shared list on its own. Experimental and off by default. ([source](https://code.claude.com/docs/en/agent-teams.md), as of 2026-10-13) | **Agent teams**: The team lead creates the tasks in the shared task list (with dependencies) and teammates work through them. The page does not say a person approves that task list first. ([source](https://code.claude.com/docs/en/agent-teams.md), as of 2026-10-13) |
 | This sample | A finished run: the script loops. `loop.ts` picks the next pending todo whose dependencies are done and runs the agent on it, stopping at the first failure ([source](../../factory/loop.ts)) | No: you run plan first ([source](../../factory/loop.ts)) |
 
+## What other factories call it
+
+Each product's own term for the planning step and the working step, copied from the `plan-name` and `execute-name`
+cells of [`landscape/matrix.json`](../../landscape/matrix.json). `plan` and `dev-task` are only this sample's names.
+
+| Product | Planning | Execution |
+|---|---|---|
+| Devin | Ask Devin ([source](https://docs.devin.ai/work-with-devin/ask-devin.md), as of 2026-10-13) | Devin session ([source](https://docs.devin.ai/essential-guidelines/instructing-devin-effectively.md), as of 2026-10-13) |
+| Factory | Spec Mode ([source](https://docs.factory.com/autonomy-and-safety/specification-mode), as of 2026-10-13) | Mission worker session ([source](https://factory.com/news/missions), as of 2026-10-13) |
+| OpenHands | GitHub Issue Triage automation ([source](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), as of 2026-10-13) | GitHub Issue to PR automation ([source](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), as of 2026-10-13) |
+| Cursor | Plan Mode ([source](https://cursor.com/docs/agent/plan-mode), as of 2026-10-13) | Cloud agent ([source](https://cursor.com/docs/cloud-agent), as of 2026-10-13) |
+| GitHub Copilot | no name in their docs | Copilot cloud agent ([source](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent), as of 2026-10-13) |
+| Claude Code | Plan mode ([source](https://code.claude.com/docs/en/permission-modes.md), as of 2026-10-13) | Claude Code session ([source](https://code.claude.com/docs/en/how-claude-code-works.md), as of 2026-10-13) |
+
+GitHub Copilot: the pages checked (Research, plan and iterate; About Copilot cloud agent; the 2026-04-01 changelog post)
+ask for a plan before changes but none names the planning feature, so the cell reads "no name in their docs".
+
 ## What a good task contains
 
 Each row is a paraphrase of a first-party page, fetched and read on 2026-10-12. Only what the fetched page says is

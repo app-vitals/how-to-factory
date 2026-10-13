@@ -20,5 +20,5 @@ the end-to-end run is lesson 2.
 | 8 | 15 | DEMO write the loop | 6 | Write `factory/loop.ts` on camera. Do not run it |
 | 9 | 16 | | 7 | Why we loop: say it is our opinion, not a standard |
 | 10 | 17 | | 8 | How it works together: our flow vs a human or event starting each session. Slide only |
-| 11 | 18-19 | | 9 | Names table (planning and checking-done names, one row per factory), then where factories take it. Say what is deliberately missing |
+| 11 | 18-19 | | 9 | Names table (planning and execution names, one row per factory), then where factories take it. Say what is deliberately missing |
 | 12 | 20 | | 10 | Exercise hand-off and next lesson (run it end to end) |

@@ -93,10 +93,11 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
 8. **How it all works together (slide only).** One slide, nothing run. Contrast our flow with the alternative where
    a human or an event starts each session. Do not claim other products cannot loop; the sources only say what they
    document.
-9. **Names, and where factories take it.** `plan` and `dev-task` are just the names used in this sample. Show the
-   product names for each cell (from [options.md](options.md), a sourced slide): Claude Code and Cursor say plan mode,
-   Factory says Missions and a mission orchestrator, Devin says Ask Devin and Automations, OpenHands says Software
-   Factory. Name yours anything. Say what is
+9. **Names, and where factories take it.** `plan` and `dev-task` are only this sample's names. Show the product term
+   in each cell of the Planning and Execution columns (from [options.md](options.md), a sourced slide): Claude Code
+   and Cursor say Plan mode, Factory says Spec Mode, Devin says Ask Devin, OpenHands says GitHub Issue Triage; for
+   execution Devin says Devin session, Cursor says cloud agent, Copilot says Copilot cloud agent. Copilot's planning
+   cell reads "no name in their docs". Say nothing the cells do not source. Name yours anything. Say what is
    deliberately missing: no automated review, no merge, no verification gate beyond the project's own tests.
 10. **Next lesson and exercise.** Next lesson we run it end to end, then the loop builds the next feature. The
     exercise ([exercise.md](exercise.md)) has you build your own plan, dev-task and loop and run them end to end
