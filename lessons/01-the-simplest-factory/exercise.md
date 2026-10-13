@@ -13,8 +13,8 @@ Our demo uses Bun and Claude Code; you do not need either. Describe the outcomes
 2. A planning step (skill, prompt, script; name it whatever you like) whose input is your conversation with your
    agent about the work (or a file you point it at) and that produces a task list file with, at minimum: id, title, description, acceptance criteria, dependencies. Each task is small enough for one PR.
 3. A check that the todo list file is valid (any language, any test runner).
-4. An execution step that takes one task id, isolates the work on its own branch in a separate
-   worktree or equivalent isolation, implements it, verifies it (the task's acceptance criteria plus the project's
+4. An execution step that takes one task id, works on its own branch (a separate worktree keeps
+   your checkout clean), implements it, verifies it (the task's acceptance criteria plus the project's
    tests), then delivers and records the task's outcome. It opens a PR only after verification passes. If you have a remote and `gh`, it
    opens a PR; if not, it stops at the committed branch.
 5. A loop that gives each task a starting state (pending) and runs the execution step on the first pending todo whose dependencies are done, and repeats until none
@@ -28,7 +28,7 @@ Use [`factory/skills/plan/SKILL.md`](../../factory/skills/plan/SKILL.md),
 ## Done when
 
 - [ ] your todo list file exists and your validity check passes
-- [ ] your execution step produced a commit on its own branch in separate isolation
+- [ ] your execution step produced a commit on its own branch
 - [ ] your loop worked at least two todos in dependency order
 - [ ] your names are ones you chose
 
