@@ -52,7 +52,7 @@ GitHub Repository Monitor, Goal Completion Loop, Critic (SDK and Agent Canvas), 
 | Field | Value | Source | As of |
 | --- | --- | --- | --- |
 | input | A GitHub, GitLab, Jira or Linear issue carrying the trigger label (default `openhands`; `ready-for-dev` in the Software Factory walkthrough) or an implementation-ready state. The agent reads the title, description, acceptance criteria and linked dependencies | https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/issue-to-pr.md ; https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md | 2026-10-13 |
-| step | A fresh agent conversation per issue clones the repository, creates a branch from the configured prefix and issue number, implements the change, runs the project's test suite, commits and pushes, opens the PR and posts the PR link on the issue. The page lists "runs tests" as a step but does not say what happens when the tests fail, or that the agent retries | https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/issue-to-pr.md | 2026-10-13 |
+| step | A fresh agent conversation per issue clones the repository, creates a branch from the configured prefix and issue number, implements the change, runs the project's test suite, commits and pushes, opens the PR and posts the PR link on the issue. The page lists "runs tests" as a step but does not say what happens when the tests fail, or that the agent retries. Checked again on 2026-10-13 in the gap-closing pass: TODO Management, Dependency Upgrades, Vulnerability Remediation, Headless Mode, Automated Code Review and GitHub Repository Monitor; none describes the Issue to PR run's failure path | https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/issue-to-pr.md | 2026-10-13 |
 | output | A pull request titled `[#42] <issue title>` with a summary and `Closes #42` in the body, as a draft by default or ready for review by setting; a progress comment and the PR link on the issue | https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/issue-to-pr.md | 2026-10-13 |
 | who drives | Automated: the automation polls on a schedule (every 15 minutes by default; 5 minutes in the Software Factory walkthrough) and a person only applies the label. To retry an issue, a person removes and re-applies the label | https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/issue-to-pr.md ; https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md | 2026-10-13 |
 
@@ -73,6 +73,30 @@ GitHub Repository Monitor, Goal Completion Loop, Critic (SDK and Agent Canvas), 
 | step | After the person approves the plan the agent implements the change, runs the relevant checks and reports what changed. A separate agent can be dispatched for independent work, with limits stated in the prompt | https://docs.openhands.dev/openhands/usage/use-cases/daily-workflow.md | 2026-10-13 |
 | output | Changes in the conversation's workspace and a summary; pushing or posting depends on the permissions granted and the confirmation policy | https://docs.openhands.dev/openhands/usage/use-cases/daily-workflow.md | 2026-10-13 |
 | who drives | Human approves | https://docs.openhands.dev/openhands/usage/use-cases/daily-workflow.md | 2026-10-13 |
+
+### Surface 4: TODO Management (SDK GitHub Actions workflow, a developer run for `TODO(openhands)` comments)
+
+| Field | Value | Source | As of |
+| --- | --- | --- | --- |
+| input | A `TODO(openhands): ...` comment in the code (the identifier is configurable). A scanner finds the matches and extracts the description; the number processed per run is capped (`MAX_TODOS`, default 3 in the reference workflow; the page advises starting at 1) | https://docs.openhands.dev/sdk/guides/github-workflows/todo-management.md | 2026-10-13 |
+| step | For each TODO the workflow checks out the repository, creates a branch named from the description, runs the OpenHands agent with the TODO's file, line and description, and, if the agent changed anything, commits, pushes and opens a PR. If the agent process exits with an error the job exits with that error and no PR is made; if the working tree has no diff it skips PR creation. The reference workflow contains no test or lint step of its own, and the page does not show what the agent's prompt says about tests (the prompt file is linked, not shown) | https://docs.openhands.dev/sdk/guides/github-workflows/todo-management.md | 2026-10-13 |
+| output | A branch and a PR per TODO, with a title "Implement TODO: ..." and a body naming the file, line and description; the page says reviewers are picked from code changes and file ownership. The page's own advice: "Always review the generated PRs before merging" | https://docs.openhands.dev/sdk/guides/github-workflows/todo-management.md | 2026-10-13 |
+| who drives | Human to add the TODO and to review. Automated once started: a manual dispatch, or the `automatic-todo` label added to a PR; the schedule trigger is commented out by default | https://docs.openhands.dev/sdk/guides/github-workflows/todo-management.md | 2026-10-13 |
+
+Headless Mode (CLI `openhands --headless -t "<task>"` or `-f task.txt`) is the way to run one task without the UI, for scripts
+and CI. It always runs in `always-approve` mode (no confirmation, not changeable), and `--json` streams the agent's events as
+JSON lines so a pipeline can parse them "to determine success/failure". The page defines no success condition, no test step and
+no retry (https://docs.openhands.dev/openhands/usage/cli/headless.md, 2026-10-13). So it is a way to run a developer task, not a
+second developer flow; it adds no cell.
+
+The Dependency Upgrades and Vulnerability Remediation pages are use-case pages of example prompts, not Agent Canvas prebuilt
+automations (the prebuilts index lists Issue to Pull Request, GitHub PR Review Assistant, GitHub Repository Monitor and Slack
+Channel Monitor). Their prompts tell the agent to run the tests ("Run the test suite", "Verify all tests pass", "Run tests,
+Create a PR with ... Test results") and the Vulnerability page sketches a pipeline prompt that ends "Auto-merge low-risk fixes
+after tests pass". These are prompts a person writes, not documented behavior of the product, and none says what the agent does
+when a test fails. The Vulnerability page's example app shows a person reviewing and merging
+(https://docs.openhands.dev/openhands/usage/use-cases/dependency-upgrades.md ;
+https://docs.openhands.dev/openhands/usage/use-cases/vulnerability-remediation.md, 2026-10-13).
 
 Verification before delivery on a separate surface: the QA agent (a GitHub Actions plugin or a skill invoked as `/qa-changes`)
 runs the changed software, not the test suite, and posts a PASS, FAIL or PARTIAL report as a PR comment. It works from the PR
@@ -112,8 +136,8 @@ The two compose: the critic governs each inner run and the goal loop governs the
 
 | Field | Value | Source | As of |
 | --- | --- | --- | --- |
-| retries until a check passes? | Not documented as a loop inside the developer run. The page lists running tests as one step. Checked: Issue to Pull Request Automation, Software Factory, Managing Automations in Agent Canvas, Critic. The Software Factory page does describe revision after failed review checks, which happens across runs (see LOOP-ACROSS) | https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/issue-to-pr.md ; https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md | 2026-10-13 |
-| what judges it | not documented for the developer run (same pages checked) | n/a | 2026-10-13 |
+| retries until a check passes? | Not documented as a loop inside the developer run. The page lists running tests as one step. Checked: Issue to Pull Request Automation, Software Factory, Managing Automations in Agent Canvas, Critic, and (gap-closing pass) TODO Management, Headless Mode, Dependency Upgrades, Vulnerability Remediation, Automated Code Review, GitHub Repository Monitor. The Software Factory page does describe revision after failed review checks, which happens across runs (see LOOP-ACROSS) | https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/issue-to-pr.md ; https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md | 2026-10-13 |
+| what judges it | not documented for the developer run (same pages checked, including the six read in the gap-closing pass). The TODO Management workflow has no judge either: an agent exit error fails the job, otherwise any diff becomes a PR | n/a | 2026-10-13 |
 | who drives | not documented (same pages checked) | n/a | 2026-10-13 |
 
 ## LOOP-ACROSS-TASKS
@@ -158,6 +182,25 @@ The two compose: the critic governs each inner run and the goal loop governs the
 | next piece of work after a run finishes | Next item on request | https://docs.openhands.dev/openhands/usage/use-cases/daily-workflow.md | 2026-10-13 |
 | who drives | Human | https://docs.openhands.dev/openhands/usage/use-cases/daily-workflow.md | 2026-10-13 |
 
+### Surface 5: TODO Management workflow (SDK GitHub Actions)
+
+| Field | Value | Source | As of |
+| --- | --- | --- | --- |
+| what moves on by itself | After a scan job lists the matching TODOs (up to the cap), a matrix job processes them with `max-parallel: 1`, "one TODO at a time to avoid conflicts", each getting its own branch and PR | https://docs.openhands.dev/sdk/guides/github-workflows/todo-management.md | 2026-10-13 |
+| next piece of work after a run finishes | Yes within one workflow run (the next TODO in the list); the next run needs a manual dispatch or an `automatic-todo` label, since the schedule is commented out | https://docs.openhands.dev/sdk/guides/github-workflows/todo-management.md | 2026-10-13 |
+| who drives | Automated within a run; Human to start it (default) | https://docs.openhands.dev/sdk/guides/github-workflows/todo-management.md | 2026-10-13 |
+
+Automated Code Review triggers (read in full): a PR opened non-draft, a draft marked ready, the `review-this` label, or
+`openhands-agent` requested as reviewer. It does not re-run when commits are pushed (`synchronize` is excluded on purpose); a
+follow-up review needs the label re-added or the reviewer re-requested
+(https://docs.openhands.dev/openhands/usage/use-cases/code-review.md, 2026-10-13). This refines the Software Factory note that a
+new commit needs a fresh review: on this page that fresh review is triggered by a person or a label, not by the push.
+
+The GitHub Repository Monitor page, read in full, ends after "Verify the Automation". Beyond setup it only says the setup agent
+interviews the person (repository, events, frequency, action, where to report) and creates an automation, with an example of
+"watch for failed workflow runs, summarize the failure, and open a pull request when the fix is straightforward". It documents
+no queue and no chaining (https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/github-repo-monitor.md, 2026-10-13).
+
 ## Pages read
 
 All fetched 2026-10-13 and read in full.
@@ -175,7 +218,12 @@ All fetched 2026-10-13 and read in full.
 - https://docs.openhands.dev/openhands/usage/automations/managing-automations.md
 - https://docs.openhands.dev/openhands/usage/agent-canvas/overview.md
 - https://docs.openhands.dev/openhands/usage/agent-canvas/managing-automations.md (read to the "run manually" section)
-- https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/github-repo-monitor.md (read to the "start the workflow" section)
+- https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/github-repo-monitor.md (read in full in the gap-closing pass)
+- https://docs.openhands.dev/sdk/guides/github-workflows/todo-management.md (gap-closing pass, in full)
+- https://docs.openhands.dev/openhands/usage/cli/headless.md (gap-closing pass, in full)
+- https://docs.openhands.dev/openhands/usage/use-cases/dependency-upgrades.md (gap-closing pass, in full)
+- https://docs.openhands.dev/openhands/usage/use-cases/vulnerability-remediation.md (gap-closing pass, in full)
+- https://docs.openhands.dev/openhands/usage/use-cases/code-review.md (gap-closing pass, in full)
 - https://docs.openhands.dev/openhands/usage/agent-canvas/critic.md
 - https://docs.openhands.dev/sdk/guides/critic.md
 - https://docs.openhands.dev/sdk/guides/iterative-refinement.md
@@ -183,22 +231,40 @@ All fetched 2026-10-13 and read in full.
 
 ## Ruled out (why)
 
-- **Automated Code Review** (https://docs.openhands.dev/openhands/usage/use-cases/code-review.md): only the trigger and automation sections
-  were read for this pass. It is a PR reviewer, so review policy and posting are out of lesson 1 scope.
+- **Automated Code Review** (https://docs.openhands.dev/openhands/usage/use-cases/code-review.md): read in full in the gap-closing pass.
+  It is a PR reviewer, so review policy and posting are out of lesson 1 scope; only its triggers are used (LOOP-ACROSS, Surface 5 note).
 - **Reviewer and watchdog stages of the Software Factory** (read on the Software Factory page): used only to show how work moves
   between stages in LOOP-ACROSS. Review policy and the merge decision (release) are left out of the grids.
 - **Slack Integration** (read in full): `@openhands` in a channel or thread starts a conversation, with a repository named in
   the message, and thread replies are follow-ups. It is a way to start a task conversation, not a plan, a verify loop or a
   queue; it gives no planning or looping behavior, which is why the earlier draft's `not documented` PLAN column was wrong to
   rest on it alone.
-- **GitHub Repository Monitor** (read through setup): a prebuilt workflow that watches a repository and triggers an agent on
+- **GitHub Repository Monitor** (read in full): a prebuilt workflow that watches a repository and triggers an agent on
   matching activity. The page opens a prefilled setup prompt and does not say what the agent then does with the work, so it is
   not used in a grid.
-- **Pages in the index not read for this pass**: Vulnerability Remediation, Incident Triage, Dependency Upgrades, COBOL
-  Modernization, Spark Migrations, Slack Channel Monitor and GitHub PR Review Assistant prebuilts, TODO Management, Headless
-  Mode, ACP Agents, Agent Profiles, plugin and extension pages, the Agent Canvas release notes, Jira Cloud and GitHub Cloud
+- **Pages in the index not read**: Incident Triage, COBOL
+  Modernization, Spark Migrations, Slack Channel Monitor and GitHub PR Review Assistant prebuilts, ACP Agents, Agent Profiles, plugin and extension pages, the Agent Canvas release notes, Jira Cloud and GitHub Cloud
   integration pages, and the Enterprise pages. They cover other use cases, setup, or integrations; open for a later pass if
   lesson 1 widens.
 - **Sandboxes, Docker execution, backends, secrets and token scopes, parallel runs, Enterprise sharing**: isolation and ops,
   out of scope for lesson 1.
 - **Shipwright marketing pages** (`site/src/pages/compare.astro`, `vs/*.astro`): not consulted; no wording or claims reused.
+
+## Gap-closing pass (2026-10-13)
+
+All pages fetched in full on 2026-10-13. Flags are from the CROSS-CHECK in README.md.
+
+| Flag | Page read | Changed a cell? |
+| --- | --- | --- |
+| TODO Management | https://docs.openhands.dev/sdk/guides/github-workflows/todo-management.md | Added DEV-TASK Surface 4 and LOOP-ACROSS Surface 5. No contradiction with an existing cell. Does not answer the Issue to PR failed-tests question |
+| Headless Mode | https://docs.openhands.dev/openhands/usage/cli/headless.md | No cell. Always-approve, JSON event stream; no success condition, test step or retry (note under DEV-TASK) |
+| Dependency Upgrades "prebuilt" | https://docs.openhands.dev/openhands/usage/use-cases/dependency-upgrades.md | No cell. It is a use-case page of example prompts, not a prebuilt automation; "run tests" is in the person's prompt |
+| Vulnerability Remediation "prebuilt" | https://docs.openhands.dev/openhands/usage/use-cases/vulnerability-remediation.md | No cell. Same as above; a sketched pipeline prompt says "Auto-merge low-risk fixes after tests pass", a prompt not documented behavior |
+| Automated Code Review (triggers) | https://docs.openhands.dev/openhands/usage/use-cases/code-review.md | Note added under LOOP-ACROSS: no re-review on push |
+| GitHub Repository Monitor past setup | https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/github-repo-monitor.md | No cell. Nothing past "Verify the Automation"; LOOP-ACROSS Surface 3 "not documented" stands |
+
+Answer to the open question: what the Issue to Pull Request developer run does when tests fail is **not documented**. Pages
+checked: Issue to Pull Request Automation, Software Factory, Managing Automations (Agent Canvas), Critic, TODO Management,
+Headless Mode, Dependency Upgrades, Vulnerability Remediation, Automated Code Review, GitHub Repository Monitor. The only
+documented consequence of failure is at the stage level in the Software Factory: failed review checks lead to revisions, and a
+person can remove and re-apply the label to retry.
