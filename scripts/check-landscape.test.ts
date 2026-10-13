@@ -20,7 +20,9 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
     { id: "plan-hitl", label: "Plan: person approves" },
     { id: "plan-persist", label: "Plan: tasks outlive chat" },
     { id: "plan-contents", label: "Plan: criteria and dependencies" },
-    { id: "verify", label: "Verify" },
+    { id: "verify-judge", label: "Who decides it's done" },
+    { id: "verify-runs-app", label: "Runs the app itself" },
+    { id: "verify-keeps-going", label: "How it keeps going until it passes" },
     { id: "loop-across", label: "Loop across" },
     { id: "loop-drive", label: "Loop: who drives" },
   ],
@@ -34,7 +36,9 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
         "plan-hitl": cell(over),
         "plan-persist": cell(),
         "plan-contents": cell(),
-        verify: { omitted: "no page found; checked docs index and quickstart" },
+        "verify-judge": cell(),
+        "verify-runs-app": { omitted: "no page found; checked docs index and quickstart" },
+        "verify-keeps-going": cell(),
         "loop-across": cell(),
         "loop-drive": cell(),
       },
@@ -89,11 +93,11 @@ describe("validateLandscape", () => {
     delete (factory(d).cells as Record<string, unknown>)["loop-drive"];
     expect(validateLandscape(d, TODAY).join()).toContain("cell loop-drive: missing");
     const e = make();
-    factory(e).cells.verify = { omitted: "" };
-    expect(validateLandscape(e, TODAY).join()).toContain("cell verify");
+    factory(e).cells["verify-runs-app"] = { omitted: "" };
+    expect(validateLandscape(e, TODAY).join()).toContain("cell verify-runs-app");
   });
   test("every component cell is required for a factory", () => {
-    for (const id of ["plan-hitl", "plan-persist", "plan-contents", "verify", "loop-across", "loop-drive"]) {
+    for (const id of ["plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-across", "loop-drive"]) {
       const d = make();
       delete (factory(d).cells as Record<string, unknown>)[id];
       expect(validateLandscape(d, TODAY).join()).toContain(`cell ${id}: missing`);
