@@ -30,6 +30,8 @@ They are guidelines from general presentation research, not video-specific findi
 | Prose paragraphs on content slides | none (a `p.caption` of up to 12 words is allowed) | `maxCaptionWords` |
 | Visual blocks (`.visual`) per slide | 2 | `maxVisualBlocks` |
 | Content slides without a visual | not allowed (title and DEMO slides are exempt) | `visualExemptKinds` |
+| Words per `.comp-table` body cell (header row and first column exempt; a lone mark like ✓ ✗ ◐ – counts as one word) | 3 | `maxTableCellWords` |
+| `.option` cards per `.options-grid` | 4 | `maxOptions` |
 | Forbidden viewer-facing words (case-insensitive, whole phrase, visible slide text only; comments, scripts, styles and attributes are ignored) | `matrix`, `options.md`, `sourced`, `not documented` | `forbiddenWords` |
 | Face-cam safe zone (bottom-right) | 22% wide x 30% tall, kept clear | `safeZone`, `--facecam-w`, `--facecam-h` |
 

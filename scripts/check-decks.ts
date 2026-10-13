@@ -13,6 +13,8 @@ export interface DeckConfig {
   maxDiagramsPerSlide: number;
   maxDiagramNodes: number;
   maxNodeLabelWords: number;
+  maxTableCellWords: number;
+  maxOptions: number;
   safeZone: { widthPct: number; heightPct: number };
   visualExemptKinds: string[];
   forbiddenWords: string[];
@@ -179,6 +181,18 @@ export function checkDeckHtml(html: string, cfg: DeckConfig, file = "deck"): Vio
       }
     }
 
+    for (const table of all.filter((e) => e.tag === "table" && hasClass(e, "comp-table"))) {
+      for (const cell of compTableCells(table)) {
+        const w = wordCount(textOf(cell, isExcluded));
+        if (w > cfg.maxTableCellWords) fail("table-cell-words", `table cell "${textOf(cell).replace(/\s+/g, " ").trim()}" has ${w} words (max ${cfg.maxTableCellWords})`);
+      }
+    }
+
+    for (const grid of all.filter((e) => hasClass(e, "options-grid"))) {
+      const options = elems(grid).filter((c) => hasClass(c, "option"));
+      if (options.length > cfg.maxOptions) fail("option-count", `options grid has ${options.length} options (max ${cfg.maxOptions})`);
+    }
+
     const visible = decodeEntities(textOf(slide)).replace(/\s+/g, " ").toLowerCase();
     for (const word of cfg.forbiddenWords) {
       if (containsPhrase(visible, word)) fail("forbidden-word", `viewer-facing text contains forbidden word "${word}"`);
@@ -189,6 +203,15 @@ export function checkDeckHtml(html: string, cfg: DeckConfig, file = "deck"): Vio
     }
   });
   return out;
+}
+
+// Body cells of a .comp-table: skips the header row (thead, or a row of only <th>) and the first column.
+function compTableCells(table: El): El[] {
+  const rows = descendants(table).filter((e) => e.tag === "tr" && !descendants(table).some((t) => t.tag === "thead" && descendants(t).includes(e)));
+  return rows.flatMap((row) => {
+    const cells = elems(row).filter((c) => c.tag === "td" || c.tag === "th");
+    return cells.every((c) => c.tag === "th") ? [] : cells.slice(1);
+  });
 }
 
 function containsPhrase(text: string, phrase: string): boolean {

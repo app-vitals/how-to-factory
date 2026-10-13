@@ -153,3 +153,35 @@ describe("check-decks over the repo", () => {
     expect(run().exitCode).toBe(1);
   });
 });
+
+describe("check-decks table cell and option limits", () => {
+  const table = (rows: string) => `<div class="visual"><table class="comp-table">${rows}</table></div>`;
+  const header = `<tr><th>Vendor</th><th>Queue is a very long header</th></tr>`;
+
+  test("fails a body cell over the word limit, naming the cell", () => {
+    const v = checkDeckHtml(deck(slide(table(`${header}<tr><td>Acme</td><td>one two three four</td></tr>`))), cfg);
+    expect(v.map((x) => x.rule)).toEqual(["table-cell-words"]);
+    expect(v[0]?.slide).toBe(1);
+    expect(v[0]?.message).toContain("one two three four");
+  });
+
+  test("allows a cell at the limit and a lone mark", () => {
+    expect(rules(deck(slide(table(`${header}<tr><td>Acme</td><td>one two three</td></tr><tr><td>Beta</td><td>✓</td></tr>`))))).toEqual([]);
+  });
+
+  test("exempts the first column and the header row", () => {
+    expect(rules(deck(slide(table(`${header}<tr><td>Acme Corp Cloud Agents</td><td>ok</td></tr>`))))).toEqual([]);
+  });
+
+  test("ignores tables that are not comp-tables", () => {
+    expect(rules(deck(slide(`<div class="visual"><table><tr><td>a</td><td>one two three four five</td></tr></table></div>`)))).toEqual([]);
+  });
+
+  const grid = (n: number) =>
+    `<div class="visual options-grid">${Array.from({ length: n }, (_, i) => `<div class="option"><h3>O${i}</h3></div>`).join("")}</div>`;
+
+  test("fails 5 options but allows 4", () => {
+    expect(rules(deck(slide(grid(5))))).toEqual(["option-count"]);
+    expect(rules(deck(slide(grid(4))))).toEqual([]);
+  });
+});
