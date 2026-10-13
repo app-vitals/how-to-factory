@@ -15,6 +15,7 @@ export interface DeckConfig {
   maxNodeLabelWords: number;
   safeZone: { widthPct: number; heightPct: number };
   visualExemptKinds: string[];
+  forbiddenWords: string[];
 }
 
 export interface Violation {
@@ -83,9 +84,10 @@ function textOf(e: El, skip: (el: El) => boolean = () => false): string {
 
 const ENTITIES: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"', nbsp: " ", "#39": "'" };
 
+const decodeEntities = (text: string) => text.replace(/&(#?\w+);/g, (_, n: string) => ENTITIES[n] ?? " ");
+
 export function wordCount(text: string): number {
-  const decoded = text.replace(/&(#?\w+);/g, (_, n: string) => ENTITIES[n] ?? " ");
-  return decoded.split(/\s+/).filter((t) => /[\p{L}\p{N}]/u.test(t)).length;
+  return decodeEntities(text).split(/\s+/).filter((t) => /[\p{L}\p{N}]/u.test(t)).length;
 }
 
 const isVisual = (e: El) => hasClass(e, "visual");
@@ -177,11 +179,21 @@ export function checkDeckHtml(html: string, cfg: DeckConfig, file = "deck"): Vio
       }
     }
 
+    const visible = decodeEntities(textOf(slide)).replace(/\s+/g, " ").toLowerCase();
+    for (const word of cfg.forbiddenWords) {
+      if (containsPhrase(visible, word)) fail("forbidden-word", `viewer-facing text contains forbidden word "${word}"`);
+    }
+
     for (const e of all) {
       if (inSafeZone(e, cfg) && !hasClass(e, "facecam-zone")) fail("safe-zone", `<${e.tag}> is placed in the face-cam safe zone`);
     }
   });
   return out;
+}
+
+function containsPhrase(text: string, phrase: string): boolean {
+  const escaped = phrase.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(?<![\\p{L}\\p{N}])${escaped}(?![\\p{L}\\p{N}])`, "u").test(text);
 }
 
 export function loadConfig(root: string): DeckConfig {
