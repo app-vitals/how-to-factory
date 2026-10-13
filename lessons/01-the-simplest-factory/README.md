@@ -11,8 +11,19 @@ anything".
 ## Names for this
 
 The two jobs we build are called `plan` and `dev-task`. Those are just the names used in this sample. Other
-factories call the same jobs `feature-dev`, `implement`, `build`, `breakdown` and more (see
-[options.md](options.md)). Call yours whatever you like; nothing downstream depends on our names.
+factories use their own terms for the planning step and the working step; each is sourced and dated in
+[options.md](options.md#what-other-factories-call-it).
+
+| Product | Planning | Execution |
+|---|---|---|
+| Devin | Ask Devin ([source](https://docs.devin.ai/work-with-devin/ask-devin.md), as of 2026-10-13) | Devin session ([source](https://docs.devin.ai/essential-guidelines/instructing-devin-effectively.md), as of 2026-10-13) |
+| Factory | Spec Mode ([source](https://docs.factory.com/autonomy-and-safety/specification-mode), as of 2026-10-13) | Mission worker session ([source](https://factory.com/news/missions), as of 2026-10-13) |
+| OpenHands | GitHub Issue Triage automation ([source](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), as of 2026-10-13) | GitHub Issue to PR automation ([source](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), as of 2026-10-13) |
+| Cursor | Plan Mode ([source](https://cursor.com/docs/agent/plan-mode), as of 2026-10-13) | Cloud agent ([source](https://cursor.com/docs/cloud-agent), as of 2026-10-13) |
+| GitHub Copilot | no name in their docs | Copilot cloud agent ([source](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent), as of 2026-10-13) |
+| Claude Code | Plan mode ([source](https://code.claude.com/docs/en/permission-modes.md), as of 2026-10-13) | Claude Code session ([source](https://code.claude.com/docs/en/how-claude-code-works.md), as of 2026-10-13) |
+
+Call yours whatever you like; nothing downstream depends on our names.
 
 ## The concept
 
