@@ -1,4 +1,8 @@
-export type ComponentId = "intake" | "loop" | "planning" | "execution";
+export const COMPONENT_IDS = ["plan-output", "plan-drive", "verify", "loop-across", "loop-drive"] as const;
+export type ComponentId = (typeof COMPONENT_IDS)[number];
+
+/** Longest `short` a slide cell may carry, in words. */
+export const SHORT_MAX_WORDS = 8;
 
 /** A sourced claim. `name` is the product's own name for the capability. */
 export interface Cell {
@@ -8,6 +12,8 @@ export interface Cell {
   sourceUrl: string;
   /** YYYY-MM-DD date the source was fetched. */
   asOf: string;
+  /** The text a slide cell shows: at most SHORT_MAX_WORDS words; names the surface when a product has two. */
+  short: string;
 }
 
 /** A component we could not source; listed in the README, never guessed. */
@@ -40,16 +46,28 @@ export interface Destination {
   asOf?: string;
 }
 
-export interface Product {
+interface BaseProduct {
   id: string;
   name: string;
-  kind: "factory" | "task-queue";
   /** First-party hosts; sourceUrl host must equal or be a subdomain of one. */
   allowedHosts: string[];
-  cells: Record<ComponentId, Cell | OmittedCell>;
   demoable: Demoable;
   destination: Destination;
 }
+
+/** A factory is compared on every component. */
+export interface FactoryProduct extends BaseProduct {
+  kind: "factory";
+  cells: Record<ComponentId, Cell | OmittedCell>;
+}
+
+/** A task queue is not compared per component; it carries one sourced `queue` cell. */
+export interface TaskQueueProduct extends BaseProduct {
+  kind: "task-queue";
+  queue: Cell;
+}
+
+export type Product = FactoryProduct | TaskQueueProduct;
 
 export interface Landscape {
   components: { id: ComponentId; label: string }[];

@@ -1,20 +1,24 @@
 {
   "components": [
     {
-      "id": "intake",
-      "label": "Intake"
+      "id": "plan-output",
+      "label": "Plan output"
     },
     {
-      "id": "loop",
-      "label": "What starts the next run"
+      "id": "plan-drive",
+      "label": "Plan: who drives"
     },
     {
-      "id": "planning",
-      "label": "Planning / task queue"
+      "id": "verify",
+      "label": "Verify: what judges done"
     },
     {
-      "id": "execution",
-      "label": "Execution"
+      "id": "loop-across",
+      "label": "Loop: next task by itself"
+    },
+    {
+      "id": "loop-drive",
+      "label": "Loop: who drives"
     }
   ],
   "products": [
@@ -26,26 +30,40 @@
         "devin.ai"
       ],
       "cells": {
-        "intake": {
-          "name": "Linear integration (assign ticket, playbook label, @mention)",
-          "summary": "A Linear ticket can be assigned to Devin, tagged with a playbook label such as !plan, !implement, !triage or !review, or Devin can be @mentioned in a comment, each of which starts a session.",
+        "plan-output": {
+          "name": "Ask Devin",
+          "summary": "In Ask Devin the person scopes and breaks down the task in conversation with Devin, which writes a context-rich prompt that starts an Agent session. The page does not say the breakdown carries acceptance criteria or dependencies.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/ask-devin.md",
+          "asOf": "2026-10-13",
+          "short": "Ask Devin: prompt that starts a session"
+        },
+        "plan-drive": {
+          "name": "Linear integration",
+          "summary": "With Linear, a person starts the work by assigning the ticket, tagging a playbook label or @mentioning Devin (Human), or a Linear automation trigger starts it without manual assignment (Automated). For Ask Devin the page does not label who drives.",
           "sourceUrl": "https://docs.devin.ai/integrations/linear.md",
-          "asOf": "2026-10-10"
+          "asOf": "2026-10-13",
+          "short": "Linear: Human or Automated; Ask Devin unstated"
         },
-        "loop": {
+        "verify": {
+          "name": "unknown",
+          "summary": "Devin runs existing tests, lint and type checks in its own environment and iterates until tests pass before submitting a PR. Which checks run is set by the prompt, playbook or repo skill, not by a fixed pipeline.",
+          "sourceUrl": "https://docs.devin.ai/essential-guidelines/sdlc-integration.md",
+          "asOf": "2026-10-13",
+          "short": "Tests, lint, type checks named in prompt"
+        },
+        "loop-across": {
           "name": "Automations",
-          "summary": "Automations wire external events (Slack messages, GitHub webhooks, Linear ticket updates, schedules and custom webhooks) to Devin sessions that start automatically; a schedule trigger is either recurring (cron-based) or one-time.",
+          "summary": "An automation fires on a trigger (schedule, ticket, GitHub, Slack or webhook) and starts a session with a saved prompt. A finished session choosing the next ticket by itself is not documented.",
           "sourceUrl": "https://docs.devin.ai/product-guides/automations.md",
-          "asOf": "2026-10-12"
+          "asOf": "2026-10-13",
+          "short": "Triggers start sessions; next-ticket pick undocumented"
         },
-        "planning": {
-          "omitted": "The Linear page lists a !plan playbook label but does not describe a planning feature; no dedicated planning page found in the docs index."
-        },
-        "execution": {
-          "name": "session",
-          "summary": "A Devin session comes with a Shell, an IDE (VSCode environment loaded with your repos) and a Browser that you can watch or take over, plus a read-only Side Chat for asking questions without interrupting the work.",
-          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-session-tools.md",
-          "asOf": "2026-10-10"
+        "loop-drive": {
+          "name": "Automations",
+          "summary": "The page says events start sessions automatically, without a person tagging Devin, once a person has created the automation.",
+          "sourceUrl": "https://docs.devin.ai/product-guides/automations.md",
+          "asOf": "2026-10-13",
+          "short": "Automated after setup"
         }
       },
       "demoable": {
@@ -67,23 +85,40 @@
         "factory.ai"
       ],
       "cells": {
-        "intake": {
-          "omitted": "The fetched Droid CLI overview describes terminal launch only; no first-party intake integration page was verified."
+        "plan-output": {
+          "name": "Missions",
+          "summary": "Droid builds a structured plan of features grouped into milestones; once the person approves it, the Mission enters Mission Control. Dependency edges between features are not documented.",
+          "sourceUrl": "https://docs.factory.com/missions/overview",
+          "asOf": "2026-10-13",
+          "short": "Mission plan: features grouped in milestones"
         },
-        "loop": {
-          "name": "Automations (Trigger)",
-          "summary": "An automation's trigger is what starts a run: a schedule, a Slack message, a GitHub event, or an HTTP POST to the automation's webhook URL.",
-          "sourceUrl": "https://docs.factory.com/software-factory/automations.md",
-          "asOf": "2026-10-12"
+        "plan-drive": {
+          "name": "Missions",
+          "summary": "Mission execution starts once the person approves the plan.",
+          "sourceUrl": "https://docs.factory.com/missions/overview",
+          "asOf": "2026-10-13",
+          "short": "Human approves"
         },
-        "planning": {
-          "omitted": "The overview says Droid plans, implements, tests and reviews end to end but names no separate planning feature."
+        "verify": {
+          "name": "Validation workers",
+          "summary": "Validation workers run at the end of each milestone, verifying its work, and Missions validate their own work by exercising the running application.",
+          "sourceUrl": "https://docs.factory.com/missions/planning",
+          "asOf": "2026-10-13",
+          "short": "Validation workers at each milestone end"
         },
-        "execution": {
-          "name": "Droid (Missions, Exec Mode)",
-          "summary": "Droid CLI runs interactively in the terminal; multi-agent Missions are launched with /missions or droid exec --mission, scoped tasks can be delegated to Custom Droids via /droids, and Exec Mode (droid exec) runs headless in scripts and CI/CD.",
-          "sourceUrl": "https://docs.factory.com/cli/getting-started/overview",
-          "asOf": "2026-10-10"
+        "loop-across": {
+          "name": "Mission orchestrator",
+          "summary": "After each feature or milestone finishes, the orchestrator reviews progress and starts the next work from the plan.",
+          "sourceUrl": "https://docs.factory.com/missions/overview",
+          "asOf": "2026-10-13",
+          "short": "Orchestrator starts next feature after each"
+        },
+        "loop-drive": {
+          "name": "Mission orchestrator",
+          "summary": "After approval an orchestrator manages execution; the person can pause it and talk to it to recover.",
+          "sourceUrl": "https://docs.factory.com/missions/overview",
+          "asOf": "2026-10-13",
+          "short": "Automated; person can pause"
         }
       },
       "demoable": {
@@ -102,26 +137,40 @@
         "github.com"
       ],
       "cells": {
-        "intake": {
-          "name": "Copilot cloud agent",
-          "summary": "Work can be started from the agents panel, a conversation, or an issue or pull request on GitHub.com; code scanning alerts from security campaigns can also be assigned to it.",
-          "sourceUrl": "https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent",
-          "asOf": "2026-10-10"
+        "plan-output": {
+          "name": "Research, plan and iterate",
+          "summary": "The cloud agent shows a plan in the conversation for review before any changes. Splitting a plan into separate tasks with acceptance criteria and dependencies is not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/research-plan-iterate",
+          "asOf": "2026-10-13",
+          "short": "Plan shown for review; no task split documented"
         },
-        "loop": {
-          "name": "Automations",
-          "summary": "Automations let you define a task once and have Copilot cloud agent run it on a schedule or in response to repository events.",
-          "sourceUrl": "https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent",
-          "asOf": "2026-10-12"
+        "plan-drive": {
+          "name": "Research, plan and iterate",
+          "summary": "The person reviews the plan and iterates until it matches their intent before the agent implements it.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/research-plan-iterate",
+          "asOf": "2026-10-13",
+          "short": "Human approves"
         },
-        "planning": {
-          "omitted": "No first-party planning page verified; the about page only mentions asking an agent to plan in chat."
+        "verify": {
+          "name": "Cloud agent session",
+          "summary": "The agent works in its own GitHub Actions environment, where it runs tests and linters to validate changes. How the results decide whether it keeps going before opening the PR is not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents",
+          "asOf": "2026-10-13",
+          "short": "Runs tests and linters; gate not documented"
         },
-        "execution": {
-          "name": "Copilot cloud agent",
-          "summary": "It works in an ephemeral cloud development environment rather than your local IDE, where it can edit files and run tests and linters.",
-          "sourceUrl": "https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent",
-          "asOf": "2026-10-10"
+        "loop-across": {
+          "name": "Agentic Workflows work queue (gh-aw)",
+          "summary": "On the gh-aw site (GitHub Next), a native work queue holds work as a dependency graph; the scheduler picks eligible work and a task waits for its predecessors' results. Copilot automations are documented only as trigger-started runs, not as picking the next ready issue.",
+          "sourceUrl": "https://github.github.com/gh-aw/reference/work-queue/",
+          "asOf": "2026-10-13",
+          "short": "gh-aw work queue; Copilot automations: not documented"
+        },
+        "loop-drive": {
+          "name": "Agentic Workflows work queue (gh-aw)",
+          "summary": "Automated once the producer, dispatcher and worker workflows are published on the default branch.",
+          "sourceUrl": "https://github.github.com/gh-aw/guides/deploy-work-queue/",
+          "asOf": "2026-10-13",
+          "short": "Automated once workflows are published"
         }
       },
       "demoable": {
@@ -141,26 +190,40 @@
         "github.com"
       ],
       "cells": {
-        "intake": {
-          "name": "conversation",
-          "summary": "In OpenHands Cloud's Slack app, a new conversation starts by mentioning @openhands in a new message or a thread in any Slack channel.",
-          "sourceUrl": "https://docs.openhands.dev/openhands/usage/cloud/slack-installation.md",
-          "asOf": "2026-10-10"
+        "plan-output": {
+          "name": "Software Factory triage",
+          "summary": "A triage agent prioritizes issues, checks their dependencies and establishes acceptance criteria, then applies the ready-for-dev label. A separate task list or plan file is not documented.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md",
+          "asOf": "2026-10-13",
+          "short": "Issue labeled ready-for-dev"
         },
-        "loop": {
-          "name": "Automations",
-          "summary": "Automations schedule AI-powered tasks that run automatically on a cron schedule (for example every Monday at 9 AM); each run gets a fresh sandbox.",
-          "sourceUrl": "https://docs.openhands.dev/openhands/usage/automations/overview.md",
-          "asOf": "2026-10-12"
+        "plan-drive": {
+          "name": "Software Factory triage",
+          "summary": "The triage step is an automation that checks every 5 minutes (Automated); a person writes the issue.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md",
+          "asOf": "2026-10-13",
+          "short": "Automated triage; Human writes the issue"
         },
-        "planning": {
-          "omitted": "The key-features page fetched mentions no planning feature."
+        "verify": {
+          "name": "Goal Completion Loop",
+          "summary": "In the SDK, a second judge LLM audits the transcript for evidence, such as test output, that proves the objective is complete. The Issue to PR automation lists running tests as a step but does not document what happens when they fail.",
+          "sourceUrl": "https://docs.openhands.dev/sdk/guides/convo-goal.md",
+          "asOf": "2026-10-13",
+          "short": "SDK: judge LLM audits transcript for proof"
         },
-        "execution": {
-          "name": "sandbox",
-          "summary": "A sandbox is the environment where OpenHands runs commands, edits files and starts servers; providers are Docker (recommended), Process (unsafe but fast) and Remote.",
-          "sourceUrl": "https://docs.openhands.dev/openhands/usage/sandboxes/overview.md",
-          "asOf": "2026-10-10"
+        "loop-across": {
+          "name": "Software Factory",
+          "summary": "Four automations poll every 5 minutes. GitHub labels and statuses are the queue, and the next labeled issue is taken at the next poll.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md",
+          "asOf": "2026-10-13",
+          "short": "Polls labeled issues every 5 minutes"
+        },
+        "loop-drive": {
+          "name": "Software Factory",
+          "summary": "Automated after a person turns on the four automations and files the issues.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md",
+          "asOf": "2026-10-13",
+          "short": "Automated once a person sets it up"
         }
       },
       "demoable": {
@@ -181,29 +244,40 @@
         "cursor.com"
       ],
       "cells": {
-        "intake": {
-          "name": "Cloud agents",
-          "summary": "Cloud agents can be started from Cursor for iOS, Cursor Web, Cursor Desktop, Slack via @cursor, @cursor comments on GitHub or Bitbucket PRs, Linear, or the API.",
-          "sourceUrl": "https://cursor.com/docs/background-agent",
-          "asOf": "2026-10-10"
-        },
-        "loop": {
-          "name": "Automations (triggers)",
-          "summary": "Automations run cloud agents in the background, either on a schedule (preset or cron expression) or in response to events from GitHub, GitLab, Slack, Linear and more; a webhook trigger gives a private HTTP endpoint that starts a run when posted to.",
-          "sourceUrl": "https://cursor.com/docs/cloud-agent/automations",
-          "asOf": "2026-10-12"
-        },
-        "planning": {
+        "plan-output": {
           "name": "Plan Mode",
-          "summary": "Plan Mode has the agent ask clarifying questions, research the codebase and produce an implementation plan you can review and edit before any code is written.",
-          "sourceUrl": "https://cursor.com/docs/agent/planning",
-          "asOf": "2026-10-10"
+          "summary": "The plan is editable and opens as a virtual file saved by default in the home directory; Save to workspace moves it into the repo. A plan that splits into tasks with criteria and dependencies is not documented as a format.",
+          "sourceUrl": "https://cursor.com/help/ai-features/plan-mode.md",
+          "asOf": "2026-10-13",
+          "short": "Editable plan; saved to home or workspace"
         },
-        "execution": {
-          "name": "Cloud agents",
-          "summary": "Cloud agents run in isolated VMs in the cloud with full development environments (cloned repos, installed dependencies, secrets, startup commands, network access).",
-          "sourceUrl": "https://cursor.com/docs/background-agent",
-          "asOf": "2026-10-10"
+        "plan-drive": {
+          "name": "Plan Mode",
+          "summary": "The person clicks Build when satisfied with the plan.",
+          "sourceUrl": "https://cursor.com/docs/agent/plan-mode.md",
+          "asOf": "2026-10-13",
+          "short": "Plan Mode: Human approves"
+        },
+        "verify": {
+          "name": "Cloud Agents",
+          "summary": "The cloud agent can build, test and interact with the changed software, and can control a desktop and browser. The docs say an agent that cannot run tests cannot close the loop. A fixed pre-delivery gate that always runs is not documented.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent",
+          "asOf": "2026-10-13",
+          "short": "Agent builds and tests itself; no fixed gate"
+        },
+        "loop-across": {
+          "name": "Automations",
+          "summary": "A trigger (schedule, source-control, Slack, webhook, Linear event) starts a cloud agent with a saved prompt. One run starting the next is not documented as chaining.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent/automations.md",
+          "asOf": "2026-10-13",
+          "short": "Triggers start runs; chaining not documented"
+        },
+        "loop-drive": {
+          "name": "Automations",
+          "summary": "Automated after a person creates and activates the automation.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent/automations.md",
+          "asOf": "2026-10-13",
+          "short": "Automated after setup"
         }
       },
       "demoable": {
@@ -211,40 +285,6 @@
         "summary": "The docs say Cloud Agents require a paid Cursor plan and are charged at API pricing for the selected model.",
         "sourceUrl": "https://cursor.com/docs/background-agent",
         "asOf": "2026-10-10"
-      },
-      "destination": {
-        "summary": "unknown"
-      }
-    },
-    {
-      "id": "codegen",
-      "name": "Codegen",
-      "kind": "factory",
-      "allowedHosts": [
-        "codegen.com"
-      ],
-      "cells": {
-        "intake": {
-          "name": "code agents",
-          "summary": "Per the overview, work can be started through the Slack integration, the Linear integration, or programmatically with the Python SDK/API.",
-          "sourceUrl": "https://docs.codegen.com/introduction/overview",
-          "asOf": "2026-10-10"
-        },
-        "loop": {
-          "omitted": "The overview and the triggering page fetched describe manual, Web UI/CLI and API invocation and PR-driven auto-triggers only; no schedule or queue-driven start verified."
-        },
-        "planning": {
-          "omitted": "No dedicated planning page found in the docs index."
-        },
-        "execution": {
-          "name": "code agents",
-          "summary": "The overview says agents can safely run code, install dependencies and test changes in isolated environments, and can create branches, commit code and review PRs.",
-          "sourceUrl": "https://docs.codegen.com/introduction/overview",
-          "asOf": "2026-10-10"
-        }
-      },
-      "demoable": {
-        "kind": "unknown"
       },
       "destination": {
         "summary": "unknown"
@@ -260,29 +300,40 @@
         "docs.claude.com"
       ],
       "cells": {
-        "intake": {
-          "name": "surfaces",
-          "summary": "Claude Code runs from the terminal, IDE extensions, a desktop app and the web; a bug report can also be routed from Slack by mentioning @Claude to get a pull request back, and GitHub Actions or GitLab CI/CD can automate PR review and issue triage.",
-          "sourceUrl": "https://code.claude.com/docs/en/overview",
-          "asOf": "2026-10-10"
+        "plan-output": {
+          "name": "Plan mode",
+          "summary": "Claude reads the code and writes a plan the person can open in an editor and edit before approving. Splitting the plan into separate tasks with acceptance criteria or dependencies is not documented for plan mode.",
+          "sourceUrl": "https://code.claude.com/docs/en/permission-modes.md",
+          "asOf": "2026-10-13",
+          "short": "Editable plan; task split not documented"
         },
-        "loop": {
-          "name": "Routines",
-          "summary": "A routine is a saved Claude Code configuration that runs automatically on a schedule (recurring or one-off), from an HTTP POST to its API endpoint, or in response to GitHub events, on Anthropic-managed cloud infrastructure.",
-          "sourceUrl": "https://code.claude.com/docs/en/routines",
-          "asOf": "2026-10-12"
+        "plan-drive": {
+          "name": "Plan mode",
+          "summary": "Source files are not edited until the person approves the plan.",
+          "sourceUrl": "https://code.claude.com/docs/en/permission-modes.md",
+          "asOf": "2026-10-13",
+          "short": "Plan mode: Human approves"
         },
-        "planning": {
-          "name": "plan mode",
-          "summary": "In plan mode Claude reads files and proposes a plan but makes no edits until you approve; start it with --permission-mode plan or Shift+Tab.",
-          "sourceUrl": "https://code.claude.com/docs/en/common-workflows",
-          "asOf": "2026-10-10"
+        "verify": {
+          "name": "/goal",
+          "summary": "After every turn a separate small model checks the condition; if it is not met, Claude starts another turn. The evaluator runs no commands and reads no files, so the condition must be something the transcript shows, such as a test result.",
+          "sourceUrl": "https://code.claude.com/docs/en/goal.md",
+          "asOf": "2026-10-13",
+          "short": "/goal: small model checks the condition"
         },
-        "execution": {
-          "name": "session",
-          "summary": "Claude Code reads the codebase, edits files and runs commands in a session; subagents and background agents can run work in parallel, and claude -p runs non-interactively for CI.",
-          "sourceUrl": "https://code.claude.com/docs/en/overview",
-          "asOf": "2026-10-10"
+        "loop-across": {
+          "name": "Agent teams",
+          "summary": "In an agent team, a teammate that finishes a task picks up the next unassigned, unblocked task from the shared list on its own. Experimental and off by default.",
+          "sourceUrl": "https://code.claude.com/docs/en/agent-teams.md",
+          "asOf": "2026-10-13",
+          "short": "Agent teams self-claim next task (experimental)"
+        },
+        "loop-drive": {
+          "name": "Agent teams",
+          "summary": "Automated after a person starts the team.",
+          "sourceUrl": "https://code.claude.com/docs/en/agent-teams.md",
+          "asOf": "2026-10-13",
+          "short": "Automated once a person starts the team"
         }
       },
       "demoable": {
@@ -301,22 +352,12 @@
       "allowedHosts": [
         "linear.app"
       ],
-      "cells": {
-        "intake": {
-          "omitted": "Not covered by the page fetched for this slice."
-        },
-        "loop": {
-          "omitted": "Not covered by the page fetched for this slice."
-        },
-        "planning": {
-          "name": "Issues, Projects, Cycles",
-          "summary": "Issues are Linear's fundamental unit of work; Projects group issues around a shared outcome, and Cycles are a team's repeating planning period.",
-          "sourceUrl": "https://linear.app/docs/conceptual-model",
-          "asOf": "2026-10-10"
-        },
-        "execution": {
-          "omitted": "A task queue is not an executor."
-        }
+      "queue": {
+        "name": "Issues, Projects, Cycles",
+        "summary": "Issues are Linear's fundamental unit of work; Projects group issues around a shared outcome, and Cycles are a team's repeating planning period.",
+        "sourceUrl": "https://linear.app/docs/conceptual-model",
+        "asOf": "2026-10-10",
+        "short": "Issues, Projects and Cycles"
       },
       "demoable": {
         "kind": "unknown"
@@ -332,22 +373,12 @@
       "allowedHosts": [
         "atlassian.com"
       ],
-      "cells": {
-        "intake": {
-          "omitted": "Not covered by the page fetched for this slice."
-        },
-        "loop": {
-          "omitted": "Not covered by the page fetched for this slice."
-        },
-        "planning": {
-          "name": "Work items (formerly issues)",
-          "summary": "Work items are the building blocks of Jira and can represent a story, bug, task or another work type.",
-          "sourceUrl": "https://support.atlassian.com/jira-software-cloud/docs/what-is-an-issue/",
-          "asOf": "2026-10-10"
-        },
-        "execution": {
-          "omitted": "A task queue is not an executor."
-        }
+      "queue": {
+        "name": "Work items (formerly issues)",
+        "summary": "Work items are the building blocks of Jira and can represent a story, bug, task or another work type.",
+        "sourceUrl": "https://support.atlassian.com/jira-software-cloud/docs/what-is-an-issue/",
+        "asOf": "2026-10-10",
+        "short": "Work items: stories, bugs, tasks"
       },
       "demoable": {
         "kind": "unknown"
@@ -364,22 +395,12 @@
         "docs.github.com",
         "github.com"
       ],
-      "cells": {
-        "intake": {
-          "omitted": "Not covered by the page fetched for this slice."
-        },
-        "loop": {
-          "omitted": "Not covered by the page fetched for this slice."
-        },
-        "planning": {
-          "name": "Issues, sub-issues, Projects",
-          "summary": "Issues track bugs, features and ideas; sub-issues add hierarchies between issues, and Projects is integrated with issues to plan and track a team's work.",
-          "sourceUrl": "https://docs.github.com/en/issues/tracking-your-work-with-issues/learning-about-issues/about-issues",
-          "asOf": "2026-10-10"
-        },
-        "execution": {
-          "omitted": "A task queue is not an executor."
-        }
+      "queue": {
+        "name": "Issues, sub-issues, Projects",
+        "summary": "Issues track bugs, features and ideas; sub-issues add hierarchies between issues, and Projects is integrated with issues to plan and track a team's work.",
+        "sourceUrl": "https://docs.github.com/en/issues/tracking-your-work-with-issues/learning-about-issues/about-issues",
+        "asOf": "2026-10-10",
+        "short": "Issues, sub-issues and Projects"
       },
       "demoable": {
         "kind": "unknown"
