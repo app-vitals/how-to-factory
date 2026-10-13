@@ -33,12 +33,19 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
      - Size is a rule, not a field: each task is small enough to deliver as one PR. Status is not plan output; it is
        the queue's state, introduced in the loop section. The branch is derived by dev-task; it only becomes a real
        concern with parallel work, which is a later lesson.
-   - How the field differs (slide, [options.md](options.md)): the plan splits into a plan you approve and tasks in a
-     queue. Claude Code (plan mode), Cursor (Plan Mode), Copilot (research, plan and iterate) and Factory (Missions)
-     show a plan the person approves before work starts; OpenHands works from issues in a queue, where a triage
-     automation checks dependencies and acceptance criteria and labels the issue ready. Say what the pages say:
-     Copilot, Claude Code and Cursor do not document splitting the plan into tasks with criteria and dependencies,
-     which is different from saying they cannot. The matrix has no omitted cells, so never say "not in their docs".
+   - How the field differs (slide, [options.md](options.md)): three questions, each answered from the cells and nothing
+     more. Does a person approve or edit the plan first? Approval is the gate form of human in the loop. When the person
+     is not satisfied, the docs describe editing and iterating, not dropping the plan: Cursor (edit the plan, then
+     Build), Copilot (review and iterate until it matches intent) and Claude Code (edit the plan, approve, or keep
+     planning; no source edits until approved). Factory also approves or keeps iterating. OpenHands triage runs
+     automatically; a person writes the issue. Do tasks outlive the chat? The field splits between a plan you approve
+     and tasks in a queue, and the same product often has both surfaces: Claude Code plan mode vs agent teams (task list
+     on disk), Cursor Plan Mode (a plan file) vs Projects, OpenHands triage (issues labeled ready-for-dev), Devin
+     (Linear tickets). Do the tasks carry criteria and dependencies? OpenHands triage, Factory Missions and Devin's
+     example tickets (an example, not a guaranteed format) document acceptance criteria; OpenHands triage, Claude Code
+     agent teams and Devin's example tickets document dependencies. Say
+     "not in their docs" only for omitted cells (Devin approval, Copilot persistence and contents, Cursor contents);
+     elsewhere say what the cell says, including "not documented" where the page says so.
    - In our demo we use a markdown skill, [`factory/skills/plan/SKILL.md`](../../factory/skills/plan/SKILL.md),
      writing [`factory/todos.json`](../../factory/README.md). DEMO: write the skill on camera. Do not run it.
    - Yours can be anything: a pasted prompt, a planning mode, a person. Trackers and issues are the usual queue;
