@@ -91,7 +91,20 @@ Projects, Manage multiple agents with agent view, Orchestrate subagents at scale
 | input | The finished diff, plus a plan or criteria the reviewer is told to check against | https://code.claude.com/docs/en/best-practices.md | 2026-10-13 |
 | step | A reviewer subagent in a fresh context checks the diff against the plan (every requirement implemented, listed edge cases tested, nothing out of scope changed) and reports gaps. The guide warns that a reviewer asked for gaps will usually find some, and says to tell it to flag only correctness or stated-requirement gaps. Dynamic workflows can have a second set of agents try to refute findings | https://code.claude.com/docs/en/best-practices.md ; https://code.claude.com/docs/en/workflows.md | 2026-10-13 |
 | output | A list of gaps returned to the implementing session, which can fix them and re-review | https://code.claude.com/docs/en/best-practices.md | 2026-10-13 |
-| who drives | Human asks for the review; the fix and re-review then run in the session. Whether it is Automated by default: not documented (checked: Best practices, Run agents in parallel) | https://code.claude.com/docs/en/best-practices.md | 2026-10-13 |
+| who drives | Human asks for the review (naming the subagent in a prompt, an @-mention, or `claude --agent NAME`); the fix and re-review then run in the session. The Sub-agents page adds that Claude can also delegate on its own: it "automatically delegates tasks based on the task description" and each subagent's `description`, and a description containing phrases like "use proactively" encourages it; the page's own code-reviewer example is described "Use immediately after writing or modifying code". So a person-defined reviewer can run without being asked each time, but nothing says Claude Code ships one that runs after every task (checked: Best practices, Run agents in parallel, Sub-agents) | https://code.claude.com/docs/en/best-practices.md ; https://code.claude.com/docs/en/sub-agents.md | 2026-10-13 |
+
+Sub-agents page (read through, 2026-10-13), for this surface: a custom subagent is a Markdown file with frontmatter in `.claude/agents/` (project) or `~/.claude/agents/`, with its own tools, model and system prompt, and starts in a fresh context. Its `maxTurns` field caps agentic turns; on the cap the output comes back marked partial and Claude can resume it. A `Stop` hook in a subagent's frontmatter runs as `SubagentStop` when the subagent finishes, and `SubagentStart` and `SubagentStop` also fire from `settings.json`. The page does not say a `SubagentStop` hook can send a subagent back to work (the blocking behaviour is documented for `Stop` in the hooks guide, quoted in LOOP-WITHIN Surface 2), so that is not claimed here.
+
+### Surface 5: delegate from Slack (Claude Code in Slack, cloud session)
+
+| Field | Value | Source | As of |
+| --- | --- | --- | --- |
+| input | An `@Claude` mention in a channel the app was invited to (public or private, not DMs). Claude reads the thread, or recent channel messages, for context and picks a repository from it. In "Code + Chat" routing it decides whether the message is a coding task; "Code only" sends every mention to Claude Code. The page advises defining "what done looks like" (tests, docs, a PR) in the request | https://code.claude.com/docs/en/slack.md | 2026-10-13 |
+| step | A Claude Code cloud session is created, status updates are posted in the Slack thread, and a completion message @mentions the person with a summary. Which checks the session runs: not documented on this page (checked: Slack page, Use Claude Code in the cloud) | https://code.claude.com/docs/en/slack.md | 2026-10-13 |
+| output | A cloud session with the changes. A person clicks **Create PR** (or **View Session**) to open a pull request; each session can create one PR, and repositories must be on GitHub | https://code.claude.com/docs/en/slack.md | 2026-10-13 |
+| who drives | Human starts it with the mention; the session then runs on its own (Automated), and a Human clicks Create PR. The page says Claude "may follow directions from other messages in the context", so it advises using it only in trusted conversations | https://code.claude.com/docs/en/slack.md | 2026-10-13 |
+
+Product status on the page: it documents "the earlier Claude Code in Slack", which runs each session under an individual Claude account (Pro or Max), and says the earlier bot "is retired effective October 5, 2026" in workspaces an organization has connected to Claude Tag, the organization-managed version for Team and Enterprise (https://code.claude.com/docs/en/slack.md, 2026-10-13). Claude Tag's own docs live on claude.com and were not read in this pass.
 
 ## LOOP-WITHIN-A-TASK
 
@@ -187,6 +200,16 @@ Projects, Manage multiple agents with agent view, Orchestrate subagents at scale
 | next piece of work after a run finishes | Yes in the shell loop (the script) and in Projects (the coordinating conversation starts threads; an idle thread also wakes when CI fails or a comment arrives on its PR) | https://code.claude.com/docs/en/claude-projects.md | 2026-10-13 |
 | who drives | Automated for the script and `/batch` once started; Projects: Human approves if told to confirm first, otherwise Automated | https://code.claude.com/docs/en/claude-projects.md | 2026-10-13 |
 
+### Surface 6: sessions messaging each other (cross-session messaging)
+
+| Field | Value | Source | As of |
+| --- | --- | --- | --- |
+| what moves on by itself | Claude can send a plain-text message from one of the person's sessions to another (same machine over a local socket; other machines and cloud sessions through Remote Control and Anthropic servers), on its own or when asked. A message to an idle session starts a new turn there; to a busy one it is read between tool calls. Claude can also ask a session on this machine for one notice "when it next goes idle or exits" (`notify_when_idle`), so a watching session can start the next step when a worker finishes | https://code.claude.com/docs/en/cross-session-messaging.md | 2026-10-13 |
+| queue / pacing | No task queue: a message is text, never the sender's history or files. A receiving session queues at most 50 accepted messages, rate-limits repeats per sender (so a message loop between two sessions stops on its own), and a notice subscription is dropped after 12 hours. Receivers set `crossSessionInbound` to `accept`, `hold` or `refuse`; by default a message to a session that prompts for permission is delivered, and one to a session that bypasses prompts is held for approval | https://code.claude.com/docs/en/cross-session-messaging.md | 2026-10-13 |
+| output | Another turn in the receiving session; the page's examples are a migration finishing, a schema change another session builds on, and status from long-running work | https://code.claude.com/docs/en/cross-session-messaging.md | 2026-10-13 |
+| next piece of work after a run finishes | Not documented as a work-picking feature. The page shows sessions handing findings and idle notices to each other; choosing the next task is left to the sessions' own prompts. A message cannot approve a permission prompt or change settings on the receiving side. Only the main conversation can subscribe to an idle notice, and only for the person's own local sessions | https://code.claude.com/docs/en/cross-session-messaging.md | 2026-10-13 |
+| who drives | Automated once Claude decides to send, or Human asks it to; the receiving session's controls decide whether it is delivered | https://code.claude.com/docs/en/cross-session-messaging.md | 2026-10-13 |
+
 ## Pages read
 
 All fetched 2026-10-13. "In full" means read from the first line to the last; "sections" means only the parts used above.
@@ -210,19 +233,18 @@ All fetched 2026-10-13. "In full" means read from the first line to the last; "s
 - https://code.claude.com/docs/en/agent-view.md (intro only)
 - https://code.claude.com/docs/en/channels.md (intro only)
 - https://code.claude.com/docs/en/overview.md and https://code.claude.com/docs/en/how-claude-code-works.md (searched for the planning, loop, scheduling and CI passages; not read through)
+- https://code.claude.com/docs/en/sub-agents.md (gap-closing pass, read through from the first line to the last)
+- https://code.claude.com/docs/en/slack.md (gap-closing pass, in full)
+- https://code.claude.com/docs/en/cross-session-messaging.md (gap-closing pass, in full)
 
 ## Ruled out (why)
 
 - **Channels** (https://code.claude.com/docs/en/channels.md, intro read): an MCP server pushes chat or CI events into a session that is
   already open. It is a way to feed events to a running session, not a plan, a verify loop or a queue, and events only arrive
   while the session is open.
-- **Agent view and cross-session messaging** (https://code.claude.com/docs/en/agent-view.md, https://code.claude.com/docs/en/cross-session-messaging.md):
-  dispatching and watching several background sessions is parallel runs, which is out of lesson 1 scope. Agent view was read
-  only in its intro; cross-session messaging was not fetched or read.
-- **Subagents and the Claude Code Slack integration** (https://code.claude.com/docs/en/sub-agents.md, https://code.claude.com/docs/en/slack.md):
-  subagents appear only as the verifier in DEV-TASK Surface 4, via the best-practices and workflows pages. The sub-agents page
-  was fetched but not read through, and the Slack page was not fetched; from its index description Slack is a way to start a
-  task, so it is not used in a grid.
+- **Agent view** (https://code.claude.com/docs/en/agent-view.md): dispatching and watching several background sessions is parallel runs,
+  which is out of lesson 1 scope. Read only in its intro. Cross-session messaging, the Sub-agents page and the Slack page were
+  read in the gap-closing pass (see below) and are now used in DEV-TASK Surfaces 4 and 5 and LOOP-ACROSS Surface 6.
 - **Code Review and ultrareview** (https://code.claude.com/docs/en/code-review.md, https://code.claude.com/docs/en/ultrareview.md): review policy
   and posting, out of lesson 1 scope. Code Review was fetched but not read through, ultrareview was not fetched; `/code-review`
   appears only where the best-practices page names it as a check.
@@ -235,3 +257,17 @@ All fetched 2026-10-13. "In full" means read from the first line to the last; "s
 - **GitLab CI/CD** (https://code.claude.com/docs/en/gitlab-ci-cd.md): by its index description the GitLab counterpart of the GitHub
   Actions surface; not fetched.
 - **Shipwright marketing pages** (`site/src/pages/compare.astro`, `vs/*.astro`): not consulted; no wording or claims reused.
+
+## Gap-closing pass (2026-10-13)
+
+Fetch date for every page below: 2026-10-13. All were fetched as Markdown (`.md` suffix) and read through; none was unreachable. Flags come from "CROSS-CHECK" in `README.md`.
+
+| Flag | Page read | Changed a cell? |
+| --- | --- | --- |
+| Sub-agents page, fetched but not read through | https://code.claude.com/docs/en/sub-agents.md (all 1,420 lines: built-ins, quickstart, scopes, frontmatter, tools, permission modes, memory, hooks, delegation, foreground and background, patterns, nesting, resume, forks, example subagents) | **Yes**, DEV-TASK Surface 4 "who drives": Claude can delegate to a person-defined reviewer subagent on its own, from the subagent's `description` ("use proactively"); it is not a built-in gate. Also logged: `maxTurns`, partial output and resume, and `Stop` hooks in a subagent running as `SubagentStop`. Not found: any statement that a `SubagentStop` hook can send a subagent back to work |
+| Slack page, not fetched | https://code.claude.com/docs/en/slack.md (in full) | **Yes**, new DEV-TASK Surface 5: input from a channel mention, cloud session, status in thread, a person clicks Create PR; checks not documented. Also logs the Oct 5, 2026 retirement of the earlier bot in Claude Tag workspaces |
+| Cross-session messaging page, not fetched | https://code.claude.com/docs/en/cross-session-messaging.md (in full) | Partly, new LOOP-ACROSS Surface 6: sessions can message each other and ask for an idle notice; it is not a queue and does not choose the next task, so the "next piece of work" answer for the existing surfaces is unchanged |
+
+Not read in this pass (outside the flags): https://code.claude.com/docs/en/claude-tag.md was fetched and is a web landing page that points to setup and usage docs on claude.com, so Claude Tag itself is not described here.
+
+**Net effect on the slide cells.** PLAN (output, who drives), LOOP within a task and LOOP across tasks are unchanged: the three pages add no plan format, no loop-until-pass mechanism beyond the `Stop` hook, `/goal` and PR auto-fix already recorded, and no work queue. DEV-TASK (what judges done) gains the delegation-by-description point and a Slack entry point, neither of which is a fixed pre-delivery check.

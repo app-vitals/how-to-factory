@@ -28,7 +28,7 @@ coding (URLs under "Pages read").
 
 | Field | Value | Source | As of |
 | --- | --- | --- | --- |
-| input | A request typed in the Agent panel while in Plan mode. Cursor can also suggest the mode when the wording signals a complex task | https://cursor.com/docs/agent/plan-mode.md ; https://cursor.com/help/ai-features/plan-mode.md | 2026-10-13 |
+| input | A request typed in the Agent panel while in Plan mode. Cursor can also suggest the mode when the wording signals a complex task. In the CLI the same mode starts with `--plan` (shorthand for `--mode=plan`) or from a session with `/plan [prompt]`, which also shows the current plan | https://cursor.com/docs/agent/plan-mode.md ; https://cursor.com/help/ai-features/plan-mode.md ; https://cursor.com/docs/cli/reference/parameters.md ; https://cursor.com/docs/cli/reference/slash-commands.md | 2026-10-13 |
 | step | The agent asks clarifying questions, researches the codebase, then writes an implementation plan the person reviews and edits in chat or as markdown. The docs recommend it for work with several valid approaches or unclear scope. A plan that breaks work into separate tasks with acceptance criteria and dependencies: not documented as a plan format (checked: Plan Mode docs and help, Agent overview, Prompting agents, Agentic coding help). The Multi-agent help page does say that from a plan, **Build in Parallel** runs independent steps at once and keeps dependent steps in order, so plans have steps with ordering, but the page does not say how steps or dependencies are written | https://cursor.com/docs/agent/plan-mode.md ; https://cursor.com/help/ai-features/multi-agent.md | 2026-10-13 |
 | output | An editable plan, opened as a virtual file and saved by default in the person's home directory; "Save to workspace" moves it into the repo for sharing | https://cursor.com/help/ai-features/plan-mode.md | 2026-10-13 |
 | who drives | Human approves: the person clicks Build when satisfied with the plan. The docs also advise reverting and refining the plan, rather than patching a bad build with follow-ups | https://cursor.com/docs/agent/plan-mode.md | 2026-10-13 |
@@ -75,8 +75,8 @@ coding (URLs under "Pages read").
 
 | Field | Value | Source | As of |
 | --- | --- | --- | --- |
-| input | A prompt passed to `agent -p`; with `--force` it applies file changes, without it changes are only proposed | https://cursor.com/docs/cli/headless.md | 2026-10-13 |
-| step | One non-interactive agent run. The GitHub Actions page recommends giving the agent file edits only and keeping commits, pushes and API calls in separate deterministic workflow steps for production CI, and also shows a full-autonomy variant | https://cursor.com/docs/cli/github-actions.md | 2026-10-13 |
+| input | A prompt passed to `agent -p`; with `--force` it applies file changes, without it changes are only proposed (headless page). The CLI Parameters page words it differently: `-p, --print` "has access to all tools, including write and shell", and the Permissions page says print mode can use write and shell tools, with `permissions.allow`, `permissions.deny` and `--force` controlling what runs without prompts. Whether bare `-p` writes files is therefore stated two ways across these pages; the headless page is quoted above and not reconciled | https://cursor.com/docs/cli/headless.md ; https://cursor.com/docs/cli/reference/parameters.md ; https://cursor.com/docs/cli/reference/permissions.md | 2026-10-13 |
+| step | One non-interactive agent run. The Parameters page lists no option for a retry count, turn limit or "until a check passes" (checked: the full global-options, commands, MCP, sandbox and worker tables), and the Configuration page's `cli-config.json` has none either; permissions are the only project-level CLI setting (`<project>/.cursor/cli.json`). The GitHub Actions page recommends giving the agent file edits only and keeping commits, pushes and API calls in separate deterministic workflow steps for production CI, and also shows a full-autonomy variant | https://cursor.com/docs/cli/github-actions.md | 2026-10-13 |
 | output | Text, JSON or streamed JSON; edited files when forced | https://cursor.com/docs/cli/headless.md | 2026-10-13 |
 | who drives | Automated once the script or workflow runs; the person writes the script | https://cursor.com/docs/cli/github-actions.md | 2026-10-13 |
 
@@ -86,15 +86,15 @@ coding (URLs under "Pages read").
 
 | Field | Value | Source | As of |
 | --- | --- | --- | --- |
-| retries until a check passes? | The page describes a long-lived objective the agent works toward "until it's fully complete", with the example `/goal fix all flaky tests and make CI green`, and contrasts it with the default where each message is a new job. It does not state a retry limit or the stopping test (checked: Agent overview, Prompting agents, CLI overview). The page says `/goal` is rolling out | https://cursor.com/docs/agent/overview.md | 2026-10-13 |
-| what judges it | not documented (same pages checked). The example's check is CI going green, but the page does not say whether the agent or a separate judge decides it is complete | n/a | 2026-10-13 |
+| retries until a check passes? | The page describes a long-lived objective the agent works toward "until it's fully complete", with the example `/goal fix all flaky tests and make CI green`, and contrasts it with the default where each message is a new job. It does not state a retry limit or the stopping test (checked: Agent overview, Prompting agents, CLI overview, CLI slash commands, CLI parameters, CLI configuration). The page says `/goal` is rolling out. The CLI slash-commands page has the same one-line description ("Give the agent a long-lived objective to work towards until it's fully complete. Rolling out."); no CLI parameter or `cli-config.json` field sets a goal limit | https://cursor.com/docs/agent/overview.md ; https://cursor.com/docs/cli/reference/slash-commands.md | 2026-10-13 |
+| what judges it | not documented (same pages checked). The example's check is CI going green, but no page says whether the agent or a separate judge decides it is complete | n/a | 2026-10-13 |
 | who drives | Automated after the person sets the goal; in the CLI Ctrl+C pauses it | https://cursor.com/docs/agent/overview.md | 2026-10-13 |
 
 ### Surface 2: `stop` and `subagentStop` hooks (project `.cursor/hooks.json`, also run in cloud agents)
 
 | Field | Value | Source | As of |
 | --- | --- | --- | --- |
-| retries until a check passes? | Yes, if the person writes the hook. When the agent loop ends, the stop hook's script can return a `followup_message`, which Cursor submits as the next user message, so the agent continues. The docs describe this as enabling "iterate until a goal is met". Default cap is 5 automatic follow-ups per script, set by `loop_limit` (null removes the cap). The hook receives `loop_count` and the end status (completed, aborted, error) | https://cursor.com/docs/hooks.md | 2026-10-13 |
+| retries until a check passes? | Yes, if the person writes the hook. When the agent loop ends, the stop hook's script can return a `followup_message`, which Cursor submits as the next user message, so the agent continues. The docs describe this as enabling "iterate until a goal is met". Default cap is 5 automatic follow-ups per script, set by `loop_limit` (null removes the cap). The hook receives `loop_count` and the end status (completed, aborted, error). The Cloud Agents help page confirms the `stop` and `subagentStop` hooks run in cloud agents and says conversation-level hooks "let you build self-correcting loops around agent output and reasoning" | https://cursor.com/docs/hooks.md ; https://cursor.com/help/ai-features/cloud-agents.md | 2026-10-13 |
 | what judges it | The hook script the person writes, which can run any check (tests, a linter, a file test) and decide whether to send another message. Cursor ships no default judge for this | https://cursor.com/docs/hooks.md | 2026-10-13 |
 | who drives | Automated once the hook is configured. Cloud agents run command-based hooks from the repo, but not user-level hooks, and hooks do not run during early read-only exploration turns | https://cursor.com/docs/hooks.md ; https://cursor.com/docs/cloud-agent.md | 2026-10-13 |
 
@@ -102,7 +102,7 @@ coding (URLs under "Pages read").
 
 | Field | Value | Source | As of |
 | --- | --- | --- | --- |
-| retries until a check passes? | Yes, for GitHub Actions. Cloud agents automatically try to fix CI failures in PRs they create. They skip it when a person pushed a new commit, when a follow-up message was sent, when the same check already fails on the base commit, and after 10 CI-failure follow-ups. A comment `@cursor autofix off` stops it | https://cursor.com/docs/cloud-agent/capabilities.md | 2026-10-13 |
+| retries until a check passes? | Yes, for GitHub Actions. Cloud agents automatically try to fix CI failures in PRs they create. They skip it when a person pushed a new commit, when a follow-up message was sent, when the same check already fails on the base commit, and after 10 CI-failure follow-ups. A comment `@cursor autofix off` stops it (`@cursor autofix on` re-enables it, and it can be turned off globally in the dashboard under Cloud Agents > My Settings, per the Cloud Agents help page, which lists no retry cap) | https://cursor.com/docs/cloud-agent/capabilities.md ; https://cursor.com/help/ai-features/cloud-agents.md | 2026-10-13 |
 | what judges it | The repository's own CI checks. A CI subscription waits for every check on the commit and reports one result, success or the names of failed checks | https://cursor.com/docs/cloud-agent/capabilities.md | 2026-10-13 |
 | who drives | Automated. The page notes auto-fix is available on Teams plans | https://cursor.com/docs/cloud-agent/capabilities.md | 2026-10-13 |
 
@@ -188,8 +188,12 @@ All fetched 2026-10-13 and read in full unless noted.
 - https://cursor.com/docs/cloud-agent/best-practices.md
 - https://cursor.com/docs/cloud-agent/automations.md
 - https://cursor.com/docs/cloud-agent/api/webhooks.md (read to the signature section)
-- https://cursor.com/help/ai-features/automations.md (searched for chaining and loop wording)
-- https://cursor.com/help/ai-features/cloud-agents.md (searched)
+- https://cursor.com/help/ai-features/automations.md (read in full in the gap-closing pass)
+- https://cursor.com/help/ai-features/cloud-agents.md (read in full in the gap-closing pass)
+- https://cursor.com/docs/cli/reference/parameters.md (gap-closing pass, in full)
+- https://cursor.com/docs/cli/reference/permissions.md (gap-closing pass, in full)
+- https://cursor.com/docs/cli/reference/configuration.md (gap-closing pass, in full)
+- https://cursor.com/docs/cli/reference/slash-commands.md (gap-closing pass, in full)
 - https://cursor.com/help/ai-features/agentic-coding.md
 - https://cursor.com/help/ai-features/multi-agent.md
 - https://cursor.com/docs/integrations/slack.md (read the usage, status and handoff sections; settings and permission tables skimmed)
@@ -222,6 +226,21 @@ All fetched 2026-10-13 and read in full unless noted.
   one more entry point for the DEV-TASK input; the endpoint reference is not a lesson 1 concept and was not read in full.
 - **Models and pricing, release notes, changelog, Marketplace automation templates**: not about the concepts.
 - **Pages in the index not read for this pass**: the GitLab, Bitbucket, Azure DevOps and Microsoft Teams integrations, Tab,
-  Context, MCP, Plugins, Worktrees, Enterprise and Teams account pages, and the other CLI reference pages (parameters,
-  permissions, configuration, output format, ACP, shell mode). They cover setup, access or other surfaces.
+  Context, MCP, Plugins, Worktrees, Enterprise and Teams account pages, and the CLI reference pages for output format, ACP and
+  shell mode (parameters, permissions, configuration and slash commands were read in the gap-closing pass). They cover setup, access or other surfaces.
 - **Shipwright marketing pages** (`site/src/pages/compare.astro`, `vs/*.astro`): not consulted; no wording or claims reused.
+
+## Gap-closing pass (2026-10-13)
+
+Fetch date for every page below: 2026-10-13. All were fetched as Markdown (`.md` suffix) and read in full; none was unreachable. Flags come from "CROSS-CHECK" in `README.md`.
+
+| Flag | Page read | Changed a cell? |
+| --- | --- | --- |
+| CLI reference: parameters | https://cursor.com/docs/cli/reference/parameters.md | **Yes.** PLAN Surface 1 input (`--plan`, `--mode plan`); DEV-TASK Surface 3 input and step: the page says `-p` "has access to all tools, including write and shell", which reads differently from the headless page; no option for a retry count, turn limit or loop |
+| CLI reference: permissions | https://cursor.com/docs/cli/reference/permissions.md | **Yes**, same DEV-TASK Surface 3 cells: print mode can use write and shell tools, controlled by `permissions.allow`, `permissions.deny` and `--force`. It is a permission list (Shell, Read, Write, WebFetch, Mcp), not a pre-delivery gate |
+| CLI reference: configuration | https://cursor.com/docs/cli/reference/configuration.md | Partly. No loop, retry or goal field in `cli-config.json`; only permissions can be set per project. Recorded in DEV-TASK Surface 3 step |
+| CLI reference: slash commands (not flagged; opened because it is where `/goal` is listed) | https://cursor.com/docs/cli/reference/slash-commands.md | Partly. LOOP-WITHIN Surface 1: same one-line `/goal` description, "Rolling out"; the stopping test and judge are still not documented. `/plan` is listed |
+| Help page: automations | https://cursor.com/help/ai-features/automations.md | No. It repeats the docs page (triggers, tools, Memories, billing) with a shorter trigger table, and has no queue, chaining or "next task" wording. LOOP-ACROSS Surface 1 stands |
+| Help page: cloud agents | https://cursor.com/help/ai-features/cloud-agents.md | Partly. LOOP-WITHIN Surface 2 and Surface 3: it confirms `stop` and `subagentStop` hooks run in cloud agents, adds the "self-correcting loops" wording, and the CI auto-fix on and off comments and global setting. It states no retry cap and no chaining |
+
+**Net effect on the slide cells.** PLAN (output, who drives), DEV-TASK (what judges done) and LOOP across tasks are unchanged: none of the six pages names a task queue or a run starting the next task, so "not documented" stands for those, with the pages now named. LOOP within a task is unchanged in substance (hook cap 5, CI-fix cap 10, `/goal` stopping test still not documented). One discrepancy is flagged rather than settled: the CLI Parameters and Permissions pages say print mode can use write and shell tools, while the headless page says changes are only proposed without `--force`.
