@@ -1,12 +1,16 @@
 {
   "components": [
     {
-      "id": "plan-output",
-      "label": "Plan output"
+      "id": "plan-hitl",
+      "label": "A person approves or edits first"
     },
     {
-      "id": "plan-drive",
-      "label": "Plan: who drives"
+      "id": "plan-persist",
+      "label": "Tasks outlive the chat"
+    },
+    {
+      "id": "plan-contents",
+      "label": "Criteria and dependencies in them"
     },
     {
       "id": "verify",
@@ -30,19 +34,22 @@
         "devin.ai"
       ],
       "cells": {
-        "plan-output": {
-          "name": "Ask Devin",
-          "summary": "In Ask Devin the person scopes and breaks down the task in conversation with Devin, which writes a context-rich prompt that starts an Agent session. The page does not say the breakdown carries acceptance criteria or dependencies.",
-          "sourceUrl": "https://docs.devin.ai/work-with-devin/ask-devin.md",
-          "asOf": "2026-10-13",
-          "short": "Ask Devin: prompt that starts a session"
+        "plan-hitl": {
+          "omitted": "Pages checked: Ask Devin, Linear, Jira, Using Playbooks, gallery bulk-plan-backlog and prd-to-tickets (docs.devin.ai). They describe a person working with Devin in conversation or Devin posting plan comments with open questions, but none states whether a person must approve or edit the plan before work starts."
         },
-        "plan-drive": {
-          "name": "Linear integration",
-          "summary": "With Linear, a person starts the work by assigning the ticket, tagging a playbook label or @mentioning Devin (Human), or a Linear automation trigger starts it without manual assignment (Automated). For Ask Devin the page does not label who drives.",
-          "sourceUrl": "https://docs.devin.ai/integrations/linear.md",
+        "plan-persist": {
+          "name": "PRD to tickets",
+          "summary": "In the gallery example Devin reads a PRD and creates Linear tickets, so the plan lives in the tracker. The bulk-plan example instead posts the plan as a comment on each ticket. Ask Devin produces a prompt that starts a session; the page does not say it is saved.",
+          "sourceUrl": "https://docs.devin.ai/use-cases/gallery/prd-to-tickets.md",
           "asOf": "2026-10-13",
-          "short": "Linear: Human or Automated; Ask Devin unstated"
+          "short": "Yes: Linear tickets and ticket comments"
+        },
+        "plan-contents": {
+          "name": "PRD to tickets",
+          "summary": "The page's example output is tickets with an ID, title, T-shirt size, dependencies on other tickets, description, acceptance criteria and likely file paths; it is an example, not a guaranteed format. The Ask Devin page does not say its breakdown carries criteria or dependencies.",
+          "sourceUrl": "https://docs.devin.ai/use-cases/gallery/prd-to-tickets.md",
+          "asOf": "2026-10-13",
+          "short": "Mixed: example tickets carry both; Ask Devin unstated"
         },
         "verify": {
           "name": "unknown",
@@ -85,19 +92,26 @@
         "factory.ai"
       ],
       "cells": {
-        "plan-output": {
-          "name": "Missions",
-          "summary": "Droid builds a structured plan of features grouped into milestones; once the person approves it, the Mission enters Mission Control. Dependency edges between features are not documented.",
-          "sourceUrl": "https://docs.factory.com/missions/overview",
+        "plan-hitl": {
+          "name": "Specification Mode",
+          "summary": "Droid researches read-only and proposes a plan; nothing is edited until the person approves, and the person can approve or keep iterating on it. In Missions, execution starts once the plan is approved.",
+          "sourceUrl": "https://docs.factory.com/autonomy-and-safety/specification-mode",
           "asOf": "2026-10-13",
-          "short": "Mission plan: features grouped in milestones"
+          "short": "Yes: approve or keep iterating"
         },
-        "plan-drive": {
-          "name": "Missions",
-          "summary": "Mission execution starts once the person approves the plan.",
-          "sourceUrl": "https://docs.factory.com/missions/overview",
+        "plan-persist": {
+          "name": "Specification Mode",
+          "summary": "Once approved, the plan can optionally be saved as a dated Markdown file (default .factory/docs). Whether Spec Mode splits it into separate tasks is not documented.",
+          "sourceUrl": "https://docs.factory.com/autonomy-and-safety/specification-mode",
           "asOf": "2026-10-13",
-          "short": "Human approves"
+          "short": "Yes: Spec Mode can save a file"
+        },
+        "plan-contents": {
+          "name": "Missions plan",
+          "summary": "A Mission plan is features grouped into milestones, and each feature has its own validation criteria visible in the Factory App. Explicit dependency edges between features are not documented (ordering is mentioned).",
+          "sourceUrl": "https://docs.factory.com/missions/running-app",
+          "asOf": "2026-10-13",
+          "short": "Mixed: Missions criteria; dependencies not documented"
         },
         "verify": {
           "name": "Validation workers",
@@ -137,19 +151,18 @@
         "github.com"
       ],
       "cells": {
-        "plan-output": {
+        "plan-hitl": {
           "name": "Research, plan and iterate",
-          "summary": "The cloud agent shows a plan in the conversation for review before any changes. Splitting a plan into separate tasks with acceptance criteria and dependencies is not documented.",
+          "summary": "The cloud agent shows a plan before making changes; the person reviews it and iterates with follow-up prompts until it matches their intent, then asks it to implement. In Copilot CLI plan mode the person chooses to accept the plan before autopilot starts.",
           "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/research-plan-iterate",
           "asOf": "2026-10-13",
-          "short": "Plan shown for review; no task split documented"
+          "short": "Yes: review and iterate on the plan"
         },
-        "plan-drive": {
-          "name": "Research, plan and iterate",
-          "summary": "The person reviews the plan and iterates until it matches their intent before the agent implements it.",
-          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/research-plan-iterate",
-          "asOf": "2026-10-13",
-          "short": "Human approves"
+        "plan-persist": {
+          "omitted": "Pages checked (docs.github.com): Research, plan and iterate; Copilot CLI autopilot; Copilot on GitHub.com; Best practices; Dynamic workflows. They say the plan is shown in the conversation or executed by the same session; none says it is saved as a file or tracker items."
+        },
+        "plan-contents": {
+          "omitted": "Pages checked (docs.github.com): Research, plan and iterate; Copilot CLI autopilot; Best practices; improve-a-project tutorial. None says a plan is split into tasks carrying acceptance criteria or dependencies (the tutorial has the person check criteria on issues Copilot creates from findings, which is not plan output)."
         },
         "verify": {
           "name": "Cloud agent session",
@@ -190,19 +203,26 @@
         "github.com"
       ],
       "cells": {
-        "plan-output": {
+        "plan-hitl": {
           "name": "Software Factory triage",
-          "summary": "A triage agent prioritizes issues, checks their dependencies and establishes acceptance criteria, then applies the ready-for-dev label. A separate task list or plan file is not documented.",
+          "summary": "The triage agent runs as an automation that checks every 5 minutes: it prioritizes issues, checks dependencies, establishes acceptance criteria, then applies the ready-for-dev label. The page describes no step where a person approves or edits the result; the person writes the issues and acceptance criteria beforehand.",
           "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md",
           "asOf": "2026-10-13",
-          "short": "Issue labeled ready-for-dev"
+          "short": "No: triage runs automatically"
         },
-        "plan-drive": {
-          "name": "Software Factory triage",
-          "summary": "The triage step is an automation that checks every 5 minutes (Automated); a person writes the issue.",
+        "plan-persist": {
+          "name": "ready-for-dev label",
+          "summary": "The output of triage is the GitHub issue carrying the ready-for-dev label, which the developer automation watches. A separate task list or plan file is not documented.",
           "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md",
           "asOf": "2026-10-13",
-          "short": "Automated triage; Human writes the issue"
+          "short": "Yes: GitHub issue labeled ready-for-dev"
+        },
+        "plan-contents": {
+          "name": "Software Factory triage",
+          "summary": "The triage agent checks the issue's dependencies and establishes acceptance criteria before applying ready-for-dev. How the criteria are written is not documented.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md",
+          "asOf": "2026-10-13",
+          "short": "Yes: triage checks dependencies and criteria"
         },
         "verify": {
           "name": "Goal Completion Loop",
@@ -244,19 +264,22 @@
         "cursor.com"
       ],
       "cells": {
-        "plan-output": {
+        "plan-hitl": {
           "name": "Plan Mode",
-          "summary": "The plan is editable and opens as a virtual file saved by default in the home directory; Save to workspace moves it into the repo. A plan that splits into tasks with criteria and dependencies is not documented as a format.",
-          "sourceUrl": "https://cursor.com/help/ai-features/plan-mode.md",
-          "asOf": "2026-10-13",
-          "short": "Editable plan; saved to home or workspace"
-        },
-        "plan-drive": {
-          "name": "Plan Mode",
-          "summary": "The person clicks Build when satisfied with the plan.",
+          "summary": "The agent writes a plan that the person reviews and edits in chat or as markdown, then clicks Build when satisfied. If it is not right, the docs advise reverting and refining the plan rather than patching a bad build with follow-ups.",
           "sourceUrl": "https://cursor.com/docs/agent/plan-mode.md",
           "asOf": "2026-10-13",
-          "short": "Plan Mode: Human approves"
+          "short": "Yes: edit the plan, then Build"
+        },
+        "plan-persist": {
+          "name": "Plan Mode",
+          "summary": "The plan opens as an editable virtual file saved by default in the person's home directory; Save to workspace moves it into the repo for sharing.",
+          "sourceUrl": "https://cursor.com/help/ai-features/plan-mode.md",
+          "asOf": "2026-10-13",
+          "short": "Yes: plan file; Save to workspace"
+        },
+        "plan-contents": {
+          "omitted": "Pages checked (cursor.com): Plan Mode docs and help, Agent overview, Prompting agents, Agentic coding help, Multi-agent help, Projects. None says plan steps carry acceptance criteria. Multi-agent help says Build in Parallel keeps dependent steps in order but not how dependencies are written."
         },
         "verify": {
           "name": "Cloud Agents",
@@ -300,19 +323,26 @@
         "docs.claude.com"
       ],
       "cells": {
-        "plan-output": {
+        "plan-hitl": {
           "name": "Plan mode",
-          "summary": "Claude reads the code and writes a plan the person can open in an editor and edit before approving. Splitting the plan into separate tasks with acceptance criteria or dependencies is not documented for plan mode.",
+          "summary": "Claude writes a plan and does not edit source files until it is approved. The person can open the plan in a text editor (Ctrl+G) and edit it; approving offers three choices: continue in auto mode, continue approving each edit, or keep planning.",
           "sourceUrl": "https://code.claude.com/docs/en/permission-modes.md",
           "asOf": "2026-10-13",
-          "short": "Editable plan; task split not documented"
+          "short": "Yes: edit it, approve, or keep planning"
         },
-        "plan-drive": {
-          "name": "Plan mode",
-          "summary": "Source files are not edited until the person approves the plan.",
-          "sourceUrl": "https://code.claude.com/docs/en/permission-modes.md",
+        "plan-persist": {
+          "name": "Agent teams",
+          "summary": "In an agent team the lead creates tasks in a shared task list, stored locally under ~/.claude/tasks/{team-name}/. Agent teams are experimental and off by default.",
+          "sourceUrl": "https://code.claude.com/docs/en/agent-teams.md",
           "asOf": "2026-10-13",
-          "short": "Plan mode: Human approves"
+          "short": "Yes: agent teams task list on disk"
+        },
+        "plan-contents": {
+          "name": "Agent teams",
+          "summary": "Tasks in the shared task list can depend on other tasks: a pending task with unresolved dependencies cannot be claimed until they are completed. Acceptance criteria on a task are not documented.",
+          "sourceUrl": "https://code.claude.com/docs/en/agent-teams.md",
+          "asOf": "2026-10-13",
+          "short": "Mixed: agent teams have dependencies; criteria undocumented"
         },
         "verify": {
           "name": "/goal",
