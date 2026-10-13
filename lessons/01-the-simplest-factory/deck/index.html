@@ -141,11 +141,11 @@
       <div class="slide-body">
         <div class="visual">
           <table class="comp-table">
-            <thead><tr><th>Who</th><th>What judges a task done (as of 2026-10-13)</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>Tests, lint, type checks named in prompt</td></tr><tr><td>Factory</td><td>Validation workers at each milestone end</td></tr><tr><td>OpenHands</td><td>SDK: judge LLM audits transcript for proof</td></tr><tr><td>Cursor</td><td>Agent builds and tests itself; no fixed gate</td></tr><tr><td>GitHub Copilot</td><td>Runs tests and linters; gate not in their docs</td></tr><tr><td>Claude Code</td><td>/goal: small model checks the condition</td></tr><tr><td>This sample</td><td>Acceptance checks, tests, typecheck, lint</td></tr></tbody>
+            <thead><tr><th>Who (as of 2026-10-13)</th><th>Who decides it's done</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>A check (tests, lint, type checks)</td></tr><tr><td>Factory</td><td>Another model (Mission validation workers)</td></tr><tr><td>OpenHands</td><td>Another model (SDK goal loop)</td></tr><tr><td>Cursor</td><td>A check (CI, for cloud auto-fix)</td></tr><tr><td>GitHub Copilot</td><td>A check (tests and linters)</td></tr><tr><td>Claude Code</td><td>A check + another model (/goal)</td></tr><tr><td>This sample</td><td>A check + the agent itself</td></tr></tbody>
           </table>
         </div>
-        <p class="caption">Same prompt-to-PR shape in every factory.</p>
+        <p class="caption">The prompt-to-PR flow is the same shape in every factory.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
