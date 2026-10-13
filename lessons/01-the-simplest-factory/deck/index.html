@@ -79,8 +79,8 @@
       <div class="slide-body">
         <div class="visual">
           <table class="comp-table">
-            <thead><tr><th>Who</th><th>Planning (as of 2026-10-10)</th></tr></thead>
-            <tbody><tr><td>Claude Code</td><td>plan mode, in the session</td></tr><tr><td>Cursor</td><td>Plan Mode, plan you edit</td></tr><tr><td>Others</td><td>no planning stage found</td></tr><tr><td>This sample</td><td>plan skill writes todos.json</td></tr></tbody>
+            <thead><tr><th>Who</th><th>Plan output (as of 2026-10-13)</th><th>Who drives</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>Ask Devin: prompt that starts a session</td><td>Linear: Human or Automated; Ask Devin unstated</td></tr><tr><td>Factory</td><td>Mission plan: features grouped in milestones</td><td>Human approves</td></tr><tr><td>OpenHands</td><td>Issue labeled ready-for-dev</td><td>Automated triage; Human writes the issue</td></tr><tr><td>Cursor</td><td>Editable plan; saved to home or workspace</td><td>Plan Mode: Human approves</td></tr><tr><td>GitHub Copilot</td><td>Plan shown for review; no task split documented</td><td>Human approves</td></tr><tr><td>Claude Code</td><td>Editable plan; task split not in their docs</td><td>Plan mode: Human approves</td></tr><tr><td>This sample</td><td>todos.json entries</td><td>Human, in chat</td></tr></tbody>
           </table>
         </div>
         <p class="caption">Links in the video description.</p>
@@ -141,11 +141,11 @@
       <div class="slide-body">
         <div class="visual">
           <table class="comp-table">
-            <thead><tr><th>Who</th><th>Environment (as of 2026-10-10)</th></tr></thead>
-            <tbody><tr><td>Claude Code</td><td>a session, subagents in parallel</td></tr><tr><td>Cursor</td><td>cloud agents in isolated VMs</td></tr><tr><td>OpenHands</td><td>a sandbox</td></tr><tr><td>This sample</td><td>a git worktree</td></tr></tbody>
+            <thead><tr><th>Who</th><th>What judges a task done (as of 2026-10-13)</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>Tests, lint, type checks named in prompt</td></tr><tr><td>Factory</td><td>Validation workers at each milestone end</td></tr><tr><td>OpenHands</td><td>SDK: judge LLM audits transcript for proof</td></tr><tr><td>Cursor</td><td>Agent builds and tests itself; no fixed gate</td></tr><tr><td>GitHub Copilot</td><td>Runs tests and linters; gate not in their docs</td></tr><tr><td>Claude Code</td><td>/goal: small model checks the condition</td></tr><tr><td>This sample</td><td>Acceptance checks, tests, typecheck, lint</td></tr></tbody>
           </table>
         </div>
-        <p class="caption">Same shape; the environment and trigger differ.</p>
+        <p class="caption">Same prompt-to-PR shape in every factory.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -179,8 +179,8 @@
       <div class="slide-body">
         <div class="visual">
           <table class="comp-table">
-            <thead><tr><th>Who</th><th>What starts a run (as of 2026-10-12)</th></tr></thead>
-            <tbody><tr><td>Claude Code</td><td>schedule, API call or GitHub event</td></tr><tr><td>Cursor</td><td>schedule, event or webhook</td></tr><tr><td>Devin</td><td>Slack, webhook, ticket or schedule</td></tr><tr><td>This sample</td><td>our choice: a script loop</td></tr></tbody>
+            <thead><tr><th>Who</th><th>Next task by itself (as of 2026-10-13)</th><th>Who drives</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>Triggers start sessions; next-ticket pick not in their docs</td><td>Automated after setup</td></tr><tr><td>Factory</td><td>Orchestrator starts next feature after each</td><td>Automated; person can pause</td></tr><tr><td>OpenHands</td><td>Polls labeled issues every 5 minutes</td><td>Automated once a person sets it up</td></tr><tr><td>Cursor</td><td>Triggers start runs; chaining not in their docs</td><td>Automated after setup</td></tr><tr><td>GitHub Copilot</td><td>gh-aw work queue; Copilot automations: not in their docs</td><td>Automated once workflows are published</td></tr><tr><td>Claude Code</td><td>Agent teams self-claim next task (experimental)</td><td>Automated once a person starts the team</td></tr><tr><td>This sample</td><td>Script picks the next ready todo</td><td>Automated (script)</td></tr></tbody>
           </table>
         </div>
         <p class="caption">Links in the video description.</p>
@@ -229,8 +229,8 @@
       <div class="slide-body">
         <div class="visual">
           <table class="comp-table">
-            <thead><tr><th>Who</th><th>Planning</th><th>Execution</th></tr></thead>
-            <tbody><tr><td>This sample</td><td>plan</td><td>dev-task</td></tr><tr><td>Claude Code</td><td>plan mode</td><td>session</td></tr><tr><td>Cursor</td><td>Plan Mode</td><td>Cloud agents</td></tr><tr><td>OpenHands</td><td>none found</td><td>sandbox</td></tr></tbody>
+            <thead><tr><th>Who</th><th>Planning</th><th>Checking done</th></tr></thead>
+            <tbody><tr><td>This sample</td><td>plan</td><td>dev-task</td></tr><tr><td>Devin</td><td>Ask Devin</td><td>no name in their docs</td></tr><tr><td>Factory</td><td>Missions</td><td>Validation workers</td></tr><tr><td>OpenHands</td><td>Software Factory triage</td><td>Goal Completion Loop</td></tr><tr><td>Cursor</td><td>Plan Mode</td><td>Cloud Agents</td></tr><tr><td>GitHub Copilot</td><td>Research, plan and iterate</td><td>Cloud agent session</td></tr><tr><td>Claude Code</td><td>Plan mode</td><td>/goal</td></tr></tbody>
           </table>
         </div>
         <p class="caption">Links in the video description.</p>
