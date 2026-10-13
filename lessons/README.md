@@ -60,6 +60,7 @@ Each claim is from the product's own page, fetched 2026-10-13.
 - Make the agent run lint, typecheck and tests before it says "done"
 - Require CI to pass before anything merges
 - Design a test system for a repo that has none
+- Compare how factories verify: who decides it is done, whether it runs the app itself, how it keeps going. Research is banked in `landscape/field-grid` and the `verify-*` columns of `landscape/matrix.json`
 
 ## Review
 - Have a second agent review the PR

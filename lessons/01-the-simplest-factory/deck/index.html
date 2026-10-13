@@ -80,7 +80,7 @@
         <div class="visual diagram" data-diagram="task-card">
           <div class="flow"><div class="node node-store">Title</div><div class="node node-store">Description</div><div class="node node-store">Acceptance criteria</div><div class="node node-store">Depends on</div></div>
         </div>
-        <p class="caption">One task card. Each task is small enough for one PR.</p>
+        <p class="caption">Small enough for one PR. Criteria become the checks verify runs.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -167,7 +167,7 @@
           <div class="flow"><div class="node node-store">Todo list</div><span class="arrow"></span><div class="node node-job">Pick, run, repeat</div><span class="arrow"></span><div class="node node-external">Open PRs</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div>
-        <p class="caption">Status is the queue's state. Stops when none is ready.</p>
+        <p class="caption">Repeat while a todo is ready; a blocked task stops it.</p>
         <ul class="bullets"><li>pending: waiting its turn</li><li>in_progress: being worked now</li><li>pr_open: PR waiting for review</li></ul>
       </div>
       <div class="facecam-zone"></div>
@@ -243,7 +243,7 @@
       <h2 class="slide-title">Where factories take it</h2>
       <div class="slide-body">
         <div class="visual options-grid">
-          <div class="option"><h3>Tracker queue</h3><div class="pick">Linear, Jira or GitHub Issues hold the work</div></div><div class="option"><h3>Cloud sandboxes</h3><div class="pick">Each task runs in an isolated VM</div></div><div class="option"><h3>Parallel agents</h3><div class="pick">Several tasks run at once</div></div>
+          <div class="option"><h3>Tracker queue</h3><div class="pick">Linear, Jira or GitHub Issues hold the work</div></div><div class="option"><h3>Cloud sandboxes</h3><div class="pick">Each task runs in an isolated VM</div></div><div class="option"><h3>Parallel agents</h3><div class="pick">Several tasks run at once</div></div><div class="option"><h3>Independent checks</h3><div class="pick">Another model or a script judges done</div></div>
         </div>
         <p class="caption">Destinations, not a recommendation.</p>
       </div>
