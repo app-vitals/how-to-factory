@@ -8,6 +8,8 @@
   "maxDiagramsPerSlide": 1,
   "maxDiagramNodes": 8,
   "maxNodeLabelWords": 3,
+  "maxTableCellWords": 3,
+  "maxOptions": 4,
   "safeZone": { "widthPct": 22, "heightPct": 30 },
   "visualExemptKinds": ["title", "demo"],
   "forbiddenWords": ["matrix", "options.md", "sourced", "not documented"]
