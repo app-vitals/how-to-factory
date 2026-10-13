@@ -13,3 +13,5 @@
 - [ ] Slide count about 18 to 20; same vendors in the same order on every comparison slide, plus a "This sample" row
 - [ ] Demo run through once on a scratch repo (skills and loop); filming demo is build-only unless the lesson is about running
 - [ ] Exercise run by following only its text; outcomes listed, no required tool
+- [ ] Every changed slide rendered at 1920x1080; no wrapped rows, overflow or face-cam intrusion
+- [ ] Differs slides contain only marks and chips (no sentences)

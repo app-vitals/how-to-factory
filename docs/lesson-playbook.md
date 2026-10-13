@@ -56,8 +56,14 @@ Learned from building the field grid. For every vendor or product the lesson com
 
 - Compare the lesson's own **inputs, steps and outputs**, plus **how human-in-the-loop** it is.
 - Two or three simple columns per slide.
-- Categorical answers are labels, not yes/no.
-- Each matrix cell has a `short` text of at most 8 words; that is what the slide shows. Detail stays in the repo.
+- Categorical answers are fixed labels, not yes/no.
+- A differs slide shows marks (✓ ✗ ◐ –) or short chips, never sentences. Qualifiers live off-slide, in `options.md`
+  and the script.
+- Each matrix cell has two texts: `chip` is what the slide shows; `short` (at most 8 words) feeds `options.md` and the
+  script. Detail stays in the repo.
+- A takeaway title states what to notice, and is checked against the data before the slide is done.
+- Header column 1 reads "Checked MM/YYYY" (month and year of the latest as-of date in the slide's cells).
+- A legend sits under any table that uses marks: "✓ yes  ✗ no  ◐ partly  – not in their docs".
 - The same vendors in the same order on every slide, plus a "This sample" row.
 - One takeaway per slide.
 - Names are a product's own term, never a docs page title. The column header matches the sample's component (for
@@ -79,6 +85,10 @@ Taken from lesson 1. The deck follows the rules in [CLAUDE.md](../CLAUDE.md) and
 9. Exercise.
 
 Budget: about 18 to 20 slides.
+
+**Layout.** An options grid fits on one row (at most 4 options). Render every changed slide at 1920x1080 before calling
+a deck task done, using the headless-shell procedure in `planning/lesson1-grokable-slides/PLAN.md`, and look for wrapped
+rows, overflow and the face-cam zone. The deck check tests counts and words, not layout.
 
 **Viewer-facing wording.** Slides and narration never say "matrix", "options.md", "sourced" or "not documented". A
 blank cell reads "not in their docs".
@@ -112,6 +122,8 @@ The fill-in version is [`lessons/_template/checklist.md`](../lessons/_template/c
 - `bun scripts/check-landscape.ts` passes.
 - `bun test` passes.
 - A grep for the forbidden viewer-facing words (section 4) finds nothing in the deck or script.
+- Every changed slide is rendered at 1920x1080 with no wrapped rows, overflow or face-cam intrusion; differs slides
+  contain only marks and chips.
 - Every claim about another product has a first-party URL and an as-of date, and the dates are current.
 - All links resolve.
 - The demo has been run through once (section 5).
@@ -127,3 +139,5 @@ The fill-in version is [`lessons/_template/checklist.md`](../lessons/_template/c
   out-of-scope part.
 - Names and column headers did not match: a docs page title was used as a product's term.
 - Chains of tasks were serialized more than needed. Section 7 asks for chaining only on a shared file.
+- Differs-slide cells were sentences even after the columns were fixed, and a fourth option wrapped onto a second row,
+  because the deck check does not test layout. Sections 3 and 4 add the marks, chips and render rules.
