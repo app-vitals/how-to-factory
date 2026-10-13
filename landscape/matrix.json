@@ -13,8 +13,16 @@
       "label": "Criteria and dependencies in them"
     },
     {
-      "id": "verify",
-      "label": "Verify: what judges done"
+      "id": "verify-judge",
+      "label": "Who decides it's done"
+    },
+    {
+      "id": "verify-runs-app",
+      "label": "Runs the app itself"
+    },
+    {
+      "id": "verify-keeps-going",
+      "label": "How it keeps going until it passes"
     },
     {
       "id": "loop-across",
@@ -51,12 +59,26 @@
           "asOf": "2026-10-13",
           "short": "Mixed: example tickets carry both; Ask Devin unstated"
         },
-        "verify": {
+        "verify-judge": {
           "name": "unknown",
-          "summary": "Devin runs existing tests, lint and type checks in its own environment and iterates until tests pass before submitting a PR. Which checks run is set by the prompt, playbook or repo skill, not by a fixed pipeline.",
+          "summary": "Devin runs existing tests, lint and type checks in its own environment before submitting a PR. Which checks run is set by the prompt, playbook or repo skill, not by a fixed pipeline.",
           "sourceUrl": "https://docs.devin.ai/essential-guidelines/sdlc-integration.md",
           "asOf": "2026-10-13",
-          "short": "Tests, lint, type checks named in prompt"
+          "short": "A check (tests, lint, type checks)"
+        },
+        "verify-runs-app": {
+          "name": "Testing mode",
+          "summary": "After a PR is created Devin can enter a testing mode: it writes a test plan for the main end-to-end flow, then once CI is green records a video of itself running the plan in the browser. The page calls the recording a quick sanity check.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/testing-and-recordings.md",
+          "asOf": "2026-10-13",
+          "short": "Yes, after the PR (testing mode)"
+        },
+        "verify-keeps-going": {
+          "name": "Auto-Fix",
+          "summary": "Devin iterates in its own environment until tests pass before submitting a PR, and the page says Auto-Fix lets it respond to review comments and CI failures until the PR is merge-ready. The in-session loop is set up by the prompt; no retry cap is documented.",
+          "sourceUrl": "https://docs.devin.ai/essential-guidelines/sdlc-integration.md",
+          "asOf": "2026-10-13",
+          "short": "In the prompt + Auto-fix"
         },
         "loop-across": {
           "name": "Automations",
@@ -113,12 +135,26 @@
           "asOf": "2026-10-13",
           "short": "Mixed: Missions criteria; dependencies not documented"
         },
-        "verify": {
+        "verify-judge": {
           "name": "Validation workers",
           "summary": "Validation workers run at the end of each milestone, verifying its work, and Missions validate their own work by exercising the running application.",
           "sourceUrl": "https://docs.factory.com/missions/planning",
           "asOf": "2026-10-13",
-          "short": "Validation workers at each milestone end"
+          "short": "Another model (Mission validation workers)"
+        },
+        "verify-runs-app": {
+          "name": "User-testing validation",
+          "summary": "Missions validate their own work by exercising the running application; each feature is checked by user-facing QA against the running app, which needs a script that can start or mock the app.",
+          "sourceUrl": "https://docs.factory.com/missions/planning",
+          "asOf": "2026-10-13",
+          "short": "Yes, QA against the running app"
+        },
+        "verify-keeps-going": {
+          "name": "Stop hook",
+          "summary": "A user-written hook runs when Droid is about to finish; a block decision with a reason keeps it working, so a script can require a check before it stops. Not a built-in loop: plain sessions and droid exec are not documented as retrying.",
+          "sourceUrl": "https://docs.factory.com/harness/hooks",
+          "asOf": "2026-10-13",
+          "short": "Hook (script blocks finishing)"
         },
         "loop-across": {
           "name": "Mission orchestrator",
@@ -164,12 +200,22 @@
         "plan-contents": {
           "omitted": "Pages checked (docs.github.com): Research, plan and iterate; Copilot CLI autopilot; Best practices; improve-a-project tutorial. None says a plan is split into tasks carrying acceptance criteria or dependencies (the tutorial has the person check criteria on issues Copilot creates from findings, which is not plan output)."
         },
-        "verify": {
+        "verify-judge": {
           "name": "Cloud agent session",
           "summary": "The agent works in its own GitHub Actions environment, where it runs tests and linters to validate changes. How the results decide whether it keeps going before opening the PR is not documented.",
           "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents",
           "asOf": "2026-10-13",
-          "short": "Runs tests and linters; gate not documented"
+          "short": "A check (tests and linters)"
+        },
+        "verify-runs-app": {
+          "omitted": "Pages checked: Managing agent sessions, Using cloud agent on GitHub, Best practices for the cloud agent (docs.github.com). They say the agent runs tests and linters and can build and validate in its environment, but none says it starts the app or drives it as a user."
+        },
+        "verify-keeps-going": {
+          "name": "agentStop hook",
+          "summary": "An agentStop hook fires when the agent finishes; its output can set decision block with a reason, which forces another agent turn. A built-in rule that the cloud agent keeps retrying until a check passes is not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/reference/hooks-reference",
+          "asOf": "2026-10-13",
+          "short": "Hook (script blocks finishing)"
         },
         "loop-across": {
           "name": "Agentic Workflows work queue (gh-aw)",
@@ -224,12 +270,26 @@
           "asOf": "2026-10-13",
           "short": "Yes: triage checks dependencies and criteria"
         },
-        "verify": {
+        "verify-judge": {
           "name": "Goal Completion Loop",
           "summary": "In the SDK, a second judge LLM audits the transcript for evidence, such as test output, that proves the objective is complete. The Issue to PR automation lists running tests as a step but does not document what happens when they fail.",
           "sourceUrl": "https://docs.openhands.dev/sdk/guides/convo-goal.md",
           "asOf": "2026-10-13",
-          "short": "SDK: judge LLM audits transcript for proof"
+          "short": "Another model (SDK goal loop)"
+        },
+        "verify-runs-app": {
+          "name": "QA agent",
+          "summary": "The QA agent (a GitHub Actions plugin, or the /qa-changes skill) runs the changed software rather than the test suite and posts a PASS, FAIL or PARTIAL report as a PR comment. It works from the PR after it is open.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/qa-changes.md",
+          "asOf": "2026-10-13",
+          "short": "Yes, after the PR (QA agent)"
+        },
+        "verify-keeps-going": {
+          "name": "Goal Completion Loop",
+          "summary": "After each agent run the judge decides whether the objective is provably complete; if not, the agent is re-prompted with what is missing and runs again, up to a cap, after which the result is capped.",
+          "sourceUrl": "https://docs.openhands.dev/sdk/guides/convo-goal.md",
+          "asOf": "2026-10-13",
+          "short": "Goal (SDK run_goal)"
         },
         "loop-across": {
           "name": "Software Factory",
@@ -281,12 +341,26 @@
         "plan-contents": {
           "omitted": "Pages checked (cursor.com): Plan Mode docs and help, Agent overview, Prompting agents, Agentic coding help, Multi-agent help, Projects. None says plan steps carry acceptance criteria. Multi-agent help says Build in Parallel keeps dependent steps in order but not how dependencies are written."
         },
-        "verify": {
+        "verify-judge": {
+          "name": "CI auto-fix",
+          "summary": "Cloud agents automatically try to fix CI failures in PRs they create, and the repository's own CI checks are the judge. A fixed pre-delivery gate that always runs is not documented.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent/capabilities.md",
+          "asOf": "2026-10-13",
+          "short": "A check (CI, for cloud auto-fix)"
+        },
+        "verify-runs-app": {
           "name": "Cloud Agents",
-          "summary": "The cloud agent can build, test and interact with the changed software, and can control a desktop and browser. The docs say an agent that cannot run tests cannot close the loop. A fixed pre-delivery gate that always runs is not documented.",
+          "summary": "The cloud agent works in a cloud VM and can build, test and interact with the changed software, controlling a desktop and browser.",
           "sourceUrl": "https://cursor.com/docs/cloud-agent",
           "asOf": "2026-10-13",
-          "short": "Agent builds and tests itself; no fixed gate"
+          "short": "Yes, in the cloud agent VM"
+        },
+        "verify-keeps-going": {
+          "name": "stop hook",
+          "summary": "Cloud agents run the stop and subagentStop hooks, which the help page says let you build self-correcting loops, and automatically try to fix CI failures in PRs they create (switch off with @cursor autofix off).",
+          "sourceUrl": "https://cursor.com/help/ai-features/cloud-agents.md",
+          "asOf": "2026-10-13",
+          "short": "Hook + Auto-fix"
         },
         "loop-across": {
           "name": "Automations",
@@ -344,12 +418,22 @@
           "asOf": "2026-10-13",
           "short": "Mixed: agent teams have dependencies; criteria undocumented"
         },
-        "verify": {
+        "verify-judge": {
           "name": "/goal",
-          "summary": "After every turn a separate small model checks the condition; if it is not met, Claude starts another turn. The evaluator runs no commands and reads no files, so the condition must be something the transcript shows, such as a test result.",
+          "summary": "After every turn a separate small model checks the condition. The evaluator runs no commands and reads no files, so the condition must be something the transcript shows, such as a test result the agent's own check produced.",
           "sourceUrl": "https://code.claude.com/docs/en/goal.md",
           "asOf": "2026-10-13",
-          "short": "/goal: small model checks the condition"
+          "short": "A check + another model (/goal)"
+        },
+        "verify-runs-app": {
+          "omitted": "Pages checked: Best practices, Common workflows, Run Claude Code programmatically, Use Claude Code in the cloud (code.claude.com). They advise asking for evidence such as test output or a screenshot but do not document Claude Code starting the app and driving it as a built-in step."
+        },
+        "verify-keeps-going": {
+          "name": "/goal",
+          "summary": "After every turn a model checks the condition; if it is not met, Claude starts another turn using the evaluator's reason as guidance. The loop ends when the condition is met, judged impossible, or cleared by the person.",
+          "sourceUrl": "https://code.claude.com/docs/en/goal.md",
+          "asOf": "2026-10-13",
+          "short": "Goal"
         },
         "loop-across": {
           "name": "Agent teams",
