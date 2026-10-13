@@ -10,7 +10,7 @@ concept covers inputs, steps and outputs generalized across factories, then a "h
 (from [options.md](options.md)), then the build-only demo.
 
 1. **What a factory is, and the factory map.** A factory turns a request into a reviewed change. Show the factory
-   map slide: eleven components in [docs/components.md](../../docs/components.md), today we touch planning and
+   map slide: eight of the components in [docs/components.md](../../docs/components.md), today we touch planning and
    execution, plus a loop. Nothing here is the standard; `factory/` is our demo.
 2. **What the human does.** Three things: chat and explore with your own agent, run the plan, review the PRs.
    The chat is part of plan, not a separate demo: you and the agent talk the work through, then you run plan and its
