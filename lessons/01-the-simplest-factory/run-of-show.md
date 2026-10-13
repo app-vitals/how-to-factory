@@ -10,7 +10,7 @@ later lessons add components and build them with this factory.
 
 | # | Slides | Demo beat | Script step | Notes |
 |---|---|---|---|---|
-| 1 | 1-4 | | 1-3 | Title, factory map (plan, dev-task and loop glow), what the human does, what we build. Say `factory/` is our demo, not the standard |
+| 1 | 1-4 | | 1-3 | Title, factory map (planning, execution and loop glow), what the human does, what we build. Say `factory/` is our demo, not the standard |
 | 2 | 5 | | 4 | Plan concept (inputs, steps, outputs). Slide only |
 | 3 | 6-8 | | 4 | Task-card slide (title, description, acceptance criteria, depends on; size is one PR each; criteria become the checks verify runs, with the greet example), then why each part, then "how the field differs" (six factories, three yes/no questions: a person approves or edits first, tasks outlive the chat, criteria and dependencies). Say dependencies let a task wait for another, so tasks stay small. Say "not in their docs" for a blank, never "has none". Slides, not a demo |
 | 4 | 9 | DEMO write the plan skill | 4 | Write `factory/skills/plan/SKILL.md` on camera. Do not run it |

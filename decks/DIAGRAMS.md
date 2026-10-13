@@ -72,3 +72,10 @@ Include the `.legend` strip on any diagram where more than one kind appears.
 One architecture diagram of the whole factory reappears in every lesson with the component being taught highlighted
 (signaling). Previously built components are solid (`is-built`), the current one glows (`is-active`), later ones are
 faded (`is-planned`). Later lessons grow the map by adding nodes (keep within 8; split into containers if it grows).
+
+Node labels use the component names from [docs/components.md](../docs/components.md) (Intake, Planning, Execution,
+Verification, Review, Release, Loop, Chat). The grid reads left to right in the doc's bands: work in (Intake, Planning),
+work done (Execution, Verification, Review, Release), keeps it moving (Loop, Chat); the grouping is by order only, with no
+extra CSS or diagram pattern. Governance, feedback and memory support every node, so they are not nodes: a caption of at
+most 12 words says so ("Governance, feedback and memory support all of these."). Skill names from the sample (Plan,
+Dev-task) belong on the build-flow slide, not the map.
