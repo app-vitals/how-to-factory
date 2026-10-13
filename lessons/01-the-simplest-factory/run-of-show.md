@@ -6,7 +6,7 @@ build-only: write the skill or the loop on camera, run nothing.
 
 **Pre-filming:** run the plan skill, the dev-task skill and the loop end to end once on a scratch repo, so you know
 they work and what they produce. Re-check the as-of dates in [options.md](options.md). Do not run any of it on camera;
-the end-to-end run is lesson 2.
+later lessons add components and build them with this factory.
 
 | # | Slides | Demo beat | Script step | Notes |
 |---|---|---|---|---|
@@ -20,5 +20,5 @@ the end-to-end run is lesson 2.
 | 8 | 15 | DEMO write the loop | 6 | Write `factory/loop.ts` on camera. Do not run it |
 | 9 | 16 | | 7 | Why we loop: say it is our opinion, not a standard |
 | 10 | 17 | | 8 | How it works together: our flow vs a human or event starting each session. Slide only |
-| 11 | 18-19 | | 9 | Names table (planning and execution names, one row per factory), then where factories take it. Say what is deliberately missing: our agent grades itself, an independent judge is the verification lesson |
-| 12 | 20 | | 10 | Exercise hand-off and next lesson (run it end to end) |
+| 11 | 18-19 | | 9 | Names table (planning and execution names, one row per factory), then where factories take it (four options, each labeled with the piece it extends: Plan, Dev-task, Loop, Checks; caption: later, not next). Say what is deliberately missing: our agent grades itself, an independent judge is the verification lesson |
+| 12 | 20 | | 10 | Exercise hand-off and next lesson (our factory builds its own next parts) |

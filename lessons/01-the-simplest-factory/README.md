@@ -45,8 +45,8 @@ else in this lesson is that same flow with the repeated parts written down once 
 ## The parts
 
 Each part goes concept first (inputs, steps, outputs, generalized across factories), then how the field differs
-([options.md](options.md)), then a build-only demo: we write the skill or loop on camera and run nothing. Running
-it end to end is lesson 2.
+([options.md](options.md)), then a build-only demo: we write the skill or loop on camera and run nothing. Later
+lessons add the other components and build them with this factory.
 
 ### Plan
 
@@ -115,7 +115,7 @@ Numbers match [script.md](script.md).
 3. Write the dev-task skill (step 5).
 4. Write the loop (step 6).
 5. Why we loop, how it works together, names (steps 7-9).
-6. Next lesson: run it end to end (step 10).
+6. Next: our factory builds its own next parts (step 10).
 
 ## How the field does it
 

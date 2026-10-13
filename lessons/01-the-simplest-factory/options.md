@@ -104,3 +104,15 @@ isolated cloud VMs ([docs](https://cursor.com/docs/background-agent)); trackers 
 Issues hold the queue ([Linear](https://linear.app/docs/conceptual-model),
 [Jira](https://support.atlassian.com/jira-software-cloud/docs/what-is-an-issue/),
 [GitHub](https://docs.github.com/en/issues/tracking-your-work-with-issues/learning-about-issues/about-issues)).
+
+Each destination extends one piece. Plan: trackers hold the queue (sources above). Dev-task: each task in its own
+environment (Cursor's isolated cloud VMs, above). Loop: several at once, or on a schedule. Claude Code's overview says
+background agents run several full sessions in parallel and lists Routines and Desktop scheduled tasks for running
+Claude on a recurring schedule ([overview](https://code.claude.com/docs/en/overview), as of 2026-10-13). Checks:
+another model or a script judges done. The field's verify-judge cells name a check such as tests, lint or CI
+([Devin](https://docs.devin.ai/essential-guidelines/sdlc-integration.md),
+[Copilot](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents),
+[Cursor](https://cursor.com/docs/cloud-agent/capabilities.md)), another model
+([Factory](https://docs.factory.com/missions/planning),
+[OpenHands](https://docs.openhands.dev/sdk/guides/convo-goal.md)), or both
+([Claude Code](https://code.claude.com/docs/en/goal.md)), as of 2026-10-13.
