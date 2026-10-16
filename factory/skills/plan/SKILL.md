@@ -1,29 +1,39 @@
 ---
 name: plan
-description: Turn the conversation context into todos in factory/todos.json (illustrative name; rename freely)
+description: Design a feature with the engineer, break it into tasks, and append the approved tasks to factory/tasks.json
 ---
 
 # Plan
 
-Illustrative skill name — other factories call this `feature-dev`, `breakdown`, etc. Rename freely.
+Run by a human, interactively; it is not part of the loop. The input is a brief description of what the engineer wants
+to build. The output is a reviewed set of tasks appended to `factory/tasks.json`.
 
-Run by a human, interactively; it is not part of the loop. The input is the conversation context (what the human
-and agent just explored together), or a file if the human points at one. Produce task entries in `factory/todos.json`.
+## Task schema
 
-The output is tasks. Each task has:
+Each task is an object with:
 
-- `id` (unique) and `title`.
+- `id`: unique kebab-case slug (e.g. `add-login-route`). Needed so other tasks can depend on it.
+- `title`: short, imperative.
 - `description`: what to build, why, and what is out of scope.
-- `acceptanceCriteria`: statements written as checks the agent can run or inspect, not as intentions.
-- `dependencies`: ids of tasks that must finish first.
+- `acceptanceCriteria`: array of statements written as checks that can be run or inspected, not as intentions.
+- `dependencies`: array of task `id`s that must finish first (`[]` if none).
+- `status`: always `"pending"` when you write it. The loop owns it from there (`pending` -> `in_progress` -> `pr`).
 
-Each task must be small enough to deliver as one PR. Write `status` as `pending`; it is bookkeeping the
-factory updates as the task moves, not a planning decision. Do not set a branch; the dev-task skill
-derives it. Schema: `factory/README.md`.
+Each task must be small enough to deliver as one PR.
 
-1. Read the conversation context (or the file the human named) and skim the repo enough to know where the work lands.
-2. Split the work into small tasks, each deliverable as one PR.
-3. Write each task's fields as above.
-4. Append to the existing array if `factory/todos.json` exists; never change existing ids or statuses.
-5. Validate: `validateTodos` from `factory/todos.schema.ts` must return no errors.
-6. Summarize the tasks created and their dependency order.
+## Steps
+
+1. **Understand.** Read the engineer's brief. Skim the repo enough to know where the work lands and what already
+   exists. Ask clarifying questions one at a time, only for things you cannot resolve from the brief or the code.
+2. **Design.** Propose the approach in a few short paragraphs: the shape of the solution, key decisions and the
+   alternatives you rejected, and what is out of scope. Iterate with the engineer until they agree on the design.
+3. **Break down.** Split the design into tasks following the schema. Order them so dependencies point backwards,
+   and avoid dependencies that are not real (independent tasks should be able to run in parallel).
+4. **Present.** Show the engineer the full task list (titles, descriptions, criteria, dependencies) and the
+   dependency order. Revise until they approve. **Do not write to `tasks.json` before explicit approval.**
+5. **Append.** After approval, add the tasks to the array in `factory/tasks.json` (create it as `[]` first if it
+   does not exist). Never modify or remove existing tasks. If an id collides with an existing one, rename the new task.
+   New tasks may depend on existing ids.
+6. **Validate.** Re-read the file and confirm: it is valid JSON, ids are unique, every dependency id exists, and
+   there are no dependency cycles. Fix anything that fails before reporting.
+7. **Summarize.** List the tasks added and their dependency order.

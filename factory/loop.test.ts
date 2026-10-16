@@ -1,65 +1,122 @@
 import { describe, expect, test } from "bun:test";
-import { pickNext, runLoop } from "./loop.ts";
-import type { Todo, TodoStatus } from "./todos.schema.ts";
+import { pickNext, runLoop, type Runner } from "./loop.ts";
+import type { Task, TaskStatus } from "./tasks.schema.ts";
+import type { TaskStore } from "./tasks.store.ts";
 
-const todo = (id: string, status: TodoStatus = "pending", dependencies: string[] = []): Todo => ({
+const task = (id: string, status: TaskStatus = "pending", dependencies: string[] = []): Task => ({
   id,
-  title: `Todo ${id}`,
+  title: `Task ${id}`,
   description: "d",
-  acceptanceCriteria: [],
-  status,
+  acceptanceCriteria: ["c"],
   dependencies,
+  status,
 });
 
+/** In-memory store that records every status transition. */
+function memStore(tasks: Task[]) {
+  const history: string[] = [];
+  const store: TaskStore = {
+    load: () => tasks.map((t) => ({ ...t })),
+    setStatus(id, status) {
+      tasks.find((t) => t.id === id)!.status = status;
+      history.push(`${id}:${status}`);
+    },
+  };
+  return { store, history, tasks };
+}
+
 describe("pickNext", () => {
-  test("returns the first pending todo with no dependencies", () => {
-    expect(pickNext([todo("A"), todo("B")])?.id).toBe("A");
+  test("returns the first pending task with no dependencies", () => {
+    expect(pickNext([task("A"), task("B")])?.id).toBe("A");
   });
 
-  test("gates on dependencies being done", () => {
-    const todos = [todo("A", "pending", ["B"]), todo("B", "done"), todo("C", "pending", ["D"]), todo("D", "pending")];
-    expect(pickNext(todos)?.id).toBe("A");
-    expect(pickNext([todo("A", "pending", ["B"]), todo("B", "pr_open")])).toBeNull();
-    expect(pickNext([todo("A", "pending", ["B"]), todo("B", "pending")])?.id).toBe("B");
+  test("waits until every dependency is in pr", () => {
+    expect(pickNext([task("A", "pending", ["B", "C"]), task("B", "pr"), task("C", "in_progress")])).toBeNull();
+    expect(pickNext([task("A", "pending", ["B", "C"]), task("B", "pr"), task("C", "pr")])?.id).toBe("A");
   });
 
-  test("skips blocked, in_progress, pr_open and done", () => {
-    const todos = [todo("A", "blocked"), todo("B", "in_progress"), todo("C", "pr_open"), todo("D", "done"), todo("E")];
-    expect(pickNext(todos)?.id).toBe("E");
+  test("a pending dependency blocks its dependent but is itself picked", () => {
+    expect(pickNext([task("A", "pending", ["B"]), task("B")])?.id).toBe("B");
   });
 
-  test("returns null when empty or none ready", () => {
+  test("skips in_progress and pr tasks", () => {
+    expect(pickNext([task("A", "in_progress"), task("B", "pr"), task("C")])?.id).toBe("C");
+  });
+
+  test("returns null when empty or nothing is ready", () => {
     expect(pickNext([])).toBeNull();
-    expect(pickNext([todo("A", "done"), todo("B", "blocked")])).toBeNull();
+    expect(pickNext([task("A", "pr"), task("B", "in_progress")])).toBeNull();
+  });
+
+  test("never picks a task with an unknown dependency", () => {
+    expect(pickNext([task("A", "pending", ["ghost"])])).toBeNull();
   });
 });
 
 describe("runLoop", () => {
-  const fakeStore = (todos: Todo[], outcome: (t: Todo) => TodoStatus) => ({
-    load: () => todos.map((t) => ({ ...t })),
-    run: async (t: Todo) => {
-      todos.find((x) => x.id === t.id)!.status = outcome(t);
+  const ok: Runner = async () => 0;
+
+  test("moves each task pending -> in_progress -> pr, in dependency order", async () => {
+    const { store, history } = memStore([task("B", "pending", ["A"]), task("A")]);
+    expect(await runLoop(store, ok)).toEqual({ ran: ["A", "B"], stoppedOn: null });
+    expect(history).toEqual(["A:in_progress", "A:pr", "B:in_progress", "B:pr"]);
+  });
+
+  test("marks the task in_progress while the runner executes", async () => {
+    const { store, tasks } = memStore([task("A")]);
+    let seen: TaskStatus | undefined;
+    await runLoop(store, async (t) => {
+      seen = tasks.find((x) => x.id === t.id)?.status;
       return 0;
-    },
+    });
+    expect(seen).toBe("in_progress");
   });
 
-  test("runs todos in order until nothing is ready", async () => {
-    const { load, run } = fakeStore([todo("A"), todo("B", "pending", ["A"])], () => "done");
-    expect(await runLoop(load, run)).toEqual({ ran: ["A", "B"], stoppedOn: null });
+  test("passes the picked task to the runner", async () => {
+    const { store } = memStore([task("A")]);
+    const got: string[] = [];
+    await runLoop(store, async (t) => (got.push(t.title), 0));
+    expect(got).toEqual(["Task A"]);
   });
 
-  test("pr_open counts as success but does not unblock dependents", async () => {
-    const { load, run } = fakeStore([todo("A"), todo("B", "pending", ["A"])], () => "pr_open");
-    expect(await runLoop(load, run)).toEqual({ ran: ["A"], stoppedOn: null });
+  test("a non-zero exit returns the task to pending and stops the loop", async () => {
+    const { store, tasks } = memStore([task("A"), task("B"), task("C")]);
+    const run: Runner = async (t) => (t.id === "B" ? 1 : 0);
+    expect(await runLoop(store, run)).toEqual({ ran: ["A", "B"], stoppedOn: "B" });
+    expect(tasks.map((t) => t.status)).toEqual(["pr", "pending", "pending"]);
   });
 
-  test("stops on the first todo that does not end pr_open or done", async () => {
-    const { load, run } = fakeStore([todo("A"), todo("B"), todo("C")], (t) => (t.id === "B" ? "blocked" : "done"));
-    expect(await runLoop(load, run)).toEqual({ ran: ["A", "B"], stoppedOn: "B" });
+  test("a throwing runner is treated as a failure", async () => {
+    const { store, tasks } = memStore([task("A")]);
+    const logs: string[] = [];
+    const run: Runner = async () => {
+      throw new Error("spawn failed");
+    };
+    expect(await runLoop(store, run, (m) => logs.push(m))).toEqual({ ran: ["A"], stoppedOn: "A" });
+    expect(tasks[0]?.status).toBe("pending");
+    expect(logs.some((m) => m.includes("spawn failed"))).toBe(true);
   });
 
-  test("stops when the agent leaves the todo unchanged", async () => {
-    const { load } = fakeStore([todo("A")], () => "pending");
-    expect(await runLoop(load, async () => 1)).toEqual({ ran: ["A"], stoppedOn: "A" });
+  test("does not start dependents of a failed task", async () => {
+    const { store, history } = memStore([task("A"), task("B", "pending", ["A"])]);
+    await runLoop(store, async () => 1);
+    expect(history).toEqual(["A:in_progress", "A:pending"]);
+  });
+
+  test("does nothing when no task is ready", async () => {
+    const { store, history } = memStore([task("A", "in_progress"), task("B", "pr")]);
+    const logs: string[] = [];
+    expect(await runLoop(store, ok, (m) => logs.push(m))).toEqual({ ran: [], stoppedOn: null });
+    expect(history).toEqual([]);
+    expect(logs.some((m) => m.includes("still in_progress") && m.includes("A"))).toBe(true);
+  });
+
+  test("picks up tasks appended while the loop runs", async () => {
+    const { store, tasks } = memStore([task("A")]);
+    const run: Runner = async (t) => {
+      if (t.id === "A") tasks.push(task("B", "pending", ["A"]));
+      return 0;
+    };
+    expect((await runLoop(store, run)).ran).toEqual(["A", "B"]);
   });
 });
