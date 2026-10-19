@@ -2,7 +2,7 @@
 
 **Components taught:** [Intake](../../docs/components.md), [Planning / decomposition](../../docs/components.md),
 [Execution](../../docs/components.md), plus the smallest possible loop that ties them together
-**Video:** _added after publishing_
+**Video:** [How to Build Your Own Software Factory, Lesson 1](https://www.youtube.com/watch?v=c4qi_zu3vZI) (playlist: [How to Build a Software Factory](https://www.youtube.com/playlist?list=PLEtnpY4_ARns))
 
 `factory/` in this repo is our demo. This lesson teaches the concepts; Bun and Claude Code are what the demo happens
 to use, never what you need. Each part below goes concept first, then "in our demo we use...", then "yours can be
