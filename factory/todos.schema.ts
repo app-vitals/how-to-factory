@@ -1,6 +1,6 @@
 // Plain-TS validator for factory/todos.json. No dependencies.
 
-export const TODO_STATUSES = ["pending", "in_progress", "pr_open", "done", "blocked"] as const;
+const TODO_STATUSES = ["pending", "in_progress", "pr_open", "done", "blocked"] as const;
 export type TodoStatus = (typeof TODO_STATUSES)[number];
 
 export interface Todo {
