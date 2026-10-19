@@ -28,6 +28,11 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
     { id: "verify-keeps-going", label: "How it keeps going until it passes" },
     { id: "loop-starts-next", label: "What starts the next task" },
     { id: "loop-includes-plan", label: "Plan runs inside the loop?" },
+    { id: "design-reads", label: "Reads the code before proposing" },
+    { id: "design-form", label: "Design output and its form" },
+    { id: "design-reuse", label: "Names reuse, risks or breaking changes" },
+    { id: "design-approval", label: "Approval before work starts" },
+    { id: "design-tasks", label: "How it becomes tasks" },
   ],
   products: [
     {
@@ -46,6 +51,11 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
         "verify-keeps-going": cell({ chip: "Goal" }),
         "loop-starts-next": cell({ chip: "Finished run" }),
         "loop-includes-plan": cell({ chip: "✓" }),
+        "design-reads": cell({ chip: "✓" }),
+        "design-form": cell({ chip: "File" }),
+        "design-reuse": cell({ chip: "◐" }),
+        "design-approval": cell({ chip: "Human approves" }),
+        "design-tasks": cell({ chip: "Plan steps + Parallel" }),
       },
       demoable: { kind: "unknown" },
       destination: { summary: "unknown" },
@@ -102,7 +112,7 @@ describe("validateLandscape", () => {
     expect(validateLandscape(e, TODAY).join()).toContain("cell verify-runs-app");
   });
   test("every component cell is required for a factory", () => {
-    for (const id of ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan"]) {
+    for (const id of ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks"]) {
       const d = make();
       delete (factory(d).cells as Record<string, unknown>)[id];
       expect(validateLandscape(d, TODAY).join()).toContain(`cell ${id}: missing`);
@@ -216,5 +226,33 @@ describe("real data", () => {
     expect(data.products.map((p) => p.id).sort()).toEqual(
       ["claude-code", "copilot", "cursor", "devin", "factory", "github-issues", "jira", "linear", "openhands"].sort(),
     );
+  });
+  test("plan-design cells need chip, short, sourceUrl and asOf", () => {
+    for (const id of ["design-reads", "design-form", "design-reuse", "design-approval", "design-tasks"] as const) {
+      for (const [field, msg] of [["chip", "missing chip"], ["short", "missing short"], ["sourceUrl", "missing sourceUrl"], ["asOf", "missing asOf"]] as const) {
+        const d = make();
+        factory(d).cells[id] = cell({ chip: "✓", [field]: "" });
+        expect(validateLandscape(d, TODAY).join()).toContain(`cell ${id}: ${msg}`);
+      }
+    }
+  });
+  test("plan-design chips follow their format", () => {
+    const withCell = (id: "design-reads" | "design-form" | "design-approval" | "design-tasks", chip: string) => {
+      const d = make();
+      factory(d).cells[id] = cell({ chip });
+      return validateLandscape(d, TODAY).join();
+    };
+    expect(withCell("design-reads", "Yes")).toContain("must be one of");
+    expect(withCell("design-form", "File + Chat")).toBe("");
+    expect(withCell("design-form", "Essay")).toContain("chip label");
+    expect(withCell("design-approval", "Human")).toBe("");
+    expect(withCell("design-approval", "Sometimes")).toContain("chip label");
+    expect(withCell("design-tasks", "Tickets")).toBe("");
+    expect(withCell("design-tasks", "Plan steps + Parallel + Tickets")).toContain("3 labels (max 2)");
+  });
+  test("plan-design cell may be omitted with a reason", () => {
+    const d = make();
+    factory(d).cells["design-reuse"] = { omitted: "not documented; checked Plan Mode page" };
+    expect(validateLandscape(d, TODAY)).toEqual([]);
   });
 });

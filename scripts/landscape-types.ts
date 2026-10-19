@@ -1,4 +1,4 @@
-export const COMPONENT_IDS = ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan"] as const;
+export const COMPONENT_IDS = ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks"] as const;
 type ComponentId = (typeof COMPONENT_IDS)[number];
 
 /** Longest `short` a slide cell may carry, in words. */
@@ -31,6 +31,11 @@ export const CHIP_RULES: Record<ComponentId, ChipRule> = {
   "verify-keeps-going": { kind: "labels", allowed: ["Goal", "Hook", "Auto-fix", "Prompt", "Autopilot"] },
   "loop-starts-next": { kind: "labels", allowed: ["Event", "Schedule", "Finished run", "Person"] },
   "loop-includes-plan": MARK,
+  "design-reads": MARK,
+  "design-form": { kind: "labels", allowed: ["File", "Chat"] },
+  "design-reuse": MARK,
+  "design-approval": { kind: "labels", allowed: ["Human", "Human approves", "Automated"] },
+  "design-tasks": { kind: "labels", allowed: ["Plan steps", "Parallel", "Tickets", "Same session"] },
 };
 
 /** Task-queue products have no component; their `queue` cell chip is the product's own term. */
