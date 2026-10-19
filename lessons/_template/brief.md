@@ -4,7 +4,8 @@
 > Scoping rule: lesson 1 explains plan and dev-task, builds the most basic version of each live, and runs a simple
 > loop that ends at open PRs (a person reviews and merges). Every later lesson adds ONE component to the existing loop
 > and ends with the loop doing a little more. Each lesson is about the size of lesson 1. Order stays open. `factory/`
-> is our demo; the lesson stays tool-neutral.
+> is our demo; the lesson stays tool-neutral. The lesson's plan session queues lesson material only (brief, script,
+> deck, exercise, options, run-of-show), never `factory/` changes: the factory builds `factory/` live.
 
 ## Component taught and band
 
@@ -34,7 +35,7 @@
 
 ## What the factory builds in this lesson
 
-<The factory builds itself from lesson 2 on. Which parts of `factory/` does it write?>
+<What does the factory build live in this lesson? Not pre-queued: no plan session queues `factory/` work.>
 
 ## Prerequisites
 

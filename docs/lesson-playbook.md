@@ -19,6 +19,8 @@ Agreed at the start of the project, and it applies to every lesson:
 - **Lesson order stays open.** Lessons are chosen one at a time from the [backlog](../lessons/README.md).
 - **`factory/` is our demo; lessons stay tool-neutral.** No required language, runner or agent. Concept first, then
   "in our demo we use...", then "yours can be anything".
+- **A lesson's plan session queues lesson material only:** the brief, script, deck, exercise, options and run-of-show.
+  It never queues `factory/` changes. The factory builds out `factory/` live, by itself, as the course runs.
 
 ## 1. The lesson brief
 
@@ -31,12 +33,12 @@ One page. It holds:
    teach it.
 4. **In scope / out of scope.** For each out-of-scope item, name the later lesson that owns it.
 5. **The sample's concrete steps.** What the sample does, step by step.
-6. **What the factory builds in this lesson.** The factory builds itself from lesson 2 on, so say which parts of
-   `factory/` are written by the factory.
+6. **What the factory builds in this lesson.** Say what the factory builds live on camera. This is not pre-queued: no
+   plan session queues it, and it is built during the lesson run.
 7. **Prerequisites.**
 8. **Exercise outcomes.**
-9. **Loop delta and size.** What does the loop do after this lesson that it could not before? Is this about the size
-   of lesson 1?
+9. **Loop delta and size.** What does the loop do after this lesson that it could not before? The delta comes from the
+   live build. Is this about the size of lesson 1?
 
 ## 2. Research protocol
 
@@ -100,13 +102,15 @@ filming, run the skills and the loop once yourself on a scratch repo so you know
 
 ## 6. Exercise rules
 
-Exercises list outcomes. They name no required tool, language or runner.
+Exercises list outcomes. They name no required tool, language or runner. The loop delta an exercise builds toward
+comes from what the factory built live in the lesson.
 
 ## 7. Work-queue rules
 
 These apply to the Shipwright pipeline that queues and ships this repo's work.
 
 - The brief is approved before any task is queued.
+- Lesson plan sessions queue no `factory/` tasks; the factory builds `factory/` live.
 - Edit a queued task only while it is `pending`.
 - Never edit merged PRs; fix forward in a new task.
 - Chain tasks on the last pending editor of a shared file, so two tasks never edit the same file in parallel.
