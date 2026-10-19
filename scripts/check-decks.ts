@@ -4,7 +4,7 @@ import { Glob } from "bun";
 import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
-export interface DeckConfig {
+interface DeckConfig {
   maxBullets: number;
   maxBulletWords: number;
   maxTitleWords: number;
@@ -20,7 +20,7 @@ export interface DeckConfig {
   forbiddenWords: string[];
 }
 
-export interface Violation {
+interface Violation {
   file: string;
   slide: number;
   rule: string;
@@ -36,7 +36,7 @@ interface El {
 const VOID = new Set(["meta", "link", "br", "hr", "img", "input", "path", "rect", "circle", "line", "stop"]);
 const RAW = new Set(["script", "style"]);
 
-export function parseHtml(html: string): El {
+function parseHtml(html: string): El {
   const root: El = { tag: "#root", attrs: {}, children: [] };
   const stack: El[] = [root];
   const re = /<!--[\s\S]*?-->|<(\/?)([a-zA-Z][\w:-]*)((?:"[^"]*"|'[^']*'|[^>"'])*)>|([^<]+)/g;
@@ -223,7 +223,7 @@ export function loadConfig(root: string): DeckConfig {
   return JSON.parse(readFileSync(join(root, "decks/deck.config.json"), "utf8")) as DeckConfig;
 }
 
-export async function findDecks(root: string): Promise<string[]> {
+async function findDecks(root: string): Promise<string[]> {
   const files = [join(root, "decks/_template/index.html")];
   for await (const f of new Glob("lessons/*/deck/index.html").scan({ cwd: root })) files.push(join(root, f));
   return files;

@@ -4,10 +4,10 @@
 import { readFileSync } from "node:fs";
 import { parseTodos, type Todo } from "./todos.schema.ts";
 
-export const TODOS_PATH = new URL("./todos.json", import.meta.url).pathname;
+const TODOS_PATH = new URL("./todos.json", import.meta.url).pathname;
 
 /** Default agent: Claude Code headless. Flags verified in factory/README.md. */
-export const DEFAULT_AGENT_CMD: string[] = [
+const DEFAULT_AGENT_CMD: string[] = [
   "claude",
   "-p",
   "/{skill} {id}",
@@ -22,9 +22,9 @@ export function pickNext(todos: Todo[]): Todo | null {
 }
 
 /** Runs the agent for one todo; resolves to the process exit code. */
-export type Runner = (todo: Todo) => Promise<number>;
+type Runner = (todo: Todo) => Promise<number>;
 
-export interface LoopResult {
+interface LoopResult {
   ran: string[];
   /** Id of the todo that stopped the loop, or null when nothing was left ready. */
   stoppedOn: string | null;
@@ -52,7 +52,7 @@ export async function runLoop(
 }
 
 /** Builds a runner from an argv template; `{id}` and `{skill}` are substituted in each arg. */
-export function agentRunner(template: string[], skill: string): Runner {
+function agentRunner(template: string[], skill: string): Runner {
   return async (todo) => {
     const cmd = template.map((a) => a.replaceAll("{id}", todo.id).replaceAll("{skill}", skill));
     const proc = Bun.spawn(cmd, { stdin: "inherit", stdout: "inherit", stderr: "inherit" });

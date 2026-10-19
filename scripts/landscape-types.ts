@@ -1,5 +1,5 @@
 export const COMPONENT_IDS = ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan"] as const;
-export type ComponentId = (typeof COMPONENT_IDS)[number];
+type ComponentId = (typeof COMPONENT_IDS)[number];
 
 /** Longest `short` a slide cell may carry, in words. */
 export const SHORT_MAX_WORDS = 8;
@@ -10,7 +10,7 @@ export const CHIP_NAME_MAX_WORDS = 3;
 /** Most labels a labels chip may join with " + ". */
 export const CHIP_MAX_LABELS = 2;
 
-export const CHIP_MARKS = ["✓", "✗", "◐"] as const;
+const CHIP_MARKS = ["✓", "✗", "◐"] as const;
 
 export type ChipRule =
   | { kind: "mark"; allowed: readonly string[] }
@@ -63,7 +63,7 @@ export const DEMOABLE_KINDS = [
   "docs-only",
   "unknown",
 ] as const;
-export type DemoableKind = (typeof DEMOABLE_KINDS)[number];
+type DemoableKind = (typeof DEMOABLE_KINDS)[number];
 
 /** kind "unknown" needs no source; any other kind needs summary + source + date. */
 export interface Demoable {
@@ -74,7 +74,7 @@ export interface Demoable {
 }
 
 /** summary "unknown" needs no source; otherwise summary + source + date. */
-export interface Destination {
+interface Destination {
   summary: string;
   sourceUrl?: string;
   asOf?: string;
