@@ -54,38 +54,46 @@ Spec to plan, and Intake including triage and readiness.
 - Break a conversation or spec into small tasks with dependencies
 - Keep tasks in a durable queue instead of a chat window
 - Estimate task size and pick a model tier per task
-- Spec to plan: what a plan session does, in four activities plus two extras (outline below)
+- Spec to plan: what a plan session does, in four activities plus two extras. Understand and Decide are taught by [lesson 2, A plan that looks before it slices](02-a-plan-that-looks-first/brief.md); the other parts are in the outline below
 
 #### Spec to plan (outline)
 
 A plan session turns an approved spec into a queue of tasks. One way to cut it:
 
-1. **Understand** - clarify the ask, explore the code, find similar features to reuse, decide where the solution goes.
+1. **Understand** - clarify the ask, explore the code, find similar features to reuse, decide where the solution goes. _Taught by [lesson 2](02-a-plan-that-looks-first/brief.md)._
 2. **Decide** - flag complexity risks; list breaking changes with their consumers, and any added constraint that needs
-   a backfill first; research when the approach is unclear; get the design approved before slicing.
-3. **Prove** - plan testing and verification: which test layers apply, and what each task adds or retires.
+   a backfill first; research when the approach is unclear; get the design approved before slicing. _Taught by [lesson 2](02-a-plan-that-looks-first/brief.md)._
+3. **Prove** - plan testing and verification: which test layers apply, and what each task adds or retires. _Owned by the Verification lesson._
 4. **Slice** - small shippable tasks with dependencies; bundle tightly coupled ones into one PR; flag work only a human
-   can do; optionally estimate size and pick a model tier.
+   can do; optionally estimate size and pick a model tier. _Lesson 1 slices simply; bundling, estimates and model tiers (the extras) belong to a later planning lesson that is not yet scheduled._
 
-Two extras: a standards file the plan reads first, and an approval point between design and tasks.
+Two extras: a standards file the plan reads first (owned by the Instructions and standards lesson), and an approval point
+between design and tasks (taught in lesson 2).
 
 Shipwright's plan session is one worked example of this shape, not the standard; other factories name and order the steps
 differently.
 
 ##### How the field does it
 
-Each claim is from the product's own page, fetched 2026-10-13.
+Each claim is from the product's own page, fetched 2026-10-19. The full grid, with every surface, the pages checked and the
+gaps, is in [`landscape/plan-grid/`](../landscape/plan-grid/README.md).
 
-- Cursor Plan Mode (https://cursor.com/docs/agent/planning, as of 2026-10-13): the agent asks clarifying questions,
-  researches the codebase, and produces a plan you can review and edit through chat or markdown files; plans are saved by
-  default in your home directory.
-- Claude Code best practices (https://code.claude.com/docs/en/best-practices, as of 2026-10-13): a four-phase workflow
-  of explore, plan, implement, commit; for larger features, have the agent interview you and write a spec first; if you
-  could describe the diff in one sentence, skip the plan.
-- Kiro specs (https://kiro.dev/docs/specs/, as of 2026-10-13): feature specs hold requirements with acceptance
-  criteria, a design that includes a testing strategy, and tasks, over which Kiro builds a dependency graph.
-- Spec Kit (https://github.com/github/spec-kit, as of 2026-10-13): a command sequence of constitution, specify, plan,
-  tasks, implement, then converge, repeating implement and converge until convergence reports Converged.
+- Devin CLI Plan mode (https://docs.devin.ai/cli/reference/commands.md, as of 2026-10-19): the plan tool set is read-only
+  (search, read, a question tool), and leaving Plan mode shows an approval prompt before anything is implemented.
+- Factory Spec Mode (https://docs.factory.com/autonomy-and-safety/specification-mode.md, as of 2026-10-19): read-only until
+  the plan is approved; the plan can optionally be saved as a Markdown file, and the pages show no fixed template.
+- OpenHands planning agent (https://docs.openhands.dev/sdk/guides/agent-custom.md, as of 2026-10-19): an SDK example where a
+  planning agent can only write `PLAN.md`, to a fixed outline of objective, context, approach and steps, then a second agent
+  builds from it; the example has no pause for a person.
+- Cursor Plan Mode (https://cursor.com/docs/agent/plan-mode.md, as of 2026-10-19): asks clarifying questions, researches the
+  codebase, then opens an editable plan; the person approves by clicking Build.
+- GitHub Copilot plan mode (https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/use-copilot-agents/use-plan-mode,
+  as of 2026-10-19): read-only research, then a summary, steps and open questions; nothing changes until the person approves.
+- Claude Code Plan mode (https://code.claude.com/docs/en/permission-modes, as of 2026-10-19): explores without editing,
+  writes a plan file you can edit, and offers approve or keep planning.
+
+Across these: reading the code first and a human approval before work starts are common; asking the plan to name reuse or
+breaking changes is mostly left to the person's prompt, and how a plan becomes tasks varies by product.
 
 ### Intake / spec
 - Turn a chat conversation into a written spec file
