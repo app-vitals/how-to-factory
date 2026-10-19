@@ -11,7 +11,7 @@ the standard.
 - `lessons/` — one directory per lesson (outline, script, options, exercise); unordered backlog in `lessons/README.md`
 - `landscape/` — factory x component comparison matrix
 - `decks/` — shared lesson deck framework (`deck.css`, `deck.js`, `deck.config.json`, `_template/`, `DIAGRAMS.md`); each lesson's deck is `lessons/<lesson>/deck/index.html`
-- `factory/` — the sample factory, grown lesson by lesson
+- `factory/` — the sample factory, built by the factory itself as the course runs
 - `planning/` — plan-session output
 
 ## Commands
@@ -40,6 +40,8 @@ TypeScript on Bun. Strict mode. Conventional commit prefixes (`feat:`, `fix:`, `
 - **`factory/` is the demo; lessons stay tool-neutral.** Each lesson part is the concept first (tool-neutral), then
   "in our demo we use...", then "yours can be anything". Bun and Claude Code are demo choices, never requirements;
   exercises list outcomes and name no required tool.
+- **Plan sessions never touch `factory/`.** A lesson's plan session queues lesson material only (brief, script, deck,
+  exercise, options, run-of-show); the factory builds `factory/` live.
 - Lessons show a simple version first, then where other factories take the concept. Describe
   destinations, never prescribe them.
 - **Follow the lesson playbook** (`docs/lesson-playbook.md`): scoping rule, lesson brief, research, work-queue rules, checklist.
