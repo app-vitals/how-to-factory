@@ -1,20 +1,36 @@
 ---
 name: dev-task
-description: Implement one todo from factory/todos.json in a worktree and open a PR (illustrative name; rename freely)
+description: Take one task from factory/tasks.json and deliver it as a pull request - branch, code, unit tests, PR
 ---
 
-# Dev Task
+# Dev task
 
-Illustrative skill name — other factories call this `feature-dev`, `implement`, etc. Rename freely.
+Takes one task and produces one pull request. The input is a task `id` from `factory/tasks.json` (or the task object
+itself). The output is an open PR and its URL.
 
-Input: one todo `id` from `factory/todos.json`.
+## Steps
 
-1. **Branch.** Load the todo and stop if it is missing. Create a worktree on its own branch, derived from the
-   id as `feat/<id-lowercase>`, off the latest main so main stays clean:
-   `git worktree add ../<repo>-<branch-slug> origin/main -b feat/<id-lowercase>`. Work only there. Setting the
-   todo to `in_progress` is a visible marker only, not a lock.
-2. **Code.** Implement against the description and acceptance criteria. Write tests first where practical.
-3. **Verify.** Run the todo's acceptance checks plus the project's tests, typecheck and lint. Fix until they pass.
-4. **Deliver.** Commit, push, and open a PR (`gh pr create`) whose body lists the acceptance criteria. Record
-   status `pr_open` only after verification passes (`done` once merged). If you cannot finish, set `blocked`
-   and say why.
+1. **Load the task.** Read the task from `factory/tasks.json` by `id`. Stop and report if it does not exist. The
+   loop only starts a task once every dependency has reached `pr` (PR open, not necessarily merged).
+2. **Create a branch.** Start from an up-to-date base branch (`main`). If the task has dependencies, their code lives on
+   their unmerged branches (`<type>/<dependency-id>`): branch from the dependency's branch instead, and with several
+   dependencies merge their branches in first. Create `<type>/<task-id>`, where `type` is the
+   Conventional Commit type that fits the task (`feat`, `fix`, `refactor`, `docs`, `chore`). Never work on the base
+   branch directly.
+3. **Write the code.** Read the repo enough to follow its existing conventions, then implement the task's
+   `description`. Stay inside its scope: anything the description calls out of scope stays out. Write unit tests
+   alongside the code, one or more per acceptance criterion where a test can express it.
+4. **Verify with unit tests.** Run the project's unit test suite. It must pass, along with typecheck and lint if
+   the project has them. If something fails, fix the cause and rerun; do not weaken or skip tests to get green.
+   Then walk each `acceptanceCriteria` item and confirm it is met, naming the test or check that shows it. If a
+   criterion cannot be met, stop and report instead of opening the PR.
+5. **Create the PR.** Commit with a Conventional Commit message (`<type>: <task title>`), push the branch, and open a
+   PR against the base branch. Title it the same way. The body is a short summary plus the acceptance criteria as a
+   checklist, each marked with how it was verified. Report the PR URL.
+
+## Rules
+
+- One task, one branch, one PR.
+- Stage specific files, never everything; do not commit unrelated changes.
+- Do not edit `factory/tasks.json`; tasks are added by the plan skill and `status` is moved by the loop.
+- Exit non-zero if the PR was not opened; the loop reads exit 0 as "PR open".
