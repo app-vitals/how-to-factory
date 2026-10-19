@@ -5,7 +5,7 @@ import type { Task } from "./tasks.schema.ts";
 import { fileStore, type TaskStore } from "./tasks.store.ts";
 
 /** Claude Code headless, running the dev-task skill for one task. `{id}` is substituted. */
-export const AGENT_CMD: string[] = [
+const AGENT_CMD: string[] = [
   "claude",
   "-p",
   "/dev-task {id}",
@@ -22,7 +22,7 @@ export function pickNext(tasks: Task[]): Task | null {
 /** Runs the agent for one task; resolves to the process exit code. */
 export type Runner = (task: Task) => Promise<number>;
 
-export interface LoopResult {
+interface LoopResult {
   ran: string[];
   /** Id of the task that stopped the loop, or null when nothing was left ready. */
   stoppedOn: string | null;
@@ -64,7 +64,7 @@ export async function runLoop(
 }
 
 /** Builds a runner that spawns the given argv template with `{id}` substituted in each arg. */
-export function agentRunner(template: string[]): Runner {
+function agentRunner(template: string[]): Runner {
   return async (task) => {
     const cmd = template.map((a) => a.replaceAll("{id}", task.id));
     const proc = Bun.spawn(cmd, { stdin: "inherit", stdout: "inherit", stderr: "inherit" });
