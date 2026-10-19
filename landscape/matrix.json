@@ -39,6 +39,26 @@
     {
       "id": "loop-includes-plan",
       "label": "Plan runs inside the loop?"
+    },
+    {
+      "id": "design-reads",
+      "label": "Reads the code before proposing"
+    },
+    {
+      "id": "design-form",
+      "label": "Design output and its form"
+    },
+    {
+      "id": "design-reuse",
+      "label": "Names reuse, risks or breaking changes"
+    },
+    {
+      "id": "design-approval",
+      "label": "Approval before work starts"
+    },
+    {
+      "id": "design-tasks",
+      "label": "How it becomes tasks"
     }
   ],
   "products": [
@@ -119,6 +139,36 @@
         },
         "loop-includes-plan": {
           "omitted": "Pages checked: Automations, Linear, Jira, Using Playbooks, gallery bulk-plan-backlog and prd-to-tickets (docs.devin.ai). None states whether a plan step runs inside the automation loop, or whether a person approves one first."
+        },
+        "design-reads": {
+          "name": "CLI Plan mode",
+          "summary": "Devin CLI's Plan mode profile has only read-only tools (grep, glob, read, todo, question, exit-plan), so it can look at the code but not change it.",
+          "sourceUrl": "https://docs.devin.ai/cli/reference/commands.md",
+          "asOf": "2026-10-19",
+          "short": "Read-only tools in Plan mode",
+          "chip": "✓"
+        },
+        "design-form": {
+          "name": "CLI Plan mode",
+          "summary": "The plan is written to a file that always opens with a heading and a summary paragraph; nothing beyond those is documented.",
+          "sourceUrl": "https://docs.devin.ai/cli/changelog/stable.md",
+          "asOf": "2026-10-19",
+          "short": "Plan file; heading and summary only",
+          "chip": "File"
+        },
+        "design-reuse": {
+          "omitted": "Pages checked: Commands & Flags, Essential Commands, Changelog (Stable) (docs.devin.ai). They do not say the CLI plan names reused code, risks or breaking changes; only a 'megaplan' keyword that makes it ask a clarifying question."
+        },
+        "design-approval": {
+          "name": "CLI Plan mode",
+          "summary": "Leaving Plan mode shows an approval prompt with three choices: implement and accept edits, implement and bypass permissions, or plan needs changes.",
+          "sourceUrl": "https://docs.devin.ai/cli/changelog/stable.md",
+          "asOf": "2026-10-19",
+          "short": "Approval prompt on leaving Plan mode",
+          "chip": "Human approves"
+        },
+        "design-tasks": {
+          "omitted": "Pages checked: Commands & Flags, Essential Commands, Changelog (Stable), Subagents (docs.devin.ai). The plan profile has a todo tool, but no page says the plan is split into tasks or stored beyond the plan file."
         }
       },
       "demoable": {
@@ -219,6 +269,41 @@
           "asOf": "2026-10-13",
           "short": "No: plan approved before it runs",
           "chip": "✗"
+        },
+        "design-reads": {
+          "name": "Spec Mode",
+          "summary": "Spec Mode is read-only: Droid searches the repo, reads files, inspects linked artifacts and asks questions, and changes nothing until the plan is approved.",
+          "sourceUrl": "https://docs.factory.com/autonomy-and-safety/specification-mode.md",
+          "asOf": "2026-10-19",
+          "short": "Read-only until plan approved",
+          "chip": "✓"
+        },
+        "design-form": {
+          "name": "Spec Mode",
+          "summary": "A concrete implementation plan is shown for review; it can optionally be saved as a Markdown file once a setting is on. No fixed template is shown.",
+          "sourceUrl": "https://docs.factory.com/autonomy-and-safety/specification-mode.md",
+          "asOf": "2026-10-19",
+          "short": "Plan shown; optional Markdown file",
+          "chip": "Chat + File"
+        },
+        "design-reuse": {
+          "name": "Spec Mode",
+          "summary": "Reuse comes only if the person asks: the docs advise naming existing patterns in the request, but no page says the plan must list reuse, risks or breaking changes.",
+          "sourceUrl": "https://docs.factory.com/autonomy-and-safety/specification-mode.md",
+          "asOf": "2026-10-19",
+          "short": "Only if the request asks",
+          "chip": "◐"
+        },
+        "design-approval": {
+          "name": "Spec Mode",
+          "summary": "When the plan is ready Droid calls an exit-spec-mode tool to ask for approval; the person then proceeds or keeps iterating.",
+          "sourceUrl": "https://docs.factory.com/autonomy-and-safety/specification-mode.md",
+          "asOf": "2026-10-19",
+          "short": "Asks approval before implementing",
+          "chip": "Human approves"
+        },
+        "design-tasks": {
+          "omitted": "Pages checked: Interaction Modes, Droid CLI Quickstart, Droid CLI Reference, Custom droids (docs.factory.com). After approval the same session implements the plan; no page says it is split into stored tasks."
         }
       },
       "demoable": {
@@ -291,6 +376,46 @@
         },
         "loop-includes-plan": {
           "omitted": "Pages checked: About automations, Creating automations, Managing rationale and approvals, Using cloud agent on GitHub (docs.github.com). None states whether a plan step runs inside the automation loop or is approved before it."
+        },
+        "design-reads": {
+          "name": "Plan mode",
+          "summary": "The plan agent researches the task with read-only tools and codebase analysis to find requirements and constraints, and makes no code change until the plan is approved.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/use-copilot-agents/use-plan-mode",
+          "asOf": "2026-10-19",
+          "short": "Read-only research before the plan",
+          "chip": "✓"
+        },
+        "design-form": {
+          "name": "Plan mode",
+          "summary": "A plan draft in a standard format shown in the chat: summary, breakdown of steps and open questions. It can be opened as a Markdown file.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/use-copilot-agents/use-plan-mode",
+          "asOf": "2026-10-19",
+          "short": "Chat plan; can open as Markdown",
+          "chip": "Chat + File"
+        },
+        "design-reuse": {
+          "name": "Plan mode",
+          "summary": "Constraints are named during research and ambiguity becomes open questions; reuse and breaking changes are not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/use-copilot-agents/use-plan-mode",
+          "asOf": "2026-10-19",
+          "short": "Constraints and open questions only",
+          "chip": "◐"
+        },
+        "design-approval": {
+          "name": "Plan mode",
+          "summary": "Nothing changes until the person reviews and approves the plan, then clicks Start Implementation.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/use-copilot-agents/use-plan-mode",
+          "asOf": "2026-10-19",
+          "short": "Start Implementation after approval",
+          "chip": "Human approves"
+        },
+        "design-tasks": {
+          "name": "Plan mode",
+          "summary": "The plan's steps are the units of work and there is no separate task store; Start Implementation hands the plan to an agent session.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/use-copilot-agents/use-plan-mode",
+          "asOf": "2026-10-19",
+          "short": "Plan steps; no task store",
+          "chip": "Plan steps"
         }
       },
       "demoable": {
@@ -389,6 +514,41 @@
           "asOf": "2026-10-13",
           "short": "Yes: triage automation",
           "chip": "✓"
+        },
+        "design-reads": {
+          "name": "Planning agent",
+          "summary": "In the SDK example the planning agent gets only file search, content search and an editor limited to writing PLAN.md, so it can look at the code but not change it.",
+          "sourceUrl": "https://docs.openhands.dev/sdk/guides/agent-custom.md",
+          "asOf": "2026-10-19",
+          "short": "Search tools; writes only PLAN.md",
+          "chip": "✓"
+        },
+        "design-form": {
+          "name": "Planning agent",
+          "summary": "A file, PLAN.md, written to a fixed outline in the planning agent's system prompt: objective, context, approach with rationale, and steps.",
+          "sourceUrl": "https://docs.openhands.dev/sdk/guides/agent-custom.md",
+          "asOf": "2026-10-19",
+          "short": "PLAN.md to a fixed outline",
+          "chip": "File"
+        },
+        "design-reuse": {
+          "name": "Planning agent",
+          "summary": "The outline asks for relevant components, constraints and the rationale for the approach; reuse of existing code and breaking changes are not documented.",
+          "sourceUrl": "https://docs.openhands.dev/sdk/guides/agent-custom.md",
+          "asOf": "2026-10-19",
+          "short": "Components and constraints only",
+          "chip": "◐"
+        },
+        "design-approval": {
+          "omitted": "Pages checked: Creating Custom Agent, Task Tool Set, File-Based Agents, Ask Oracle (docs.openhands.dev). The example script runs the execution agent straight after planning with no pause, which is how the sample is written, not a stated policy."
+        },
+        "design-tasks": {
+          "name": "Planning agent",
+          "summary": "PLAN.md is the handoff: the second agent is told to read it and implement every component. There is no task list beyond the plan's own step list.",
+          "sourceUrl": "https://docs.openhands.dev/sdk/guides/agent-custom.md",
+          "asOf": "2026-10-19",
+          "short": "PLAN.md step list is the handoff",
+          "chip": "Plan steps"
         }
       },
       "demoable": {
@@ -483,6 +643,41 @@
           "asOf": "2026-10-13",
           "short": "Yes: Project coordinator plans and delegates",
           "chip": "✓"
+        },
+        "design-reads": {
+          "name": "Plan Mode",
+          "summary": "The agent asks clarifying questions, then researches the codebase with file, directory and pattern search before it writes the plan.",
+          "sourceUrl": "https://cursor.com/docs/agent/plan-mode.md",
+          "asOf": "2026-10-19",
+          "short": "Asks, then researches the codebase",
+          "chip": "✓"
+        },
+        "design-form": {
+          "name": "Plan Mode",
+          "summary": "The plan opens as a virtual file you can read and edit, and can be saved into the repo. No fixed template is given.",
+          "sourceUrl": "https://cursor.com/help/ai-features/plan-mode.md",
+          "asOf": "2026-10-19",
+          "short": "Editable plan file; no template",
+          "chip": "File"
+        },
+        "design-reuse": {
+          "omitted": "Pages checked: Plan Mode, Plan mode help, Agent overview, Prompting agents, Using Agent in CLI (cursor.com). They do not say the plan lists reused code, risks or breaking changes."
+        },
+        "design-approval": {
+          "name": "Plan Mode",
+          "summary": "The person reviews and edits the plan, then clicks Build; the page frames the mode as approving the approach first.",
+          "sourceUrl": "https://cursor.com/help/ai-features/plan-mode.md",
+          "asOf": "2026-10-19",
+          "short": "Review and edit, then click Build",
+          "chip": "Human approves"
+        },
+        "design-tasks": {
+          "name": "Plan Mode",
+          "summary": "One plan and one Build click; Build in Parallel runs independent steps at once and keeps dependent steps in order. No separate task records are described.",
+          "sourceUrl": "https://cursor.com/docs/agent/plan-mode.md",
+          "asOf": "2026-10-19",
+          "short": "One plan; independent steps in parallel",
+          "chip": "Plan steps + Parallel"
         }
       },
       "demoable": {
@@ -579,6 +774,41 @@
           "asOf": "2026-10-13",
           "short": "Yes: team lead writes the task list",
           "chip": "✓"
+        },
+        "design-reads": {
+          "name": "Plan mode",
+          "summary": "Claude reads files and runs shell commands to explore and does not edit source; edits stay blocked until a plan is approved (with a stated exception for bypass permissions in an interactive terminal).",
+          "sourceUrl": "https://code.claude.com/docs/en/permission-modes",
+          "asOf": "2026-10-19",
+          "short": "Explores without editing until approved",
+          "chip": "✓"
+        },
+        "design-form": {
+          "name": "Plan mode",
+          "summary": "A plan written to a file and shown for review; you can open it in your editor and change it before approving. Required sections are not documented.",
+          "sourceUrl": "https://code.claude.com/docs/en/permission-modes",
+          "asOf": "2026-10-19",
+          "short": "Editable plan file; no required sections",
+          "chip": "File"
+        },
+        "design-reuse": {
+          "name": "Plan mode",
+          "summary": "Not built in: the docs' example prompt asks which files change, and guidance says to point Claude at an existing pattern, so reuse comes from what you ask for.",
+          "sourceUrl": "https://code.claude.com/docs/en/best-practices",
+          "asOf": "2026-10-19",
+          "short": "Only if the prompt asks",
+          "chip": "◐"
+        },
+        "design-approval": {
+          "name": "Plan mode",
+          "summary": "When the plan is ready Claude presents it and offers to approve (auto mode or review each edit) or keep planning.",
+          "sourceUrl": "https://code.claude.com/docs/en/permission-modes",
+          "asOf": "2026-10-19",
+          "short": "Approve, review each edit, or keep planning",
+          "chip": "Human approves"
+        },
+        "design-tasks": {
+          "omitted": "Pages checked: Permission modes, Best practices, Common workflows, Tools reference, Interactive mode (code.claude.com). Approving ends plan mode and Claude edits in the same session; no page says the plan is split into tasks."
         }
       },
       "demoable": {
