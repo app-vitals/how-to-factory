@@ -767,12 +767,7 @@
           "chip": "Plan steps"
         },
         "plan-clarify": {
-          "name": "unknown",
-          "summary": "The SDK example's task text tells the planning agent not to ask clarifying questions and to write its plan straight away. That line belongs to the example task, not to a documented setting of the planning preset.",
-          "sourceUrl": "https://docs.openhands.dev/sdk/guides/agent-custom.md",
-          "asOf": "2026-10-20",
-          "short": "Example forbids questions",
-          "chip": "✗"
+          "omitted": "Pages checked: Creating Custom Agent, Task Tool Set, File-Based Agents, Ask Oracle (docs.openhands.dev, planning agent then execution agent). The SDK example's task text tells its planning agent not to ask clarifying questions, but that is the example's prompt, not a stated property of the planning preset. Not documented."
         },
         "plan-assumptions": {
           "omitted": "Pages checked: Creating Custom Agent, Task Tool Set, File-Based Agents, Ask Oracle (docs.openhands.dev, planning agent then execution agent). The fixed plan outline has no assumptions or open-questions part. Not documented."
