@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lesson 2: A plan that looks first</title>
+<link rel="stylesheet" href="../../../decks/deck.css" />
+</head>
+<body>
+<div id="counter"></div>
+<main>
+  <section class="slide slide-title-slide" data-kind="title">
+    <div class="slide-inner">
+      <h1 class="slide-title">A Plan That Looks First</h1>
+      <div class="slide-body">
+        <p class="subtitle">Planning: from brief to approved design to tasks</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Factory map: planning gets a closer look</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="factory-map">
+          <div class="grid-arch">
+            <div class="node node-human is-built">Intake</div><div class="node node-agent is-active">Planning</div><div class="node node-agent is-built">Execution</div><div class="node node-agent is-planned">Verification</div>
+            <div class="node node-agent is-planned">Review</div><div class="node node-external is-planned">Release</div><div class="node node-job is-built">Loop</div><div class="node node-human is-built">Chat</div>
+          </div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Governance, feedback and memory support all of these.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">What the human does</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="human-role">
+          <div class="flow"><div class="node node-human">Brief</div><span class="arrow"></span><div class="node node-human">Approve design</div><span class="arrow"></span><div class="node node-human">Review PRs</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Approval comes before any task exists.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">What we build today</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="build-flow">
+          <div class="flow"><div class="node node-agent">Look</div><span class="arrow"></span><div class="node node-agent">Design</div><span class="arrow"></span><div class="node node-human">Approve</div><span class="arrow"></span><div class="node node-agent">Slice</div><span class="arrow"></span><div class="node node-store">Tasks</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Three new steps sit in front of slicing.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-demo" data-kind="demo">
+    <div class="slide-inner">
+      <h2 class="slide-title">DEMO</h2>
+      <div class="slide-body">
+        <div class="demo-label">DEMO: run lesson 1's loop</div>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">What a skimming plan gets wrong</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="light-plan">
+          <div class="flow"><div class="node node-human">Request</div><span class="arrow"></span><div class="node node-agent">Skim repo</div><span class="arrow"></span><div class="node node-store">Tasks</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <ul class="bullets"><li>Rebuilds what already exists</li><li>Names files that are not there</li><li>Breaks something nobody checked</li></ul>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Concept: look, design, approve, slice</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="concept">
+          <div class="flow"><div class="node node-agent">Understand</div><span class="arrow"></span><div class="node node-agent">Decide</div><span class="arrow"></span><div class="node node-human">Approve</div><span class="arrow"></span><div class="node node-agent">Slice</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Input is a brief; output is tasks.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Understand: ask less, read more</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="understand">
+          <div class="flow"><div class="node node-human">Brief</div><span class="arrow"></span><div class="node node-agent">Explore repo</div><span class="arrow"></span><div class="node node-agent">Find reuse</div><span class="arrow"></span><div class="node node-agent">Place change</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <ul class="bullets"><li>Ask only what code cannot answer</li><li>Explore the repo first</li><li>Reuse before building new</li></ul>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">The design is short, and names consumers</h2>
+      <div class="slide-body">
+<div class="visual options-grid">
+          <div class="option"><h3>Approach</h3><div class="pick">What we will do</div></div><div class="option"><h3>Rejected</h3><div class="pick">What we did not</div></div><div class="option"><h3>Risks</h3><div class="pick">What could go wrong</div></div><div class="option"><h3>Breaking</h3><div class="pick">Who depends on it</div></div>
+        </div>
+        <p class="caption">Someone can say no before work exists.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">The hard stop: approval before tasks</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="approval-stop">
+          <div class="flow"><div class="node node-agent">Explore</div><span class="arrow"></span><div class="node node-agent">Design</div><span class="arrow"></span><div class="node node-human">Approve</div><span class="arrow"></span><div class="node node-agent">Slice</div><span class="arrow"></span><div class="node node-store">Tasks</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Rejected design goes back to Design. No tasks yet.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">All look first; most wait for approval</h2>
+      <div class="slide-body">
+        <div class="visual">
+          <table class="comp-table">
+            <thead><tr><th>Checked 10/2026</th><th>Reads code first</th><th>Person approves first</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>✓</td><td>Human approves</td></tr><tr><td>Factory</td><td>✓</td><td>Human approves</td></tr><tr><td>OpenHands</td><td>✓</td><td>–</td></tr><tr><td>Cursor</td><td>✓</td><td>Human approves</td></tr><tr><td>GitHub Copilot</td><td>✓</td><td>Human approves</td></tr><tr><td>Claude Code</td><td>✓</td><td>Human approves</td></tr><tr><td>This sample</td><td>✓</td><td>Human approves</td></tr></tbody>
+          </table>
+          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
+        </div>
+        <p class="caption">Links in the video description.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">No plan fully names reuse and risks</h2>
+      <div class="slide-body">
+        <div class="visual">
+          <table class="comp-table">
+            <thead><tr><th>Checked 10/2026</th><th>Design form</th><th>Names reuse or risks</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>File</td><td>–</td></tr><tr><td>Factory</td><td>Chat + File</td><td>◐</td></tr><tr><td>OpenHands</td><td>File</td><td>◐</td></tr><tr><td>Cursor</td><td>File</td><td>–</td></tr><tr><td>GitHub Copilot</td><td>Chat + File</td><td>◐</td></tr><tr><td>Claude Code</td><td>File</td><td>◐</td></tr><tr><td>This sample</td><td>Short design</td><td>✓</td></tr></tbody>
+          </table>
+          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
+        </div>
+        <p class="caption">Links in the video description.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Half hand the plan over as steps</h2>
+      <div class="slide-body">
+        <div class="visual">
+          <table class="comp-table">
+            <thead><tr><th>Checked 10/2026</th><th>How it becomes tasks</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>–</td></tr><tr><td>Factory</td><td>–</td></tr><tr><td>OpenHands</td><td>Plan steps</td></tr><tr><td>Cursor</td><td>Plan steps + Parallel</td></tr><tr><td>GitHub Copilot</td><td>Plan steps</td></tr><tr><td>Claude Code</td><td>–</td></tr><tr><td>This sample</td><td>Tasks</td></tr></tbody>
+          </table>
+          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
+        </div>
+        <p class="caption">Products slice in different places.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-demo" data-kind="demo">
+    <div class="slide-inner">
+      <h2 class="slide-title">DEMO</h2>
+      <div class="slide-body">
+        <div class="demo-label">DEMO: upgrade the plan skill</div>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">After approval: slice into real tasks</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="slice">
+          <div class="flow"><div class="node node-agent">Slice</div><span class="arrow"></span><div class="node node-store">Tasks</div><span class="arrow"></span><div class="node node-job">Loop</div><span class="arrow"></span><div class="node node-agent">Dev-task</div><span class="arrow"></span><div class="node node-external">PRs</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Each task names files that exist.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Why approve the design: our opinion</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="why-approve">
+          <div class="flow"><div class="node node-agent">Design</div><span class="arrow"></span><div class="node node-human">Fix it here</div><span class="arrow"></span><div class="node node-store">Tasks fit code</div><span class="arrow"></span><div class="node node-external">Fewer bad PRs</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Our view, not a standard.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">How it works together</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="together">
+          <div class="flow"><div class="node node-agent">Plan</div><span class="arrow"></span><div class="node node-human">Approve</div><span class="arrow"></span><div class="node node-store">Tasks</div><span class="arrow"></span><div class="node node-job">Loop</div><span class="arrow"></span><div class="node node-external">PRs</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">You approve the design, then review PRs.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Same job, different names</h2>
+      <div class="slide-body">
+        <div class="visual">
+          <table class="comp-table">
+            <thead><tr><th>Checked 10/2026</th><th>Planning</th><th>Execution</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>Plan mode</td><td>Devin session</td></tr><tr><td>Factory</td><td>Spec Mode</td><td>Worker session</td></tr><tr><td>OpenHands</td><td>Planning agent</td><td>Issue to PR</td></tr><tr><td>Cursor</td><td>Plan Mode</td><td>Cloud agent</td></tr><tr><td>GitHub Copilot</td><td>Plan mode</td><td>Copilot cloud agent</td></tr><tr><td>Claude Code</td><td>Plan mode</td><td>Claude Code session</td></tr><tr><td>This sample</td><td>plan</td><td>dev-task</td></tr></tbody>
+          </table>
+        </div>
+        <p class="caption">Links in the video description.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Where factories take it</h2>
+      <div class="slide-body">
+<div class="visual options-grid">
+          <div class="option"><h3>Coordinator</h3><div class="pick">Children run the pieces</div></div><div class="option"><h3>Tracker</h3><div class="pick">Tickets hold the tasks</div></div><div class="option"><h3>Task list</h3><div class="pick">Agents claim tasks</div></div><div class="option"><h3>Check</h3><div class="pick">A check approves</div></div>
+        </div>
+        <p class="caption">Later, not next: tests, specs, standards, estimates.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-exercise" data-kind="exercise">
+    <div class="slide-inner">
+      <h2 class="slide-title">Your turn: make your plan look first</h2>
+      <div class="slide-body">
+        <div class="eyebrow">Exercise</div>
+        <div class="visual diagram" data-diagram="exercise-steps">
+          <div class="flow"><div class="node node-agent">Read code</div><span class="arrow"></span><div class="node node-agent">Write design</div><span class="arrow"></span><div class="node node-human">Approve</div><span class="arrow"></span><div class="node node-store">Tasks</div></div>
+        </div>
+        <ul class="bullets"><li>Any agent, any language</li><li>Design names reuse and breakage</li><li>Tasks name real files</li></ul>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+</main>
+<script src="../../../decks/deck.js"></script>
+</body>
+</html>
