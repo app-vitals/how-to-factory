@@ -80,3 +80,176 @@ for plan, approval and spec on the pages I also fetched.
 - Cloud Agent setup, builds, security, identity, network, self-hosted and mobile pages: environment and security setup, not planning.
 - Help Center pages outside the AI features section (getting started, customization, models and usage, security and privacy), plus its Tab, inline edit, vibe coding, side chats and conversation search pages: not planning.
 - Estimates and model choice: Cursor's pages on model selection and effort settings are left out on purpose, as is `/multitask`, which is parallel running rather than planning.
+
+## Depth dimensions
+
+Added in the depth-reset pass. Twelve extra dimensions for each of the seven surfaces above, with the same surface names. Every
+page below was fetched again on **2026-10-20**: the docs index (https://cursor.com/docs/llms.txt) first, then each page as raw Markdown,
+read or searched for the dimension's terms. Nothing here changes the grid above, and the fetch dates in the grid stay as they
+were. Names are Cursor's own. "Not documented" always names the pages checked. Where a page states an intention and not a
+mechanism, the entry says so and does not guess which one it is. The read-only row uses the labels **Tool restriction** and
+**Instruction only**; where the docs name no mechanism the entry says that instead. The CLI changelog entries carry no dates in
+the page text, so they are cited as undated. The index lists no page titled spec or design for planning beyond Plan Mode (the
+Design Mode page is UI design in the browser), so the headline finding above holds for these dimensions too.
+
+
+### Plan Mode (Agent in the editor or Agents Window; Shift+Tab to switch)
+
+| Dimension | What the docs say | Sources (fetched 2026-10-20) |
+| --- | --- | --- |
+| Clarify or interview mode | Yes. Step one of the documented flow is the agent asking clarifying questions; the Agent tool list also has an ask-questions tool that lets the agent keep reading and editing while it waits for the answer. | [Plan Mode](https://cursor.com/docs/agent/plan-mode.md), [Plan mode help](https://cursor.com/help/ai-features/plan-mode.md), [Cursor Agent](https://cursor.com/docs/agent/overview.md) |
+| Assumptions or open questions surfaced | Partly. Unclear requirements are named as a reason to use the mode, and the questions are the documented route for surfacing them. A plan section for assumptions or open questions: not documented (checked: Plan Mode, Plan mode help, Cursor Agent, Multi-agent help). | [Plan Mode](https://cursor.com/docs/agent/plan-mode.md), [Plan mode help](https://cursor.com/help/ai-features/plan-mode.md) |
+| Plan editable before approval | Yes. The plan opens as a virtual file you can read and edit, through chat or as markdown, and work starts only when you click Build. | [Plan Mode](https://cursor.com/docs/agent/plan-mode.md), [Plan mode help](https://cursor.com/help/ai-features/plan-mode.md) |
+| Where the plan is saved | Home directory by default. "Save to workspace" moves it into the repo for later reference, team sharing and documentation. It is not saved in chat only. | [Plan Mode](https://cursor.com/docs/agent/plan-mode.md), [Plan mode help](https://cursor.com/help/ai-features/plan-mode.md) |
+| Dependencies or ordering between steps | Partly. From a plan, Build in Parallel keeps dependent steps in order, so the product tracks ordering; how a plan marks the dependency: not documented (checked: Plan Mode, Plan mode help, Cursor Agent, Multi-agent help). | [Multi-agent help](https://cursor.com/help/ai-features/multi-agent.md) |
+| Parallel split of independent work | Yes. Build in Parallel runs the plan's independent steps at once. A separate `/multitask` command runs async subagents in parallel instead of queuing requests; that is parallel running, not plan splitting. | [Multi-agent help](https://cursor.com/help/ai-features/multi-agent.md) |
+| Re-plan after execution is blocked | By restart, not by a documented re-plan step. If the build goes wrong, revert the files (or roll back to an earlier chat message), make the plan more specific and run it again; the docs prefer this to patching a bad build with follow-ups. Whether a blocked build triggers this on its own: not documented. | [Plan Mode](https://cursor.com/docs/agent/plan-mode.md), [Plan mode help](https://cursor.com/help/ai-features/plan-mode.md) |
+| Second-model plan critique | Not documented (checked: Plan Mode, Plan mode help, Cursor Agent, Multi-agent help). The plan is reviewed by the person. | [Plan Mode](https://cursor.com/docs/agent/plan-mode.md), [Plan mode help](https://cursor.com/help/ai-features/plan-mode.md) |
+| Read-only enforcement | Not documented as a mechanism (checked: Plan Mode, Plan mode help, Cursor Agent, Multi-agent help). The pages say a plan is made "before writing any code" but do not say whether edit tools are withheld or the agent is only told not to edit, so no label is given. | [Plan Mode](https://cursor.com/docs/agent/plan-mode.md), [Plan mode help](https://cursor.com/help/ai-features/plan-mode.md) |
+| Tracker or ticket output | Not documented (checked: Plan Mode, Plan mode help, Cursor Agent, Multi-agent help). The plan is a file, not a ticket. | [Plan Mode](https://cursor.com/docs/agent/plan-mode.md), [Plan mode help](https://cursor.com/help/ai-features/plan-mode.md) |
+| Human-only step flag | Not documented (checked: Plan Mode, Plan mode help, Cursor Agent, Multi-agent help). | [Plan Mode](https://cursor.com/docs/agent/plan-mode.md), [Plan mode help](https://cursor.com/help/ai-features/plan-mode.md) |
+| Rollout or rollback section | Not documented (checked: Plan Mode, Plan mode help, Cursor Agent, Multi-agent help). The product's separate Rollouts feature writes a rollout plan when a pull request opens, which is a different artifact from this plan (see the Rollouts note below). | [Plan Mode](https://cursor.com/docs/agent/plan-mode.md), [Plan mode help](https://cursor.com/help/ai-features/plan-mode.md), [Rollouts](https://cursor.com/docs/rollouts.md) |
+
+### Ask mode (read-only exploration before planning)
+
+| Dimension | What the docs say | Sources (fetched 2026-10-20) |
+| --- | --- | --- |
+| Clarify or interview mode | No interview; the mode answers the questions you ask it. Whether it asks you anything back: not documented (checked: Ask mode help, CLI slash commands, CLI overview). | [Ask mode help](https://cursor.com/help/ai-features/ask-mode.md) |
+| Assumptions or open questions surfaced | Not documented (checked: Ask mode help, CLI slash commands, CLI overview). | [Ask mode help](https://cursor.com/help/ai-features/ask-mode.md) |
+| Plan editable before approval | Not applicable: no plan is produced (checked: Ask mode help, CLI slash commands, CLI overview). | [Ask mode help](https://cursor.com/help/ai-features/ask-mode.md) |
+| Where the plan is saved | Chat only. No file is described (checked: Ask mode help, CLI slash commands, CLI overview). | [Ask mode help](https://cursor.com/help/ai-features/ask-mode.md) |
+| Dependencies or ordering between steps | Not documented (checked: Ask mode help, CLI slash commands, CLI overview). | [Ask mode help](https://cursor.com/help/ai-features/ask-mode.md) |
+| Parallel split of independent work | Not documented (checked: Ask mode help, CLI slash commands, CLI overview). | [Ask mode help](https://cursor.com/help/ai-features/ask-mode.md) |
+| Re-plan after execution is blocked | Not documented (checked: Ask mode help, CLI slash commands, CLI overview). | [Ask mode help](https://cursor.com/help/ai-features/ask-mode.md) |
+| Second-model plan critique | Not documented (checked: Ask mode help, CLI slash commands, CLI overview). | [Ask mode help](https://cursor.com/help/ai-features/ask-mode.md) |
+| Read-only enforcement | Read-only by definition, but the mechanism is not described (checked: Ask mode help, CLI slash commands, CLI overview), so no tool-restriction or instruction-only label is given. The page says the agent explores code "without making any edits"; the CLI lists the mode as read-only exploration without making changes. | [Ask mode help](https://cursor.com/help/ai-features/ask-mode.md), [CLI overview](https://cursor.com/docs/cli/overview.md), [CLI slash commands](https://cursor.com/docs/cli/reference/slash-commands.md) |
+| Tracker or ticket output | Not documented (checked: Ask mode help, CLI slash commands, CLI overview). | [Ask mode help](https://cursor.com/help/ai-features/ask-mode.md) |
+| Human-only step flag | Not documented (checked: Ask mode help, CLI slash commands, CLI overview). | [Ask mode help](https://cursor.com/help/ai-features/ask-mode.md) |
+| Rollout or rollback section | Not documented (checked: Ask mode help, CLI slash commands, CLI overview). | [Ask mode help](https://cursor.com/help/ai-features/ask-mode.md) |
+
+### Cursor CLI, Plan mode (terminal; `/plan`, `--plan`, `--mode=plan`)
+
+| Dimension | What the docs say | Sources (fetched 2026-10-20) |
+| --- | --- | --- |
+| Clarify or interview mode | Yes. The mode's stated purpose is to design the approach before coding, and the agent asks clarifying questions to refine the plan. An undated changelog entry says questions are shown one at a time with a free-text "Other" answer. | [Using Agent in CLI](https://cursor.com/docs/cli/using.md), [CLI changelog](https://cursor.com/docs/cli/changelog.md) |
+| Assumptions or open questions surfaced | Not documented as a plan section (checked: Using Agent in CLI, CLI overview, CLI slash commands, CLI changelog). | [Using Agent in CLI](https://cursor.com/docs/cli/using.md), [CLI changelog](https://cursor.com/docs/cli/changelog.md) |
+| Plan editable before approval | Partly. A native plan-review screen exists and an undated changelog entry mentions pressing Esc to return to Vim normal mode "while you revise a plan", so revising is possible; how edits are made beyond that: not documented (checked: Using Agent in CLI, CLI overview, CLI slash commands, CLI changelog). A persistent menu offers Build Locally or Build in Cloud. | [CLI changelog](https://cursor.com/docs/cli/changelog.md) |
+| Where the plan is saved | On disk. An undated changelog entry says plans are saved to disk; the path and any move into the repo: not documented (checked: Using Agent in CLI, CLI overview, CLI slash commands, CLI changelog). `/plan` with no prompt shows the current plan. | [CLI changelog](https://cursor.com/docs/cli/changelog.md), [CLI slash commands](https://cursor.com/docs/cli/reference/slash-commands.md) |
+| Dependencies or ordering between steps | Not documented (checked: Using Agent in CLI, CLI overview, CLI slash commands, CLI changelog). | [Using Agent in CLI](https://cursor.com/docs/cli/using.md), [CLI changelog](https://cursor.com/docs/cli/changelog.md) |
+| Parallel split of independent work | Not documented for the plan (checked: Using Agent in CLI, CLI overview, CLI slash commands, CLI changelog). Separately, the CLI can run the agent in a new git worktree (`--worktree`), which isolates a run and does not split a plan. | [Using Agent in CLI](https://cursor.com/docs/cli/using.md) |
+| Re-plan after execution is blocked | Not documented (checked: Using Agent in CLI, CLI overview, CLI slash commands, CLI changelog). The CLI's rule is to state intent and resume a thread (`--resume`), not to re-plan. | [Using Agent in CLI](https://cursor.com/docs/cli/using.md) |
+| Second-model plan critique | Not documented (checked: Using Agent in CLI, CLI overview, CLI slash commands, CLI changelog). | [Using Agent in CLI](https://cursor.com/docs/cli/using.md), [CLI changelog](https://cursor.com/docs/cli/changelog.md) |
+| Read-only enforcement | **Instruction only**, as the docs suggest it: tell the agent "do not write any code" to keep it from editing while it plans. The Plan mode entry itself does not say whether edit tools are withheld, so no tool-restriction label is given. By contrast, non-interactive mode (`-p`) is stated to have full write access; an undated entry says plan mode works with `-p`, and the page does not say how the two combine. | [Using Agent in CLI](https://cursor.com/docs/cli/using.md), [CLI changelog](https://cursor.com/docs/cli/changelog.md) |
+| Tracker or ticket output | Not documented (checked: Using Agent in CLI, CLI overview, CLI slash commands, CLI changelog). | [Using Agent in CLI](https://cursor.com/docs/cli/using.md), [CLI changelog](https://cursor.com/docs/cli/changelog.md) |
+| Human-only step flag | Not documented (checked: Using Agent in CLI, CLI overview, CLI slash commands, CLI changelog). | [Using Agent in CLI](https://cursor.com/docs/cli/using.md), [CLI changelog](https://cursor.com/docs/cli/changelog.md) |
+| Rollout or rollback section | Not documented (checked: Using Agent in CLI, CLI overview, CLI slash commands, CLI changelog). | [Using Agent in CLI](https://cursor.com/docs/cli/using.md), [CLI changelog](https://cursor.com/docs/cli/changelog.md) |
+
+### Projects (coordinator agent in the Agents Window, runs on Cloud Agents)
+
+| Dimension | What the docs say | Sources (fetched 2026-10-20) |
+| --- | --- | --- |
+| Clarify or interview mode | Not documented (checked: Projects, Multi-agent help, Cloud Agents). You describe what you want built and the coordinator takes it from there; no question step is described. | [Projects](https://cursor.com/docs/agent/projects.md) |
+| Assumptions or open questions surfaced | Not documented (checked: Projects, Multi-agent help, Cloud Agents). | [Projects](https://cursor.com/docs/agent/projects.md) |
+| Plan editable before approval | Not documented (checked: Projects, Multi-agent help, Cloud Agents). You direct the coordinator by chat, which is the only documented way to change course. | [Projects](https://cursor.com/docs/agent/projects.md) |
+| Where the plan is saved | Not documented as a plan (checked: Projects, Multi-agent help, Cloud Agents). What is stored is a set of shared context files that agents add research, artifacts and codebase learnings to; they sync across the machines the Project's agents use. | [Projects](https://cursor.com/docs/agent/projects.md) |
+| Dependencies or ordering between steps | Not documented (checked: Projects, Multi-agent help, Cloud Agents). The page says the coordinator plans the work and does not describe how steps are ordered. | [Projects](https://cursor.com/docs/agent/projects.md) |
+| Parallel split of independent work | Yes, as the main idea. The coordinator delegates tasks to many agents in parallel and runs as many as the work needs; you can open any of them. How it decides which work is independent: not documented (checked: Projects, Multi-agent help, Cloud Agents). | [Projects](https://cursor.com/docs/agent/projects.md), [Multi-agent help](https://cursor.com/help/ai-features/multi-agent.md) |
+| Re-plan after execution is blocked | Partly. The Project keeps context over months and the coordinator stays responsive to direction, so a person can redirect it. A documented re-plan after a blocked agent: not documented (checked: Projects, Multi-agent help, Cloud Agents). | [Projects](https://cursor.com/docs/agent/projects.md) |
+| Second-model plan critique | Not documented (checked: Projects, Multi-agent help, Cloud Agents). | [Projects](https://cursor.com/docs/agent/projects.md) |
+| Read-only enforcement | Not documented (checked: Projects, Multi-agent help, Cloud Agents). The coordinator is said not to write code itself, which is a stated role, not a described restriction. | [Projects](https://cursor.com/docs/agent/projects.md) |
+| Tracker or ticket output | Not documented (checked: Projects, Multi-agent help, Cloud Agents). Subscriptions can start work from a Slack channel, PR activity, CI runs or a schedule; that is input, not output. | [Projects](https://cursor.com/docs/agent/projects.md) |
+| Human-only step flag | Not documented (checked: Projects, Multi-agent help, Cloud Agents). The coordinator brings finished work back for you to check. | [Projects](https://cursor.com/docs/agent/projects.md) |
+| Rollout or rollback section | Not documented (checked: Projects, Multi-agent help, Cloud Agents). | [Projects](https://cursor.com/docs/agent/projects.md) |
+
+### Slack, Linear and Jira hand-offs (Cloud Agent started from a thread or an issue)
+
+| Dimension | What the docs say | Sources (fetched 2026-10-20) |
+| --- | --- | --- |
+| Clarify or interview mode | Not documented (checked: Slack, Linear, Jira). Jira advises delegating only when the ticket already describes the task clearly, so the questions are meant to be answered up front in the ticket. | [Jira](https://cursor.com/docs/integrations/jira.md) |
+| Assumptions or open questions surfaced | Not documented (checked: Slack, Linear, Jira). | [Slack](https://cursor.com/docs/integrations/slack.md), [Linear](https://cursor.com/docs/integrations/linear.md), [Jira](https://cursor.com/docs/integrations/jira.md) |
+| Plan editable before approval | Not documented (checked: Slack, Linear, Jira). In Slack the short plan is posted before code changes; no page says it can be edited or held. | [Slack](https://cursor.com/docs/integrations/slack.md) |
+| Where the plan is saved | In Slack, the thread: a short plan is posted there before code changes when the task is a bug fix or the detail would help, and simple requests skip it. For Linear and Jira no plan location is described (checked: Linear, Jira). | [Slack](https://cursor.com/docs/integrations/slack.md) |
+| Dependencies or ordering between steps | Not documented (checked: Slack, Linear, Jira). | [Slack](https://cursor.com/docs/integrations/slack.md), [Linear](https://cursor.com/docs/integrations/linear.md), [Jira](https://cursor.com/docs/integrations/jira.md) |
+| Parallel split of independent work | Not documented (checked: Slack, Linear, Jira). Slack, Linear and Jira each start one Cloud Agent per delegation; the Cloud Agents page says you can run as many agents in parallel as you want. | [Cloud Agents](https://cursor.com/docs/cloud-agent.md), [Slack](https://cursor.com/docs/integrations/slack.md) |
+| Re-plan after execution is blocked | Partly. A person can send follow-up instructions to a running agent: by mentioning `@Cursor` in a Linear comment, from Rovo chat in Jira, or with an Add follow-up action in Slack. A documented re-plan on a block: not documented (checked: Slack, Linear, Jira). | [Linear](https://cursor.com/docs/integrations/linear.md), [Jira](https://cursor.com/docs/integrations/jira.md), [Slack](https://cursor.com/docs/integrations/slack.md) |
+| Second-model plan critique | Not documented (checked: Slack, Linear, Jira). | [Slack](https://cursor.com/docs/integrations/slack.md), [Linear](https://cursor.com/docs/integrations/linear.md), [Jira](https://cursor.com/docs/integrations/jira.md) |
+| Read-only enforcement | Not documented (checked: Slack, Linear, Jira). The documented outcome is a pull request, so a run is not read-only. | [Slack](https://cursor.com/docs/integrations/slack.md), [Linear](https://cursor.com/docs/integrations/linear.md), [Jira](https://cursor.com/docs/integrations/jira.md) |
+| Tracker or ticket output | The issue is the input. Linear shows real-time status in the issue and a PR at the end; Slack gets status updates under the thread, then a completion notice with a PR link. Whether Jira receives a write-back: not documented (checked: Jira, Linear, Slack). | [Linear](https://cursor.com/docs/integrations/linear.md), [Slack](https://cursor.com/docs/integrations/slack.md), [Jira](https://cursor.com/docs/integrations/jira.md) |
+| Human-only step flag | Not documented (checked: Slack, Linear, Jira). Linear and Jira automation rules need a human assignee to fire, which is a trigger condition and not a mark on a plan step. | [Linear](https://cursor.com/docs/integrations/linear.md) |
+| Rollout or rollback section | Not documented (checked: Slack, Linear, Jira). | [Slack](https://cursor.com/docs/integrations/slack.md), [Linear](https://cursor.com/docs/integrations/linear.md), [Jira](https://cursor.com/docs/integrations/jira.md) |
+
+### Custom subagents (a planner you define in `.cursor/agents/`)
+
+| Dimension | What the docs say | Sources (fetched 2026-10-20) |
+| --- | --- | --- |
+| Clarify or interview mode | As the planner's prompt says; the product has no built-in interview. An example skill on the Skills page tells the agent to use the ask-questions tool to clarify requirements, which shows the tool can be called from custom instructions. Not documented as a subagent setting (checked: Subagents, Plan Mode, Skills). | [Subagents](https://cursor.com/docs/subagents.md), [Skills](https://cursor.com/docs/skills.md) |
+| Assumptions or open questions surfaced | Whatever the prompt asks for. Not documented as a feature (checked: Subagents, Plan Mode). | [Subagents](https://cursor.com/docs/subagents.md) |
+| Plan editable before approval | Not documented (checked: Subagents, Plan Mode). The orchestrator pattern hands structured output from planner to implementer and names no point where a person edits it. | [Subagents](https://cursor.com/docs/subagents.md) |
+| Where the plan is saved | Not documented (checked: Subagents, Plan Mode). The planner's output returns to the parent conversation; background subagents write their state as they run so they can be resumed. | [Subagents](https://cursor.com/docs/subagents.md) |
+| Dependencies or ordering between steps | Partly. The orchestrator pattern runs planner, implementer and verifier in sequence, so order is by role. Ordering between plan steps: not documented (checked: Subagents, Plan Mode). | [Subagents](https://cursor.com/docs/subagents.md) |
+| Parallel split of independent work | Yes. Subagents can run in the foreground or in the background, and the page lists running multiple workstreams in parallel as a reason to use them. Each runs in its own context window, so five in parallel cost about five times the tokens. How a plan marks the independent steps: not documented (checked: Subagents). | [Subagents](https://cursor.com/docs/subagents.md) |
+| Re-plan after execution is blocked | Partly. A background subagent can be resumed after it finishes with its context preserved, and a verification agent checks whether claimed work was really completed. Neither is described as re-planning (checked: Subagents, Plan Mode). | [Subagents](https://cursor.com/docs/subagents.md) |
+| Second-model plan critique | Possible, by configuration, not as a plan step. A subagent's `model` field can name a model other than the parent's, and a verifier subagent is a documented pattern for checking completed work. A plan critique is not described (checked: Subagents, Plan Mode). | [Subagents](https://cursor.com/docs/subagents.md) |
+| Read-only enforcement | **Tool restriction.** A subagent with `readonly: true` runs with restricted write permissions: no file edits and no state-changing shell commands. The default is `false`, so a planner is read-only only if its file sets it. | [Subagents](https://cursor.com/docs/subagents.md) |
+| Tracker or ticket output | Not documented (checked: Subagents, Plan Mode). The verifier pattern mentions confirming work before tickets are marked complete, with no ticket integration described. | [Subagents](https://cursor.com/docs/subagents.md) |
+| Human-only step flag | Not documented (checked: Subagents, Plan Mode). | [Subagents](https://cursor.com/docs/subagents.md) |
+| Rollout or rollback section | Not documented (checked: Subagents, Plan Mode). | [Subagents](https://cursor.com/docs/subagents.md) |
+
+### Cloud Agents API (programmatic start in plan mode)
+
+| Dimension | What the docs say | Sources (fetched 2026-10-20) |
+| --- | --- | --- |
+| Clarify or interview mode | Not documented (checked: Cloud Agents API endpoints). The first run in plan mode "explores and drafts a plan before coding"; whether it asks questions through the API: not documented. | [Cloud Agents API endpoints](https://cursor.com/docs/cloud-agent/api/endpoints.md) |
+| Assumptions or open questions surfaced | Not documented (checked: Cloud Agents API endpoints). | [Cloud Agents API endpoints](https://cursor.com/docs/cloud-agent/api/endpoints.md) |
+| Plan editable before approval | Not documented (checked: Cloud Agents API endpoints). A follow-up run takes a mode override, `agent` or `plan`, so a caller can switch from planning to building by sending a second run. | [Cloud Agents API endpoints](https://cursor.com/docs/cloud-agent/api/endpoints.md) |
+| Where the plan is saved | Not documented (checked: Cloud Agents API endpoints). | [Cloud Agents API endpoints](https://cursor.com/docs/cloud-agent/api/endpoints.md) |
+| Dependencies or ordering between steps | Not documented (checked: Cloud Agents API endpoints). | [Cloud Agents API endpoints](https://cursor.com/docs/cloud-agent/api/endpoints.md) |
+| Parallel split of independent work | Not documented for the plan (checked: Cloud Agents API endpoints). The Cloud Agents page says many agents can run in parallel. | [Cloud Agents API endpoints](https://cursor.com/docs/cloud-agent/api/endpoints.md), [Cloud Agents](https://cursor.com/docs/cloud-agent.md) |
+| Re-plan after execution is blocked | Partly. The follow-up run's mode can be set back to `plan`, and omitting it keeps the conversation's current mode. A documented trigger for that after a blocked build: not documented (checked: Cloud Agents API endpoints). | [Cloud Agents API endpoints](https://cursor.com/docs/cloud-agent/api/endpoints.md) |
+| Second-model plan critique | Not documented (checked: Cloud Agents API endpoints). | [Cloud Agents API endpoints](https://cursor.com/docs/cloud-agent/api/endpoints.md) |
+| Read-only enforcement | Not documented as a mechanism (checked: Cloud Agents API endpoints). The `mode` option names plan as exploring and drafting before coding; no restriction is described, so no label is given. | [Cloud Agents API endpoints](https://cursor.com/docs/cloud-agent/api/endpoints.md) |
+| Tracker or ticket output | Not documented (checked: Cloud Agents API endpoints). | [Cloud Agents API endpoints](https://cursor.com/docs/cloud-agent/api/endpoints.md) |
+| Human-only step flag | Not documented (checked: Cloud Agents API endpoints). | [Cloud Agents API endpoints](https://cursor.com/docs/cloud-agent/api/endpoints.md) |
+| Rollout or rollback section | Not documented (checked: Cloud Agents API endpoints). | [Cloud Agents API endpoints](https://cursor.com/docs/cloud-agent/api/endpoints.md) |
+
+### Pages read (depth pass)
+
+Fetched 2026-10-20 as raw Markdown from https://cursor.com/docs/llms.txt. "In full" means every line read; "searched" means searched for
+plan, clarify, assumption, dependency, parallel, read-only, critique, ticket, human and rollback wording with the matching sections read.
+
+- Plan Mode: https://cursor.com/docs/agent/plan-mode.md (in full)
+- Plan mode (help): https://cursor.com/help/ai-features/plan-mode.md (in full)
+- Ask mode (help): https://cursor.com/help/ai-features/ask-mode.md (in full)
+- What is multi-agent coding? (help): https://cursor.com/help/ai-features/multi-agent.md (in full)
+- What is agentic coding? (help): https://cursor.com/help/ai-features/agentic-coding.md (searched)
+- Cursor Agent: https://cursor.com/docs/agent/overview.md (in full)
+- Prompting agents: https://cursor.com/docs/agent/prompting.md (searched)
+- Search: https://cursor.com/docs/agent/tools/search.md (searched)
+- Projects: https://cursor.com/docs/agent/projects.md (in full)
+- Agents Window: https://cursor.com/docs/agent/agents-window.md (searched)
+- Using Agent in CLI: https://cursor.com/docs/cli/using.md (in full)
+- CLI overview: https://cursor.com/docs/cli/overview.md (searched)
+- CLI slash commands: https://cursor.com/docs/cli/reference/slash-commands.md (searched)
+- CLI headless: https://cursor.com/docs/cli/headless.md (searched)
+- CLI changelog: https://cursor.com/docs/cli/changelog.md (searched for plan, question, review and mode entries; undated)
+- Subagents: https://cursor.com/docs/subagents.md (searched; configuration fields, model configuration, verification-agent and orchestrator sections read)
+- Skills: https://cursor.com/docs/skills.md (searched)
+- Cloud Agents: https://cursor.com/docs/cloud-agent.md (searched)
+- Cloud Agent best practices: https://cursor.com/docs/cloud-agent/best-practices.md (searched)
+- Cloud Agent capabilities: https://cursor.com/docs/cloud-agent/capabilities.md (searched)
+- Cloud Agents API endpoints: https://cursor.com/docs/cloud-agent/api/endpoints.md (searched; the `mode` parameters on launch and follow-up read)
+- Slack integration: https://cursor.com/docs/integrations/slack.md (searched; status updates and hand-off section read)
+- Linear integration: https://cursor.com/docs/integrations/linear.md (in full)
+- Jira integration: https://cursor.com/docs/integrations/jira.md (searched; delegating, mentioning and follow-up sections read)
+- Rules: https://cursor.com/docs/rules.md (searched)
+- Rollouts: https://cursor.com/docs/rollouts.md (opening and rollout-plans sections read)
+
+### Ruled out (depth pass)
+
+- Rollouts (https://cursor.com/docs/rollouts.md): writes a rollout plan as a pull-request comment when the PR opens, listing risks, expected effect, signals to check and instrumentation gaps, and checks telemetry after deploy. It is a post-code release artifact made by a separate product feature, not a section of the pre-code plan, so it is not used as the Rollout or rollback entry for any surface. It does show the vendor has a rollout-plan concept; a person can ask for the plan to be revised in a PR comment.
+- Rules, Plugins, Hooks, MCP: standards and instruction files, owned by a later lesson; searched for plan-related wording, none found for these dimensions.
+- Design Mode (https://cursor.com/docs/agent/design-mode.md), Debug Mode, Terminal and Browser tools, Canvas: UI design and debugging tools, not planning.
+- Agent Review, Bugbot, PR Routing & Approval (https://cursor.com/docs/approval-agents.md): review of code and pull requests, so they cannot supply a plan critique.
+- Automations and grok-bot pages: triggers and non-coding work, as in the earlier pass.
+- Worktrees: isolated checkouts for running agents; the CLI `--worktree` flag was noted under Parallel split and is not a plan feature.
+- Estimates, model tiers and pricing pages: left out on purpose, as in the earlier pass.
