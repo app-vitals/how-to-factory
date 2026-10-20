@@ -53,29 +53,49 @@ Spec to plan, and Intake including triage and readiness.
 ### Planning / decomposition
 - Break a conversation or spec into small tasks with dependencies
 - Keep tasks in a durable queue instead of a chat window
-- Estimate task size and pick a model tier per task
-- Spec to plan: what a plan session does, in four activities plus two extras. Understand and Decide are taught by [lesson 2, A plan that looks before it slices](02-a-plan-that-looks-first/brief.md); the other parts are in the outline below
+- Estimate task size and pick a model tier per task (Tier B candidate, see below)
+- Spec to plan: what a plan session does, in four activities plus two extras. Taught by [lesson 2, A plan that looks first and slices safely](02-a-plan-that-looks-first/brief.md): the Tier A capabilities below. The Tier B items are candidates for later deep dives
 
 #### Spec to plan (outline)
 
 A plan session turns an approved spec into a queue of tasks. One way to cut it:
 
-1. **Understand** - clarify the ask, explore the code, find similar features to reuse, decide where the solution goes. _Taught by [lesson 2](02-a-plan-that-looks-first/brief.md)._
-2. **Decide** - flag complexity risks; list breaking changes with their consumers, and any added constraint that needs
-   a backfill first; research when the approach is unclear; get the design approved before slicing. _Taught by [lesson 2](02-a-plan-that-looks-first/brief.md)._
+1. **Understand** - clarify the ask and state what is still assumed, explore the code in layers, find similar features to reuse, flag complexity risks. _Taught by [lesson 2](02-a-plan-that-looks-first/brief.md) (Tier A: clarify and assumptions, layered exploration with reuse, complexity risks)._
+2. **Decide** - list breaking changes with their consumers (including the release pipeline), and any added constraint that
+   needs a backfill first; save the design where every task links to it; get a person's approval before any task exists.
+   _Taught by [lesson 2](02-a-plan-that-looks-first/brief.md) (Tier A: breaking-change scan, saved design, hard approval)._
 3. **Prove** - plan testing and verification: which test layers apply, and what each task adds or retires. _Owned by the Verification lesson._
-4. **Slice** - small shippable tasks with dependencies; bundle tightly coupled ones into one PR; flag work only a human
-   can do; optionally estimate size and pick a model tier. _Lesson 1 slices simply; bundling, estimates and model tiers (the extras) belong to a later planning lesson that is not yet scheduled._
+4. **Slice** - small shippable tasks with dependencies, each safe to ship on its own (atomic, or add then migrate then
+   remove); check the open queue for duplicates; flag work only a human can do. _Taught by [lesson 2](02-a-plan-that-looks-first/brief.md) (Tier A: slicing rules, queue awareness, human-only flag). Bundling tightly coupled tasks, and estimating size and picking a model tier (the extras), are Tier B: later planning deep-dive candidates, not yet scheduled._
 
 Two extras: a standards file the plan reads first (owned by the Instructions and standards lesson), and an approval point
 between design and tasks (taught in lesson 2).
+
+##### Taught by lesson 2 (Tier A)
+
+Built or walked through, ranked by what is expected, common and crucial for a plan step:
+
+- Clarify, then state assumptions; layered exploration with reuse; complexity risks flagged before design (built live).
+- Breaking-change scan of consumers, backfill and the release pipeline; hard approval before tasks exist; slicing rules
+  (add, migrate, remove) (built live).
+- Saved design linked from every task; queue awareness; a human-only task flag (walked through as finished output).
+
+##### Later deep-dive candidates (Tier B)
+
+Named in lesson 2, not built, and not prescribed; each is a candidate for a later planning deep dive unless another lesson owns it:
+
+- Bundling tightly coupled tasks into one PR.
+- Scoring tasks and choosing a model tier per task.
+- Autonomous mode with a decision log (the unattended variant of approval).
+- Second-model critique of a plan; parallel coordinators; tracker sync; methodology config.
+- Per-task test planning is owned by the Verification lesson, and a shared standards file by the Instructions and standards lesson.
 
 Shipwright's plan session is one worked example of this shape, not the standard; other factories name and order the steps
 differently.
 
 ##### How the field does it
 
-Each claim is from the product's own page, fetched 2026-10-19. The full grid, with every surface, the pages checked and the
+Each claim is from the product's own page, fetched 2026-10-19; the depth counts in the last paragraph are from the extended grid, as of 2026-10-20. The full grid, with every surface, the pages checked and the
 gaps, is in [`landscape/plan-grid/`](../landscape/plan-grid/README.md).
 
 - Devin CLI Plan mode (https://docs.devin.ai/cli/reference/commands.md, as of 2026-10-19): the plan tool set is read-only
@@ -92,8 +112,12 @@ gaps, is in [`landscape/plan-grid/`](../landscape/plan-grid/README.md).
 - Claude Code Plan mode (https://code.claude.com/docs/en/permission-modes, as of 2026-10-19): explores without editing,
   writes a plan file you can edit, and offers approve or keep planning.
 
-Across these: reading the code first and a human approval before work starts are common; asking the plan to name reuse or
-breaking changes is mostly left to the person's prompt, and how a plan becomes tasks varies by product.
+Across these: reading the code first and a human approval before work starts are common (5 of 6 shown plan modes gate on a
+person); a way to question the person, a way to change the plan and a saved file are also common. Documented by at most one or
+two: ordering between tasks and a parallel split. Documented by none of the six shown surfaces: assumptions as a plan part,
+reuse or breaking changes unless the person's prompt asks, a human-only task flag, and a rollout section. That is what these
+docs say, not what the products can do; counts and pages checked are in the
+[extended grid](../landscape/plan-grid/README.md).
 
 ### Intake / spec
 - Turn a chat conversation into a written spec file
