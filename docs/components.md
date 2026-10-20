@@ -60,6 +60,7 @@ Entries marked **(proposed)** are candidate additions or splits that are not fin
 - **Simplest version:** ask the agent for a numbered checklist and work through it.
 - **Range:** a plan file in the repo; tasks as issues; a durable task queue with dependencies, size or model-tier estimates and a "needs a human" flag; a coordinator agent that decomposes and assigns.
 - **Shipwright example:** a planning command writes scored tasks, with dependencies, to a task store that survives restarts.
+- **Depth:** a plan that looks before it slices clarifies and states assumptions, explores the code in layers for reuse, flags complexity risks, scans for breaking changes (consumers, backfill, the release pipeline), saves a design every task links to, waits for a person's approval, and cuts tasks that are each safe to ship alone, skipping queued duplicates and flagging person-only work. Lesson 2 teaches these. Bundling, scoring and model tier, autonomous mode with a decision log, second-model critique, parallel coordinators, tracker sync and methodology config are candidates for later deep dives; test planning belongs to Verification and a shared standards file to Instructions and standards.
 
 ## 3. Execution
 
