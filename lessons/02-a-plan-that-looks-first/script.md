@@ -14,9 +14,10 @@ is asked, plans it, and builds it during the run.
      over a real run: the presenter may talk over getting it running, and nothing is pre-queued in `factory/`. Show the
      loop pick the task, dev-task branch and work, and an open PR at the end. A person reviews and merges, as before.
    - Say what the viewer should notice: a task goes in, an open PR comes out, and nobody typed the steps in between.
-2. **What is missing.** The loop is only as good as the tasks it is fed. Lesson 1's plan slices straight from a
-   conversation. Ask what happens when the plan has not looked at the code: tasks that rebuild what exists, name files
-   that are not there, or break something nobody checked.
+2. **What is missing.** The loop is only as good as the tasks it is fed. Lesson 1's plan does a light version of
+   looking: it skims the repo and agrees an approach, but its design never names risks or what could break and who
+   depends on it, and its hard stop is on the task list, not the design. Ask what happens when a plan has not looked
+   properly: tasks that rebuild what exists, name files that are not there, or break something nobody checked.
 3. **Concept: look, design, approve, then slice.** Tool-neutral. Inputs are a brief or a conversation; the output is
    tasks. Three new steps sit in front of slicing.
    - **Understand:** ask only what the code cannot answer, explore the repo, find what can be reused, decide where the
@@ -42,9 +43,11 @@ is asked, plans it, and builds it during the run.
      slicing in one step. Ours is one way, not the standard.
 6. **DEMO the factory plans its own upgrade of the plan skill.** The live beat. The existing factory, the one built in
    lesson 1, is asked to upgrade its own plan skill to look first. Nothing is queued in `factory/` ahead of time.
-   - Ask: "upgrade the plan skill so it explores the repo and writes a design before it writes tasks."
-   - Show the current plan skill run: it explores the repo, finds what to reuse, and writes a short design with an
-     approach, a rejected alternative, risks, and what could break and who depends on it.
+   - Ask: "upgrade the plan skill so its design names risks and breaking changes with their consumers, and it stops
+     for approval of the design before it writes tasks."
+   - Show the current plan skill run on that request: it skims the repo, finds what to reuse, and proposes a short
+     design for the upgrade with an approach and a rejected alternative. That is its light version of looking; the
+     upgrade is what adds the risks and consumers section and the hard stop on the design.
    - It stops. Point at the stop: no tasks exist yet.
    - Read the design out loud and approve it. This is the human step the lesson is about.
 7. **After approval: slice, then the loop builds it.** The plan slices the approved design into tasks that name real

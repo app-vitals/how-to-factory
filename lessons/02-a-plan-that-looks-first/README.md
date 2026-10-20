@@ -17,7 +17,10 @@ In this lesson ours is the `plan` skill, with the design as a step inside it. Ot
 
 A plan that slices straight from a request produces tasks that ignore what the code already has. A plan that first
 reads the code, writes a short design, and gets a person to approve that design before any task exists produces tasks
-that fit the code. Lesson 1's plan did the last step only: it sliced. This lesson adds the steps in front of it.
+that fit the code. Lesson 1's plan already does a light version: it skims the repo, asks only what the code cannot
+answer, agrees an approach and rejected alternatives with you, and gets the task list approved before writing it. What
+it lacks is a design that names risks and breaking changes with their consumers, and a hard stop on the design itself
+before any task exists. This lesson adds those.
 
 This lesson also adds a small follow-up segment at the start: lesson 1's loop, run for real on a small task, so the
 loop is proven from a task to an open PR before we change what feeds it.
