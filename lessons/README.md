@@ -1,8 +1,8 @@
 # Lesson backlog
 
 A pool of candidate lessons, grouped by [component](../docs/components.md) and sorted into four tentative tiers.
-There is no numbering and no syllabus: lessons are chosen one at a time. Every lesson builds the simplest working version of one
-idea, then shows where different factories take it.
+There is no numbering and no syllabus: lessons are chosen one at a time. Every lesson takes one component deep, covering what is
+expected, common and crucial for it and building it live, then shows where different factories take it. Fuller deep dives come in later lessons.
 
 Shipwright and the "origins" posts are background material and inputs, not a syllabus or a prescribed order.
 Component and skill names in lessons are sample names, so call yours whatever you like.

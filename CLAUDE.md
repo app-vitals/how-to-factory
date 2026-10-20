@@ -1,8 +1,8 @@
 # how-to-factory
 
 A tutorial series (YouTube) on how to build a software factory. Each lesson teaches one
-universal component, builds the simplest working version live, shows how other factories
-do it, and ends with students building their own. Shipwright is one worked example, not
+universal component in depth, builds it live, shows how other factories do it, and ends
+with students building their own. Shipwright is one worked example, not
 the standard.
 
 ## Layout
@@ -42,8 +42,9 @@ TypeScript on Bun. Strict mode. Conventional commit prefixes (`feat:`, `fix:`, `
   exercises list outcomes and name no required tool.
 - **Plan sessions never touch `factory/`.** A lesson's plan session queues lesson material only (brief, script, deck,
   exercise, options, run-of-show); the factory builds `factory/` live.
-- Lessons show a simple version first, then where other factories take the concept. Describe
-  destinations, never prescribe them.
+- **One deep component per lesson.** A lesson teaches one component and builds it in that lesson, prioritizing what is
+  expected, common and crucial for it. Fuller deep dives come in later lessons; name them as destinations, never
+  prescribe them.
 - **Follow the lesson playbook** (`docs/lesson-playbook.md`): scoping rule, lesson brief, research, work-queue rules, checklist.
 
 ## Deck rules
