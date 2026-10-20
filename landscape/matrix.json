@@ -59,6 +59,54 @@
     {
       "id": "design-tasks",
       "label": "How it becomes tasks"
+    },
+    {
+      "id": "plan-clarify",
+      "label": "Asks questions before planning"
+    },
+    {
+      "id": "plan-assumptions",
+      "label": "Lists assumptions or open questions"
+    },
+    {
+      "id": "plan-editable",
+      "label": "Plan editable before approval"
+    },
+    {
+      "id": "plan-saved",
+      "label": "Where the plan is saved"
+    },
+    {
+      "id": "plan-ordering",
+      "label": "Dependencies or ordering between steps"
+    },
+    {
+      "id": "plan-parallel",
+      "label": "Parallel split of independent work"
+    },
+    {
+      "id": "plan-replan",
+      "label": "Re-plan after a blocked build"
+    },
+    {
+      "id": "plan-critique",
+      "label": "Second-model plan critique"
+    },
+    {
+      "id": "plan-readonly",
+      "label": "How read-only is enforced"
+    },
+    {
+      "id": "plan-tracker",
+      "label": "Tracker or ticket output"
+    },
+    {
+      "id": "plan-human-only",
+      "label": "Human-only step flag"
+    },
+    {
+      "id": "plan-rollout",
+      "label": "Rollout or rollback section"
     }
   ],
   "products": [
@@ -169,6 +217,62 @@
         },
         "design-tasks": {
           "omitted": "Pages checked: Commands & Flags, Essential Commands, Changelog (Stable), Subagents (docs.devin.ai). The plan profile has a todo tool, but no page says the plan is split into tasks or stored beyond the plan file."
+        },
+        "plan-clarify": {
+          "name": "Question tool",
+          "summary": "The plan profile carries a question tool, and a changelog entry says a keyword such as megaplan makes the agent plan more widely and always ask at least one clarifying question before writing.",
+          "sourceUrl": "https://docs.devin.ai/cli/reference/commands.md",
+          "asOf": "2026-10-20",
+          "short": "Question tool; megaplan always asks one",
+          "chip": "✓"
+        },
+        "plan-assumptions": {
+          "omitted": "Pages checked: Commands, Essential, Changelog (docs.devin.ai, Devin CLI Plan mode). No assumptions or open-questions output is described. Not documented."
+        },
+        "plan-editable": {
+          "name": "No, plan needs changes",
+          "summary": "The exit prompt offers \"No, plan needs changes\", which sends the plan back for revision. Editing the plan file directly before approving is not documented.",
+          "sourceUrl": "https://docs.devin.ai/cli/changelog/stable.md",
+          "asOf": "2026-10-20",
+          "short": "Send back for changes",
+          "chip": "◐"
+        },
+        "plan-saved": {
+          "name": "Plan file",
+          "summary": "The plan is written to a file that always has a heading and a summary paragraph. The path is not documented.",
+          "sourceUrl": "https://docs.devin.ai/cli/changelog/stable.md",
+          "asOf": "2026-10-20",
+          "short": "File with heading and summary",
+          "chip": "File"
+        },
+        "plan-ordering": {
+          "omitted": "Pages checked: Commands, Essential, Changelog (docs.devin.ai, Devin CLI Plan mode), Subagents. Not documented."
+        },
+        "plan-parallel": {
+          "omitted": "Pages checked: Commands, Subagents (docs.devin.ai). The plan profile's tool list has no subagent tool and the subagents page says nothing about plan mode. Not documented."
+        },
+        "plan-replan": {
+          "omitted": "Pages checked: Commands, Essential, Changelog (docs.devin.ai, Devin CLI Plan mode). The mode can be switched back with /plan, but no page describes that as a re-plan step. Not documented."
+        },
+        "plan-critique": {
+          "omitted": "Pages checked: Commands, Changelog, Subagents (docs.devin.ai). A custom reviewer profile for code changes is shown, not a plan critique. Not documented."
+        },
+        "plan-readonly": {
+          "name": "Plan profile",
+          "summary": "The plan profile is defined by a list of read-only tools (grep, glob, read, todo, question, exit-plan); later entries add read-only web fetch, web search and read-only MCP tools.",
+          "sourceUrl": "https://docs.devin.ai/cli/reference/commands.md",
+          "asOf": "2026-10-20",
+          "short": "Read-only tool list",
+          "chip": "Tool restriction"
+        },
+        "plan-tracker": {
+          "omitted": "Pages checked: Commands, Essential, Changelog (docs.devin.ai, Devin CLI Plan mode). Not documented."
+        },
+        "plan-human-only": {
+          "omitted": "Pages checked: Commands, Essential, Changelog (docs.devin.ai, Devin CLI Plan mode). Not documented."
+        },
+        "plan-rollout": {
+          "omitted": "Pages checked: Commands, Essential, Changelog (docs.devin.ai, Devin CLI Plan mode). Not documented."
         }
       },
       "demoable": {
@@ -304,6 +408,57 @@
         },
         "design-tasks": {
           "omitted": "Pages checked: Interaction Modes, Droid CLI Quickstart, Droid CLI Reference, Custom droids (docs.factory.com). After approval the same session implements the plan; no page says it is split into stored tasks."
+        },
+        "plan-clarify": {
+          "name": "Spec Mode",
+          "summary": "Droid may ask clarifying questions while it researches, and the person can keep iterating before approving. There is no separate interview step that questions the person first.",
+          "sourceUrl": "https://docs.factory.com/autonomy-and-safety/specification-mode.md",
+          "asOf": "2026-10-20",
+          "short": "May ask while researching",
+          "chip": "◐"
+        },
+        "plan-assumptions": {
+          "omitted": "Pages checked: Interaction Modes, Droid CLI Quickstart, Droid CLI Reference, Droid Exec, Custom droids (docs.factory.com, Spec Mode). The docs only advise the person to state constraints and how to verify in the request. Not documented."
+        },
+        "plan-editable": {
+          "name": "Spec Mode",
+          "summary": "The person can reject the plan and keep iterating in Spec Mode. Editing the proposed plan text directly before approving is not documented.",
+          "sourceUrl": "https://docs.factory.com/autonomy-and-safety/specification-mode.md",
+          "asOf": "2026-10-20",
+          "short": "Reject and iterate",
+          "chip": "◐"
+        },
+        "plan-saved": {
+          "name": "Save spec as Markdown",
+          "summary": "Optional: with the setting on, an approved plan is written as a dated Markdown file (default folder .factory/docs). With it off, the page describes the plan only in the session.",
+          "sourceUrl": "https://docs.factory.com/autonomy-and-safety/specification-mode.md",
+          "asOf": "2026-10-20",
+          "short": "Optional Markdown file, off by default",
+          "chip": "File + Chat"
+        },
+        "plan-ordering": {
+          "omitted": "Pages checked: Interaction Modes, Droid CLI Quickstart, Droid CLI Reference, Droid Exec, Custom droids (docs.factory.com, Spec Mode). The page says only that the plan is concrete and shows no step graph. Not documented."
+        },
+        "plan-parallel": {
+          "omitted": "Pages checked: Interaction Modes, Droid CLI Quickstart, Custom droids (docs.factory.com). Subagents can run in parallel, but the page does not say the plan is split that way. Not documented."
+        },
+        "plan-replan": {
+          "omitted": "Pages checked: Interaction Modes, Droid CLI Quickstart, Droid CLI Reference, Droid Exec, Custom droids (docs.factory.com, Spec Mode). Shift+Tab switches modes both ways, but no page describes that as a re-plan step. Not documented."
+        },
+        "plan-critique": {
+          "omitted": "Pages checked: Interaction Modes, Droid Exec, Droid CLI Reference (docs.factory.com). A different model can be chosen for the planning phase, which is a model choice and not a second model reviewing the plan. Not documented."
+        },
+        "plan-readonly": {
+          "omitted": "Pages checked: Interaction Modes, Custom droids, Droid Exec (docs.factory.com). For the interactive main session the page says what Droid should not do and names no tool list, so no label is given; only subagents have a stated restriction. Not documented."
+        },
+        "plan-tracker": {
+          "omitted": "Pages checked: Interaction Modes, Droid CLI Quickstart, Droid CLI Reference, Droid Exec, Custom droids (docs.factory.com, Spec Mode). The plan is shown in the session and optionally saved as a file. Not documented."
+        },
+        "plan-human-only": {
+          "omitted": "Pages checked: Interaction Modes, Droid CLI Quickstart, Droid CLI Reference, Droid Exec, Custom droids (docs.factory.com, Spec Mode). Not documented."
+        },
+        "plan-rollout": {
+          "omitted": "Pages checked: Interaction Modes, Droid CLI Quickstart, Droid CLI Reference, Droid Exec, Custom droids (docs.factory.com, Spec Mode). Not documented."
         }
       },
       "demoable": {
@@ -416,6 +571,67 @@
           "asOf": "2026-10-19",
           "short": "Plan steps; no task store",
           "chip": "Plan steps"
+        },
+        "plan-clarify": {
+          "name": "Open questions",
+          "summary": "There is no question round before the draft; the questions arrive with it. The plan includes open questions on anything ambiguous, and the person can iterate to clarify requirements.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/use-copilot-agents/use-plan-mode",
+          "asOf": "2026-10-20",
+          "short": "Questions arrive with the draft",
+          "chip": "◐"
+        },
+        "plan-assumptions": {
+          "name": "Open questions",
+          "summary": "Open questions are part of the standard plan. Assumptions as a named part are not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/use-copilot-agents/use-plan-mode",
+          "asOf": "2026-10-20",
+          "short": "Open questions yes; assumptions not documented",
+          "chip": "◐"
+        },
+        "plan-editable": {
+          "name": "Open in Editor",
+          "summary": "The person iterates on the draft by conversation before approving. Open in Editor shows the plan as Markdown in an editor tab; whether edited text is read back by the agent is not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/use-copilot-agents/use-plan-mode",
+          "asOf": "2026-10-20",
+          "short": "Iterate in chat; Open in Editor",
+          "chip": "✓"
+        },
+        "plan-saved": {
+          "name": "Open in Editor",
+          "summary": "The plan lives in the chat view by default. Open in Editor produces a Markdown document in an editor tab that the person can save as a file; the page names no folder or file name.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/use-copilot-agents/use-plan-mode",
+          "asOf": "2026-10-20",
+          "short": "Chat; Open in Editor gives Markdown",
+          "chip": "Chat + File"
+        },
+        "plan-ordering": {
+          "omitted": "Pages checked: Using plan mode in your IDE; Using agent mode in your IDE (docs.github.com, Plan mode in the IDE). The plan is a breakdown into actionable steps with no mention of dependencies. Not documented."
+        },
+        "plan-parallel": {
+          "omitted": "Pages checked: Using plan mode in your IDE; Using agent mode in your IDE; Using subagents in your IDE (docs.github.com). The subagents page does not say the plan is split that way. Not documented."
+        },
+        "plan-replan": {
+          "omitted": "Pages checked: Using plan mode in your IDE; Using agent mode in your IDE; Using subagents in your IDE (docs.github.com). The plan page describes iteration before approval only. Not documented."
+        },
+        "plan-critique": {
+          "omitted": "Pages checked: Using plan mode in your IDE; Using agent mode in your IDE; Using subagents in your IDE (docs.github.com). Subagents use the same model as the main session. Not documented."
+        },
+        "plan-readonly": {
+          "name": "Plan agent",
+          "summary": "As the page states it, the plan agent researches with read-only tools and makes no code change until the plan is approved. The page does not list the tools.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/use-copilot-agents/use-plan-mode",
+          "asOf": "2026-10-20",
+          "short": "Read-only tools until approval",
+          "chip": "Tool restriction"
+        },
+        "plan-tracker": {
+          "omitted": "Pages checked: Using plan mode in your IDE; Using agent mode in your IDE (docs.github.com, Plan mode in the IDE). The outputs named are the chat plan and the Markdown document. Not documented."
+        },
+        "plan-human-only": {
+          "omitted": "Pages checked: Using plan mode in your IDE; Using agent mode in your IDE (docs.github.com, Plan mode in the IDE). Not documented."
+        },
+        "plan-rollout": {
+          "omitted": "Pages checked: Using plan mode in your IDE; Using agent mode in your IDE (docs.github.com, Plan mode in the IDE). The standard plan is summary, steps and open questions. Not documented."
         }
       },
       "demoable": {
@@ -549,6 +765,62 @@
           "asOf": "2026-10-19",
           "short": "PLAN.md step list is the handoff",
           "chip": "Plan steps"
+        },
+        "plan-clarify": {
+          "name": "unknown",
+          "summary": "The SDK example's task text tells the planning agent not to ask clarifying questions and to write its plan straight away. That line belongs to the example task, not to a documented setting of the planning preset.",
+          "sourceUrl": "https://docs.openhands.dev/sdk/guides/agent-custom.md",
+          "asOf": "2026-10-20",
+          "short": "Example forbids questions",
+          "chip": "✗"
+        },
+        "plan-assumptions": {
+          "omitted": "Pages checked: Creating Custom Agent, Task Tool Set, File-Based Agents, Ask Oracle (docs.openhands.dev, planning agent then execution agent). The fixed plan outline has no assumptions or open-questions part. Not documented."
+        },
+        "plan-editable": {
+          "omitted": "Pages checked: Creating Custom Agent, Task Tool Set, File-Based Agents, Ask Oracle (docs.openhands.dev, planning agent then execution agent). There is no approval point, and no page describes editing the plan between the two phases. Not documented."
+        },
+        "plan-saved": {
+          "name": "PLAN.md",
+          "summary": "A file named PLAN.md in the conversation's workspace folder. The planning agent's editor tool can write that one file only.",
+          "sourceUrl": "https://docs.openhands.dev/sdk/guides/agent-custom.md",
+          "asOf": "2026-10-20",
+          "short": "PLAN.md in the workspace folder",
+          "chip": "File"
+        },
+        "plan-ordering": {
+          "name": "Step list",
+          "summary": "The outline asks for step-by-step implementation steps, so order is implied by the list. Explicit dependencies between steps are not documented.",
+          "sourceUrl": "https://docs.openhands.dev/sdk/guides/agent-custom.md",
+          "asOf": "2026-10-20",
+          "short": "Ordered steps, no explicit dependencies",
+          "chip": "◐"
+        },
+        "plan-parallel": {
+          "omitted": "Pages checked: Creating Custom Agent, Task Tool Set, File-Based Agents, Ask Oracle (docs.openhands.dev, planning agent then execution agent). The Task Tool Set page calls sub-agent delegation a fit for sequential blocking work. Not documented."
+        },
+        "plan-replan": {
+          "omitted": "Pages checked: Creating Custom Agent, Task Tool Set, File-Based Agents, Ask Oracle (docs.openhands.dev, planning agent then execution agent). The sample runs planning once and execution once, with no path back to the planner. Not documented."
+        },
+        "plan-critique": {
+          "omitted": "Pages checked: Creating Custom Agent, Task Tool Set, File-Based Agents, Ask Oracle (docs.openhands.dev, planning agent then execution agent). A separate optional tool asks a differently configured model for a one-off second opinion, but the planning agent's tool list does not include it. Not documented."
+        },
+        "plan-readonly": {
+          "name": "Planning agent tools",
+          "summary": "The planning agent is given only file-pattern search, content search and an editor limited to PLAN.md, so it has no way to run commands or edit source.",
+          "sourceUrl": "https://docs.openhands.dev/sdk/guides/agent-custom.md",
+          "asOf": "2026-10-20",
+          "short": "Search tools and a PLAN.md-only editor",
+          "chip": "Tool restriction"
+        },
+        "plan-tracker": {
+          "omitted": "Pages checked: Creating Custom Agent, Task Tool Set, File-Based Agents, Ask Oracle (docs.openhands.dev, planning agent then execution agent). The output is the PLAN.md file. Not documented."
+        },
+        "plan-human-only": {
+          "omitted": "Pages checked: Creating Custom Agent, Task Tool Set, File-Based Agents, Ask Oracle (docs.openhands.dev, planning agent then execution agent). Not documented."
+        },
+        "plan-rollout": {
+          "omitted": "Pages checked: Creating Custom Agent, Task Tool Set, File-Based Agents, Ask Oracle (docs.openhands.dev, planning agent then execution agent). The outline's only verification part is a testing section. Not documented."
         }
       },
       "demoable": {
@@ -678,6 +950,77 @@
           "asOf": "2026-10-19",
           "short": "One plan; independent steps in parallel",
           "chip": "Plan steps + Parallel"
+        },
+        "plan-clarify": {
+          "name": "Clarifying questions",
+          "summary": "Step one of the documented flow is the agent asking clarifying questions, and the Agent tool list has an ask-questions tool that lets the agent keep working while it waits for the answer.",
+          "sourceUrl": "https://cursor.com/docs/agent/plan-mode.md",
+          "asOf": "2026-10-20",
+          "short": "Questions come first",
+          "chip": "✓"
+        },
+        "plan-assumptions": {
+          "name": "Clarifying questions",
+          "summary": "Unclear requirements are named as a reason to use the mode, and the questions are the documented route for surfacing them. A plan section for assumptions or open questions is not documented.",
+          "sourceUrl": "https://cursor.com/docs/agent/plan-mode.md",
+          "asOf": "2026-10-20",
+          "short": "Questions yes; plan section not documented",
+          "chip": "◐"
+        },
+        "plan-editable": {
+          "name": "Plan file",
+          "summary": "The plan opens as a virtual file you can read and edit, through chat or as markdown, and work starts only when you click Build.",
+          "sourceUrl": "https://cursor.com/docs/agent/plan-mode.md",
+          "asOf": "2026-10-20",
+          "short": "Edit the plan, then Build",
+          "chip": "✓"
+        },
+        "plan-saved": {
+          "name": "Save to workspace",
+          "summary": "The plan is kept in the home directory by default; Save to workspace moves it into the repo for later reference, team sharing and documentation. It is not saved in chat only.",
+          "sourceUrl": "https://cursor.com/docs/agent/plan-mode.md",
+          "asOf": "2026-10-20",
+          "short": "Home folder; Save to workspace moves it",
+          "chip": "File"
+        },
+        "plan-ordering": {
+          "name": "Build in Parallel",
+          "summary": "From a plan, Build in Parallel keeps dependent steps in order. How a plan marks the dependency is not documented.",
+          "sourceUrl": "https://cursor.com/help/ai-features/multi-agent.md",
+          "asOf": "2026-10-20",
+          "short": "Parallel build keeps step order",
+          "chip": "◐"
+        },
+        "plan-parallel": {
+          "name": "Build in Parallel",
+          "summary": "Build in Parallel runs the plan's independent steps at once.",
+          "sourceUrl": "https://cursor.com/help/ai-features/multi-agent.md",
+          "asOf": "2026-10-20",
+          "short": "Build in Parallel for independent steps",
+          "chip": "✓"
+        },
+        "plan-replan": {
+          "name": "Revert and rerun",
+          "summary": "If the build goes wrong, the docs say to revert the files, make the plan more specific and run it again. Whether a blocked build triggers this on its own is not documented.",
+          "sourceUrl": "https://cursor.com/docs/agent/plan-mode.md",
+          "asOf": "2026-10-20",
+          "short": "By restart, not a plan step",
+          "chip": "◐"
+        },
+        "plan-critique": {
+          "omitted": "Pages checked: Plan Mode, Plan mode help, Cursor Agent, Multi-agent help (cursor.com, Plan Mode). The plan is reviewed by the person. Not documented."
+        },
+        "plan-readonly": {
+          "omitted": "Pages checked: Plan Mode, Plan mode help, Cursor Agent, Multi-agent help (cursor.com, Plan Mode). The pages say a plan is made before writing any code but do not say whether edit tools are withheld or the agent is only told not to edit, so no label is given. Not documented."
+        },
+        "plan-tracker": {
+          "omitted": "Pages checked: Plan Mode, Plan mode help, Cursor Agent, Multi-agent help (cursor.com, Plan Mode). The plan is a file, not a ticket. Not documented."
+        },
+        "plan-human-only": {
+          "omitted": "Pages checked: Plan Mode, Plan mode help, Cursor Agent, Multi-agent help (cursor.com, Plan Mode). Not documented."
+        },
+        "plan-rollout": {
+          "omitted": "Pages checked: Plan Mode, Plan mode help, Cursor Agent, Multi-agent help (cursor.com, Plan Mode). The separate Rollouts feature writes a rollout plan when a pull request opens, which is a different artifact from this plan. Not documented."
         }
       },
       "demoable": {
@@ -809,6 +1152,72 @@
         },
         "design-tasks": {
           "omitted": "Pages checked: Permission modes, Best practices, Common workflows, Tools reference, Interactive mode (code.claude.com). Approving ends plan mode and Claude edits in the same session; no page says the plan is split into tasks."
+        },
+        "plan-clarify": {
+          "name": "Question tool",
+          "summary": "Claude can ask multiple-choice questions with its question tool while it plans; you answer by picking an option or typing your own text.",
+          "sourceUrl": "https://code.claude.com/docs/en/tools-reference",
+          "asOf": "2026-10-20",
+          "short": "Multiple-choice question tool",
+          "chip": "✓"
+        },
+        "plan-assumptions": {
+          "name": "Question tool",
+          "summary": "The question tool is the documented route for surfacing what Claude is unsure of. A plan section for assumptions or open questions is not documented.",
+          "sourceUrl": "https://code.claude.com/docs/en/tools-reference",
+          "asOf": "2026-10-20",
+          "short": "Questions yes; plan section not documented",
+          "chip": "◐"
+        },
+        "plan-editable": {
+          "name": "Ctrl+G",
+          "summary": "Ctrl+G opens the proposed plan in your editor so you can change it before Claude proceeds, and \"No, keep planning\" lets you tell Claude what to change.",
+          "sourceUrl": "https://code.claude.com/docs/en/permission-modes",
+          "asOf": "2026-10-20",
+          "short": "Ctrl+G opens plan in your editor",
+          "chip": "✓"
+        },
+        "plan-saved": {
+          "name": "plansDirectory",
+          "summary": "The plan is a file, by default under the user's Claude directory in the home folder; the plansDirectory setting moves it into the project. Not chat only.",
+          "sourceUrl": "https://code.claude.com/docs/en/settings-reference",
+          "asOf": "2026-10-20",
+          "short": "Plan file; plansDirectory moves it",
+          "chip": "File"
+        },
+        "plan-ordering": {
+          "omitted": "Pages checked: Permission modes, Best practices, Common workflows, Tools reference (code.claude.com, Plan mode), Large codebases. The large-codebase guidance is advice to the person, not a marked ordering in the plan. Not documented."
+        },
+        "plan-parallel": {
+          "omitted": "Pages checked: Permission modes, Best practices, Common workflows, Large codebases (code.claude.com). Parallel work is a separate choice: worktrees, subagents, agent teams or /batch. Not documented."
+        },
+        "plan-replan": {
+          "name": "/plan",
+          "summary": "After approval the session leaves plan mode; to plan again, cycle back with Shift+Tab or start a prompt with /plan. Whether a blocked build triggers a re-plan on its own is not documented.",
+          "sourceUrl": "https://code.claude.com/docs/en/permission-modes",
+          "asOf": "2026-10-20",
+          "short": "By hand with Shift+Tab or /plan",
+          "chip": "◐"
+        },
+        "plan-critique": {
+          "omitted": "Pages checked: Permission modes, Best practices, Common workflows, Advisor (code.claude.com). The advisor tool is a session-wide setting that Claude decides when to call, not a plan-review step. Not documented."
+        },
+        "plan-readonly": {
+          "name": "Plan mode",
+          "summary": "Edits stay blocked until you approve, so mostly a tool restriction. The exception is an interactive terminal session with bypass permissions available, where the block is not enforced and Claude is only told to plan.",
+          "sourceUrl": "https://code.claude.com/docs/en/permission-modes",
+          "asOf": "2026-10-20",
+          "short": "Tool restriction; bypass makes it instruction",
+          "chip": "Tool restriction + Instruction only"
+        },
+        "plan-tracker": {
+          "omitted": "Pages checked: Permission modes, Best practices, Common workflows, Tools reference (code.claude.com, Plan mode). The plan is a file. Not documented."
+        },
+        "plan-human-only": {
+          "omitted": "Pages checked: Permission modes, Best practices, Common workflows, Tools reference (code.claude.com, Plan mode). Not documented."
+        },
+        "plan-rollout": {
+          "omitted": "Pages checked: Permission modes, Best practices, Common workflows, Tools reference (code.claude.com, Plan mode), Large codebases. The only rollback and rollout hits are unrelated. Not documented."
         }
       },
       "demoable": {

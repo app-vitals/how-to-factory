@@ -33,6 +33,18 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
     { id: "design-reuse", label: "Names reuse, risks or breaking changes" },
     { id: "design-approval", label: "Approval before work starts" },
     { id: "design-tasks", label: "How it becomes tasks" },
+    { id: "plan-clarify", label: "plan-clarify" },
+    { id: "plan-assumptions", label: "plan-assumptions" },
+    { id: "plan-editable", label: "plan-editable" },
+    { id: "plan-saved", label: "plan-saved" },
+    { id: "plan-ordering", label: "plan-ordering" },
+    { id: "plan-parallel", label: "plan-parallel" },
+    { id: "plan-replan", label: "plan-replan" },
+    { id: "plan-critique", label: "plan-critique" },
+    { id: "plan-readonly", label: "plan-readonly" },
+    { id: "plan-tracker", label: "plan-tracker" },
+    { id: "plan-human-only", label: "plan-human-only" },
+    { id: "plan-rollout", label: "plan-rollout" },
   ],
   products: [
     {
@@ -56,6 +68,18 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
         "design-reuse": cell({ chip: "◐" }),
         "design-approval": cell({ chip: "Human approves" }),
         "design-tasks": cell({ chip: "Plan steps + Parallel" }),
+        "plan-clarify": cell({ chip: "✓" }),
+        "plan-assumptions": cell({ chip: "◐" }),
+        "plan-editable": cell({ chip: "✓" }),
+        "plan-saved": cell({ chip: "File + Chat" }),
+        "plan-ordering": cell({ chip: "◐" }),
+        "plan-parallel": cell({ chip: "✗" }),
+        "plan-replan": cell({ chip: "◐" }),
+        "plan-critique": cell({ chip: "✗" }),
+        "plan-readonly": cell({ chip: "Tool restriction + Instruction only" }),
+        "plan-tracker": cell({ chip: "✗" }),
+        "plan-human-only": cell({ chip: "✗" }),
+        "plan-rollout": cell({ chip: "✗" }),
       },
       demoable: { kind: "unknown" },
       destination: { summary: "unknown" },
@@ -112,7 +136,7 @@ describe("validateLandscape", () => {
     expect(validateLandscape(e, TODAY).join()).toContain("cell verify-runs-app");
   });
   test("every component cell is required for a factory", () => {
-    for (const id of ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks"]) {
+    for (const id of ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks", "plan-clarify", "plan-assumptions", "plan-editable", "plan-saved", "plan-ordering", "plan-parallel", "plan-replan", "plan-critique", "plan-readonly", "plan-tracker", "plan-human-only", "plan-rollout"]) {
       const d = make();
       delete (factory(d).cells as Record<string, unknown>)[id];
       expect(validateLandscape(d, TODAY).join()).toContain(`cell ${id}: missing`);
@@ -253,6 +277,33 @@ describe("real data", () => {
   test("plan-design cell may be omitted with a reason", () => {
     const d = make();
     factory(d).cells["design-reuse"] = { omitted: "not documented; checked Plan Mode page" };
+    expect(validateLandscape(d, TODAY)).toEqual([]);
+  });
+  test("depth dimension chips follow their format", () => {
+    const withCell = (id: "plan-clarify" | "plan-saved" | "plan-readonly", chip: string) => {
+      const d = make();
+      factory(d).cells[id] = cell({ chip });
+      return validateLandscape(d, TODAY).join();
+    };
+    expect(withCell("plan-clarify", "◐")).toBe("");
+    expect(withCell("plan-clarify", "Yes")).toContain("must be one of");
+    expect(withCell("plan-saved", "Chat + File")).toBe("");
+    expect(withCell("plan-saved", "Database")).toContain("chip label");
+    expect(withCell("plan-readonly", "Tool restriction + Instruction only")).toBe("");
+    expect(withCell("plan-readonly", "Honor system")).toContain("chip label");
+  });
+  test("depth dimension cells need chip, short, sourceUrl and asOf", () => {
+    for (const id of ["plan-clarify", "plan-readonly"] as const) {
+      for (const [field, msg] of [["chip", "missing chip"], ["short", "missing short"], ["sourceUrl", "missing sourceUrl"], ["asOf", "missing asOf"]] as const) {
+        const d = make();
+        factory(d).cells[id] = cell({ chip: "✓", [field]: "" });
+        expect(validateLandscape(d, TODAY).join()).toContain(`cell ${id}: ${msg}`);
+      }
+    }
+  });
+  test("depth dimension cell may be omitted with a reason", () => {
+    const d = make();
+    factory(d).cells["plan-rollout"] = { omitted: "not documented; checked Plan Mode page" };
     expect(validateLandscape(d, TODAY)).toEqual([]);
   });
 });
