@@ -1,4 +1,4 @@
-export const COMPONENT_IDS = ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks"] as const;
+export const COMPONENT_IDS = ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks", "plan-clarify", "plan-assumptions", "plan-editable", "plan-saved", "plan-ordering", "plan-parallel", "plan-replan", "plan-critique", "plan-readonly", "plan-tracker", "plan-human-only", "plan-rollout"] as const;
 type ComponentId = (typeof COMPONENT_IDS)[number];
 
 /** Longest `short` a slide cell may carry, in words. */
@@ -36,6 +36,18 @@ export const CHIP_RULES: Record<ComponentId, ChipRule> = {
   "design-reuse": MARK,
   "design-approval": { kind: "labels", allowed: ["Human", "Human approves", "Automated"] },
   "design-tasks": { kind: "labels", allowed: ["Plan steps", "Parallel", "Tickets", "Same session"] },
+  "plan-clarify": MARK,
+  "plan-assumptions": MARK,
+  "plan-editable": MARK,
+  "plan-saved": { kind: "labels", allowed: ["File", "Chat"] },
+  "plan-ordering": MARK,
+  "plan-parallel": MARK,
+  "plan-replan": MARK,
+  "plan-critique": MARK,
+  "plan-readonly": { kind: "labels", allowed: ["Tool restriction", "Instruction only"] },
+  "plan-tracker": MARK,
+  "plan-human-only": MARK,
+  "plan-rollout": MARK,
 };
 
 /** Task-queue products have no component; their `queue` cell chip is the product's own term. */
