@@ -27,6 +27,123 @@ The pages are under "Pages read"; the rest are under "Ruled out (why)".
 | **Managed sessions** (a coordinator session splitting large work) | Yes, as the prompt asks. The migration walkthrough first uses Ask mode to find which files use the old client, group them by area and flag shared state, then tells the coordinator to analyse the dependency graph. ([Migrate 50 Files](https://docs.devin.ai/use-cases/gallery/parallelize-migration.md), [Advanced Capabilities](https://docs.devin.ai/work-with-devin/advanced-capabilities.md), 2026-10-19) | A proposed list of work packages: each group with its file list, plus notes on which group must go first because of a dependency. Shown in chat as text. ([Migrate 50 Files](https://docs.devin.ai/use-cases/gallery/parallelize-migration.md), 2026-10-19) | Yes, for coupling. Shared state and cross-group imports are flagged and drive ordering (the example puts auth before admin). Reuse and breaking changes for outside consumers: not documented (checked: Migrate 50 Files, Advanced Capabilities, Dynamic Workflows, Best Practices). ([Migrate 50 Files](https://docs.devin.ai/use-cases/gallery/parallelize-migration.md), 2026-10-19) | **Human approves** in the walkthrough, because its prompt says to show the grouping for approval first. By default the coordinator starts child sessions without asking; turning off the "Auto-approve child sessions" preference makes it ask before each batch, so the default is **Automated**. Dynamic workflows likewise run without asking unless "Auto-approve workflows" is turned off. ([Migrate 50 Files](https://docs.devin.ai/use-cases/gallery/parallelize-migration.md), [Advanced Capabilities](https://docs.devin.ai/work-with-devin/advanced-capabilities.md), [Dynamic Workflows](https://docs.devin.ai/work-with-devin/dynamic-workflows.md), 2026-10-19) | One child session per work package, each on its own machine, each opening its own PR; the coordinator monitors them and can message them. In the example, the dependent package starts after the one it needs merges. ([Advanced Capabilities](https://docs.devin.ai/work-with-devin/advanced-capabilities.md), [Migrate 50 Files](https://docs.devin.ai/use-cases/gallery/parallelize-migration.md), 2026-10-19) |
 | **PRD to tickets** (gallery recipe: Notion document in, Linear tickets out) | Yes, as the prompt asks. Devin reads the document through a Notion connector, then searches the codebase to map the architecture before cutting work. ([PRD to Sprint Tickets](https://docs.devin.ai/use-cases/gallery/prd-to-tickets.md), 2026-10-19) | One Linear ticket per independent work package, each with a description, acceptance criteria and the files likely to change, ordered by suggested sequence, plus a summary table in chat. ([PRD to Sprint Tickets](https://docs.devin.ai/use-cases/gallery/prd-to-tickets.md), 2026-10-19) | Dependencies between tickets are named. Reuse, risks and breaking changes: not documented (checked: PRD to Sprint Tickets, Linear, Bulk-Plan Your Ticket Backlog). ([PRD to Sprint Tickets](https://docs.devin.ai/use-cases/gallery/prd-to-tickets.md), 2026-10-19) | **Human** reviews the tickets after they exist and then assigns Devin or adds an implement label. The page does not show an approval before the tickets are written. ([PRD to Sprint Tickets](https://docs.devin.ai/use-cases/gallery/prd-to-tickets.md), 2026-10-19) | Tickets in Linear are the tasks, carrying acceptance criteria and dependencies. A person can ask Devin to split a broad ticket; each ticket is later started by assignment or an implement label. ([PRD to Sprint Tickets](https://docs.devin.ai/use-cases/gallery/prd-to-tickets.md), [Linear](https://docs.devin.ai/integrations/linear.md), 2026-10-19) |
 
+## Depth dimensions
+
+Added in the depth-reset pass. Twelve extra dimensions for each of the six surfaces above, with the same surface names.
+Every page below was fetched again on **2026-10-20** (the docs index https://docs.devin.ai/llms.txt first, then each page
+as raw Markdown and searched for the dimension's terms; the small gallery and integration pages were read through). A
+"not documented" entry names the pages checked. Nothing here changes the grid above. Names are Devin's own. Where a
+dimension is a prompt convention and not a product behaviour, the entry says so.
+
+Source short names, all under https://docs.devin.ai and all fetched 2026-10-20: Ask Devin `/work-with-devin/ask-devin.md`;
+First Session `/get-started/first-run.md`; Investigate `/use-cases/gallery/investigate-codebase-ask-devin.md`; Commands
+`/cli/reference/commands.md`; Changelog `/cli/changelog/stable.md`; Essential `/cli/essential-commands.md`; Subagents
+`/cli/subagents.md`; Linear `/integrations/linear.md`; Bulk-Plan `/use-cases/gallery/bulk-plan-backlog.md`; PRD `/use-cases/gallery/prd-to-tickets.md`;
+Spec `/use-cases/gallery/implement-feature-from-spec.md`; Migrate `/use-cases/gallery/parallelize-migration.md`; Advanced
+`/work-with-devin/advanced-capabilities.md`.
+
+### Ask Devin (cloud app, Ask mode, with DeepWiki)
+
+| Dimension | What the docs say | Sources (fetched 2026-10-20) |
+| --- | --- | --- |
+| Clarify or interview mode | Conversational: the person asks, Devin answers with code citations, and the person clarifies their goal before starting a session. No separate interview mode where Devin questions the person first. Not documented (checked: Ask Devin, First Session, Investigate). | [Ask Devin](https://docs.devin.ai/work-with-devin/ask-devin.md), [First Session](https://docs.devin.ai/get-started/first-run.md) |
+| Assumptions or open questions surfaced | Not documented (checked: Ask Devin, First Session, Investigate). | same pages |
+| Plan editable before approval | The person can type their own implementation prompt before launching the build session. Editing Devin's drafted prompt: not documented (checked: Ask Devin, First Session, Investigate). | [Investigate](https://docs.devin.ai/use-cases/gallery/investigate-codebase-ask-devin.md) |
+| Where the plan is saved | In the Ask Devin conversation; the build session's status shows back in it. A plan file or other store: not documented (checked: Ask Devin, First Session). | [Ask Devin](https://docs.devin.ai/work-with-devin/ask-devin.md) |
+| Dependencies or ordering between steps | Not documented as a built-in output (checked: Ask Devin, First Session, Investigate). | same pages |
+| Parallel split of independent work | Not documented (checked: Ask Devin, First Session, Investigate). | same pages |
+| Re-plan after execution is blocked | Not documented (checked: Ask Devin, First Session, Investigate). | same pages |
+| Second-model plan critique | Not documented (checked: Ask Devin, First Session, Investigate). | same pages |
+| Read-only enforcement | Stated as an outcome: the mode explores and plans "without making changes to the actual code". Whether that is a tool restriction or an instruction: not documented (checked: Ask Devin, First Session). | [First Session](https://docs.devin.ai/get-started/first-run.md) |
+| Tracker or ticket output | Not documented (checked: Ask Devin, First Session, Investigate). | same pages |
+| Human-only step flag | Not documented (checked: Ask Devin, First Session, Investigate). | same pages |
+| Rollout or rollback section | Not documented (checked: Ask Devin, First Session, Investigate). | same pages |
+
+### Devin CLI, Plan mode (terminal)
+
+| Dimension | What the docs say | Sources (fetched 2026-10-20) |
+| --- | --- | --- |
+| Clarify or interview mode | The plan profile carries a question tool. A changelog entry says a keyword such as `megaplan` makes the agent plan more widely and always ask at least one clarifying question before writing. | [Commands](https://docs.devin.ai/cli/reference/commands.md), [Changelog](https://docs.devin.ai/cli/changelog/stable.md) |
+| Assumptions or open questions surfaced | Not documented as an output (checked: Commands, Essential, Changelog). | same pages |
+| Plan editable before approval | The exit prompt offers "No, plan needs changes", which sends it back for revision. Editing the plan file directly before approving: not documented (checked: Commands, Essential, Changelog). | [Changelog](https://docs.devin.ai/cli/changelog/stable.md) |
+| Where the plan is saved | Written to a file that always has a heading and a summary paragraph; the session's plan files are exempt from the sensitive-path prompt. The path: not documented (checked: Commands, Essential, Changelog). On exit a plan can be handed to a cloud session. | [Changelog](https://docs.devin.ai/cli/changelog/stable.md) |
+| Dependencies or ordering between steps | Not documented (checked: Commands, Essential, Changelog, Subagents). | same pages |
+| Parallel split of independent work | Not documented for plans. The plan profile's tool list has no subagent tool, and the subagents page says nothing about plan mode (checked: Commands, Subagents). Subagents themselves can run in the background in parallel. | [Commands](https://docs.devin.ai/cli/reference/commands.md), [Subagents](https://docs.devin.ai/cli/subagents.md) |
+| Re-plan after execution is blocked | Not documented. The mode can be switched back with `/plan` at any time, and resuming a session restores the mode; neither is described as a re-plan step (checked: Commands, Essential, Changelog). | [Commands](https://docs.devin.ai/cli/reference/commands.md), [Changelog](https://docs.devin.ai/cli/changelog/stable.md) |
+| Second-model plan critique | Not documented for plans (checked: Commands, Changelog, Subagents). The subagents page shows a custom reviewer profile for code changes that the person must write. | [Subagents](https://docs.devin.ai/cli/subagents.md) |
+| Read-only enforcement | **Tool restriction.** The plan profile is defined by a list of read-only tools (grep, glob, read, todo, question, exit-plan); later entries add read-only web fetch, web search and read-only MCP tools. | [Commands](https://docs.devin.ai/cli/reference/commands.md), [Changelog](https://docs.devin.ai/cli/changelog/stable.md) |
+| Tracker or ticket output | Not documented (checked: Commands, Essential, Changelog). | same pages |
+| Human-only step flag | Not documented (checked: Commands, Essential, Changelog). | same pages |
+| Rollout or rollback section | Not documented (checked: Commands, Essential, Changelog). | same pages |
+
+### Ticket planning in Linear (the `!plan` playbook, bulk use), plus Jira
+
+| Dimension | What the docs say | Sources (fetched 2026-10-20) |
+| --- | --- | --- |
+| Clarify or interview mode | No live interview. Devin leaves questions in its ticket comment and, for yellow tickets, the person answers in the ticket thread and Devin re-evaluates. | [Bulk-Plan](https://docs.devin.ai/use-cases/gallery/bulk-plan-backlog.md) |
+| Assumptions or open questions surfaced | Yes: each comment lists open questions that need a human answer; the example flags a missing rollback decision. | [Bulk-Plan](https://docs.devin.ai/use-cases/gallery/bulk-plan-backlog.md) |
+| Plan editable before approval | Not documented (checked: Bulk-Plan, Linear). Follow-up messages in the ticket's agent thread are supported. | [Linear](https://docs.devin.ai/integrations/linear.md) |
+| Where the plan is saved | A comment on the ticket; the working todo list also syncs to Linear's plan view. | [Bulk-Plan](https://docs.devin.ai/use-cases/gallery/bulk-plan-backlog.md), [Linear](https://docs.devin.ai/integrations/linear.md) |
+| Dependencies or ordering between steps | Not documented (checked: Bulk-Plan, Linear). The example notes call-site counts, not an order. | [Bulk-Plan](https://docs.devin.ai/use-cases/gallery/bulk-plan-backlog.md) |
+| Parallel split of independent work | Many tickets are scoped in parallel. Splitting one ticket into parallel parts: not documented (checked: Bulk-Plan, Linear). | [Bulk-Plan](https://docs.devin.ai/use-cases/gallery/bulk-plan-backlog.md) |
+| Re-plan after execution is blocked | Re-evaluation happens before work, after questions are answered. After a blocked build: not documented (checked: Bulk-Plan, Linear). | [Bulk-Plan](https://docs.devin.ai/use-cases/gallery/bulk-plan-backlog.md) |
+| Second-model plan critique | Not documented (checked: Bulk-Plan, Linear). | same pages |
+| Read-only enforcement | **Instruction only.** The `!plan` playbook is described as telling Devin to analyze and comment without writing code. | [Bulk-Plan](https://docs.devin.ai/use-cases/gallery/bulk-plan-backlog.md) |
+| Tracker or ticket output | The tracker is the output: a structured comment on each ticket. A playbook can also have Devin set labels from its findings. New sub-tickets: not documented (checked: Bulk-Plan, Linear). | [Bulk-Plan](https://docs.devin.ai/use-cases/gallery/bulk-plan-backlog.md), [Linear](https://docs.devin.ai/integrations/linear.md) |
+| Human-only step flag | Yes: a red mark means the ticket is best given to a human engineer; Devin's analysis still comes with it. | [Bulk-Plan](https://docs.devin.ai/use-cases/gallery/bulk-plan-backlog.md) |
+| Rollout or rollback section | No such section in the documented comment format. Rollback appears only as an example open question (checked: Bulk-Plan, Linear). | [Bulk-Plan](https://docs.devin.ai/use-cases/gallery/bulk-plan-backlog.md) |
+
+### Spec-first build session (cloud agent, plan requested in the prompt)
+
+| Dimension | What the docs say | Sources (fetched 2026-10-20) |
+| --- | --- | --- |
+| Clarify or interview mode | Not a product mode. The page suggests an optional Ask Devin scoping step first. Not documented as a built-in interview (checked: Spec, First Session). | [Spec](https://docs.devin.ai/use-cases/gallery/implement-feature-from-spec.md) |
+| Assumptions or open questions surfaced | Not documented (checked: Spec, First Session). | same pages |
+| Plan editable before approval | The example prompt has Devin share its plan in chat for approval before code. A revise step is not shown (checked: Spec). | [Spec](https://docs.devin.ai/use-cases/gallery/implement-feature-from-spec.md) |
+| Where the plan is saved | In the session conversation; no file or store is described (checked: Spec). | [Spec](https://docs.devin.ai/use-cases/gallery/implement-feature-from-spec.md) |
+| Dependencies or ordering between steps | The prompt asks for the order of implementation. No dependency graph is documented (checked: Spec). | [Spec](https://docs.devin.ai/use-cases/gallery/implement-feature-from-spec.md) |
+| Parallel split of independent work | Not documented; one session builds everything (checked: Spec, First Session). | same pages |
+| Re-plan after execution is blocked | Not documented (checked: Spec, First Session). | same pages |
+| Second-model plan critique | Not documented for the plan. A separate Devin Review pass is suggested after the PR exists. | [Spec](https://docs.devin.ai/use-cases/gallery/implement-feature-from-spec.md) |
+| Read-only enforcement | **Instruction only.** "Before writing any code" sits in the prompt; the page describes no tool restriction. | [Spec](https://docs.devin.ai/use-cases/gallery/implement-feature-from-spec.md) |
+| Tracker or ticket output | Not documented; the spec may come from a ticket but the output is a PR (checked: Spec). | [Spec](https://docs.devin.ai/use-cases/gallery/implement-feature-from-spec.md) |
+| Human-only step flag | Not documented (checked: Spec, First Session). | same pages |
+| Rollout or rollback section | Not documented. The prompt asks the plan to list database changes; no rollout, flag or rollback content (checked: Spec). | [Spec](https://docs.devin.ai/use-cases/gallery/implement-feature-from-spec.md) |
+
+### Managed sessions (a coordinator session splitting large work)
+
+| Dimension | What the docs say | Sources (fetched 2026-10-20) |
+| --- | --- | --- |
+| Clarify or interview mode | No interview. An Ask Devin scoping step comes first, and a running child session can ask for input, which wakes the coordinator. | [Migrate](https://docs.devin.ai/use-cases/gallery/parallelize-migration.md), [Advanced](https://docs.devin.ai/work-with-devin/advanced-capabilities.md) |
+| Assumptions or open questions surfaced | Not documented as an output. Coupling between groups is flagged, which is a finding, not an open question (checked: Migrate, Advanced). | [Migrate](https://docs.devin.ai/use-cases/gallery/parallelize-migration.md) |
+| Plan editable before approval | The grouping is shown with a start prompt and can be approved. A change step beyond yes or no: not documented (checked: Migrate, Advanced). | [Migrate](https://docs.devin.ai/use-cases/gallery/parallelize-migration.md) |
+| Where the plan is saved | Shown in the coordinator session's chat; no persisted plan is described (checked: Migrate, Advanced). | [Migrate](https://docs.devin.ai/use-cases/gallery/parallelize-migration.md) |
+| Dependencies or ordering between steps | Yes: the example marks one group "migrate first" and another as depending on it, and starts the second after the first's PR merges. | [Migrate](https://docs.devin.ai/use-cases/gallery/parallelize-migration.md) |
+| Parallel split of independent work | Yes: independent groups each get a child session on its own machine and its own PR. | [Migrate](https://docs.devin.ai/use-cases/gallery/parallelize-migration.md), [Advanced](https://docs.devin.ai/work-with-devin/advanced-capabilities.md) |
+| Re-plan after execution is blocked | Not documented as a re-plan. The coordinator can message children, put stuck ones to sleep or end them (checked: Migrate, Advanced). | [Advanced](https://docs.devin.ai/work-with-devin/advanced-capabilities.md) |
+| Second-model plan critique | Not documented (checked: Migrate, Advanced). | same pages |
+| Read-only enforcement | No read-only phase. The pre-launch gate is the "Auto-approve child sessions" preference, which is on by default; the example's approval ask is a prompt instruction. | [Advanced](https://docs.devin.ai/work-with-devin/advanced-capabilities.md), [Migrate](https://docs.devin.ai/use-cases/gallery/parallelize-migration.md) |
+| Tracker or ticket output | PRs, one per child. Tickets: not documented (checked: Migrate, Advanced). | [Migrate](https://docs.devin.ai/use-cases/gallery/parallelize-migration.md) |
+| Human-only step flag | Not documented (checked: Migrate, Advanced). | same pages |
+| Rollout or rollback section | Not a plan section. The walkthrough says merge the first group first and run full CI after each merge; rollback is not documented (checked: Migrate, Advanced). | [Migrate](https://docs.devin.ai/use-cases/gallery/parallelize-migration.md) |
+
+### PRD to tickets (gallery recipe: Notion document in, Linear tickets out)
+
+| Dimension | What the docs say | Sources (fetched 2026-10-20) |
+| --- | --- | --- |
+| Clarify or interview mode | None. The person gives the ticket format and conventions up front in the prompt (checked: PRD, Linear). | [PRD](https://docs.devin.ai/use-cases/gallery/prd-to-tickets.md) |
+| Assumptions or open questions surfaced | Not documented (checked: PRD, Linear). | same pages |
+| Plan editable before approval | The tickets are reviewed after they are created, and a broad one can be sent back to be split. No approval before they exist. | [PRD](https://docs.devin.ai/use-cases/gallery/prd-to-tickets.md) |
+| Where the plan is saved | As Linear tickets in a named project, plus a summary table posted in chat. | [PRD](https://docs.devin.ai/use-cases/gallery/prd-to-tickets.md) |
+| Dependencies or ordering between steps | Yes: tickets are ordered by suggested sequence and carry a dependencies column. | [PRD](https://docs.devin.ai/use-cases/gallery/prd-to-tickets.md) |
+| Parallel split of independent work | Work is cut into independent packages, several with no dependency. Running them at the same time is not stated (checked: PRD, Linear). | [PRD](https://docs.devin.ai/use-cases/gallery/prd-to-tickets.md) |
+| Re-plan after execution is blocked | Not documented (checked: PRD, Linear). | same pages |
+| Second-model plan critique | Not documented (checked: PRD, Linear). | same pages |
+| Read-only enforcement | Not documented; the recipe writes tickets and reads the codebase (checked: PRD, Linear). | same pages |
+| Tracker or ticket output | Yes: one ticket per work package, with description, acceptance criteria, a size and likely files. | [PRD](https://docs.devin.ai/use-cases/gallery/prd-to-tickets.md) |
+| Human-only step flag | Not documented (checked: PRD, Linear). | same pages |
+| Rollout or rollback section | Not documented (checked: PRD, Linear). | same pages |
+
 ## Pages read
 
 Fetched 2026-10-19 from the docs index at https://docs.devin.ai/llms.txt and read in full unless noted.
@@ -59,6 +176,16 @@ Fetched 2026-10-19 from the docs index at https://docs.devin.ai/llms.txt and rea
 - Devin CLI, Changelog (Stable): https://docs.devin.ai/cli/changelog/stable.md (searched for plan entries; entry versions and dates were not captured)
 - Release notes 2026: https://docs.devin.ai/release-notes/2026.md (searched for plan entries only)
 
+Re-fetched 2026-10-20 for the depth dimensions (raw Markdown, searched for the dimension terms; the pages marked "read" were read through):
+
+- Ask Devin (read); First Session and Investigate a codebase (searched for plan, prompt, edit and read-only terms): same URLs as above.
+- Linear, Bulk-Plan Your Ticket Backlog, PRD to Sprint Tickets (read): same URLs as above.
+- Migrate 50 Files, Implement a feature from a spec (read): same URLs as above.
+- Advanced Capabilities (read to the end of the managed-sessions section): same URL as above.
+- Devin CLI Commands & Flags, Essential Commands, Changelog (Stable) (searched for plan, question, approval, read-only and file terms): same URLs as above.
+- Devin CLI Subagents (searched for plan, parallel, background, reviewer, read-only): https://docs.devin.ai/cli/subagents.md
+- Devin CLI permissions (searched for plan): https://docs.devin.ai/cli/reference/permissions.md
+
 ## Ruled out (why)
 
 Pages from the same index that I set aside for this lesson. Each reason comes from the page's index description, plus a keyword search for plan, approve and scope on the pages I also fetched (playbooks, skills, memory, knowledge, AGENTS.md, slash commands, session tools, handoff, subagents, GitHub, Devin Review, migration, Java upgrades, Good vs. Bad Instructions). Those were searched or skimmed, not read end to end. Testing & Video Recordings, Automations, Scheduled Sessions and Devin Oncall were ruled out on their index descriptions without being opened, so nothing in the grid relies on them.
@@ -77,3 +204,4 @@ Pages from the same index that I set aside for this lesson. Each reason comes fr
 - Stacked PRs (above, read): splits finished work into ordered pull requests. That is bundling and PR shaping, which another lesson owns, so it is not used in the grid.
 - Estimates and sizes: the PRD-to-tickets and migration walkthroughs include size or complexity estimates; those are left out here on purpose.
 - Enterprise, Federal, Billing, Admin, API and Desktop sections of the index, all non-English indexes, and the Outposts pages: administration, deployment, pricing and translations of the pages above, not planning behaviour.
+- Depth pass, 2026-10-20: Devin Jira integration (https://docs.devin.ai/integrations/jira.md) was fetched but not re-read for the depth dimensions; the Linear and Bulk-Plan pages carry the ticket-planning entries, so Jira cells say nothing beyond the earlier row. Dynamic Workflows (https://docs.devin.ai/work-with-devin/dynamic-workflows.md) and Devin Review were not re-read; no depth entry relies on them.
