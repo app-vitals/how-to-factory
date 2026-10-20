@@ -10,12 +10,15 @@ in a lesson's `options.md` or the [landscape](../landscape/README.md), with a fi
 
 Agreed at the start of the project, and it applies to every lesson:
 
-- **Lesson 1** explains what `plan` and `dev-task` do, builds the most basic version of each live, and runs a simple
+- **Lesson 1** explains what `plan` and `dev-task` do, builds a first version of each live, and runs a simple
   loop that ends at open pull requests. A person reviews and merges.
-- **Every later lesson adds ONE component to the loop that already exists** and ends with the loop doing a little
-  more than it did before.
-- **Each lesson stays about the size of lesson 1:** explain the thing, build the most basic version live, students
-  build their own.
+- **Every later lesson is ONE component, taught deep.** It is added to the loop that already exists and built in that
+  one lesson, so the loop ends doing more than it did before.
+- **Prioritize by expected, common and crucial.** Cover what a factory is expected to do for the component, what is
+  common across factories, and what is crucial because the factory breaks or misleads without it. Anything else is a
+  later deep dive: name it as a destination and the lesson that owns it.
+- **Deeper dives come later.** A lesson delivers real learnings on its component now; fuller treatments get their own
+  lessons.
 - **Lesson order stays open.** Lessons are chosen one at a time from the [backlog](../lessons/README.md).
 - **`factory/` is our demo; lessons stay tool-neutral.** No required language, runner or agent. Concept first, then
   "in our demo we use...", then "yours can be anything".
@@ -37,8 +40,12 @@ One page. It holds:
    plan session queues it, and it is built during the lesson run.
 7. **Prerequisites.**
 8. **Exercise outcomes.**
-9. **Loop delta and size.** What does the loop do after this lesson that it could not before? The delta comes from the
-   live build. Is this about the size of lesson 1?
+9. **Capabilities.** List every capability of the component that this lesson covers (prioritized by expected, common
+   and crucial). For each, give four things: the **concept** (what it is), **why it exists**, a **concrete failure
+   without it**, and **what it takes to build**. A capability missing any of the four is not ready.
+10. **Loop delta and depth.** What does the loop do after this lesson that it could not before? The delta comes from
+    the live build. Does the lesson cover what is expected, common and crucial for its one component, and name the
+    deeper dives it leaves for later?
 
 ## 2. Research protocol
 
@@ -73,20 +80,22 @@ Learned from building the field grid. For every vendor or product the lesson com
 
 ## 4. Deck outline and slide budget
 
-Taken from lesson 1. The deck follows the rules in [CLAUDE.md](../CLAUDE.md) and
+Taken from lesson 1, with a larger budget for deep lessons. The deck follows the rules in [CLAUDE.md](../CLAUDE.md) and
 [`decks/DIAGRAMS.md`](../decks/DIAGRAMS.md).
 
 1. Factory map with the taught component highlighted.
 2. What the human does.
 3. What we build.
-4. Per piece: concept, how the field differs, demo.
+4. Per capability: concept, why it exists, failure without it, how the field differs, demo.
 5. Why (our opinion, said as opinion).
 6. How it works together.
 7. Names.
 8. Destinations.
 9. Exercise.
 
-Budget: about 18 to 20 slides.
+Budget: about 30 to 36 slides. A lesson covers every capability in its brief, and each capability needs its concept,
+why it exists, a failure without it and what it takes to build; 18 to 20 slides only fit a minimal lesson. The
+per-slide limits in CLAUDE.md still apply, so the extra depth comes from more slides, not denser ones.
 
 **Layout.** An options grid fits on one row (at most 4 options). Render every changed slide at 1920x1080 before calling
 a deck task done, using the headless-shell procedure in `planning/lesson1-grokable-slides/PLAN.md`, and look for wrapped

@@ -1,9 +1,9 @@
 # Lesson brief: <title>
 
 > Fill in and get this agreed before any work is queued. One page. See [docs/lesson-playbook.md](../../docs/lesson-playbook.md).
-> Scoping rule: lesson 1 explains plan and dev-task, builds the most basic version of each live, and runs a simple
-> loop that ends at open PRs (a person reviews and merges). Every later lesson adds ONE component to the existing loop
-> and ends with the loop doing a little more. Each lesson is about the size of lesson 1. Order stays open. `factory/`
+> Scoping rule: lesson 1 explains plan and dev-task, builds a first version of each live, and runs a simple
+> loop that ends at open PRs (a person reviews and merges). Every later lesson is ONE component, taught deep and built
+> in that lesson, prioritized by expected, common and crucial; deeper dives come later. Order stays open. `factory/`
 > is our demo; the lesson stays tool-neutral. The lesson's plan session queues lesson material only (brief, script,
 > deck, exercise, options, run-of-show), never `factory/` changes: the factory builds `factory/` live.
 
@@ -37,6 +37,15 @@
 
 <What does the factory build live in this lesson? Not pre-queued: no plan session queues `factory/` work.>
 
+## Capabilities
+
+<Every capability of the component this lesson covers, prioritized by expected, common and crucial. All four columns
+are required for each row.>
+
+| Capability | Concept | Why it exists | Concrete failure without it | What it takes to build |
+|---|---|---|---|---|
+| | | | | |
+
 ## Prerequisites
 
 -
@@ -53,6 +62,6 @@
 
 <Answer>
 
-**Is this about the size of lesson 1?** (explain the thing, build the most basic version live, students build their own)
+**Does it cover what is expected, common and crucial for its one component?** (and name the deeper dives left for later lessons)
 
 <Yes / no, and why>

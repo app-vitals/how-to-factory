@@ -16,9 +16,9 @@ others call it `<alt>`, `<alt>` (see [options.md](options.md)). Call yours whate
 
 <What the component is and why a factory needs it. Two or three sentences.>
 
-## The simplest thing that works
+## The deep version, built live
 
-<The smallest version a single person can run today. No harness, no schedule. Tool-neutral: describe what it does, not which product does it.>
+<The component taken deep: what is expected, common and crucial for it, built in this lesson and runnable by a single person today. Tool-neutral: describe what it does, not which product does it. Fuller deep dives are named under "Where factories take it".>
 
 - **In our demo we use:** <the concrete choice from `factory/`, linked. One line; a demo choice, never a requirement.>
 - **Yours can be anything:** <the kinds of tool, language or runner that would do the same job.>
