@@ -14,9 +14,9 @@ review, release and memory. The [component map](docs/components.md) lays them ou
 
 Each lesson takes one component and does three things:
 
-1. **Simplest version first.** Build the smallest thing that works, live, using plain tools.
+1. **Take the component deep.** Cover what is expected, common and crucial for it, and build it live using plain tools.
 2. **Where factories take it.** Show the range of ways other factories implement the same component, and the destinations
-   people reach as they grow. This is a menu, not a prescription.
+   people reach as they grow, including later deep dives. This is a menu, not a prescription.
 3. **You build yours.** Students build their own version, name it whatever they like, and take it in the direction that fits them.
 
 Lessons are picked one at a time, not in a fixed order. The [lesson backlog](lessons/README.md) is an unordered pool of
