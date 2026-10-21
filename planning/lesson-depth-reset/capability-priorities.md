@@ -30,14 +30,14 @@ Ordered by tier, then by how much the three ratings agree.
 
 | # | Capability | Expected | Common (N of 6) | Crucial | Evidence |
 |---|---|---|---|---|---|
+| A8 | Queue awareness | Low | **0**. Not a grid dimension; tracker output is **0**, so the grid cannot show it | **High** | Inv #2: documented ("to avoid duplicates"; other sessions' task ids become valid `dependencies`). Crucial is High because the reason is documented: open tasks, including other sessions', are valid dependencies, so new work is queued with dependencies on in-flight tasks without waiting for them. Expected and Common stay as the honest evidence; cheap to build (one list call and a printed warning). |
 | A1 | Clarify, then state assumptions | High | Clarify **5** (Devin, Cursor, Claude Code yes; Factory, Copilot partly). Assumptions as a plan part **0**; open questions **3** (Cursor, Copilot, Claude Code) | Med | Grid: *Clarify or interview mode*, *Assumptions or open questions surfaced*. Inv #9: "don't pick an interpretation silently" (documented as intent; the consequence is not spelled out, so Med). Inv #17 shows the unattended variant. |
 | A2 | Layered exploration with reuse | High | Reads the code **6**. Reuse named as a plan part **0** (OpenHands partly: components, constraints) | Med | Grid: *Reads the code*, *Names reuse*. Reuse is blank on 22 of 37 surfaces and partial on 12; where it appears the person's prompt asks for it. Inv #3: the Source Map shortcut is documented; why four layers is inferred, so Med. |
-| A3 | Complexity risks flagged before design | Med | **0** (OpenHands lists "constraints", partly; Copilot names constraints) | Med | Grid: *Names reuse, risks or breaking changes*. Inv #4: examples but no rationale (inferred), so capped at Med. Inv #8 lets the design say how each risk is handled. |
+| A3 | Complexity risks that can reshape the plan | Med | **0** (OpenHands lists "constraints", partly; Copilot names constraints) | Med | Grid: *Names reuse, risks or breaking changes*. Inv #4: examples but no rationale (inferred), so capped at Med. Inv #8 lets the design say how each risk is handled. Reframed as risks that can reshape the plan: flagged before the design, and the design may rework or simplify the approach because of them. Reason still inferred, so Med. |
 | A4 | Breaking-change scan (consumers, backfill, release pipeline) | Med | **0**. Factory and Claude Code do it only if the prompt asks | **High** | Grid: widest gap in the survey. Inv #6, #5, #15: documented reasons. Pipeline consumers "won't appear in a local grep and won't error loudly; they'll just stop running"; a constraint before a backfill "will fail on (or corrupt) existing rows". |
 | A5 | Saved design, linked from every task | High | Saved to a file by default **4** (Devin, OpenHands, Cursor, Claude Code). Linked from tasks **0** (OpenHands' `PLAN.md` is the handoff, step list only). Tracker output **0** | **High** | Grid: *Where the plan is saved*, *Tracker or ticket output*. Inv #19: documented. Re-synthesizing the plan from the task list "silently drops the design rationale, the Breaking Change Safety notes, and the embedded Decision Log". |
 | A6 | Hard approval before tasks exist | High | **5** Human approves (Devin, Factory, Cursor, Copilot, Claude Code). OpenHands' SDK example: not documented. Some other surfaces (Devin spec-first and managed sessions, OpenHands prompt-led planning) are approvals only because the example prompt says to wait, see Grid cross-check §4 | Med | Grid: *Approval before work starts*, plus *Plan editable before approval*: **5** can change the plan (2 edit it, 3 by conversation). Inv #10: the gate is stated; why a human is wanted is **inferred** (tasks become autonomous work), so Med. |
 | A7 | Slicing rules, including add, migrate, remove | Med | Ordering or dependencies marked **0** (2 partly: OpenHands step order, Cursor Build in Parallel). Slicing rules **0** | **High** | Grid: *Dependencies or ordering*, *How it becomes tasks*. Inv #15, #11, #14: documented: a rename or removal not split this way is "not safe to deploy independently — that gap is a broken intermediate state in production". The 1 to 8 hour cap and test-decision bullet are inferred. |
-| A8 | Queue awareness | Low | **0**. Not a grid dimension; tracker output is **0**, so the grid cannot show it | Med | Inv #2: documented ("to avoid duplicates"; other sessions' task ids become valid `dependencies`). Kept despite the weak evidence; see "Changes". |
 | A9 | Human-only task flag | Low | **0**. Two surfaces have a human marker that is not a plan step (Devin's red mark on a ticket, OpenHands' `HUMAN:` line on a PR) | **High** | Grid: *Human-only step flag*, wholly not documented on 24 of 37 surfaces. Inv #16: every reason documented: `.claude/**` writes are "blocked unconditionally by the Claude Code CLI's own protection", net-new secrets "require a human to provision", the task environment cannot reach production data. |
 
 ### Tier B: named, not built
@@ -66,7 +66,9 @@ Ordered by tier, then by how much the three ratings agree.
 
 The approved Tier A and Tier B lists are in `planning/lesson-depth-reset/PLAN.md`. Result of ranking against the evidence:
 
-**No capability moves between tiers.** Every Tier A item is either crucial (A4, A5, A7, A9, High) or expected and common (A1, A2, A6), or documented well enough to keep (A3, A8). No Tier B item is crucial or common enough to promote: B8 is Med on both but is owned by the verification lesson.
+**Crucial ratings:** A8 queue awareness is now rated High crucial (was Med) because Inv #2 documents the "avoid duplicates" and cross-session-dependency reasons qualifies for High under the tier rule (documented evidence). A3 stays Med but is reframed from "flagged before design" to "complexity risks that can reshape the plan", so the design may rework or simplify the approach because of them.
+
+**No capability moves between tiers.** Every Tier A item is either crucial (A4, A5, A7, A8, A9, High) or expected and common (A1, A2, A6), or documented well enough to keep (A3). No Tier B item is crucial or common enough to promote: B8 is Med on both but is owned by the verification lesson.
 
 **Added (made explicit, not new scope):**
 
@@ -80,15 +82,21 @@ The approved Tier A and Tier B lists are in `planning/lesson-depth-reset/PLAN.md
 **Dropped (not in the lesson at all):** Plan PR, re-plan, rollout or rollback, research as its own step. Reasons and evidence are in the table above.
 
 **Kept on weaker evidence than the rest (flag for Dan):**
-- **A8 queue awareness**: Low expected, 0 of 6. Kept because the duplicate-and-dependency reason is documented and it is cheap to build (one list call and a printed warning). If lesson time is short, this is the first Tier A item to move to a walk-through.
+- **A8 queue awareness**: Low expected, 0 of 6. Crucial is now High because Inv #2 is documented and the feature is cheap to build. If lesson time is short, this is the first Tier A item to move to a walk-through.
 - **A9 human-only flag**: 0 of 6, but every reason is documented and a missed flag sends an unworkable task to an agent that cannot do it. Kept; the novelty is in the lesson's favor, but say "what these docs say", not "no product can".
-- **A3 complexity risks** and **A6 hard approval**: the Shipwright reasons are *inferred*, not documented. Teach the behavior; do not quote Shipwright as the source of the reason.
+- **A3 complexity risks** and **A6 hard approval**: the Shipwright reasons are *inferred*, not documented. Teach the behavior; do not quote Shipwright as the source of the reason. A3 is reframed as risks that reshape the plan, with the rating unchanged.
 
 **Reduced claims to carry into the lesson:** "5 of 6 gate on approval" is true of the shown plan modes only. Elsewhere in the files, some "Human approves" cells are a prompt convention, not a product gate (Grid cross-check §4); do not generalize the count past the shown surfaces.
 
 ## Tier A write-ups (ready to paste into the brief)
 
 Each item: concept, why it exists, a concrete failure without it, what it takes to build. Failures marked **(Shipwright, documented)** are the inventory's own words. Failures marked **(illustration)** are constructed for the lesson and are not a claim about any product.
+
+### A8. Queue awareness
+- **Concept:** before creating tasks, list what is already queued in this session and others, skip duplicates, and allow new tasks to depend on open ones. New work can be queued with dependencies on in-flight tasks without waiting for them to complete.
+- **Why it exists:** **(Shipwright, documented)** "to avoid duplicates", and other sessions' tasks are "valid dependencies".
+- **Failure without it (illustration):** the planner files the same migration task a second time under a new id; two agents build it.
+- **To build:** one read of the task list and a dedupe check by title and branch; allow foreign ids in `dependencies`. Small, and the only item here that needs the task store from lesson 1.
 
 ### A1. Clarify, then state assumptions
 - **Concept:** before designing, ask the few questions the spec leaves open; for what is still ambiguous, write the assumption into the plan and flag it for confirmation instead of choosing silently.
@@ -102,10 +110,10 @@ Each item: concept, why it exists, a concrete failure without it, what it takes 
 - **Failure without it (illustration):** the plan adds a new date-formatting helper while one already exists two directories over; review catches it, or it ships as a second copy.
 - **To build:** an exploration step with a fixed per-layer checklist, read-only tools, and a `Reuse` and `New or modified` list in the design. Medium: the discipline is in the prompt, the cost is tokens spent reading.
 
-### A3. Complexity risks flagged before design
-- **Concept:** while exploring, call out coupled code, missing abstractions, spec items that look simple but are not, and ordering constraints between layers; say what the design does about each.
-- **Why it exists:** risk named before design can shape the design. Shipwright gives examples but no stated reason (inferred).
-- **Failure without it (illustration):** a "one-line" spec item touches a module six other features share; it lands as a 1-hour task and takes two days.
+### A3. Complexity risks that can reshape the plan
+- **Concept:** while exploring, call out coupled code, missing abstractions, spec items that look simple but are not, and ordering constraints between layers; say what the design does about each. These are risks flagged before design that can reshape the plan.
+- **Why it exists:** a risk named before design can reshape the design, avoiding costly rework. The inventory gives examples; the reshaping consequence is inferred, not documented, so the rating stays Med.
+- **Failure without it (illustration):** a "one-line" spec item touches a module six other features share; without flagging the coupling, it lands as a 1-hour task and takes two days.
 - **To build:** one output block of `⚠` lines produced during A2 and a design rule that each is addressed or explicitly accepted. Small.
 
 ### A4. Breaking-change scan: consumers, backfill, release pipeline
@@ -132,12 +140,6 @@ Each item: concept, why it exists, a concrete failure without it, what it takes 
 - **Failure without it:** task 3 drops the old column; tasks 4 and 5 migrate readers. Merged in order, production breaks between 3 and 5.
 - **To build:** a slicing prompt with the three-step rule, a per-task `Safe to deploy standalone` line, and a dependency table. Medium: the rule is short, applying it takes judgment the model must show.
 
-### A8. Queue awareness
-- **Concept:** before creating tasks, list what is already queued, here and in other sessions, skip duplicates, and allow new tasks to depend on open ones.
-- **Why it exists:** **(Shipwright, documented)** "to avoid duplicates", and other sessions' tasks are "valid dependencies".
-- **Failure without it (illustration):** the planner files the same migration task a second time under a new id; two agents build it.
-- **To build:** one read of the task list and a dedupe check by title and branch; allow foreign ids in `dependencies`. Small, and the only item here that needs the task store from lesson 1.
-
 ### A9. Human-only task flag
 - **Concept:** mark tasks that need a person (console action, secret provisioning, privileged command, production data access, protected paths), and write their steps as instructions for a human instead of code to write.
 - **Why it exists:** **(Shipwright, documented)** some writes are blocked by the tool itself regardless of granted access; a new CI secret "requires a human to provision it"; the task environment cannot reach production data.
@@ -146,7 +148,7 @@ Each item: concept, why it exists, a concrete failure without it, what it takes 
 
 ## Recommended live-build scope
 
-**Build on camera (the spine): A1, A2, A3, A6, A4 with A7.** That is: understand (clarify and assumptions, layered exploration with reuse, risks), design, approve, then slice with the breaking-change rule. This matches the approved decision log.
+**Build on camera (the spine): A1, A2, A3, A6, A4 with A7.** That is: understand (clarify and assumptions, layered exploration with reuse, complexity risks), design, approve, then slice with the breaking-change rule. This matches the approved decision log, organized as Look (queue awareness, clarify, layered exploration, risks), then Design, Approve, and Slice.
 
 Reasons, from the evidence above:
 1. These are the steps where the plan visibly changes: a question appears, an assumption is written, a reuse list names a real file, a task list is split in three. A viewer can see each before-and-after.
@@ -154,11 +156,11 @@ Reasons, from the evidence above:
 3. A6 is the hinge: slicing only starts after approval, so it fits naturally between design and tasks.
 4. A1 and A2 are the most expected (5 and 6 of 6), so building them first gets students to recognize the shape before the unusual parts.
 
-**Walked through, not built: A5, A8, A9.** Each is short to build but adds no new visible step: A5 is a file write and a field, A8 is a list call, A9 is a flag. They are shown as a finished output (a plan with a `source` link, a deduped queue, one task marked human-only) and the code is left in the exercise.
+**Walked through, not built: A5, A8, A9.** Each is short to build but adds no new visible step: A5 is a file write and a field, A8 is a list call, A9 is a flag. They are shown as a finished output (a plan with a `source` link, a deduped queue, one task marked human-only) and the code is left in the exercise. A8 remains here despite High crucial because Expected and Common are both weak; it is the first Tier A item to move to walk-through if lesson time is short.
 
 **Named only: all of Tier B.** One slide, each with a destination lesson or the reason it is not built.
 
-If time is short, move A8 first, then A3, to the walk-through. Do not move A4 or A7: they are the lesson's reason to exist.
+Do not move A4 or A7: they are the lesson's reason to exist.
 
 ## Open items for review
 
