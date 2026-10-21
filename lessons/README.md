@@ -60,16 +60,16 @@ Spec to plan, and Intake including triage and readiness.
 
 A plan session turns an approved spec into a queue of tasks. One way to cut it:
 
-1. **Understand** - clarify the ask and state what is still assumed, explore the code in layers, find similar features to reuse, flag complexity risks. _Taught by [lesson 2](02-a-plan-that-looks-first/brief.md) (Tier A: clarify and assumptions, layered exploration with reuse, complexity risks)._
-2. **Decide** - list breaking changes with their consumers (including the release pipeline), and any added constraint that
-   needs a backfill first; save the design where every task links to it; get a person's approval before any task exists.
-   _Taught by [lesson 2](02-a-plan-that-looks-first/brief.md) (Tier A: breaking-change scan, saved design, hard approval)._
-3. **Prove** - plan testing and verification: which test layers apply, and what each task adds or retires. _Owned by the Verification lesson._
+1. **Look** - read the open queue first (including other sessions' tasks, which are valid dependencies), clarify the ask and state what is still assumed, explore the code in layers, find similar features to reuse, flag complexity risks. _Taught by [lesson 2](02-a-plan-that-looks-first/brief.md) (Tier A: queue awareness, clarify and assumptions, layered exploration with reuse, complexity risks)._
+2. **Design** - list breaking changes with their consumers (including the release pipeline), and any added constraint that
+   needs a backfill first; save the design where every task links to it. Planning testing and verification (which test layers
+   apply, and what each task adds or retires) is owned by the Verification lesson.
+   _Taught by [lesson 2](02-a-plan-that-looks-first/brief.md) (Tier A: breaking-change scan, saved design)._
+3. **Approve** - get a person's approval of the design before any task exists. _Taught by [lesson 2](02-a-plan-that-looks-first/brief.md) (Tier A: hard approval)._
 4. **Slice** - small shippable tasks with dependencies, each safe to ship on its own (atomic, or add then migrate then
-   remove); check the open queue for duplicates; flag work only a human can do. _Taught by [lesson 2](02-a-plan-that-looks-first/brief.md) (Tier A: slicing rules, queue awareness, human-only flag). Bundling tightly coupled tasks, and estimating size and picking a model tier (the extras), are Tier B: later planning deep-dive candidates, not yet scheduled._
+   remove); check the open queue for duplicates; flag work only a human can do. _Taught by [lesson 2](02-a-plan-that-looks-first/brief.md) (Tier A: slicing rules, human-only flag). Bundling tightly coupled tasks, and estimating size and picking a model tier (the extras), are Tier B: later planning deep-dive candidates, not yet scheduled._
 
-Two extras: a standards file the plan reads first (owned by the Instructions and standards lesson), and an approval point
-between design and tasks (taught in lesson 2).
+One extra: a standards file the plan reads first (owned by the Instructions and standards lesson).
 
 ##### Taught by lesson 2 (Tier A)
 
