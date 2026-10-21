@@ -64,7 +64,7 @@ export async function runLoop(
 }
 
 /** Builds a runner that spawns the given argv template with `{id}` substituted in each arg. */
-function agentRunner(template: string[]): Runner {
+export function agentRunner(template: string[]): Runner {
   return async (task) => {
     const cmd = template.map((a) => a.replaceAll("{id}", task.id));
     const proc = Bun.spawn(cmd, { stdin: "inherit", stdout: "inherit", stderr: "inherit" });
@@ -72,10 +72,9 @@ function agentRunner(template: string[]): Runner {
   };
 }
 
-export async function main(): Promise<number> {
-  const store = fileStore();
+export async function main(store: TaskStore = fileStore(), agentCmd: string[] = AGENT_CMD): Promise<number> {
   store.load(); // validate up front
-  const { stoppedOn } = await runLoop(store, agentRunner(AGENT_CMD), (m) => console.log(`[loop] ${m}`));
+  const { stoppedOn } = await runLoop(store, agentRunner(agentCmd), (m) => console.log(`[loop] ${m}`));
   return stoppedOn ? 1 : 0;
 }
 
