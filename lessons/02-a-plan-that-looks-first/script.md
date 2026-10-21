@@ -60,9 +60,7 @@ the saved design, the human-only flag) to one minute each, keeping the queue-awa
      do.
    - Say what is left out on purpose: test design (the plan only states each task's test line), how specs are
      written, a shared standards file, and bundling, scoring and model tier. Each is named again in step 8.
-4. **The nine capabilities, by stage** (about 15 min, roughly 1.5 min each). Show the design slide first: approach,
-   rejected alternatives, risks, and breaking changes with their consumers. Say it is short, and that naming consumers
-   lets someone say "no, that one is used elsewhere" before work exists. Then walk the four stages in order, Look,
+4. **The nine capabilities, by stage** (about 15 min, roughly 1.5 min each). Walk the four stages in order, Look,
    Design, Approve, Slice. For each capability, say the concept, then one line on why it exists or what it prevents
    (whichever is stronger), then two or three of the spoken examples, then what it takes to build. Keep it to the
    examples; no separate breakdown of what goes wrong. Close each with "in our demo we use..." and "yours can be
@@ -121,6 +119,9 @@ the saved design, the human-only flag) to one minute each, keeping the queue-awa
          accepted. Small.
        - Demo: a Risks section in the design file. Yours: a bulleted list at the top of your plan.
    - **Design.** Turn what was found into one saved design that says what could break.
+     - Start the stage on the design slide: approach, rejected alternatives, risks, and breaking changes with their
+       consumers. Say it is short, and that naming consumers lets someone say "no, that one is used elsewhere" before
+       work exists.
      - **Breaking-change scan: consumers, backfill, release pipeline.**
        - Concept: for every rename, removal or new constraint, find every current consumer first; treat the build and
          release pipeline as an interface; require a live query of real values before a data migration.
