@@ -41,11 +41,19 @@ One page. It holds:
 7. **Prerequisites.**
 8. **Exercise outcomes.**
 9. **Capabilities.** List every capability of the component that this lesson covers (prioritized by expected, common
-   and crucial). For each, give four things: the **concept** (what it is), **why it exists**, a **concrete failure
-   without it**, and **what it takes to build**. A capability missing any of the four is not ready.
+   and crucial) in a stage-grouped table: **stage**, **capability**, **concept** (what it is), **why it exists or
+   what it prevents**, **examples**, and **what it takes to build**. Examples are constructed for the lesson, marked
+   "(illustration)", and are not claims about any product. A capability needs no failure story. *From lessons 1 and
+   2, revisit after lesson 3.*
 10. **Loop delta and depth.** What does the loop do after this lesson that it could not before? The delta comes from
     the live build. Does the lesson cover what is expected, common and crucial for its one component, and name the
     deeper dives it leaves for later?
+11. **Reused from earlier lessons / New this time.** Required. What earlier lessons already settled and this lesson
+    builds on without re-teaching, and what is new. *From lessons 1 and 2, revisit after lesson 3.*
+
+**Sketch review.** *From lessons 1 and 2, revisit after lesson 3.* Before the script, README and deck are written, Dan
+reviews a sketch: the brief, one stage slide and one capability slide. Fix the shape there, where a change is cheap, then
+write the rest. Both slide patterns are in [`decks/_template/index.html`](../decks/_template/index.html).
 
 ## 2. Research protocol
 
@@ -86,16 +94,20 @@ Taken from lesson 1, with a larger budget for deep lessons. The deck follows the
 1. Factory map with the taught component highlighted.
 2. What the human does.
 3. What we build.
-4. Per capability: concept, why it exists, failure without it, how the field differs, demo.
+4. Per stage: a stage slide, then one capability slide per capability (pattern below), then how the field differs and
+   the demo.
 5. Why (our opinion, said as opinion).
 6. How it works together.
 7. Names.
 8. Destinations.
 9. Exercise.
 
-Budget: about 30 to 36 slides. A lesson covers every capability in its brief, and each capability needs its concept,
-why it exists, a failure without it and what it takes to build; 18 to 20 slides only fit a minimal lesson. The
-per-slide limits in CLAUDE.md still apply, so the extra depth comes from more slides, not denser ones.
+**Capability slide pattern.** *From lessons 1 and 2, revisit after lesson 3.* Title "Stage: capability". One bullet
+saying why it exists or what it prevents, then two "e.g." bullets. One diagram. A caption that the examples are
+illustrations, not product claims. No failure slide.
+
+**Slide count is guidance.** Lesson 1 ran about 20 slides and lesson 2 about 26. Let the capabilities set the count,
+not a target. The per-slide limits in CLAUDE.md still apply, so extra depth comes from more slides, not denser ones.
 
 **Layout.** An options grid fits on one row (at most 4 options). Render every changed slide at 1920x1080 before calling
 a deck task done, using the headless-shell procedure in `planning/lesson1-grokable-slides/PLAN.md`, and look for wrapped
@@ -154,3 +166,15 @@ The fill-in version is [`lessons/_template/checklist.md`](../lessons/_template/c
 - Chains of tasks were serialized more than needed. Section 7 asks for chaining only on a shared file.
 - Differs-slide cells were sentences even after the columns were fixed, and a fourth option wrapped onto a second row,
   because the deck check does not test layout. Sections 3 and 4 add the marks, chips and render rules.
+
+**Lesson 2 (spec to plan).** Settled the shape that lesson 3 reuses. *From lessons 1 and 2, revisit after lesson 3.*
+
+- The per-capability "concrete failure without it" requirement and the failure slide are gone. Each capability now says
+  why it exists or what it prevents, with two illustrated examples.
+- The capability table is grouped by stage, and the deck has a stage slide, then capability slides titled
+  "Stage: capability" (sections 1 and 4).
+- Slide count is guidance, not a target (section 4).
+- A sketch review comes first (section 1): the brief, a stage slide and a capability slide, before the rest.
+- Rework passes after the first build of lesson 2: three, counted from the git history. A depth reset (#120 to #137),
+  a regroup by stage that deleted the failure slides (#139 to #145), and a per-task test line (#146 and #147). The
+  sketch review exists to cut that number.

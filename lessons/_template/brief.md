@@ -37,14 +37,29 @@
 
 <What does the factory build live in this lesson? Not pre-queued: no plan session queues `factory/` work.>
 
+## Reused from earlier lessons / New this time
+
+<Required. Reused: what earlier lessons already settled (loop, names, deck shape, rules) that this lesson builds on
+without re-teaching. New this time: what this lesson adds. Each item is one line.>
+
+**Reused from earlier lessons**
+
+-
+
+**New this time**
+
+-
+
 ## Capabilities
 
-<Every capability of the component this lesson covers, prioritized by expected, common and crucial. All four columns
-are required for each row.>
+<Every capability of the component this lesson covers, grouped by stage and prioritized by expected, common and
+crucial. All six columns are required for each row. Examples are constructed for the lesson, marked "(illustration)",
+and are not claims about any product. No failure story is required per capability. From lessons 1 and 2, revisit after
+lesson 3.>
 
-| Capability | Concept | Why it exists | Concrete failure without it | What it takes to build |
-|---|---|---|---|---|
-| | | | | |
+| Stage | Capability | Concept | Why it exists or what it prevents | Examples | What it takes to build |
+|---|---|---|---|---|---|
+| | | | | (illustration) | |
 
 ## Prerequisites
 
