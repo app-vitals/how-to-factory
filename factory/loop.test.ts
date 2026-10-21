@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { pickNext, runLoop, type Runner } from "./loop.ts";
+import { agentRunner, main, pickNext, runLoop, type Runner } from "./loop.ts";
 import type { Task, TaskStatus } from "./tasks.schema.ts";
 import type { TaskStore } from "./tasks.store.ts";
 
@@ -118,5 +118,32 @@ describe("runLoop", () => {
       return 0;
     };
     expect((await runLoop(store, run)).ran).toEqual(["A", "B"]);
+  });
+});
+
+describe("agentRunner", () => {
+  test("resolves the child's exit code", async () => {
+    expect(await agentRunner(["sh", "-c", "exit 0"])(task("T1"))).toBe(0);
+    expect(await agentRunner(["sh", "-c", "exit 3"])(task("T1"))).toBe(3);
+  });
+
+  test("substitutes {id} in every argument", async () => {
+    const check = ["sh", "-c", 'test "{id}" = T1 && test "$0" = T1', "{id}"];
+    expect(await agentRunner(check)(task("T1"))).toBe(0);
+    expect(await agentRunner(check)(task("T2"))).not.toBe(0);
+  });
+});
+
+describe("main", () => {
+  test("returns 0 and leaves the task in pr when the agent succeeds", async () => {
+    const { store, tasks } = memStore([task("A")]);
+    expect(await main(store, ["sh", "-c", "exit 0"])).toBe(0);
+    expect(tasks[0]!.status).toBe("pr");
+  });
+
+  test("returns 1 and returns the task to pending when the agent fails", async () => {
+    const { store, tasks } = memStore([task("A")]);
+    expect(await main(store, ["sh", "-c", "exit 1"])).toBe(1);
+    expect(tasks[0]!.status).toBe("pending");
   });
 });
