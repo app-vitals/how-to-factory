@@ -154,6 +154,47 @@ describe("check-decks over the repo", () => {
   });
 });
 
+describe("check-decks CLI", () => {
+  const CLI = join(ROOT, "scripts/check-decks.ts");
+  const CLEAN = deck(slide(`<ul><li>a</li><li>b</li><li>c</li></ul>${VISUAL}`));
+  const BAD = deck(slide(`<ul><li>a</li><li>b</li><li>c</li><li>d</li></ul>${VISUAL}`));
+
+  // A fixture repo whose only deck is the template, so the deck count is exactly 1.
+  const fixture = (html: string) => {
+    const root = mkdtempSync(join(tmpdir(), "decks-cli-"));
+    mkdirSync(join(root, "decks/_template"), { recursive: true });
+    cpSync(join(ROOT, "decks/deck.config.json"), join(root, "decks/deck.config.json"));
+    writeFileSync(join(root, "decks/_template/index.html"), html);
+    return root;
+  };
+  const run = async (args: string[], cwd?: string) => {
+    const proc = Bun.spawn(["bun", CLI, ...args], { cwd, stdout: "pipe", stderr: "pipe" });
+    const [stdout, stderr, exitCode] = await Promise.all([new Response(proc.stdout).text(), new Response(proc.stderr).text(), proc.exited]);
+    return { stdout, stderr, exitCode };
+  };
+
+  test("a clean fixture deck exits 0 and reports OK on stdout", async () => {
+    const { exitCode, stdout } = await run([fixture(CLEAN)]);
+    expect(exitCode).toBe(0);
+    expect(stdout).toContain("check-decks: 1 deck(s) OK");
+  });
+
+  test("a rule violation exits 1 with a located line and a summary on stderr", async () => {
+    const { exitCode, stdout, stderr } = await run([fixture(BAD)]);
+    expect(exitCode).toBe(1);
+    expect(stdout).toBe("");
+    expect(stderr).toMatch(/^decks\/_template\/index\.html slide 1 \[bullet-count\] .+$/m);
+    expect(stderr).toContain("check-decks: 1 violation(s) in 1 deck(s)");
+  });
+
+  test("with no argument the root is the current directory", async () => {
+    expect((await run([], fixture(CLEAN))).stdout).toContain("check-decks: 1 deck(s) OK");
+    const bad = await run([], fixture(BAD));
+    expect(bad.exitCode).toBe(1);
+    expect(bad.stderr).toContain("1 violation(s) in 1 deck(s)");
+  });
+});
+
 describe("check-decks table cell and option limits", () => {
   const table = (rows: string) => `<div class="visual"><table class="comp-table">${rows}</table></div>`;
   const header = `<tr><th>Vendor</th><th>Queue is a very long header</th></tr>`;
