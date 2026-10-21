@@ -1,5 +1,7 @@
 import { describe, expect, test } from "bun:test";
-import { readFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import { checkReadmeFresh, validateLandscape } from "./check-landscape.ts";
 import { renderLandscape } from "./render-landscape.ts";
 import type { Cell, FactoryProduct, Landscape, TaskQueueProduct } from "./landscape-types.ts";
@@ -347,5 +349,38 @@ describe("real data", () => {
     const d = make();
     factory(d).cells["verify-test-guard"] = { omitted: "not documented; checked the best-practices page" };
     expect(validateLandscape(d, TODAY)).toEqual([]);
+  });
+});
+
+describe("CLI", () => {
+  const CLI = resolve(import.meta.dir, "check-landscape.ts");
+
+  const run = (data: Landscape, readme: string) => {
+    const cwd = mkdtempSync(join(tmpdir(), "landscape-cli-"));
+    mkdirSync(join(cwd, "landscape"));
+    writeFileSync(join(cwd, "landscape/matrix.json"), JSON.stringify(data));
+    writeFileSync(join(cwd, "landscape/README.md"), readme);
+    const proc = Bun.spawnSync(["bun", CLI], { cwd });
+    return { code: proc.exitCode, out: proc.stdout.toString(), err: proc.stderr.toString() };
+  };
+
+  test("valid matrix with fresh README exits 0 and prints ok", () => {
+    const d = make();
+    const r = run(d, renderLandscape(d));
+    expect(r.code).toBe(0);
+    expect(r.out.trim()).toBe("landscape: ok");
+  });
+  test("invalid matrix exits 1 with a landscape error on stderr", () => {
+    const r = run(make({ sourceUrl: "" }), renderLandscape(make()));
+    expect(r.code).toBe(1);
+    expect(r.err).toContain("landscape: ");
+    expect(r.err).toContain("missing sourceUrl");
+    expect(r.out).toBe("");
+  });
+  test("valid matrix with stale README exits 1 with the stale message", () => {
+    const r = run(make(), "stale");
+    expect(r.code).toBe(1);
+    expect(r.err).toContain("landscape: landscape/README.md is stale");
+    expect(r.out).toBe("");
   });
 });
