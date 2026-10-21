@@ -17,6 +17,6 @@
 - [ ] Demo run through once on a scratch repo (this lesson runs things on camera, so it is not build-only): the factory upgrading its own dev-task, with the induced failure and the guard
 - [ ] Nothing for the demo is pre-queued in `factory/`; the live beat is planned and built during the run
 - [ ] Exercise run by following only its text; outcomes listed, no required tool
-- [ ] Every changed slide rendered at 1920x1080; no wrapped rows, overflow or face-cam intrusion
+- [x] Every changed slide rendered at 1920x1080; no wrapped rows, overflow or face-cam intrusion
 - [ ] Differs slides (19-23) contain only marks and chips (no sentences)
 - [ ] Open item in [run-of-show.md](run-of-show.md) settled: the DEMO slide's position (deck slide 5) against the script's live beat (step 8)
