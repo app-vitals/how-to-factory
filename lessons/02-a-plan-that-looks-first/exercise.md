@@ -71,6 +71,8 @@ The plan cuts the change into tasks that are each safe to ship, and says so.
 
 - [ ] the removal or rename came out as add, migrate, remove tasks, or as one atomic task that updates every consumer
 - [ ] every task states whether it is safe to deploy alone
+- [ ] every task states the tests it adds or retires, or says none are needed and why; each named test file or case exists
+  in your repo (or the task says it creates it)
 - [ ] merge the tasks in order in your head (or on a branch): at no point between two merges does a consumer point at
   something that no longer exists
 
