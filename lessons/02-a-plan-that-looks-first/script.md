@@ -240,8 +240,8 @@ the saved design, the human-only flag) to one minute each, keeping the queue-awa
    call it. Destinations, described not prescribed: a coordinator that splits a plan and runs pieces in parallel,
    tracker tickets as the output, a check standing in for the approval. Field: Where it goes from here. Say what is
    deliberately out of scope, each with its own lesson and order open, promising nothing: test design (the
-   verification lesson; the plan only states each task's test line), how specs are written (an intake lesson), a shared standards file (the standards lesson), and
-   bundling, scoring and model tier, the unattended variant of approval, a second model reading the plan, parallel
+   verification lesson; the plan only states each task's test line), how specs are written (an intake lesson), a
+   shared standards file (the standards lesson), and bundling, scoring and model tier, the unattended variant of approval, a second model reading the plan, parallel
    coordinators, tracker sync and configuring the planning method (a later planning deep dive).
 9. **Exercise** (about 2 min). The [exercise](exercise.md) has you give your own planning step the same behaviours, with
    an agent and language of your choice. Say it lists outcomes only and names no required tool.
