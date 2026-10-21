@@ -87,6 +87,7 @@ Entries marked **(proposed)** are candidate additions or splits that are not fin
 - **Why it exists:** agents can report success that did not happen. Machine-checked gates are what make "done" mean something.
 - **Simplest version:** run the repo's existing test, lint and typecheck commands before opening the PR.
 - **Range:** local checks only; required CI checks with branch protection; coverage thresholds; speed budgets per test layer; smoke tests against a deployed copy; a test-readiness effort that designs the test system before building features.
+- **Depth:** lesson 3 (in draft) teaches verification as checks the agent runs and shows, with each task stating what proves it, a CI gate it cannot talk past, guards against weakened tests, a bounded fix loop and visible evidence. Coverage thresholds, speed budgets, canary suites and designing a whole test system are destinations, not taught.
 - **Shipwright example:** a staged test-readiness pipeline plus shared principles that execution and review both read.
 
 ## 5. Review

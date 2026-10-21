@@ -9,7 +9,7 @@ the standard.
 
 - `docs/` — living, vendor-neutral component map (`docs/components.md`)
 - `lessons/` — one directory per lesson (outline, script, options, exercise); unordered backlog in `lessons/README.md`
-- `landscape/` — factory x component comparison matrix
+- `landscape/` — factory x component comparison matrix (`matrix.json`) plus per-product research grids (`plan-grid/`, `verify-grid/`, `field-grid/`)
 - `decks/` — shared lesson deck framework (`deck.css`, `deck.js`, `deck.config.json`, `_template/`, `DIAGRAMS.md`); each lesson's deck is `lessons/<lesson>/deck/index.html`
 - `factory/` — the sample factory, built by the factory itself as the course runs
 - `planning/` — plan-session output
@@ -20,6 +20,7 @@ the standard.
 - `bun run typecheck` — `tsc --noEmit`
 - `bun test` — run tests
 - `bun scripts/check-decks.ts` — enforce the deck rules below
+- `bun run check:landscape` — validate `landscape/matrix.json` (sources, dates, chip formats); `bun run render:landscape` regenerates `landscape/README.md` from it
 
 ## CI checks
 

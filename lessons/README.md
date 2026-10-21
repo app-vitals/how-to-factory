@@ -26,7 +26,7 @@ Verification, Review and Release, plus the instructions and standards the factor
 - Make the agent run lint, typecheck and tests before it says "done"
 - Require CI to pass before anything merges
 - Design a test system for a repo that has none
-- Compare how factories verify: who decides it is done, whether it runs the app itself, how it keeps going. Research is banked in `landscape/field-grid` and the `verify-*` columns of `landscape/matrix.json`
+- Compare how factories verify: who decides it is done, whether it runs the app itself, how it keeps going. Taught by [lesson 3, Done means checked](03-done-means-checked/brief.md) (in progress: brief, options, deck skeleton, script outline and exercise outcomes drafted). Research is banked in `landscape/field-grid`, the six-product [`landscape/verify-grid/`](../landscape/verify-grid/README.md) and the `verify-*` columns of `landscape/matrix.json`
 
 ### Review
 - Have a second agent review the PR
