@@ -17,6 +17,7 @@ every page that could touch verification, then fetched each. The fetch tool retu
 raw text, so quoted phrases below are short and were checked against that summary; a claim that rests on a thinly
 summarised page is marked "(summary)". Started from `landscape/field-grid/copilot.md` (2026-10-13) but every page was
 fetched again; its notes are not carried over unchecked.
+
 ## The grid
 
 Surfaces: **Cloud agent session** (assigned issue, `/task`, agents tab), **Cloud agent hooks** (`.github/hooks`),
