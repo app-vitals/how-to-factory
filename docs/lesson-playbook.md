@@ -27,7 +27,8 @@ Agreed at the start of the project, and it applies to every lesson:
 
 ## 1. The lesson brief
 
-Before any work is queued, fill in [`lessons/_template/brief.md`](../lessons/_template/brief.md) and get it agreed.
+Fill in [`lessons/_template/brief.md`](../lessons/_template/brief.md) and get it agreed before the options, deck, script
+and exercise are written. Planning and research tasks come first (section 10).
 One page. It holds:
 
 1. **Component taught and band.** Which component from [`docs/components.md`](components.md), and which band.
@@ -130,7 +131,8 @@ comes from what the factory built live in the lesson.
 
 These apply to the Shipwright pipeline that queues and ships this repo's work.
 
-- The brief is approved before any task is queued.
+- The brief is approved before any option, deck, script or exercise task starts. Plan-session and research tasks are
+  queued first, to feed the brief (section 10).
 - Lesson plan sessions queue no `factory/` tasks; the factory builds `factory/` live.
 - Edit a queued task only while it is `pending`.
 - Never edit merged PRs; fix forward in a new task.
