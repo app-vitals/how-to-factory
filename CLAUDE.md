@@ -46,7 +46,7 @@ TypeScript on Bun. Strict mode. Conventional commit prefixes (`feat:`, `fix:`, `
 - **One deep component per lesson.** A lesson teaches one component and builds it in that lesson, prioritizing what is
   expected, common and crucial for it. Fuller deep dives come in later lessons; name them as destinations, never
   prescribe them.
-- **Follow the lesson playbook** (`docs/lesson-playbook.md`): scoping rule, lesson brief, research, work-queue rules, checklist.
+- **Follow the lesson playbook** (`docs/lesson-playbook.md`): scoping rule, lesson brief, research, work-queue rules, checklist, and the order a lesson is created in (section 10).
 
 ## Deck rules
 
