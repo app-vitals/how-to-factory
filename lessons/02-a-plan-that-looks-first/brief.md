@@ -120,6 +120,6 @@ refuse an unsafe cut, and the factory has upgraded its own plan skill to do this
 **Does it cover what is expected, common and crucial for its one component?** (and name the deeper dives left for later lessons)
 
 Yes. Every capability rated crucial (A4, A5, A7, A8, A9) and every one rated expected and common (A1, A2, A6) is in Tier A and
-exercised; A3 is kept as cheap and documented. Left for later: per-task test planning (verification lesson), spec
+exercised; A3 is kept as cheap and documented. Left for later: test design (verification lesson), spec
 writing (intake lesson), a shared standards file (standards lesson), and bundling, scoring and model tier, autonomous
 mode, second-model critique, parallel coordinators, tracker sync and methodology config (a later planning deep dive).
