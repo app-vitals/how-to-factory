@@ -67,8 +67,8 @@ the saved design, the human-only flag) to one minute each, keeping the queue-awa
    (whichever is stronger), then two or three of the spoken examples, then what it takes to build. Keep it to the
    examples; no separate breakdown of what goes wrong. Close each with "in our demo we use..." and "yours can be
    anything". Clarify and assumptions, layered exploration, complexity risks, the breaking-change scan, approval and
-   slicing are built live in step 6; queue awareness, the saved design and the human-only flag are shown as finished output in step 7. Every example below is
-   _(illustration)_: say so each time.
+   slicing are built live in step 6; queue awareness, the saved design and the human-only flag are shown as finished
+   output in step 7. Every example below is _(illustration)_: say so each time.
    - **Look.** Read before deciding anything: the queue, the spec, the code, the risks.
      - **Queue awareness (lead with this).**
        - Concept: before creating tasks, list what is already queued, here and in other sessions, skip duplicates, and
