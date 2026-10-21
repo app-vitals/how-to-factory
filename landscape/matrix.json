@@ -107,6 +107,38 @@
     {
       "id": "plan-rollout",
       "label": "Rollout or rollback section"
+    },
+    {
+      "id": "verify-checks",
+      "label": "Runs tests or linters itself"
+    },
+    {
+      "id": "verify-criteria",
+      "label": "Acceptance criteria become checks"
+    },
+    {
+      "id": "verify-test-plan",
+      "label": "Per-task test plan"
+    },
+    {
+      "id": "verify-ci-gate",
+      "label": "CI or branch protection gates"
+    },
+    {
+      "id": "verify-limits",
+      "label": "Coverage or run limits"
+    },
+    {
+      "id": "verify-test-guard",
+      "label": "Guard against weakened tests"
+    },
+    {
+      "id": "verify-evidence",
+      "label": "Evidence shown to the person"
+    },
+    {
+      "id": "verify-pr-fix",
+      "label": "Fixes after the PR opens"
     }
   ],
   "products": [
@@ -273,6 +305,70 @@
         },
         "plan-rollout": {
           "omitted": "Pages checked: Commands, Essential, Changelog (docs.devin.ai, Devin CLI Plan mode). Not documented."
+        },
+        "verify-checks": {
+          "name": "Self-check before PR",
+          "summary": "In a cloud session Devin runs existing test suites, linting and type checks before it opens the PR, and iterates until the tests pass. Which checks run is set by the prompt, playbook, AGENTS.md or a skill.",
+          "sourceUrl": "https://docs.devin.ai/essential-guidelines/sdlc-integration.md",
+          "asOf": "2026-10-21",
+          "short": "Tests, lint, type checks before the PR",
+          "chip": "✓"
+        },
+        "verify-criteria": {
+          "name": "Playbook Specifications",
+          "summary": "No product step turns criteria into checks. The guide tells the person to state success in measurable terms, and a playbook's Specifications section lists what must be true when the work is done.",
+          "sourceUrl": "https://docs.devin.ai/product-guides/creating-playbooks.md",
+          "asOf": "2026-10-21",
+          "short": "Prompt advice; playbook lists end state",
+          "chip": "◐"
+        },
+        "verify-test-plan": {
+          "name": "Testing mode",
+          "summary": "Testing mode, run after the PR, picks the most important flow and sends a concrete step plan before running it. The plain cloud session plans tests only as the prompt asks.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/testing-and-recordings.md",
+          "asOf": "2026-10-21",
+          "short": "Testing mode writes a plan; sessions do not",
+          "chip": "◐"
+        },
+        "verify-ci-gate": {
+          "name": "Branch protections",
+          "summary": "Devin is bound by the same branch protections and policies as a human engineer. The page names no specific required checks.",
+          "sourceUrl": "https://docs.devin.ai/essential-guidelines/sdlc-integration.md",
+          "asOf": "2026-10-21",
+          "short": "Bound by the repo's branch protections",
+          "chip": "◐"
+        },
+        "verify-limits": {
+          "name": "Playbook coverage target",
+          "summary": "Coverage targets appear only as playbook and AGENTS.md examples (90% or 80%) that a team copies; nothing in the product enforces them.",
+          "sourceUrl": "https://docs.devin.ai/use-cases/gallery/test-coverage-playbook.md",
+          "asOf": "2026-10-21",
+          "short": "Coverage targets are examples, not enforced",
+          "chip": "✗"
+        },
+        "verify-test-guard": {
+          "name": "Playbook Forbidden Actions",
+          "summary": "The gallery test playbook forbids changing source modules to ease testing, but does not forbid deleting or loosening existing tests. No built-in guard is documented.",
+          "sourceUrl": "https://docs.devin.ai/use-cases/gallery/test-coverage-playbook.md",
+          "asOf": "2026-10-21",
+          "short": "Playbook example forbids editing source only",
+          "chip": "◐"
+        },
+        "verify-evidence": {
+          "name": "Session Tools",
+          "summary": "Browser screenshots and videos can be sent back as proof of testing, and a Progress tab shows command history and output. Testing mode attaches a processed recording.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-session-tools.md",
+          "asOf": "2026-10-21",
+          "short": "Command output; screenshots and video",
+          "chip": "Logs + Visual"
+        },
+        "verify-pr-fix": {
+          "name": "Auto-Fix",
+          "summary": "Devin pushes new commits for CI failures and review feedback on PRs its sessions work on; Auto-Fix lets it iterate without being asked.",
+          "sourceUrl": "https://docs.devin.ai/essential-guidelines/sdlc-integration.md",
+          "asOf": "2026-10-21",
+          "short": "Pushes commits for CI and review",
+          "chip": "✓"
         }
       },
       "demoable": {
@@ -459,6 +555,55 @@
         },
         "plan-rollout": {
           "omitted": "Pages checked: Interaction Modes, Droid CLI Quickstart, Droid CLI Reference, Droid Exec, Custom droids (docs.factory.com, Spec Mode). Not documented."
+        },
+        "verify-checks": {
+          "name": "Validation workers",
+          "summary": "Validation workers run at the end of each milestone, in scrutiny and user-testing kinds: tests, regressions and integration. Which exact commands run is not named; it follows the project.",
+          "sourceUrl": "https://docs.factory.com/missions/planning",
+          "asOf": "2026-10-21",
+          "short": "Validators test at each milestone",
+          "chip": "✓"
+        },
+        "verify-criteria": {
+          "name": "Validation criteria",
+          "summary": "Each feature carries validation criteria, visible with its commits in the Factory App. How they map to test files is not documented.",
+          "sourceUrl": "https://docs.factory.com/missions/running-app",
+          "asOf": "2026-10-21",
+          "short": "Each feature carries validation criteria",
+          "chip": "◐"
+        },
+        "verify-test-plan": {
+          "name": "Mission planning",
+          "summary": "Planning names how work is validated and milestones set how often validation runs. Per-feature test lists are not documented.",
+          "sourceUrl": "https://docs.factory.com/missions/planning",
+          "asOf": "2026-10-21",
+          "short": "Planning names validation; no test lists",
+          "chip": "◐"
+        },
+        "verify-ci-gate": {
+          "omitted": "Pages checked: Missions overview, planning, reference, running-cli, running-app, Software Factory overview, Droid Exec overview (docs.factory.com). Not documented for Missions."
+        },
+        "verify-limits": {
+          "name": "Mission cost floor",
+          "summary": "The cost floor is about one run per feature plus two per milestone, and validation can be turned off in Mission Control settings. No coverage limit is documented.",
+          "sourceUrl": "https://docs.factory.com/missions/planning",
+          "asOf": "2026-10-21",
+          "short": "Cost floor and a validation off switch",
+          "chip": "◐"
+        },
+        "verify-test-guard": {
+          "omitted": "Pages checked: Missions overview, planning, reference, running-cli, running-app, factory.com/news/missions. Not documented; the pages only say validators start in a fresh session with clean context."
+        },
+        "verify-evidence": {
+          "name": "Mission Control",
+          "summary": "Mission Control lists every worker and milestone in a live progress log, shows each worker's terminal output and reasoning, and opens a feature's validation criteria and commits. Screenshots from Mission QA are not documented.",
+          "sourceUrl": "https://docs.factory.com/missions/running-app",
+          "asOf": "2026-10-21",
+          "short": "Live log, terminal output, commits",
+          "chip": "Logs"
+        },
+        "verify-pr-fix": {
+          "omitted": "Pages checked: Missions overview, planning, reference, running-cli, running-app (docs.factory.com). Post-PR fixes are not documented for Missions."
         }
       },
       "demoable": {
@@ -632,6 +777,60 @@
         },
         "plan-rollout": {
           "omitted": "Pages checked: Using plan mode in your IDE; Using agent mode in your IDE (docs.github.com, Plan mode in the IDE). The standard plan is summary, steps and open questions. Not documented."
+        },
+        "verify-checks": {
+          "name": "Cloud agent session",
+          "summary": "The agent works in its own Actions-powered environment, where it can run automated tests and linters before it pushes. Which commands run comes from the repo's custom instructions.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents",
+          "asOf": "2026-10-21",
+          "short": "Runs tests and linters before pushing",
+          "chip": "✓"
+        },
+        "verify-criteria": {
+          "name": "Task acceptance criteria",
+          "summary": "A well-scoped task carries acceptance criteria Copilot can use to verify its work. No conversion into test files is described.",
+          "sourceUrl": "https://docs.github.com/en/copilot/tutorials/cloud-agent/get-the-best-results",
+          "asOf": "2026-10-21",
+          "short": "Criteria go in the task text",
+          "chip": "◐"
+        },
+        "verify-test-plan": {
+          "omitted": "Pages checked: get-the-best-results, research-plan-iterate (docs.github.com). A product-made per-task test plan is not documented; testing expectations go in the task and repository instructions."
+        },
+        "verify-ci-gate": {
+          "name": "Rulesets and approval",
+          "summary": "Workflows do not run on Copilot's pushes until a person approves them, and the agent is blocked from default branches and subject to rulesets like a human.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/review-copilot-output",
+          "asOf": "2026-10-21",
+          "short": "Rulesets apply; workflows need approval",
+          "chip": "✓"
+        },
+        "verify-limits": {
+          "name": "Session limit",
+          "summary": "A session is capped at 59 minutes, which cannot be extended. Coverage thresholds are not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github",
+          "asOf": "2026-10-21",
+          "short": "59-minute session cap; no coverage limit",
+          "chip": "◐"
+        },
+        "verify-test-guard": {
+          "omitted": "Pages checked: get-the-best-results, review-copilot-output, use-cloud-agent-on-github, copilot-on-github, build-guardrails (docs.github.com). Not documented; weakened tests are left to the person's review."
+        },
+        "verify-evidence": {
+          "name": "Session log",
+          "summary": "The person sees the session log of reasoning and tools used, commit messages linking back to it, and the PR diff. Screenshots or recordings are not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents",
+          "asOf": "2026-10-21",
+          "short": "Session log, commits, PR diff",
+          "chip": "Logs"
+        },
+        "verify-pr-fix": {
+          "name": "PR follow-up",
+          "summary": "Three documented paths, each started by a person: an @copilot comment, Fix with Copilot on review comments, and a button on a failing Actions job.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github",
+          "asOf": "2026-10-21",
+          "short": "Fixes only when a person asks",
+          "chip": "✗"
         }
       },
       "demoable": {
@@ -816,6 +1015,50 @@
         },
         "plan-rollout": {
           "omitted": "Pages checked: Creating Custom Agent, Task Tool Set, File-Based Agents, Ask Oracle (docs.openhands.dev, planning agent then execution agent). The outline's only verification part is a testing section. Not documented."
+        },
+        "verify-checks": {
+          "name": "Goal loop",
+          "summary": "The agent runs whatever command the objective names (the example is a pytest run); a separate judge model audits the output and runs nothing itself.",
+          "sourceUrl": "https://docs.openhands.dev/sdk/guides/convo-goal.md",
+          "asOf": "2026-10-21",
+          "short": "Runs only the objective's command",
+          "chip": "◐"
+        },
+        "verify-criteria": {
+          "name": "Goal objective",
+          "summary": "The written objective is the check: the judge tests each run against it, and the page's pattern is an objective that names the command that must pass.",
+          "sourceUrl": "https://docs.openhands.dev/sdk/guides/convo-goal.md",
+          "asOf": "2026-10-21",
+          "short": "The written objective is the check",
+          "chip": "◐"
+        },
+        "verify-test-plan": {
+          "omitted": "Pages checked: Goal Completion Loop (docs.openhands.dev). Per-task test planning is not documented."
+        },
+        "verify-ci-gate": {
+          "omitted": "Pages checked: Goal Completion Loop (docs.openhands.dev). CI or branch gating is not documented for the goal loop."
+        },
+        "verify-limits": {
+          "name": "Goal loop cap",
+          "summary": "A default cap of 10 rounds ends the loop as capped. No coverage or time limit is documented.",
+          "sourceUrl": "https://docs.openhands.dev/sdk/guides/convo-goal.md",
+          "asOf": "2026-10-21",
+          "short": "Round cap of 10; no coverage limit",
+          "chip": "◐"
+        },
+        "verify-test-guard": {
+          "omitted": "Pages checked: Goal Completion Loop (docs.openhands.dev). Not documented as a rule; the judge reads real output, which covers false claims, not edited tests."
+        },
+        "verify-evidence": {
+          "name": "Goal loop outcome",
+          "summary": "Command output, test results and file contents sit in the conversation history the judge reads, and the outcome object carries the judge's last verdict.",
+          "sourceUrl": "https://docs.openhands.dev/sdk/guides/convo-goal.md",
+          "asOf": "2026-10-21",
+          "short": "Command output and the judge's verdict",
+          "chip": "Logs"
+        },
+        "verify-pr-fix": {
+          "omitted": "Pages checked: Goal Completion Loop (docs.openhands.dev). Post-PR fixes are not documented for the goal loop."
         }
       },
       "demoable": {
@@ -1016,6 +1259,50 @@
         },
         "plan-rollout": {
           "omitted": "Pages checked: Plan Mode, Plan mode help, Cursor Agent, Multi-agent help (cursor.com, Plan Mode). The separate Rollouts feature writes a rollout plan when a pull request opens, which is a different artifact from this plan. Not documented."
+        },
+        "verify-checks": {
+          "name": "Cloud agent",
+          "summary": "The cloud agent can build, test and interact with the changed software in its own VM. Which checks run is its choice from the prompt, skills, agents.md and rules.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent.md",
+          "asOf": "2026-10-21",
+          "short": "Builds and tests in its own VM",
+          "chip": "✓"
+        },
+        "verify-criteria": {
+          "omitted": "Pages checked: cloud-agent, capabilities, best-practices, skills (cursor.com/docs). Not documented; the person states criteria in the prompt, a skill or a rule."
+        },
+        "verify-test-plan": {
+          "omitted": "Pages checked: cloud-agent, capabilities, best-practices (cursor.com/docs). Per-task test planning is not documented."
+        },
+        "verify-ci-gate": {
+          "name": "CI subscriptions",
+          "summary": "Subscriptions wait until every check on the commit completes and return one result. Whether CI is required before a PR opens is not documented.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent/capabilities.md",
+          "asOf": "2026-10-21",
+          "short": "Waits for every check; required-ness unstated",
+          "chip": "◐"
+        },
+        "verify-limits": {
+          "omitted": "Pages checked: cloud-agent, capabilities, best-practices (cursor.com/docs). Coverage or speed limits are not documented as limits."
+        },
+        "verify-test-guard": {
+          "omitted": "Pages checked: cloud-agent, capabilities, best-practices (cursor.com/docs). Not documented as a built-in; hooks run in cloud agents and could be written to do it."
+        },
+        "verify-evidence": {
+          "name": "Artifacts",
+          "summary": "Artifacts (screenshots, videos and log references) are attached to the PR so the person can validate without checking out the branch.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent/capabilities.md",
+          "asOf": "2026-10-21",
+          "short": "Screenshots, videos, logs on the PR",
+          "chip": "Logs + Visual"
+        },
+        "verify-pr-fix": {
+          "name": "Autofix CI failures",
+          "summary": "It tries to fix CI failures on PRs it created, skipping in set cases and after 10 follow-ups; a PR comment or setting turns it off.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent/capabilities.md",
+          "asOf": "2026-10-21",
+          "short": "Fixes CI failures on PRs it created",
+          "chip": "✓"
         }
       },
       "demoable": {
@@ -1213,6 +1500,60 @@
         },
         "plan-rollout": {
           "omitted": "Pages checked: Permission modes, Best practices, Common workflows, Tools reference (code.claude.com, Plan mode), Large codebases. The only rollback and rollout hits are unrelated. Not documented."
+        },
+        "verify-checks": {
+          "name": "Verification advice",
+          "summary": "Claude runs whatever check the person or project instructions name. There is no built-in test, lint or typecheck step.",
+          "sourceUrl": "https://code.claude.com/docs/en/best-practices.md",
+          "asOf": "2026-10-21",
+          "short": "Nothing built in; the person names checks",
+          "chip": "◐"
+        },
+        "verify-criteria": {
+          "name": "Prompt criteria",
+          "summary": "Criteria are given by the person in the prompt (example inputs, expected outputs, a failing test first). Nothing converts criteria to tests automatically.",
+          "sourceUrl": "https://code.claude.com/docs/en/best-practices.md",
+          "asOf": "2026-10-21",
+          "short": "The person writes them; nothing converts",
+          "chip": "✗"
+        },
+        "verify-test-plan": {
+          "name": "Plan mode",
+          "summary": "Plan mode is optional, and the guide says to skip it if the diff fits in one sentence. The example prompt asks for tests but no test list is produced.",
+          "sourceUrl": "https://code.claude.com/docs/en/best-practices.md",
+          "asOf": "2026-10-21",
+          "short": "Optional plan mode; no required test list",
+          "chip": "◐"
+        },
+        "verify-ci-gate": {
+          "omitted": "Pages checked: github-actions, code-review, code-review-pull-requests (code.claude.com). CI or branch gating is not documented."
+        },
+        "verify-limits": {
+          "omitted": "Pages checked: best-practices, code-review, code-review-customize (code.claude.com). Coverage thresholds are not documented."
+        },
+        "verify-test-guard": {
+          "name": "Verification advice",
+          "summary": "Only advice: ask for the root cause and not to suppress the error, or have one session write tests and another the code. No built-in protection for test files.",
+          "sourceUrl": "https://code.claude.com/docs/en/best-practices.md",
+          "asOf": "2026-10-21",
+          "short": "Advice only; no built-in guard",
+          "chip": "◐"
+        },
+        "verify-evidence": {
+          "name": "Show evidence",
+          "summary": "The guide says to have Claude show test output, the command and its result, or a screenshot. This is advice for the prompt; no page makes it automatic.",
+          "sourceUrl": "https://code.claude.com/docs/en/best-practices.md",
+          "asOf": "2026-10-21",
+          "short": "Advice to show output or a screenshot",
+          "chip": "Logs"
+        },
+        "verify-pr-fix": {
+          "name": "Cloud session auto-fix",
+          "summary": "In the interactive session there is none. A cloud session with the GitHub App and a per-PR toggle receives CI failures and review comments and pushes a fix when one is clear.",
+          "sourceUrl": "https://code.claude.com/docs/en/claude-code-on-the-web.md",
+          "asOf": "2026-10-21",
+          "short": "Other surface: cloud session auto-fix",
+          "chip": "◐"
         }
       },
       "demoable": {
