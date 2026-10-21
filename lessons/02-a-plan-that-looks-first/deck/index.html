@@ -11,7 +11,7 @@
 <main>
   <section class="slide slide-title-slide" data-kind="title">
     <div class="slide-inner">
-      <h1 class="slide-title">A Plan That Looks First</h1>
+      <h2 class="slide-title">A Plan That Looks First</h2>
       <div class="slide-body">
         <p class="subtitle">Planning: from brief to approved design to tasks</p>
       </div>
@@ -52,10 +52,10 @@
       <h2 class="slide-title">What we build today</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="build-flow">
-          <div class="flow"><div class="node node-agent">Look</div><span class="arrow"></span><div class="node node-agent">Design</div><span class="arrow"></span><div class="node node-human">Approve</div><span class="arrow"></span><div class="node node-agent">Slice</div><span class="arrow"></span><div class="node node-store">Tasks</div></div>
+          <div class="flow"><div class="node node-agent">Understand</div><span class="arrow"></span><div class="node node-agent">Decide</div><span class="arrow"></span><div class="node node-human">Approve</div><span class="arrow"></span><div class="node node-agent">Slice</div><span class="arrow"></span><div class="node node-store">Tasks</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div>
-        <p class="caption">Three new steps sit in front of slicing.</p>
+        <p class="caption">Nine capabilities sit in front of slicing.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -97,22 +97,9 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">Understand: ask less, read more</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="understand">
-          <div class="flow"><div class="node node-human">Brief</div><span class="arrow"></span><div class="node node-agent">Explore repo</div><span class="arrow"></span><div class="node node-agent">Find reuse</div><span class="arrow"></span><div class="node node-agent">Place change</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div>
-        <ul class="bullets"><li>Ask only what code cannot answer</li><li>Explore the repo first</li><li>Reuse before building new</li></ul>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
       <h2 class="slide-title">The design is short, and names consumers</h2>
       <div class="slide-body">
-<div class="visual options-grid">
+        <div class="visual options-grid">
           <div class="option"><h3>Approach</h3><div class="pick">What we will do</div></div><div class="option"><h3>Rejected</h3><div class="pick">What we did not</div></div><div class="option"><h3>Risks</h3><div class="pick">What could go wrong</div></div><div class="option"><h3>Breaking</h3><div class="pick">Who depends on it</div></div>
         </div>
         <p class="caption">Someone can say no before work exists.</p>
@@ -122,25 +109,246 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">The hard stop: approval before tasks</h2>
+      <h2 class="slide-title">1. Clarify, then state assumptions</h2>
       <div class="slide-body">
-        <div class="visual diagram" data-diagram="approval-stop">
-          <div class="flow"><div class="node node-agent">Explore</div><span class="arrow"></span><div class="node node-agent">Design</div><span class="arrow"></span><div class="node node-human">Approve</div><span class="arrow"></span><div class="node node-agent">Slice</div><span class="arrow"></span><div class="node node-store">Tasks</div></div>
+        <div class="visual diagram" data-diagram="cap-1">
+          <div class="flow"><div class="node node-human">Spec</div><span class="arrow"></span><div class="node node-agent">Ask gaps</div><span class="arrow"></span><div class="node node-agent">Flag assumptions</div><span class="arrow"></span><div class="node node-human">Approve</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div>
-        <p class="caption">Rejected design goes back to Design. No tasks yet.</p>
+        <p class="caption">Ask only what code cannot answer.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">All look first; most wait for approval</h2>
+      <h2 class="slide-title">Failure: the silent guess</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-1-failure">
+          <div class="flow"><div class="node node-agent">Picks email</div><span class="arrow"></span><div class="node node-agent">Builds four tasks</div><span class="arrow"></span><div class="node node-human">Owner wanted chat</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Illustration, not a product claim.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">2. Explore by layer, and reuse</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-2">
+          <div class="flow"><div class="node node-human">Spec</div><span class="arrow"></span><div class="node node-agent">Read each layer</div><span class="arrow"></span><div class="node node-agent">List reuse</div><span class="arrow"></span><div class="node node-agent">List new</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Read before you design.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Failure: a second date helper</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-2-failure">
+          <div class="flow"><div class="node node-agent">Adds helper</div><span class="arrow"></span><div class="node node-external">One exists already</div><span class="arrow"></span><div class="node node-human">Review finds it</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Illustration, not a product claim.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">3. Flag complexity before the design</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-3">
+          <div class="flow"><div class="node node-agent">Explore</div><span class="arrow"></span><div class="node node-agent">Flag risks</div><span class="arrow"></span><div class="node node-agent">Design</div><span class="arrow"></span><div class="node node-human">Accept or fix</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Every flag is addressed or accepted.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Failure: the one-line item</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-3-failure">
+          <div class="flow"><div class="node node-agent">Plans one hour</div><span class="arrow"></span><div class="node node-external">Shared module</div><span class="arrow"></span><div class="node node-human">Takes two days</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Illustration, not a product claim.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">4. Scan for breaking changes</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-4">
+          <div class="flow"><div class="node node-agent">Find interfaces</div><span class="arrow"></span><div class="node node-agent">Search consumers</div><span class="arrow"></span><div class="node node-agent">List hits</div><span class="arrow"></span><div class="node node-agent">Add live check</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Pipelines count as interfaces.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Failure: the silent job</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-4-failure">
+          <div class="flow"><div class="node node-agent">Renames endpoint</div><span class="arrow"></span><div class="node node-job">Job calls it</div><span class="arrow"></span><div class="node node-external">Job stops quietly</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Illustration, not a product claim.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">5. Save the design, link every task</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-5">
+          <div class="flow"><div class="node node-agent">Write design</div><span class="arrow"></span><div class="node node-store">One file</div><span class="arrow"></span><div class="node node-store">Tasks link it</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Verbatim, never a summary.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Failure: reversed decision</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-5-failure">
+          <div class="flow"><div class="node node-store">Task: three bullets</div><span class="arrow"></span><div class="node node-agent">Agent reads task</div><span class="arrow"></span><div class="node node-human">Undoes the design</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Illustration, not a product claim.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">6. Hard approval before tasks</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-6">
+          <div class="flow"><div class="node node-agent">Design</div><span class="arrow"></span><div class="node node-human">Approve</div><span class="arrow"></span><div class="node node-agent">Slice</div><span class="arrow"></span><div class="node node-store">Tasks</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Nothing is queued until a person says yes.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Failure: ten bad PRs</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-6-failure">
+          <div class="flow"><div class="node node-agent">Wrong design</div><span class="arrow"></span><div class="node node-store">Ten tasks</div><span class="arrow"></span><div class="node node-external">Ten PRs</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Illustration, not a product claim.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">7. Slice: add, migrate, remove</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-7">
+          <div class="flow"><div class="node node-agent">Add new</div><span class="arrow"></span><div class="node node-agent">Migrate users</div><span class="arrow"></span><div class="node node-agent">Remove old</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Each task is safe to deploy alone.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Failure: broken in between</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-7-failure">
+          <div class="flow"><div class="node node-agent">Drops column</div><span class="arrow"></span><div class="node node-agent">Tasks 4-5 migrate</div><span class="arrow"></span><div class="node node-external">Production breaks</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Illustration, not a product claim.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">8. Queue awareness</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-8">
+          <div class="flow"><div class="node node-store">Read queue</div><span class="arrow"></span><div class="node node-agent">Skip duplicates</div><span class="arrow"></span><div class="node node-store">Depend on open</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Other sessions count too.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Failure: the double build</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-8-failure">
+          <div class="flow"><div class="node node-agent">Files it again</div><span class="arrow"></span><div class="node node-store">Two tasks</div><span class="arrow"></span><div class="node node-agent">Two agents build</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Illustration, not a product claim.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">9. Flag tasks only a person can do</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-9">
+          <div class="flow"><div class="node node-agent">Scan each task</div><span class="arrow"></span><div class="node node-store">Human flag</div><span class="arrow"></span><div class="node node-human">Person steps</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Some actions are out of reach.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Failure: the stalled queue</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-9-failure">
+          <div class="flow"><div class="node node-agent">Claims secret task</div><span class="arrow"></span><div class="node node-agent">Fails repeatedly</div><span class="arrow"></span><div class="node node-store">Queue stalls</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div>
+        <p class="caption">Illustration, not a product claim.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">All six read the code first</h2>
       <div class="slide-body">
         <div class="visual">
           <table class="comp-table">
-            <thead><tr><th>Checked 10/2026</th><th>Reads code first</th><th>Person approves first</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>✓</td><td>Human approves</td></tr><tr><td>Factory</td><td>✓</td><td>Human approves</td></tr><tr><td>OpenHands</td><td>✓</td><td>–</td></tr><tr><td>Cursor</td><td>✓</td><td>Human approves</td></tr><tr><td>GitHub Copilot</td><td>✓</td><td>Human approves</td></tr><tr><td>Claude Code</td><td>✓</td><td>Human approves</td></tr><tr><td>This sample</td><td>✓</td><td>Human approves</td></tr></tbody>
+            <thead><tr><th>Checked 10/2026</th><th>Reads code first</th><th>Asks first</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>✓</td><td>✓</td></tr><tr><td>Factory</td><td>✓</td><td>◐</td></tr><tr><td>OpenHands</td><td>✓</td><td>✗</td></tr><tr><td>Cursor</td><td>✓</td><td>✓</td></tr><tr><td>GitHub Copilot</td><td>✓</td><td>◐</td></tr><tr><td>Claude Code</td><td>✓</td><td>✓</td></tr><tr><td>This sample</td><td>✓</td><td>✓</td></tr></tbody>
           </table>
           <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
         </div>
@@ -151,12 +359,12 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">No plan fully names reuse and risks</h2>
+      <h2 class="slide-title">Most wait for approval; OpenHands does not say</h2>
       <div class="slide-body">
         <div class="visual">
           <table class="comp-table">
-            <thead><tr><th>Checked 10/2026</th><th>Design form</th><th>Names reuse or risks</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>File</td><td>–</td></tr><tr><td>Factory</td><td>Chat + File</td><td>◐</td></tr><tr><td>OpenHands</td><td>File</td><td>◐</td></tr><tr><td>Cursor</td><td>File</td><td>–</td></tr><tr><td>GitHub Copilot</td><td>Chat + File</td><td>◐</td></tr><tr><td>Claude Code</td><td>File</td><td>◐</td></tr><tr><td>This sample</td><td>Short design</td><td>✓</td></tr></tbody>
+            <thead><tr><th>Checked 10/2026</th><th>Person approves</th><th>Edit before approving</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>✓</td><td>✓</td></tr><tr><td>Factory</td><td>✓</td><td>✓</td></tr><tr><td>OpenHands</td><td>–</td><td>–</td></tr><tr><td>Cursor</td><td>✓</td><td>✓</td></tr><tr><td>GitHub Copilot</td><td>✓</td><td>✓</td></tr><tr><td>Claude Code</td><td>✓</td><td>✓</td></tr><tr><td>This sample</td><td>✓</td><td>✓</td></tr></tbody>
           </table>
           <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
         </div>
@@ -167,12 +375,28 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">Half hand the plan over as steps</h2>
+      <h2 class="slide-title">Plans are saved; reuse and risks are rare</h2>
       <div class="slide-body">
         <div class="visual">
           <table class="comp-table">
-            <thead><tr><th>Checked 10/2026</th><th>How it becomes tasks</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>–</td></tr><tr><td>Factory</td><td>–</td></tr><tr><td>OpenHands</td><td>Plan steps</td></tr><tr><td>Cursor</td><td>Plan steps + Parallel</td></tr><tr><td>GitHub Copilot</td><td>Plan steps</td></tr><tr><td>Claude Code</td><td>–</td></tr><tr><td>This sample</td><td>Tasks</td></tr></tbody>
+            <thead><tr><th>Checked 10/2026</th><th>Plan saved</th><th>Names reuse or risks</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>File</td><td>–</td></tr><tr><td>Factory</td><td>Optional file</td><td>◐</td></tr><tr><td>OpenHands</td><td>PLAN.md</td><td>◐</td></tr><tr><td>Cursor</td><td>File</td><td>–</td></tr><tr><td>GitHub Copilot</td><td>Editor tab</td><td>◐</td></tr><tr><td>Claude Code</td><td>File</td><td>◐</td></tr><tr><td>This sample</td><td>Design file</td><td>✓</td></tr></tbody>
+          </table>
+          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
+        </div>
+        <p class="caption">Links in the video description.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Slicing and order vary most</h2>
+      <div class="slide-body">
+        <div class="visual">
+          <table class="comp-table">
+            <thead><tr><th>Checked 10/2026</th><th>Becomes tasks</th><th>Order of steps</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>–</td><td>–</td></tr><tr><td>Factory</td><td>–</td><td>–</td></tr><tr><td>OpenHands</td><td>Plan steps</td><td>◐</td></tr><tr><td>Cursor</td><td>Plan steps</td><td>◐</td></tr><tr><td>GitHub Copilot</td><td>Plan steps</td><td>–</td></tr><tr><td>Claude Code</td><td>–</td><td>–</td></tr><tr><td>This sample</td><td>Tasks</td><td>✓</td></tr></tbody>
           </table>
           <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
         </div>
@@ -192,7 +416,7 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">After approval: slice into real tasks</h2>
+      <h2 class="slide-title">After approval: slice, then the loop builds</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="slice">
           <div class="flow"><div class="node node-agent">Slice</div><span class="arrow"></span><div class="node node-store">Tasks</div><span class="arrow"></span><div class="node node-job">Loop</div><span class="arrow"></span><div class="node node-agent">Dev-task</div><span class="arrow"></span><div class="node node-external">PRs</div></div>
@@ -205,39 +429,14 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">Why approve the design: our opinion</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="why-approve">
-          <div class="flow"><div class="node node-agent">Design</div><span class="arrow"></span><div class="node node-human">Fix it here</div><span class="arrow"></span><div class="node node-store">Tasks fit code</div><span class="arrow"></span><div class="node node-external">Fewer bad PRs</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div>
-        <p class="caption">Our view, not a standard.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">How it works together</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="together">
-          <div class="flow"><div class="node node-agent">Plan</div><span class="arrow"></span><div class="node node-human">Approve</div><span class="arrow"></span><div class="node node-store">Tasks</div><span class="arrow"></span><div class="node node-job">Loop</div><span class="arrow"></span><div class="node node-external">PRs</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div>
-        <p class="caption">You approve the design, then review PRs.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
       <h2 class="slide-title">Same job, different names</h2>
       <div class="slide-body">
         <div class="visual">
           <table class="comp-table">
             <thead><tr><th>Checked 10/2026</th><th>Planning</th><th>Execution</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>Plan mode</td><td>Devin session</td></tr><tr><td>Factory</td><td>Spec Mode</td><td>Worker session</td></tr><tr><td>OpenHands</td><td>Planning agent</td><td>Issue to PR</td></tr><tr><td>Cursor</td><td>Plan Mode</td><td>Cloud agent</td></tr><tr><td>GitHub Copilot</td><td>Plan mode</td><td>Copilot cloud agent</td></tr><tr><td>Claude Code</td><td>Plan mode</td><td>Claude Code session</td></tr><tr><td>This sample</td><td>plan</td><td>dev-task</td></tr></tbody>
+            <tbody><tr><td>Devin</td><td>Plan mode</td><td>Devin session</td></tr><tr><td>Factory</td><td>Spec Mode</td><td>Worker session</td></tr><tr><td>OpenHands</td><td>Planning agent</td><td>Issue to PR</td></tr><tr><td>Cursor</td><td>Plan Mode</td><td>Cloud agent</td></tr><tr><td>GitHub Copilot</td><td>Plan mode</td><td>Cloud agent</td></tr><tr><td>Claude Code</td><td>Plan mode</td><td>Claude Code session</td></tr><tr><td>This sample</td><td>plan</td><td>dev-task</td></tr></tbody>
           </table>
+          
         </div>
         <p class="caption">Links in the video description.</p>
       </div>
@@ -248,7 +447,7 @@
     <div class="slide-inner">
       <h2 class="slide-title">Where factories take it</h2>
       <div class="slide-body">
-<div class="visual options-grid">
+        <div class="visual options-grid">
           <div class="option"><h3>Coordinator</h3><div class="pick">Children run the pieces</div></div><div class="option"><h3>Tracker</h3><div class="pick">Tickets hold the tasks</div></div><div class="option"><h3>Task list</h3><div class="pick">Agents claim tasks</div></div><div class="option"><h3>Check</h3><div class="pick">A check approves</div></div>
         </div>
         <p class="caption">Later, not next: tests, specs, standards, estimates.</p>
