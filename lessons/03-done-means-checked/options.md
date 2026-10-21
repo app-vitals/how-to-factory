@@ -41,7 +41,7 @@ sample. It comes from the [brief](brief.md) and is our own design, not a claim a
 | GitHub Copilot | **Task acceptance criteria**: A well-scoped task carries acceptance criteria Copilot can use to verify its work. Conversion into test files is not described. ([source](https://docs.github.com/en/copilot/tutorials/cloud-agent/get-the-best-results), as of 2026-10-21) |
 | OpenHands | **Goal objective**: The written objective is the check: the judge tests each run against it, and the page's pattern is an objective that names the command that must pass. ([source](https://docs.openhands.dev/sdk/guides/convo-goal.md), as of 2026-10-21) |
 | Cursor | Not in their docs. Pages checked: cloud-agent, capabilities, best-practices, skills (cursor.com/docs). Not documented; the person states criteria in the prompt, a skill or a rule. (as of 2026-10-21) |
-| Claude Code | Criteria are given by the person in the prompt (example inputs, expected outputs, a failing test first). Automatic conversion of criteria into tests is not in their docs. ([source](https://code.claude.com/docs/en/best-practices.md), as of 2026-10-21) |
+| Claude Code | **Goal condition**: The person writes the condition in a goal: one measurable end state and a stated check. The goal page's example uses include implementing a design doc until all acceptance criteria hold. Automatic conversion of criteria into tests is not in their docs. ([source](https://code.claude.com/docs/en/goal.md), as of 2026-10-21) |
 | This sample | Target: each acceptance criterion becomes a test that is written first and seen failing ([source](brief.md)) |
 
 ### A3. A test line on every task

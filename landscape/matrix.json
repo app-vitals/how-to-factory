@@ -1510,12 +1510,12 @@
           "chip": "◐"
         },
         "verify-criteria": {
-          "name": "Prompt criteria",
-          "summary": "Criteria are given by the person in the prompt (example inputs, expected outputs, a failing test first). Nothing converts criteria to tests automatically.",
-          "sourceUrl": "https://code.claude.com/docs/en/best-practices.md",
+          "name": "Goal condition",
+          "summary": "The person writes the condition in a goal: one measurable end state and a stated check. The goal page's example uses include implementing a design doc until all acceptance criteria hold. Automatic conversion of criteria into tests is not in their docs.",
+          "sourceUrl": "https://code.claude.com/docs/en/goal.md",
           "asOf": "2026-10-21",
-          "short": "The person writes them; nothing converts",
-          "chip": "✗"
+          "short": "The person writes the condition in a goal",
+          "chip": "◐"
         },
         "verify-test-plan": {
           "name": "Plan mode",
