@@ -45,6 +45,7 @@ Playbook and template edits affect only future lessons; lessons 1 and 2 keep the
 | VLS-1.10 | docs: assemble the verify grid with a cross-check | VLS-1.4 to 1.9 | | yes |
 | VLS-1.11 | feat: add the verification depth dimensions to the landscape matrix | VLS-1.10 | | yes |
 | VLS-1.12 | docs: prioritize verification capabilities by expected, common and crucial | VLS-1.3, VLS-1.10 | | yes |
+| VLS-1.14 | docs: record the lesson creation sequence in the playbook | none | | yes |
 | VLS-1.2 | docs: add lesson 3 brief (verification) | VLS-1.1, PTT-1.1, VLS-1.12 | | yes |
 | VLS-1.13 | docs: write lesson 3 options from the verify grid | VLS-1.2, VLS-1.11 | | yes |
 | VLS-2.1 | docs: draft the lesson 3 deck skeleton | VLS-1.2, VLS-1.11, VLS-1.13 | | yes |
@@ -64,6 +65,7 @@ Playbook and template edits affect only future lessons; lessons 1 and 2 keep the
 HITL scan: no tasks require human steps.
 
 ## Decision Log
+- VLS-1.14 added after VLS-1.1 shipped (#152): Dan asked to record the creation process for future lessons; fix-forward task.
 - Topic Verification: Dan approved with the assumption stated.
 - Research moved ahead of the brief (inventory, six verify files, grid, matrix, priorities): Dan, after the first plan was queued.
 - Playbook refresh generalized into a reusable recipe (reuse section, sketch review): Dan's "easier each time, don't over-index" direction.
