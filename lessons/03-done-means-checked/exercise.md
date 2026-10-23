@@ -1,10 +1,10 @@
 # Exercise: make done mean checked
 
-**Goal:** a build step of your own that reads each task's test line, writes a failing test for every acceptance
+**Goal:** a build step of your own that reads each task's acceptance criteria, writes a failing test for every acceptance
 criterion first, runs the repo's own checks, never loosens a test to get green, fixes failures inside a cap, shows what
 ran and what happened, and ends at a gate the agent cannot talk past.
 **You need:** a repo with a test runner and a CI service of any kind, an AI coding agent of your choice, tasks that carry
-a test line and acceptance criteria (from the planning step you built in lesson 2, or written by hand), and the build
+2 to 5 acceptance criteria (from the planning step you built in lesson 2, or written by hand), and the build
 step you made in lesson 1. Name no required tool; any agent, language or runner works.
 
 Our demo uses Bun and Claude Code; you do not need either. Describe the outcomes in whatever tools you picked.
@@ -17,13 +17,13 @@ a person would use). That gives the checks something to run and the gate somethi
 Each outcome has a check you can make against real files and runs in your repo. Tick it only when you can point to the
 evidence.
 
-### 1. A test line before building starts
+### 1. Criteria are checkable before building starts
 
-The task states which test proves it before the agent writes code.
+The task states what proves it before the agent writes code.
 
-- [ ] the task carries a test line, and you can point to where it is read before building starts
-- [ ] a task marked "none needed" has a reason on record that you accepted
-- [ ] a task whose line names a layer (unit, integration) got a test at that layer
+- [ ] each task carries 2 to 5 specific, testable acceptance criteria, and you can point to where they are read before building starts
+- [ ] one criterion names the test layer and the tests added or retired; a task that needs none says why, and you accepted the reason
+- [ ] a task whose criterion names a layer (unit, integration) got a test at that layer
 
 ### 2. Criteria become tests, written first
 

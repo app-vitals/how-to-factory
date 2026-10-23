@@ -44,17 +44,10 @@ sample. It comes from the [brief](brief.md) and is our own design, not a claim a
 | Claude Code | **Goal condition**: The person writes the condition in a goal: one measurable end state and a stated check. The goal page's example uses include implementing a design doc until all acceptance criteria hold. Automatic conversion of criteria into tests is not in their docs. ([source](https://code.claude.com/docs/en/goal.md), as of 2026-10-21) |
 | This sample | Target: each acceptance criterion becomes a test that is written first and seen failing ([source](brief.md)) |
 
-### A3. A test line on every task
+### A3. Retired
 
-| Product | Per-task test planning |
-|---|---|
-| Devin | **Testing mode**: Testing mode, run after the PR, picks the most important flow and sends a concrete step plan before running it. The plain cloud session plans tests only as the prompt asks. ([source](https://docs.devin.ai/work-with-devin/testing-and-recordings.md), as of 2026-10-21) |
-| Factory (Droid) | **Mission planning**: Planning names how work is validated and milestones set how often validation runs. Per-feature test lists are not documented. ([source](https://docs.factory.com/missions/planning), as of 2026-10-21) |
-| GitHub Copilot | Not in their docs. Pages checked: get-the-best-results, research-plan-iterate (docs.github.com). A product-made per-task test plan is not documented; testing expectations go in the task and repository instructions. (as of 2026-10-21) |
-| OpenHands | Not in their docs. Pages checked: Goal Completion Loop (docs.openhands.dev). Per-task test planning is not documented. (as of 2026-10-21) |
-| Cursor | Not in their docs. Pages checked: cloud-agent, capabilities, best-practices (cursor.com/docs). Per-task test planning is not documented. (as of 2026-10-21) |
-| Claude Code | Plan mode is optional, and the guide says to skip it if the diff fits in one sentence. The example prompt asks for tests; a required test list is not in their docs. ([source](https://code.claude.com/docs/en/best-practices.md), as of 2026-10-21) |
-| This sample | Target: every task states which test proves it, and at which layer, before building starts ([source](brief.md)) |
+Folded into A2 (see [brief](brief.md)): the per-task test guidance is one acceptance criterion, so there is no separate
+comparison. The id stays so A4 to A9 keep their numbers.
 
 ### A4. Never weaken a test to get green
 
