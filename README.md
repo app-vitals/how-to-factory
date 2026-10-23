@@ -1,6 +1,9 @@
 # how-to-factory
 
-How to build a software factory: a video tutorial series by App Vitals.
+How to build a software factory: a video tutorial series by [App Vitals](https://github.com/app-vitals).
+
+This repository holds everything behind the series: the lesson outlines and scripts, the slide decks, a vendor-neutral
+component map, a sourced comparison of how different factories work, and a sample factory built live as the course runs.
 
 ## Who it is for
 
@@ -26,6 +29,23 @@ and inputs, not a syllabus.
 ## Status
 
 Early. The lessons are tool-neutral: the sample factory in `factory/` shows one concrete toolchain, and yours can use any agent, language or runner. The component map, lesson backlog and landscape comparison are in place. Lessons 1 and 2 are written; lesson 3 (verification) is in draft. The sample factory is built live as the course runs.
+
+## What is in this repo
+
+- [`docs/`](docs) holds the vendor-neutral [component map](docs/components.md) and the lesson playbook.
+- [`lessons/`](lessons) has one directory per lesson (outline, script, options, exercise) and the lesson backlog.
+- [`landscape/`](landscape) compares how different factories implement each component, with a source and date for every claim.
+- [`decks/`](decks) is the shared slide deck framework; each lesson's deck lives under its lesson directory.
+- [`factory/`](factory) is the sample factory, built live as the course runs.
+
+## Working with the repo
+
+Requires [Bun](https://bun.sh). Run `bun install`, then `bun run typecheck` and `bun test`.
+
+## Contributing and security
+
+Issues are welcome; pull requests are by invitation for now. See [CONTRIBUTING.md](CONTRIBUTING.md). To report a
+vulnerability privately, see [SECURITY.md](SECURITY.md).
 
 ## License
 
