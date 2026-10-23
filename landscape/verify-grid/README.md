@@ -149,9 +149,10 @@ answer:
   The grid does not use the hook.
 - **OpenHands `/goal`.** The `/goal` command from the 2026-10-13 field-grid notes was not re-confirmed and is not used; the goal loop
   row is the SDK `run_goal`.
-- **Source-quality caveat applies to all six.** Every file says its fetch tool returned a condensed extraction, not raw page text, so a
-  "not documented" is "the extraction did not mention it". Devin and OpenHands say this in their Method; Factory, Cursor, Copilot and
-  Claude Code mark thinly returned pages "(summary)".
+- **Source-quality caveat applies to five of six.** Every file except Cursor says its fetch tool returned a condensed extraction, not
+  raw page text, so a "not documented" is "the extraction did not mention it". Devin and OpenHands say this in their Method; Factory,
+  Copilot and Claude Code mark thinly returned pages "(summary)". Cursor was read as raw Markdown over plain HTTP, so its "not
+  documented" cells rest on verbatim page text.
 
 ### 4. Blanks against the docs index
 
