@@ -1,8 +1,9 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
+import { basename } from "node:path";
 
 // Pre-public scan: tracked files must not carry internal names, private repos, local paths
-// or internal hosts. An optional UNTRACKED denylist (PRE_PUBLIC_EXTRA_BANNED=<file path>,
-// one entry per line) catches client names without ever committing them.
+// or internal hosts. Patterns are committed; there is no untracked or env-supplied input.
+// A vendor allowlist additionally guards the structured landscape files.
 
 export type Rule = { label: string; re: RegExp };
 
@@ -17,16 +18,6 @@ export const BANNED: Rule[] = [
 export const EXEMPT = ["scripts/check-public.ts", "scripts/check-public.test.ts"];
 
 export type Hit = { file: string; line: number; label: string };
-
-const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-export function parseDenylist(text: string): Rule[] {
-  return text
-    .split("\n")
-    .map((l) => l.trim())
-    .filter((l) => l !== "" && !l.startsWith("#"))
-    .map((l) => ({ label: "denylist entry", re: new RegExp(escapeRe(l), "i") }));
-}
 
 export function scanContent(file: string, content: string, rules: Rule[]): Hit[] {
   const hits: Hit[] = [];
@@ -50,7 +41,88 @@ export function scanFiles(
     });
 }
 
-// Hit output never echoes the matched text, so a denylist entry cannot leak into CI logs.
+// Vendors permitted in the structured landscape places. The task-queue trackers (Linear, Jira,
+// GitHub Issues) are allowed because matrix.json already lists them as task-queue products.
+// Anything else naming a company there is a hit. Compared case-insensitively after stripping a
+// trailing parenthetical, e.g. "Factory (Droid)" -> "factory".
+export const ALLOWED_VENDORS = [
+  "Claude Code",
+  "Copilot",
+  "GitHub Copilot",
+  "GitHub Copilot coding agent",
+  "GitHub Copilot cloud agent",
+  "Cursor",
+  "Devin",
+  "Factory",
+  "OpenHands",
+  "Linear",
+  "Jira",
+  "GitHub Issues",
+];
+
+const slug = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+const ALLOWED_SLUGS = new Set(ALLOWED_VENDORS.map(slug));
+const VENDOR_LABEL = "vendor not in allowlist";
+
+export function isAllowedVendor(name: string): boolean {
+  return ALLOWED_SLUGS.has(slug(name.replace(/\s*\(.*\)\s*$/, "")));
+}
+
+// Product id/name entries in landscape/matrix.json (products[].id and products[].name).
+export function checkMatrix(file: string, content: string): Hit[] {
+  let data: { products?: { id?: unknown; name?: unknown }[] };
+  try {
+    data = JSON.parse(content);
+  } catch {
+    return [{ file, line: 1, label: "unparseable JSON, vendors not checked" }];
+  }
+  const lines = content.split("\n");
+  const start = Math.max(0, lines.findIndex((l) => /^\s*"products"\s*:/.test(l)));
+  const lineOf = (key: string, value: string) => {
+    const needle = JSON.stringify(value);
+    const i = lines.findIndex((l, n) => n >= start && l.includes(`"${key}"`) && l.includes(needle));
+    return i === -1 ? start + 1 : i + 1;
+  };
+  const hits: Hit[] = [];
+  for (const p of data.products ?? []) {
+    for (const key of ["id", "name"] as const) {
+      const v = p[key];
+      if (typeof v === "string" && !isAllowedVendor(v)) hits.push({ file, line: lineOf(key, v), label: VENDOR_LABEL });
+    }
+  }
+  return hits;
+}
+
+// Per-product grid files: file stem, and the name before ':' in the first "# " heading.
+export function checkGridFile(file: string, content: string): Hit[] {
+  const hits: Hit[] = [];
+  const stem = basename(file).replace(/\.md$/, "");
+  if (!isAllowedVendor(stem)) hits.push({ file, line: 1, label: VENDOR_LABEL });
+  const lines = content.split("\n");
+  const i = lines.findIndex((l) => l.startsWith("# "));
+  if (i !== -1) {
+    const name = (lines[i] ?? "").slice(2).split(":", 1)[0]?.trim() ?? "";
+    if (!isAllowedVendor(name)) hits.push({ file, line: i + 1, label: VENDOR_LABEL });
+  }
+  return hits;
+}
+
+export function checkVendors(files: string[], read: (f: string) => string | null): Hit[] {
+  return files.flatMap((f) => {
+    const isMatrix = f === "landscape/matrix.json";
+    const isGrid = /^landscape\/[^/]+-grid\/[^/]+\.md$/.test(f) && basename(f) !== "README.md";
+    if (!isMatrix && !isGrid) return [];
+    const content = read(f);
+    if (content === null) return [];
+    return isMatrix ? checkMatrix(f, content) : checkGridFile(f, content);
+  });
+}
+
+// Hit output never echoes the matched text, so nothing sensitive can leak into CI logs.
 const format = (h: Hit) => `${h.file}:${h.line}  ${h.label}`;
 
 function readText(f: string): string | null {
@@ -61,18 +133,10 @@ function readText(f: string): string | null {
 
 function main(): number {
   const tracked = Bun.spawnSync(["git", "ls-files", "-z"]).stdout.toString().split("\0").filter(Boolean);
-  const rules = [...BANNED];
-  const extra = process.env.PRE_PUBLIC_EXTRA_BANNED;
-  if (extra) {
-    if (!existsSync(extra)) {
-      console.error(`PRE_PUBLIC_EXTRA_BANNED file not found: ${extra}`);
-      return 1;
-    }
-    rules.push(...parseDenylist(readFileSync(extra, "utf8")));
-  }
-  const hits = scanFiles(tracked.filter(existsSync), readText, rules);
+  const present = tracked.filter(existsSync);
+  const hits = [...scanFiles(present, readText, BANNED), ...checkVendors(present, readText)];
   if (hits.length > 0) {
-    console.error(`check-public: ${hits.length} banned match(es)`);
+    console.error(`check-public: ${hits.length} match(es)`);
     for (const h of hits) console.error(`  ${format(h)}`);
     return 1;
   }

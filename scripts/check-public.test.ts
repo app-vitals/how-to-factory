@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { BANNED, EXEMPT, parseDenylist, scanContent, scanFiles } from "./check-public.ts";
+import { ALLOWED_VENDORS, BANNED, EXEMPT, checkGridFile, checkMatrix, checkVendors, isAllowedVendor, scanContent, scanFiles } from "./check-public.ts";
 
 describe("scanContent", () => {
   test("hits a seeded banned string with file and line", () => {
@@ -21,20 +21,61 @@ describe("scanContent", () => {
   });
 });
 
-describe("denylist", () => {
-  const rules = parseDenylist("# comment\n\nAcme Widgets\n");
+const matrix = (...products: { id: string; name: string }[]) => JSON.stringify({ products }, null, 2);
 
-  test("matches case-insensitively", () => {
-    expect(scanContent("a.md", "we built this for ACME widgets", rules)).toHaveLength(1);
+describe("vendor allowlist", () => {
+  test.each(["Claude Code", "Copilot", "GitHub Copilot coding agent", "Cursor", "Devin", "Factory (Droid)", "OpenHands", "Linear", "Jira", "GitHub Issues"])(
+    "allows %s",
+    (n) => expect(isAllowedVendor(n)).toBe(true),
+  );
+
+  test("matrix.json with all six vendors passes", () => {
+    const m = matrix(
+      { id: "claude-code", name: "Claude Code" },
+      { id: "copilot", name: "GitHub Copilot coding agent" },
+      { id: "cursor", name: "Cursor" },
+      { id: "devin", name: "Devin" },
+      { id: "factory", name: "Factory (Droid)" },
+      { id: "openhands", name: "OpenHands" },
+    );
+    expect(checkMatrix("landscape/matrix.json", m)).toEqual([]);
   });
 
-  test("ignores comments and blanks, escapes regex chars", () => {
-    expect(rules).toHaveLength(1);
-    expect(scanContent("a.md", "axme", parseDenylist("a.me"))).toEqual([]);
+  test("non-allowlisted company in matrix.json fails with line and no echo", () => {
+    const m = matrix({ id: "devin", name: "Devin" }, { id: "zorbo", name: "Zorbo Corp" });
+    const hits = checkMatrix("landscape/matrix.json", m);
+    expect(hits.map((h) => h.label)).toEqual(["vendor not in allowlist", "vendor not in allowlist"]);
+    expect(hits[0]?.line).toBe(m.split("\n").findIndex((l) => l.includes('"zorbo"')) + 1);
+    expect(JSON.stringify(hits)).not.toMatch(/zorbo/i);
   });
 
-  test("hit label does not echo the entry", () => {
-    expect(JSON.stringify(scanContent("a.md", "acme widgets", rules))).not.toMatch(/acme/i);
+  test("grid file: allowed stem and heading pass", () => {
+    expect(checkGridFile("landscape/plan-grid/cursor.md", "# Cursor: lesson 2 plan grid\n")).toEqual([]);
+    expect(checkGridFile("landscape/verify-grid/factory.md", "# Factory (Droids / Missions): grid\n")).toEqual([]);
+    expect(checkGridFile("landscape/verify-grid/copilot.md", "# GitHub Copilot (cloud agent, CLI): grid\n")).toEqual([]);
+  });
+
+  test("grid file: non-allowlisted heading and stem fail", () => {
+    const hits = checkGridFile("landscape/plan-grid/zorbo.md", "intro\n# Zorbo Corp: lesson 2\n");
+    expect(hits).toEqual([
+      { file: "landscape/plan-grid/zorbo.md", line: 1, label: "vendor not in allowlist" },
+      { file: "landscape/plan-grid/zorbo.md", line: 2, label: "vendor not in allowlist" },
+    ]);
+  });
+
+  test("checkVendors routes files, skips README and unrelated paths", () => {
+    const files: Record<string, string> = {
+      "landscape/matrix.json": matrix({ id: "zorbo", name: "Zorbo" }),
+      "landscape/plan-grid/README.md": "# Plan grid: spec to plan\n",
+      "landscape/plan-grid/zorbo.md": "# Zorbo: x\n",
+      "docs/zorbo.md": "# Zorbo: x\n",
+    };
+    const hits = checkVendors(Object.keys(files), (f) => files[f] ?? null);
+    expect([...new Set(hits.map((h) => h.file))]).toEqual(["landscape/matrix.json", "landscape/plan-grid/zorbo.md"]);
+  });
+
+  test("allowlist contains the six vendors", () => {
+    for (const v of ["Claude Code", "Copilot", "Cursor", "Devin", "Factory", "OpenHands"]) expect(ALLOWED_VENDORS).toContain(v);
   });
 });
 
