@@ -15,7 +15,7 @@ Column note: PLAN, DEV-TASK and LOOP across tasks use input / step / output / wh
 output field for LOOP within a task (they record "retries until a check passes?", "what judges it" and "who drives"), so that
 grid uses those three columns instead of inventing an output.
 
-As of 2026-10-13 unless a row says otherwise.
+As of 2026-10-13 unless a row says otherwise. The per-product files were spot-checked against their cited pages on 2026-10-23 (corrections and as-of bumps are in each file); the summary cells below are unchanged by that pass.
 
 ## PLAN (as of 2026-10-13)
 
