@@ -10,7 +10,7 @@ Repo: app-vitals/how-to-factory. Design and task list approved by Dan, 2026-10-2
 ## Design
 - **Topic (assumption, confirmed by approval): Verification.** Lesson 2's order was plan, dev-task, verification, review, spec. `docs/components.md` section 4 defines it, and PR #146 hands per-task test planning to it. Lesson 1 banked three verify columns (`verify-judge`, `verify-runs-app`, `verify-keeps-going`) for all six products.
 - **One idea (draft):** "done" should mean something a machine checked, not the agent's say-so.
-- **Stages (draft):** Define (each task states its test line; acceptance criteria become checks), Run (run the repo's tests, lint and typecheck before done; never weaken a test to get green; run the app where it matters), Gate (required CI, branch protection, coverage and speed budgets). Final capability list comes from a later inventory and field survey.
+- **Stages (draft):** Define (each task states its test-decision criterion; acceptance criteria become checks), Run (run the repo's tests, lint and typecheck before done; never weaken a test to get green; run the app where it matters), Gate (required CI, branch protection, coverage and speed budgets). Final capability list comes from a later inventory and field survey.
 - **Out of scope (owners):** review lesson, release/canary, the test-readiness pipeline (destination only), spec writing.
 - **Easier each time (Dan's goal):** VLS-1.1 turns the playbook into a reusable recipe: sketch review first (brief + stage slide + one capability slide before script/README/deck), a stage-grouped capability table in the brief template, a stage and capability slide pattern in the deck template, a required "Reused from earlier lessons / New this time" section in every brief, and a lesson 2 entry in playbook section 9 that records rework passes. Rules are marked "from lessons 1 and 2, revisit after lesson 3" so they do not harden early.
 - **Deck shape:** about 26 slides like lesson 2's final deck. Stage slide, then one slide per capability: title `Stage: capability`, one why-or-prevents bullet, two "e.g." bullets, one diagram, caption "Examples are illustrations, not product claims."
@@ -24,7 +24,7 @@ Lesson 2's final deck structure (`lessons/02-a-plan-that-looks-first/deck/index.
 ### Complexity risks
 - Template deck edits must pass `scripts/check-decks.ts` (3 bullets, 8 words, 8-word titles, one diagram, max 2 visual blocks).
 - Placeholder field slides must avoid the forbidden viewer-facing words.
-- VLS-1.1 touches the playbook and templates that lesson 2's PTT tasks do not edit, so no shared-file conflict; VLS-1.2 depends on PTT-1.1 because it restates the test-line hand-off.
+- VLS-1.1 touches the playbook and templates that lesson 2's PTT tasks do not edit, so no shared-file conflict; VLS-1.2 depends on PTT-1.1 because it restates the test-decision-criterion hand-off.
 
 ### Breaking-change scan
 Playbook and template edits affect only future lessons; lessons 1 and 2 keep their files. VLS-1.1 greps for consumers of the removed failure-slide wording (CLAUDE.md, `lessons/_template/*`, `scripts/check-decks.ts` and its tests) before editing.

@@ -22,7 +22,7 @@ Stages follow the approved design in `planning/lesson3-verification/PLAN.md`: **
 
 ## Baseline (not ranked)
 
-The sample already has these from lessons 1 and 2, so they are not depth capabilities: tasks with 2 to 5 acceptance criteria, a branch per task, and an `Expected Tests` bullet in the task brief (lesson 2's per-task test line). Running the repo's validate command once before the PR is the simplest version in `docs/components.md` section 4 and is where lesson 1 stopped.
+The sample already has these from lessons 1 and 2, so they are not depth capabilities: tasks with 2 to 5 acceptance criteria, a branch per task, and an `Expected Tests` bullet in the task brief (lesson 2's per-task test-decision criterion). Running the repo's validate command once before the PR is the simplest version in `docs/components.md` section 4 and is where lesson 1 stopped.
 
 ## The ranked list
 
@@ -34,7 +34,7 @@ Ordered by stage, then by how much the three ratings agree.
 |---|---|---|---|---|---|
 | A1 | Run: the repo's own checks before done (tests, lint, typecheck) | High | **5**; Claude Code **partly** (runs whatever the person or project names). Product picks the exact commands **0** | Med | Grid: *What runs*, Grid §5 ("Product picks the exact check commands: 0 of 6"). Inv #3, #6: "Verifications are crucial to ensuring your work is valid" is documented, but why it runs both in the subagent and again pre-ship is inferred, so Med. |
 | A2 | Define: acceptance criteria become tests, written before the code | High | Criteria turned into checks by the product **0**; the written objective or per-feature criteria are the check in **2** (OpenHands, Factory). Failing-test-first **0** (not a grid dimension) | **High** | Grid: *Criteria turned into checks*. Inv #1, #2: the rule is stated twice and the RED step carries its own documented reason: "A test passing immediately means it is testing existing behavior or is incorrectly written". It is the only hard block in the pipeline (Inv #1 note). The broader reason for TDD is inferred, but the RED-step reason alone is documented, so High. |
-| A3 | Define: a test line on every task | Med | Per-task test planning **0** on the shown surfaces (Devin's separate Testing mode writes a plan); 13 of 22 cells wholly not documented | Med | Grid: *Per-task test planning*. Inv #2: "If a Test Type is specified, a test of that type must exist and pass" is documented as a rule; the purpose is inferred, so Med. Carries lesson 2's hand-off (PR #146) into a check. |
+| A3 | Define: a test-decision criterion on every task | Med | Per-task test planning **0** on the shown surfaces (Devin's separate Testing mode writes a plan); 13 of 22 cells wholly not documented | Med | Grid: *Per-task test planning*. Inv #2: "If a Test Type is specified, a test of that type must exist and pass" is documented as a rule; the purpose is inferred, so Med. Carries lesson 2's hand-off (PR #146) into a check. |
 | A4 | Run: never weaken a test to get green | High | **0** of 6 and none of the 79 surfaces document a built-in guard | Med | Grid: *Guard against weakening tests*, Observations ("Absent"). Inv Gap #2: Shipwright has no such rule either (`weaken`: 0 hits), so there is no documented reason to quote; Med by the cap. Failure is an illustration, see the write-up. Kept on the lesson's design, see "Kept on weaker evidence". |
 | A5 | Run: a fresh-context check of the criteria against the diff | Med | A separate verifier: **2** (Factory validation workers, OpenHands judge). Who decides done: Automated **2**, Human **2**, no gate stated **2** | Med | Grid: *Who decides done*. Inv #4: "This is an independent review — the subagent has no knowledge of implementation decisions" is documented, including why it runs on the cheapest model. The failure it prevents (the builder marking its own work done) is inferred, so Med. Inv Gap #5: it judges from the diff, never from a run. |
 | A6 | Run: run the app where it matters | Med | Built in **2** (Factory, Cursor); when the prompt asks **1** (Devin); other surface **1** (Claude Code); not described **2** (OpenHands, Copilot) | Med | Grid: *Runs the app itself*. Inv Gap #1: Shipwright has no instruction to run the app (0 hits for `screenshot`, `visual`, `lighthouse`). A criterion about behavior can be rated MET on code that never ran (Inv Gap #5). No documented Shipwright reason, so Med. |
@@ -77,7 +77,7 @@ The approved stages (Define, Run, Gate) and the "never weaken a test" and "run t
 
 **Kept on weaker evidence (flag for Dan):**
 - **A4 never weaken a test**: 0 of 6 and Shipwright has no such rule (Inv Gap #2). Kept because the design names it in the Run stage and it is the cheapest check to build (a diff rule: no deleted or loosened assertions without a stated reason). Say "none of these docs describe one", never "no product has one". Crucial stays Med; the failure is an illustration, not a quote.
-- **A3 test line on every task** and **A6 run the app**: Med crucial, with common counts of 0 and 2. Kept because the design's Define and Run stages need them. A6 is the first item to move to a walk-through if lesson time is short.
+- **A3 test-decision criterion on every task** and **A6 run the app**: Med crucial, with common counts of 0 and 2. Kept because the design's Define and Run stages need them. A6 is the first item to move to a walk-through if lesson time is short.
 - **A5 fresh-context check**: Med crucial (failure inferred) and only 2 of 6, kept because it is the sample's answer to "done should mean something a machine checked, not the agent's say-so" (the design's one idea). Its limit (it reads the diff, not a run) is the reason A6 exists.
 - **A1 and A8** have Med crucial: the Shipwright reasons are partly documented or inferred. Teach the behavior; do not quote Shipwright as the source of the reason.
 
@@ -126,10 +126,10 @@ Each item: concept, why it exists, a concrete failure without it, what it takes 
 - **Failure without it (illustration):** the PR says "tested" and the person cannot tell which checks ran.
 - **To build:** a table in the PR body from the check outputs. Small.
 
-### A3. Define: a test line on every task
+### A3. Define: a test-decision criterion on every task
 - **Concept:** every task states which test proves it, and at which layer, before building starts.
 - **Why it exists:** **(Shipwright, documented)** a Test Type, when set, must exist and pass. Why is inferred.
-- **Failure without it (illustration):** a task with no test line ships with no test and nothing marks the gap.
+- **Failure without it (illustration):** a task with no test-decision criterion ships with no test and nothing marks the gap.
 - **To build:** one bullet in the task shape, from lesson 2. Small.
 
 ### A6. Run: run the app where it matters

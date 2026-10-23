@@ -58,7 +58,7 @@ the saved design, the human-only flag) to one minute each, keeping the queue-awa
    - **Approve:** a hard human approval before any task is written. This is a stop, not a suggestion.
    - **Slice:** cut the approved design into tasks that are each safe to ship alone, and mark what only a person can
      do.
-   - Say what is left out on purpose: test design (the plan only states each task's test line), how specs are
+   - Say what is left out on purpose: test design (the plan only states a test-decision criterion in each task), how specs are
      written, a shared standards file, and bundling, scoring and model tier. Each is named again in step 8.
 4. **The nine capabilities, by stage** (about 15 min, roughly 1.5 min each). Walk the four stages in order, Look,
    Design, Approve, Slice. For each capability, say the concept, then one line on why it exists or what it prevents
@@ -171,10 +171,10 @@ the saved design, the human-only flag) to one minute each, keeping the queue-awa
          production breaks between 3 and 5; a "make the field required" task ships before the backfill and every old row
          fails validation; a rename done as add, migrate, remove works at every merge point, so reverting any one task
          is safe.
-       - Build: a slicing prompt with the three-step rule, a per-task "safe to deploy alone" line, a per-task test line,
+       - Build: a slicing prompt with the three-step rule, a per-task "safe to deploy alone" line, a per-task test-decision criterion,
          and a dependency table. Medium; the rule is short, applying it takes judgment the model must show.
-       - Say, in about 20 seconds: each task also carries a test line, the tests it adds or retires, or "none needed"
-         and why. Show the line on the example task. The plan only states it; how tests are designed belongs to the
+       - Say, in about 20 seconds: each task's acceptance criteria also include a test-decision criterion, the tests it adds or retires, or "none needed"
+         and why. Show the criterion on the example task. The plan only states it; how tests are designed belongs to the
          verification lesson.
        - Demo: the slicing section of the plan skill plus a line on every task. Yours: a rule you apply by hand while
          writing the list.
@@ -241,7 +241,7 @@ the saved design, the human-only flag) to one minute each, keeping the queue-awa
    call it. Destinations, described not prescribed: a coordinator that splits a plan and runs pieces in parallel,
    tracker tickets as the output, a check standing in for the approval. Field: Where it goes from here. Say what is
    deliberately out of scope, each with its own lesson and order open, promising nothing: test design (the
-   verification lesson; the plan only states each task's test line), how specs are written (an intake lesson), a
+   verification lesson; the plan only states a test-decision criterion in each task), how specs are written (an intake lesson), a
    shared standards file (the standards lesson), and bundling, scoring and model tier, the unattended variant of approval, a second model reading the plan, parallel
    coordinators, tracker sync and configuring the planning method (a later planning deep dive).
 9. **Exercise** (about 2 min). The [exercise](exercise.md) has you give your own planning step the same behaviours, with
