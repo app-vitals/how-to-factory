@@ -14,7 +14,7 @@ Repo: app-vitals/how-to-factory. Goal: make the repo safe to flip public. Reques
 
 ## Design
 
-- `scripts/check-public.ts` (+ `bun run pre-public`): banned-strings scan over tracked files (internal org/product names, `app-vitals/intel`, local paths, internal hosts) plus an optional untracked client-name denylist (`PRE_PUBLIC_EXTRA_BANNED` file path; the list itself is never committed). Runs gitleaks over full history. Wired into CI for the committed patterns.
+- `scripts/check-public.ts` (+ `bun run pre-public`): banned-strings scan over tracked files (internal org/product names, the private deck-source repo reference, local paths, internal hosts) plus an optional untracked client-name denylist (`PRE_PUBLIC_EXTRA_BANNED` file path; the list itself is never committed). Runs gitleaks over full history. Wired into CI for the committed patterns.
 - Competitor claims: liveness check for cited URLs, then per-grid re-fetch of every claim.
 - Public-facing files: README, SECURITY.md, CONTRIBUTING.md (issues welcome, PRs by invitation for now; no CODE_OF_CONDUCT). CLAUDE.md gets the going-public scrub rule.
 - Human steps: Dave sign-off; repo settings; one pre-flip run of `pre-public` with the real client-name list; visibility flip.
