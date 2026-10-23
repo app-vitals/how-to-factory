@@ -20,3 +20,4 @@ jobs:
       - run: bun test
       - run: bun scripts/check-landscape.ts
       - run: bun scripts/check-decks.ts
+      - run: bun scripts/check-public.ts

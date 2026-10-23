@@ -27,7 +27,7 @@ the standard.
 - `CI / check` — typecheck + tests (`.github/workflows/ci.yml`)
 - `pr-title-lint / Conventional-Commit PR title` — PR title must be a Conventional Commit; types: feat fix perf revert docs refactor test build ci chore (`pr-title-lint.yml`)
 - `secret-scan / gitleaks secret scan` — pinned gitleaks binary over the PR/push commit range (`secret-scan.yml`)
-- `CI / check` also runs `scripts/check-landscape.ts` and `scripts/check-decks.ts`.
+- `CI / check` also runs `scripts/check-landscape.ts`, `scripts/check-decks.ts` and `scripts/check-public.ts` (banned internal names, paths, hosts in tracked files). Before going public run `bun run pre-public` (adds full-history gitleaks). It also enforces a vendor allowlist for `landscape/matrix.json` and the per-product `landscape/*-grid/*.md` files. Never commit client names.
 - Renovate (`renovate.json`) keeps bun deps and GitHub Action SHA pins current; enabling the app is a human step.
 
 TypeScript on Bun. Strict mode. Conventional commit prefixes (`feat:`, `fix:`, `docs:`, `chore:`).
