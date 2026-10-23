@@ -558,7 +558,7 @@
         },
         "verify-checks": {
           "name": "Validation workers",
-          "summary": "Validation workers run at the end of each milestone, in scrutiny and user-testing kinds: tests, regressions and integration. Which exact commands run is not named; it follows the project.",
+          "summary": "Validation workers run at the end of each milestone, exercising the running application. Which exact commands run is not named; it follows the project.",
           "sourceUrl": "https://docs.factory.com/missions/planning",
           "asOf": "2026-10-21",
           "short": "Validators test at each milestone",
@@ -574,10 +574,10 @@
         },
         "verify-test-plan": {
           "name": "Mission planning",
-          "summary": "Planning names how work is validated and milestones set how often validation runs. Per-feature test lists are not documented.",
+          "summary": "Planning sets milestones, which set how often validation runs. Per-feature test lists are not documented.",
           "sourceUrl": "https://docs.factory.com/missions/planning",
           "asOf": "2026-10-21",
-          "short": "Planning names validation; no test lists",
+          "short": "Milestones set validation cadence; no test lists",
           "chip": "◐"
         },
         "verify-ci-gate": {
@@ -592,7 +592,7 @@
           "chip": "◐"
         },
         "verify-test-guard": {
-          "omitted": "Pages checked: Missions overview, planning, reference, running-cli, running-app, factory.com/news/missions. Not documented; the pages only say validators start in a fresh session with clean context."
+          "omitted": "Pages checked: Missions overview, planning, reference, running-cli, running-app, factory.com/news/missions. Not documented; the news post only says each feature gets a fresh worker session, which is not a test guard."
         },
         "verify-evidence": {
           "name": "Mission Control",
@@ -1374,7 +1374,7 @@
           "chip": "Check + Model"
         },
         "verify-runs-app": {
-          "omitted": "Pages checked: Best practices, Common workflows, Run Claude Code programmatically, Use Claude Code in the cloud (code.claude.com). They advise asking for evidence such as test output or a screenshot but do not document Claude Code starting the app and driving it as a built-in step."
+          "omitted": "Pages checked: Best practices, Common workflows, Run Claude Code programmatically, Use Claude Code in the cloud (code.claude.com). They advise asking for evidence such as test output or a screenshot but do not document Claude Code starting the app and driving it as a built-in step. Other pages do: the `/verify` and `/run` skills, Chrome and Computer use (see landscape/verify-grid/claude-code.md)."
         },
         "verify-keeps-going": {
           "name": "/goal",
@@ -1526,7 +1526,7 @@
           "chip": "◐"
         },
         "verify-ci-gate": {
-          "omitted": "Pages checked: github-actions, code-review, code-review-pull-requests (code.claude.com). CI or branch gating is not documented."
+          "omitted": "Pages checked: github-actions, code-review, code-review-pull-requests (code.claude.com). No CI or branch gating is set up by default. code-review-pull-requests does document a conversation-resolution branch-protection note and a scripted severity-count gate (see landscape/verify-grid/claude-code.md)."
         },
         "verify-limits": {
           "omitted": "Pages checked: best-practices, code-review, code-review-customize (code.claude.com). Coverage thresholds are not documented."

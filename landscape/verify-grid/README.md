@@ -1,6 +1,6 @@
 # Verify grid: finished work is checked (lesson 3)
 
-**As of 2026-10-21** (every product file was fetched that day). Every product cell below is a short pointer to the matching cell in
+**As of 2026-10-23** (every product file was re-fetched and spot-checked that day; the first pass was 2026-10-21). Every product cell below is a short pointer to the matching cell in
 that product's own file, which holds the full wording, the first-party URLs, the pages read and the pages ruled out. This README
 adds no claim that the per-product files do not source; the cross-check and observations are counts and comparisons computed from
 those files. The "This sample" row is the one exception: it comes from our own inventory, not from a product page.
@@ -24,11 +24,11 @@ Copilot, cloud agent session; Claude Code, interactive session.
 | Product (surface shown) | What runs | Who decides done | Runs the app itself | How it keeps going |
 | --- | --- | --- | --- | --- |
 | [Devin](devin.md) (cloud session self-check) | Existing tests, lint and type checks in the session; which ones are set by prompt, playbook, AGENTS.md or a skill | **Human**: people review the PR, then choose to merge | Yes, when the prompt asks (run locally, walk a browser flow, screenshots); a separate Testing mode drives the app | Iterates until tests pass before submitting; retry cap not documented |
-| [Factory](factory.md) (Mission) | Validation workers at each milestone (scrutiny, user-testing): tests, regressions, integration; exact commands not named | **Automated**: validators and the orchestrator; the person can only override by marking an item complete | Yes: validators launch the app; the project must supply a start script | Orchestrator adds fix features; a retry-limit warning exists, its value not documented |
+| [Factory](factory.md) (Mission) | Validation workers at each milestone exercise the running app; exact commands not named | Not stated who declares done: the person acts as project manager and can tell the orchestrator to mark an item complete | Yes: validators launch the app; the project must supply a start script | Orchestrator adds fix features; a retry-limit warning exists, its value not documented |
 | [OpenHands](openhands.md) (goal loop) | Whatever command the objective names; a judge model audits the output and runs nothing | **Automated**: a separate judge model, from real output | Only as far as the objective's command does; not described | Judge returns what is missing, the agent retries; default cap 10 rounds |
 | [Cursor](cursor.md) (cloud agent) | The agent builds and tests in its VM; its own choice from prompt, skills and rules; a fixed set before a PR not documented | Not stated as a gate: a "merge-ready" PR with artifacts, the person validates | Yes: a desktop VM, dev servers, browser flows | Fixes CI failures on PRs it created; skips in set cases; stops after 10 follow-ups |
 | [Copilot](copilot.md) (cloud agent session) | Tests and linters in its own Actions environment before it pushes; commands come from repo instructions | **Human**: the person reviews; the agent adds them as reviewer | Not documented | Not documented as retry-until-green; 59-minute session limit |
-| [Claude Code](claude-code.md) (interactive session) | Whatever the person or project instructions name; no built-in test, lint or typecheck | None of the three: Claude stops when work looks done; without a check the person is the loop | **Other surface**: `/verify` and `/run` skills, Chrome, Computer use | **Other surface**: `/goal` and the `Stop` hook keep it going; the hook's block cap is unresolved in the file |
+| [Claude Code](claude-code.md) (interactive session) | Whatever the person or project instructions name; no built-in test, lint or typecheck | None of the three: Claude stops when work looks done; without a check the person is the loop | **Other surface**: `/verify` and `/run` skills, Chrome, Computer use | **Other surface**: `/goal` and the `Stop` hook keep it going; the hook's block cap is 8 in a row, from one page only |
 | **This sample** (dev-task pre-ship, spec check, CI gate) | Repo validate, lint, typecheck, tests, extra layers; every outcome recorded | **Automated** at the spec check (fresh-context subagent); failure of a local check never blocks, CI is the arbiter | Not in the pre-merge flow; a post-deploy canary suite hits the deployed app | Spec check loops until all MET; CI fix loop, up to 6 attempts |
 
 **Criteria, planning, gating, limits, weakened tests**
@@ -36,7 +36,7 @@ Copilot, cloud agent session; Claude Code, interactive session.
 | Product (surface shown) | Criteria turned into checks | Per-task test planning | CI or branch gating | Coverage or speed limits | Guard against weakening tests |
 | --- | --- | --- | --- | --- | --- |
 | [Devin](devin.md) | Prompt advice, not a product step: state success measurably; every slice needs a pass or fail check | Only as the prompt asks | Bound by the same branch protections as a person; no checks named | Coverage only as prompt examples; nothing enforced | Not documented; closest is a prompt saying existing tests must still pass |
-| [Factory](factory.md) | Each feature carries validation criteria; how they map to tests not documented | Planning names how work is validated; per-feature test lists not documented | Not documented for Missions | Cost floor and a switch to turn validation off; no coverage limit | Not documented |
+| [Factory](factory.md) | Each feature carries validation criteria; how they map to tests not documented | Milestones set how often validation runs; per-feature test lists not documented | Not documented for Missions | Cost floor and a switch to turn validation off; no coverage limit | Not documented |
 | [OpenHands](openhands.md) | The written objective is the check; it should name the command that must pass | Not documented | Not documented | A 10-round cap only | Not documented as a rule; the judge reads real output, which covers claims, not edited tests |
 | [Cursor](cursor.md) | Not documented | Not documented | Waits for every check on the commit; whether CI is required before a PR is not documented | Not documented as limits | Not documented as a built-in; hooks could be written to do it |
 | [Copilot](copilot.md) | In the task text, not automatic; no conversion into tests | Only via the task and repo instructions | Workflows wait for a person to approve and run; blocked from default branches, subject to rulesets | 59-minute cap; coverage thresholds not documented | Not documented; left to the person's review |
@@ -135,16 +135,16 @@ answer:
 
 - **Labels that the product files do not bold.** "Who decides done" is **Human** for Devin and **Automated** for OpenHands in the
   files. For Factory (Mission), Copilot and the Claude Code and Cursor cells the files describe who decides without one of the three
-  labels. The grid applies **Human** to Copilot ("The person") and **Automated** to Factory ("validators and the orchestrator
-  decide") because the cell says so in those words; the product files themselves do not use the labels there. Cursor and Claude Code
-  are left without a label because the cell does not name a decider.
+  labels. The grid applies **Human** to Copilot ("The person") because the cell says so in those words; the product files
+  themselves do not use the label there. Factory, Cursor and Claude Code are left without a label because the cell does not name a
+  decider (Factory's docs do not say who declares a Mission done).
 - **Claude Code's interactive session is the only shown surface with four dimensions answered from other surfaces** (runs the app,
   keeps going, CI gating, post-PR fix). The grid marks each **Other surface**. The file itself has no row for the interactive session
   on those four.
 - **Devin's Testing mode is a different surface from the one shown.** Its test plan, recorded video and "Test the app" gate sit on
   that row, not on the cloud-session self-check, so they are not counted in the shown-surface totals below.
-- **Unresolved disagreement inside a source file.** `claude-code.md` records two reads of the `Stop` hook's consecutive-block cap
-  (eight versus five) and leaves it unresolved. The grid says "unresolved" rather than picking one.
+- **Single-sourced figure.** `claude-code.md` now gives the `Stop` hook's consecutive-block cap as eight, from the hooks guide only;
+  the earlier "five" read was not reproduced on any page and was dropped.
 - **Copilot's `agentStop`.** `copilot.md` notes the cloud-agent hooks how-to has no `agentStop` event while the hooks reference does.
   The grid does not use the hook.
 - **OpenHands `/goal`.** The `/goal` command from the 2026-10-13 field-grid notes was not re-confirmed and is not used; the goal loop
@@ -182,7 +182,7 @@ Counts are "N of 6" shown surfaces only (the table above), judged from the cells
 | --- | --- |
 | Product picks the exact check commands | **0 of 6**: all six leave the commands to the prompt, repo instructions or project (Factory: "follows the project") |
 | Product runs the app itself | **2 of 6** built in (Factory, Cursor); 1 when the prompt asks (Devin); 1 on another surface (Claude Code); 2 not described (OpenHands, Copilot) |
-| Who decides done | **Human** 2 (Devin, Copilot); **Automated** 2 (Factory, OpenHands); no gate stated 2 (Cursor, Claude Code) |
+| Who decides done | **Human** 2 (Devin, Copilot); **Automated** 1 (OpenHands); no gate stated 3 (Factory, Cursor, Claude Code) |
 | A loop with a stated numeric cap | **2 of 6** (OpenHands, 10 rounds; Cursor, 10 CI follow-ups); Devin and Factory loop with no cap value; Copilot not documented; Claude Code on another surface |
 | Criteria turned into checks by the product | **0 of 6**; the written objective or per-feature criteria are the check in 2 (OpenHands, Factory) |
 | Product-made per-task test plan | **0 of 6** on the shown surfaces (Devin's separate Testing mode writes one) |
@@ -198,7 +198,7 @@ Counts are "N of 6" shown surfaces only (the table above), judged from the cells
 | Dimension | Verdict | Notes |
 | --- | --- | --- |
 | What runs | **Same**: the project's own checks | All six run what the prompt, repo files or project name; none ships a fixed test, lint and typecheck set. Factory's validators and OpenHands' judge are the only built-in verifiers. |
-| Who decides done | **Differs**; three labels do not cover it | Two products say a person; two say a machine decides; two have no stated gate. In Claude Code's interactive session the agent decides by default, which none of the three labels names. |
+| Who decides done | **Differs**; three labels do not cover it | Two products say a person; one says a machine decides; three have no stated gate. In Claude Code's interactive session the agent decides by default, which none of the three labels names. |
 | Runs the app itself | **Uneven** | Built in on 2 of 6 shown surfaces; the others leave it to the prompt, another surface or say nothing. |
 | How it keeps going | **Differs** | Loops exist everywhere but one, with a cap value in two shown surfaces. Claude Code's loop lives on other surfaces. |
 | Criteria turned into checks | **Mostly the person's job** | 0 of 6 convert automatically; the closest are written objectives (OpenHands) and per-feature validation criteria (Factory). |
