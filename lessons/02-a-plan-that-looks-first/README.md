@@ -214,7 +214,7 @@ Cut the approved design into tasks that are safe to ship one at a time.
   - _(illustration)_ A rename done as add, migrate, remove: at every merge point the system works, so a revert of any
     one task is safe.
 - **What it takes to build:** a slicing prompt with the three-step rule, a per-task "safe to deploy alone" line, a per-task
-  test line (the tests the task adds or retires, or none needed and why), and a dependency table. Medium; the rule is
+  test-decision criterion (the tests the task adds or retires, or none needed and why), and a dependency table. Medium; the rule is
   short, applying it takes judgment the model must show.
 - **In our demo we use:** the slicing section of the plan skill, plus a line on every task.
 - **Yours can be anything:** a rule you apply by hand while writing the list.
@@ -278,7 +278,7 @@ tracker tickets as the output, and a check standing in for the human approval. S
 [options.md](options.md#where-it-goes-from-here).
 
 Out of scope here, each owned by another lesson and named as a destination, never built: test design (the
-verification lesson; the plan only states each task's test line), how a spec gets written (a later intake lesson), a
+verification lesson; the plan only states each task's test-decision criterion), how a spec gets written (a later intake lesson), a
 shared standards file the plan reads (the instructions-and-standards lesson), and bundling tightly coupled tasks, scoring tasks and choosing a model tier (a later
 planning deep dive). The same deep dive owns the unattended variant of approval with a decision log, a second model
 reading the plan, parallel coordinators, tracker sync and configuring the planning method. Order stays open.
