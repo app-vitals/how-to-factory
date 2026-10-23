@@ -24,18 +24,68 @@ export type Runner = (task: Task) => Promise<number>;
 
 interface LoopResult {
   ran: string[];
-  /** Id of the task that stopped the loop, or null when nothing was left ready. */
+  /** Id of the task that stopped the loop, or null when it was stopped by the signal. */
   stoppedOn: string | null;
 }
 
-/** One task at a time. Exit 0 means a PR was opened; anything else returns the task to pending and stops. */
+/** How long the loop sleeps before re-polling when no task is ready. */
+export const LOOP_IDLE_MS = 60_000;
+
+export interface LoopOptions {
+  /** Defaults to Bun.sleep; tests inject a fake so they never wait real time. */
+  sleep?: (ms: number) => Promise<unknown>;
+  /** Aborting stops the loop: immediately when idle, after the current task otherwise. */
+  signal?: AbortSignal;
+}
+
+/** Resolves after `ms` via `sleep`, or as soon as the signal aborts. */
+async function idleWait(sleep: (ms: number) => Promise<unknown>, ms: number, signal?: AbortSignal): Promise<void> {
+  if (!signal) return void (await sleep(ms));
+  if (signal.aborted) return;
+  let onAbort = () => {};
+  const aborted = new Promise<void>((resolve) => {
+    onAbort = resolve;
+    signal.addEventListener("abort", onAbort, { once: true });
+  });
+  try {
+    await Promise.race([sleep(ms), aborted]);
+  } finally {
+    signal.removeEventListener("abort", onAbort);
+  }
+}
+
+/**
+ * One task at a time. Exit 0 means a PR was opened; anything else returns the task to pending and stops.
+ * When no task is ready the loop sleeps LOOP_IDLE_MS and polls again, until the signal aborts.
+ */
 export async function runLoop(
   store: TaskStore,
   run: Runner,
   log: (msg: string) => void = () => {},
+  { sleep = Bun.sleep, signal }: LoopOptions = {},
 ): Promise<LoopResult> {
   const ran: string[] = [];
-  for (let next = pickNext(store.load()); next; next = pickNext(store.load())) {
+  let stuckKey = "";
+  let idle = false;
+
+  while (!signal?.aborted) {
+    const tasks = store.load();
+    const next = pickNext(tasks);
+
+    if (!next) {
+      const stuck = tasks.filter((t) => t.status === "in_progress").map((t) => t.id);
+      const key = stuck.join(", ");
+      if (key !== stuckKey) {
+        stuckKey = key;
+        if (stuck.length > 0) log(`warning: still in_progress from an earlier run: ${key}`);
+      }
+      if (!idle) log(`nothing ready; polling every ${LOOP_IDLE_MS / 1000}s`);
+      idle = true;
+      await idleWait(sleep, LOOP_IDLE_MS, signal);
+      continue;
+    }
+    idle = false;
+
     log(`starting ${next.id}: ${next.title}`);
     store.setStatus(next.id, "in_progress");
     ran.push(next.id);
@@ -57,9 +107,7 @@ export async function runLoop(
     log(`${next.id} -> pr`);
   }
 
-  const stuck = store.load().filter((t) => t.status === "in_progress");
-  if (stuck.length > 0) log(`warning: still in_progress from an earlier run: ${stuck.map((t) => t.id).join(", ")}`);
-  log("nothing ready; done");
+  log("stopped by signal");
   return { ran, stoppedOn: null };
 }
 
@@ -72,10 +120,29 @@ export function agentRunner(template: string[]): Runner {
   };
 }
 
-export async function main(store: TaskStore = fileStore(), agentCmd: string[] = AGENT_CMD): Promise<number> {
+export async function main(
+  store: TaskStore = fileStore(),
+  agentCmd: string[] = AGENT_CMD,
+  { sleep, signal }: LoopOptions = {},
+): Promise<number> {
   store.load(); // validate up front
-  const { stoppedOn } = await runLoop(store, agentRunner(agentCmd), (m) => console.log(`[loop] ${m}`));
-  return stoppedOn ? 1 : 0;
+  const controller = new AbortController();
+  const stop = () => controller.abort();
+  if (signal?.aborted) stop();
+  signal?.addEventListener("abort", stop, { once: true });
+  process.once("SIGINT", stop);
+  process.once("SIGTERM", stop);
+  try {
+    const { stoppedOn } = await runLoop(store, agentRunner(agentCmd), (m) => console.log(`[loop] ${m}`), {
+      sleep,
+      signal: controller.signal,
+    });
+    return stoppedOn ? 1 : 0;
+  } finally {
+    process.off("SIGINT", stop);
+    process.off("SIGTERM", stop);
+    signal?.removeEventListener("abort", stop);
+  }
 }
 
 if (import.meta.main) process.exit(await main());
