@@ -1,5 +1,5 @@
 /* Lesson deck framework. Dark by default; every colour is a CSS variable so the theme is swappable.
-   Brand tokens (--sw-*) are the Shipwright Harness tokens used by the decks in app-vitals/intel. */
+   Brand tokens (--sw-*) are the Shipwright Harness tokens used by the Shipwright decks. */
 :root {
   color-scheme: dark;
   --sw-color-bg-base: #080e1e;
