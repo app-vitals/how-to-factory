@@ -21,6 +21,7 @@ the standard.
 - `bun test` — run tests
 - `bun scripts/check-decks.ts` — enforce the deck rules below
 - `bun run check:landscape` — validate `landscape/matrix.json` (sources, dates, chip formats); `bun run render:landscape` regenerates `landscape/README.md` from it
+- `bun run check:landscape-urls` — fetch every cited URL in `landscape/` and report dead/redirected ones with file:line (network; not part of `bun test` or CI)
 
 ## CI checks
 
