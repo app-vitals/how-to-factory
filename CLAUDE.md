@@ -33,6 +33,18 @@ the standard.
 
 TypeScript on Bun. Strict mode. Conventional commit prefixes (`feat:`, `fix:`, `docs:`, `chore:`).
 
+## Before you commit — this repository is going public
+
+Everything committed here may be read by anyone. Scrub before you commit:
+
+- Never commit client names, client data, or internal infrastructure details (hostnames, internal paths, private URLs, credentials, tokens).
+- Stage specific files by name (`git add <path>`); never `git add -A` or `git add .`.
+- Read `git diff --staged` before committing and remove anything you would not want public.
+- If you are unsure whether something is safe to publish, ask first; do not commit it.
+- Run `bun run pre-public` before pushing. It runs `scripts/check-public.ts` (banned internal names, paths, hosts) plus a full-history gitleaks scan.
+
+Planning and research docs (`planning/`, `landscape/`, `lessons/`) may be public, so write them accordingly.
+
 ## Rules
 
 - **Cite your sources.** Every factual claim about another product needs a first-party
