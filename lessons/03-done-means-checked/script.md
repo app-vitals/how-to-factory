@@ -27,7 +27,7 @@ Estimates for the finished video, narration plus the demo. The live build is the
 |---|---|---|
 | Opening: what "done" means today | 1 | 3 min |
 | Concept: three stages, Define, Run, Gate | 2 | 3 min |
-| Define: A2 and A3 (live) | 3 | 5 min |
+| Define: A2 (live) | 3 | 3 min |
 | Run, built live: A1, A4, A7 | 4 | 6 min |
 | Run, walked through: A5, A6, A8 | 5 | 5 min |
 | Gate: A9 | 6 | 3 min |
@@ -36,7 +36,7 @@ Estimates for the finished video, narration plus the demo. The live build is the
 | Finished output for the walked-through capabilities | 9 | 4 min |
 | Names, and where factories take it | 10 | 3 min |
 | Exercise | 11 | 2 min |
-| **Total** | | **about 51 min** |
+| **Total** | | **about 49 min** |
 
 If the cut runs long, A6 (run the app) moves first from a talk-through to a single slide in beat 5, then trim beat 9 to
 the criteria table alone. Do not trim beat 8.
@@ -44,7 +44,7 @@ the criteria table alone. Do not trim beat 8.
 ## Beats
 
 1. **Opening: what "done" means today** (about 3 min).
-   - Hand-off from lesson 2: every task now carries a test line; this lesson is what that line is for.
+   - Hand-off from lesson 2: every task now carries acceptance criteria; this lesson is what they are for.
    - Lesson 1's dev-task runs the repo's commands once and the PR says it is finished. The person reviewing cannot tell a
      checked "done" from a claimed one.
    - The one idea: done should mean something a machine checked, not the agent's say-so.
@@ -56,14 +56,14 @@ the criteria table alone. Do not trim beat 8.
    - Run: the agent runs the repo's own checks, fixes failures within a bound, and shows the outcome.
    - Gate: a check the agent cannot talk past decides.
    - New vocabulary to land: evidence instead of a claim; a check that does not trust the builder.
-3. **Define** (about 5 min). One stage slide, then one beat per capability. Each capability: concept, one line on why or
+3. **Define** (about 3 min). One stage slide, then one beat per capability. Each capability: concept, one line on why or
    prevents, two or three spoken examples _(illustration)_, what it takes to build, then "in our demo we use..." and
    "yours can be anything". Built live in beat 8.
-   - **A3. A test line on every task.** The lesson 2 line becomes the input; "none needed" must say why. Build: one
-     bullet in the task shape, already there. Demo: the line on the task. Yours: a field, a label, a template line.
-   - **A2. Acceptance criteria become tests, written first.** Each criterion gets a test; run it; it must fail before any
-     production code exists. A test that passes first time is rewritten. Build: one rule in the brief and a step that
-     records the red run. Demo: a rule in the dev-task prompt. Yours: any test runner and any agent.
+   - **A2. Define: criteria become tests, written first.** The input is the task's 2 to 5 acceptance criteria from
+     lesson 2; one names the test layer and the tests added or retired, and why. Each criterion gets a test; run it; it
+     must fail before any production code exists. A test that passes first time is rewritten. Today's dev-task only
+     instructs red-first and keeps no proof of the red run; the live upgrade adds that proof. Build: one rule in the
+     brief and a step that records the red run. Demo: a rule in the dev-task prompt. Yours: any test runner and any agent.
 4. **Run, built live** (about 6 min). One stage slide, then one beat per capability, same pattern as beat 3.
    - **A1. The repo's own checks before done.** Install, lint, typecheck, test, named in the repo's instructions;
      each outcome reported. Note the person must list the commands. Build: list the commands, tell the agent to run them.
@@ -88,7 +88,7 @@ the criteria table alone. Do not trim beat 8.
      and the lesson shows it.
 7. **How the field differs** (about 5 min; slides). One slide group per capability, in the brief's ids. Say only what
    the cells say.
-   - A1: Field: A1. A2: Field: A2. A3: Field: A3. A4: Field: A4.
+   - A1: Field: A1. A2: Field: A2. A4: Field: A4.
    - A5: Field: A5 (who decides done, and with what). A6: Field: A6. A7: Field: A7. A8: Field: A8. A9: Field: A9.
    - Capabilities with no column to compare: say so (Field: Not compared here). Claim nothing about the field there.
    - Takeaway: the stages appear in different places and under different names across surfaces; ours is one way, not the
@@ -96,10 +96,10 @@ the criteria table alone. Do not trim beat 8.
 8. **DEMO: the factory upgrades its own dev-task** (about 12 min). The live beat. The factory built in lesson 1 is asked to
    upgrade its own dev-task to verify its work. Nothing is pre-queued in `factory/`, and no plan session queued this
    work; say that out loud on camera.
-   - Ask, from the brief given in the lesson: dev-task writes failing tests first, runs the repo's checks, never weakens
-     a test, and fixes failures in a bounded loop.
-   - Show the plan run on that request, then the loop picking the tasks (the steps of the spine: A2, A1, A4, A7; A3 is
-     the input).
+   - Ask, from the brief given in the lesson: dev-task writes failing tests first and records the red run, runs the
+     repo's checks, never weakens a test (the guard is new), and fixes failures in a bounded loop. Say plainly that
+     the live upgrade makes red-first provable and adds the guard; today's dev-task has neither.
+   - Show the plan run on that request, then the loop picking the tasks (the steps of the spine: A2, A1, A4, A7).
    - Show the new dev-task on a small task: the test is written, run and seen failing; the code goes in; the checks run;
      one induced failure sends it round the bounded loop with the log and its history.
    - Show the guard: the loop is tempted to loosen a test and does not.

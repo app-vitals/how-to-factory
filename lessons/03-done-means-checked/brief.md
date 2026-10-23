@@ -32,8 +32,8 @@ in the lesson). Counts below are of the six surveyed products' documentation, as
 
 Tier A: built and exercised. Every row of the capability table below.
 
-- **Define:** every task carries a test line (the lesson 2 hand-off), and each acceptance criterion becomes a test that
-  is written first and seen failing.
+- **Define:** each task carries 2 to 5 checkable acceptance criteria (one of them names the test layer and the tests
+  added or retired), and each criterion becomes a test that is written first and seen failing.
 - **Run:** run the repo's own checks and report each outcome; fix failures in a bounded loop; never weaken a test to get
   green; check the criteria against the diff with a fresh agent; run the app where it matters; show evidence, not a claim.
 - **Gate:** CI is the arbiter, and branch protection makes it binding.
@@ -56,8 +56,8 @@ Tier B: named on one slide, each with the lesson that owns it. None is built her
 
 ## The sample's concrete steps
 
-1. Take a task from the plan with its test line (the tests it adds or retires, or none needed and why) and its acceptance
-   criteria (Define).
+1. Take a task from the plan with its acceptance criteria, one of which names the test layer and the tests added or
+   retired (or says none are needed and why) (Define).
 2. Turn each criterion into a test, run it, and confirm it fails before any production code exists (Define).
 3. Implement until the new tests pass, running the repo's install, lint, typecheck and test commands; no test is loosened
    to get there (Run).
@@ -84,7 +84,7 @@ weakened tests, the bounded fix loop). The rest of Tier A is walked through as f
 - Lesson 2: the stage vocabulary (capabilities grouped by stage, one stage slide, then one slide per capability).
 - Lesson 2: the capability slide pattern (title `Stage: capability`, one why-or-prevents bullet, two "e.g." bullets, one
   diagram, the illustration caption) and the run-of-show format.
-- Lesson 2: the test line on every task, taken here as the Define input (see the hand-off below).
+- Lesson 2: a plan whose tasks carry acceptance criteria, taken here as the Define input (see the hand-off below).
 - The deck rules, the expected / common / crucial ranking, and the Tier A / Tier B split.
 
 **New this time**
@@ -94,9 +94,14 @@ weakened tests, the bounded fix loop). The rest of Tier A is walked through as f
 - A check that does not trust the builder: a fresh-context criteria check, and CI as the arbiter.
 - A guard on the checks themselves: no test is weakened to get green.
 
-**Test-line hand-off from lesson 2.** Lesson 2's plan states each task's test line and teaches nothing about test design;
-it names this lesson as the owner. Here that line is the input to Define: it becomes the Expected Tests the failing-test
-step starts from (A3 feeds A2), and a task with "none needed" must say why.
+**Criteria hand-off from lesson 2.** Lesson 2's plan gives each task a title, a description and 2 to 5 acceptance
+criteria, one of which carries the test guidance (layers affected, tests added, tests retired and why), plus a layer tag.
+It teaches nothing about test design; it names this lesson as the owner. Here those criteria are the input to Define:
+each becomes a test the failing-test step starts from, and a task that adds or retires no tests must say why.
+
+**A3 is retired.** An earlier cut had a separate capability for a per-task test label. That label was only a lesson 2
+teaching name for the test-guidance criterion, so it is folded into A2. The A-ids stay stable and are not renumbered, so
+A3 stays in the table as a retired row and the lesson has eight live capabilities across Define, Run and Gate.
 
 ## Capabilities
 
@@ -104,13 +109,13 @@ Grouped by stage and prioritized by expected, common and crucial. Examples marke
 lesson and are not a claim about any product. Counts are of the six surveyed products' documentation (Devin, Factory,
 OpenHands, Cursor, Copilot, Claude Code); "not documented" means the pages checked do not say so, not that the product
 lacks it. Crucial is "high" only where the Shipwright reason is documented; where it is partly documented or inferred,
-it is capped at medium. Treated live: A1, A2, A3, A4, A7. Walked through: A5, A6, A8, A9 (A6 is first to move to a
+it is capped at medium. Treated live: A1, A2, A4, A7. Walked through: A5, A6, A8, A9 (A6 is first to move to a
 walk-through if time is short). The A-numbers are stable ids, not the order. From lessons 1 to 3, revisit after lesson 4.
 
 | Stage | Capability | Concept | Why it exists or what it prevents | Examples | What it takes to build |
 |---|---|---|---|---|---|
-| Define | A2. Acceptance criteria become tests, written first | Each acceptance criterion gets a test written before the code; the test is run and must fail before any production code exists. Expected: high. 0 of 6 turn criteria into checks; the written objective or per-feature criteria are the check in 2 (OpenHands, Factory). Crucial: high, because the reason is documented. | A check written after the code can be shaped by the code. A test that passes immediately tests existing behavior or is wrongly written. | The agent writes the function, then a test that calls it and asserts whatever it returned: the test passes and the criterion was never checked. (illustration) A criterion "rejects an empty name" gets a test that fails first, then passes once the code rejects it. (illustration) A new test that passes on the first run is rewritten, because it proves nothing. (illustration) | One rule in the task brief (write failing tests for each criterion, run them, confirm red, then implement) and a step that records the red run. Small. |
-| Define | A3. A test line on every task | Every task states which test proves it, and at which layer, before building starts; this is lesson 2's test line, taken as input. Expected: medium. 0 of 6 make a per-task test plan on the shown surfaces (Devin's separate Testing mode writes one). Crucial: medium. | Without it the gap is invisible: nothing marks a task as shipped untested, and the failing-test step has no starting point. | A task with no test line ships with no test and nothing marks the gap. (illustration) A task lists an integration test as its proof, so the agent writes one, not a unit test that mocks the thing under test. (illustration) A task marked "none needed: copy change only" is accepted by the person, with the reason on record. (illustration) | One bullet in the task shape, already present from lesson 2. Small. |
+| Define | A2. Define: criteria become tests, written first | Each acceptance criterion gets a test written before the code; the test is run and must fail before any production code exists. One criterion per task names the test layer and the tests added or retired, and why. Expected: high. 0 of 6 turn criteria into checks; the written objective or per-feature criteria are the check in 2 (OpenHands, Factory). Crucial: high, because the reason is documented. | A check written after the code can be shaped by the code. A test that passes immediately tests existing behavior or is wrongly written. | The agent writes the function, then a test that calls it and asserts whatever it returned: the test passes and the criterion was never checked. (illustration) A criterion "rejects an empty name" gets a test that fails first, then passes once the code rejects it. (illustration) A new test that passes on the first run is rewritten, because it proves nothing. (illustration) | One rule in the task brief (write failing tests for each criterion, run them, confirm red, then implement) and a step that records the red run. Small. |
+| Define | A3. (retired) | Folded into A2: the test guidance is one acceptance criterion on the task, not a separate line. | Not applicable; see A2. | Not applicable. | Not applicable. |
 | Run | A1. The repo's own checks before done | Before reporting done, run the install, lint, typecheck and test commands named in the repo's instructions, and report each outcome. Expected: high. 5 of 6 run checks; Claude Code partly (whatever the person or project names). 0 of 6 pick the exact commands themselves. Crucial: medium; the Shipwright reason is partly documented. | Done should mean a machine ran the checks, not that the agent said so. | The agent says "all green" without running anything, and the first failure shows in CI. (illustration) The lint command is listed in the repo instructions, the agent runs it, and a missing import is fixed before the PR opens. (illustration) A command that is not in the instructions is never run, so the lesson has the person list them. (illustration) | List the commands in the repo's instructions file and tell the agent to run them. Small: this is lesson 1's simplest version with the outcome recorded. |
 | Run | A4. Never weaken a test to get green | A failing test is fixed in the code. A test changes only with a stated reason that the criterion changed; deleting or loosening an assertion otherwise fails the check. Expected: high. 0 of 6; none of the 79 surfaces checked documents a built-in guard (say "none of these docs describe one", never "no product has one"). Crucial: medium; no Shipwright file states this rule, so the failure is an illustration. | A loop that is told to make the checks pass has an easy way out: change the check. | The loop hits a failing test, loosens the assertion, and reports green after one attempt. (illustration) A test that expects 3 results is changed to expect "at least 1". (illustration) A flaky test is skipped and the skip is flagged for a person to decide. (illustration) | A diff rule in the criteria check: no removed or weakened assertions in test files unless the task says so. Small to state; judgement to enforce. |
 | Run | A7. A bounded loop until checks pass | A failing check sends the agent back to fix it with the failure log and a list of what earlier attempts tried, up to a cap; then it stops and asks. Expected: high. 4 of 6 keep going until checks pass; 2 state a numeric cap (OpenHands, 10 rounds; Cursor, 10 CI follow-ups). Crucial: medium; "bounded" is by design and the cap's value is inferred. | A fix loop with no history repeats itself, and one with no cap never ends. | With no cap the agent loops on a flaky test all night. (illustration) With no history it makes the same fix three times. (illustration) After the cap it stops and hands the failing log to a person. (illustration) | A loop in the dev-task prompt with a counter and a one-line history of each attempt. Small. |
@@ -122,14 +127,13 @@ walk-through if time is short). The A-numbers are stable ids, not the order. Fro
 ## Prerequisites
 
 - Lesson 1: the plan and dev-task skills and the task loop.
-- Lesson 2: a plan whose tasks carry a test line.
+- Lesson 2: a plan whose tasks carry acceptance criteria.
 
 ## Exercise outcomes
 
 Outcomes only; no required tool, language or runner. Each covers one or more Tier A capabilities.
 
-- A task's test line is read before building starts, and "none needed" carries a reason (A3).
-- Each acceptance criterion has a test that was run and seen failing before the code that satisfies it (A2).
+- Each task has 2 to 5 specific, testable acceptance criteria, one naming the test layer and the tests added or retired (or why none), and each criterion has a test that was run and seen failing before the code that satisfies it (A2).
 - The repo's install, lint, typecheck and test commands are run before done, and each outcome is reported (A1).
 - No test is deleted or loosened to get green without a stated reason that the criterion changed (A4).
 - A failing check sends the agent back with the log and the earlier attempts, and the loop stops at a cap (A7).
@@ -143,14 +147,14 @@ Outcomes only; no required tool, language or runner. Each covers one or more Tie
 **What does the loop do after this lesson that it could not before?**
 
 The loop's "done" now means a check ran and a record exists. Before, dev-task ran the repo's commands once and the PR
-said it was finished; now each task's test line becomes failing tests first, the checks run with their outcomes shown, a
+said it was finished; now each task's acceptance criteria become failing tests first, the checks run with their outcomes shown, a
 fix loop is bounded, a fresh agent checks the criteria against the diff, no test is weakened to get there, and CI behind
-branch protection decides whether the PR can merge. The factory has upgraded its own dev-task to do this.
+branch protection decides whether the PR can merge. The live upgrade is what adds the proof of the red run and the never-weaken-a-test guard; today's dev-task only instructs red-first, with no recorded proof, and has no such guard or run-the-app step. The factory upgrades its own dev-task to do this, and the run-the-app step (A6) is walked through, not built.
 
 **Does it cover what is expected, common and crucial for its one component?** (and name the deeper dives left for later lessons)
 
 Yes. Both capabilities rated crucial and documented (A2, A9) and every one rated expected and common (A1, A7, A8) are in
-Tier A and exercised; A3 to A6 are kept on judgement, as the cheapest checks the design needs. Left for later: coverage
+Tier A and exercised; A4 to A6 are kept on judgement, as the cheapest checks the design needs. Left for later: coverage
 thresholds that block and canary suites (release lesson), testing principles and post-PR auto-fix (review lesson), check
 history, learned skips and test-quality measurement (feedback and maintenance lesson), required-step proofs (governance
 lesson), and designing the whole test system, including speed budgets (test-readiness destination).
