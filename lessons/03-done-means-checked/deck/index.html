@@ -38,7 +38,7 @@
       <h2 class="slide-title">What the human does</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="human-role">
-          <div class="flow"><div class="node node-human">Read test line</div><span class="arrow"></span><div class="node node-human">Set CI rule</div><span class="arrow"></span><div class="node node-human">Read the evidence</div></div>
+          <div class="flow"><div class="node node-human">Write criteria</div><span class="arrow"></span><div class="node node-human">Set CI rule</div><span class="arrow"></span><div class="node node-human">Read PR evidence</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div><p class="caption">Nobody takes the agent's word for it.</p>
       </div>
@@ -52,7 +52,7 @@
         <div class="visual diagram" data-diagram="build-flow">
           <div class="flow"><div class="node node-agent">Red tests</div><span class="arrow"></span><div class="node node-agent">Checks</div><span class="arrow"></span><div class="node node-agent">Fix loop</div><span class="arrow"></span><div class="node node-agent">Fresh check</div><span class="arrow"></span><div class="node node-external">CI gate</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><p class="caption">Nine capabilities across three stages.</p>
+        </div><p class="caption">Eight capabilities across three stages.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -86,30 +86,6 @@
           <div class="flow"><div class="node node-agent">Define</div><span class="arrow"></span><div class="node node-agent">Run</div><span class="arrow"></span><div class="node node-external">Gate</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div><p class="caption">Input is a task; output is checked work.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Lesson 2's test line feeds Define</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="handoff">
-          <div class="flow"><div class="node node-store">Task</div><span class="arrow"></span><div class="node node-store">Test line</div><span class="arrow"></span><div class="node node-agent">Failing test</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><p class="caption">Define starts where the plan ends.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Define: a test line on every task</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="cap-a3">
-          <div class="flow"><div class="node node-store">Task</div><span class="arrow"></span><div class="node node-agent">Name the test</div><span class="arrow"></span><div class="node node-agent">Name the layer</div><span class="arrow"></span><div class="node node-agent">Then build</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><ul class="bullets"><li>Prevents tasks that ship untested, unmarked</li><li>e.g. Task lists an integration test</li><li>e.g. "None needed: copy change only"</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -217,7 +193,7 @@
         <div class="visual diagram" data-diagram="slice">
           <div class="flow"><div class="node node-store">Tasks</div><span class="arrow"></span><div class="node node-job">Loop</div><span class="arrow"></span><div class="node node-agent">Dev-task</div><span class="arrow"></span><div class="node node-store">Evidence</div><span class="arrow"></span><div class="node node-external">CI</div><span class="arrow"></span><div class="node node-external">PRs</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><p class="caption">Each PR carries its test line and outcomes.</p>
+        </div><p class="caption">Each PR carries its criteria and outcomes.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -254,12 +230,12 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">Criteria and test plans: partial at best</h2>
+      <h2 class="slide-title">Criteria to checks: partial at best</h2>
       <div class="slide-body">
         <div class="visual">
           <table class="comp-table">
-            <thead><tr><th>Checked 10/2026</th><th>Criteria to checks</th><th>Test plan per task</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>◐</td><td>◐</td></tr><tr><td>Factory</td><td>◐</td><td>◐</td></tr><tr><td>OpenHands</td><td>◐</td><td>–</td></tr><tr><td>Cursor</td><td>–</td><td>–</td></tr><tr><td>GitHub Copilot</td><td>◐</td><td>–</td></tr><tr><td>Claude Code</td><td>◐</td><td>◐</td></tr><tr><td>This sample</td><td>✓</td><td>✓</td></tr></tbody>
+            <thead><tr><th>Checked 10/2026</th><th>Criteria to checks</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>◐</td></tr><tr><td>Factory</td><td>◐</td></tr><tr><td>OpenHands</td><td>◐</td></tr><tr><td>Cursor</td><td>–</td></tr><tr><td>GitHub Copilot</td><td>◐</td></tr><tr><td>Claude Code</td><td>◐</td></tr><tr><td>This sample</td><td>✓</td></tr></tbody>
           </table>
           <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
         </div><p class="caption">Links in the video description.</p>
