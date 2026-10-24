@@ -1,7 +1,7 @@
 # Lesson 2: A plan that looks before it slices
 
 **Component taught:** [Planning / decomposition](../../docs/components.md), in the Work in band: what a plan session does between a brief and a queue of tasks
-**Video:** _added after publishing_
+**Video:** [How to Build Your Own Software Factory, Lesson 2](https://www.youtube.com/watch?v=dr-JNCWH0Yc) (playlist: [How to Build a Software Factory](https://www.youtube.com/playlist?list=PLEtnpY4_ARns))
 
 `factory/` in this repo is our demo. This lesson teaches the concept; Bun and Claude Code are what the demo happens to
 use, never what you need. Each part below goes concept first, then "in our demo we use...", then "yours can be
