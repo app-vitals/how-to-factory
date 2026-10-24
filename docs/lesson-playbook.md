@@ -148,6 +148,8 @@ The fill-in version is [`lessons/_template/checklist.md`](../lessons/_template/c
 - `bun scripts/check-decks.ts` passes.
 - `bun scripts/check-landscape.ts` passes.
 - `bun test` passes.
+- `bun run pre-public` passes (banned internal names, paths and hosts, plus a full-history gitleaks scan). Nothing in
+  the lesson names a client or internal infrastructure.
 - A grep for the forbidden viewer-facing words (section 4) finds nothing in the deck or script.
 - Every changed slide is rendered at 1920x1080 with no wrapped rows, overflow or face-cam intrusion; differs slides
   contain only marks and chips.
