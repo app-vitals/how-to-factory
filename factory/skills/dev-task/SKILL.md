@@ -34,3 +34,6 @@ itself). The output is an open PR and its URL.
 - Stage specific files, never everything; do not commit unrelated changes.
 - Do not edit `factory/tasks.json`; tasks are added by the plan skill and `status` is moved by the loop.
 - Exit non-zero if the PR was not opened; the loop reads exit 0 as "PR open".
+- Edit files with the Edit and Write tools, never via `python3`, heredocs or `sed -i`.
+- The session starts in the repo root, so `cd` is not needed.
+- Prefer one command per Bash call; avoid chaining with `&&`, `;` or pipes unless every part is a read-only helper.
