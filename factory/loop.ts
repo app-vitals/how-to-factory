@@ -5,13 +5,26 @@ import type { Task } from "./tasks.schema.ts";
 import { fileStore, type TaskStore } from "./tasks.store.ts";
 
 /** Claude Code headless, running the dev-task skill for one task. `{id}` is substituted. */
-const AGENT_CMD: string[] = [
-  "claude",
-  "-p",
-  "/dev-task {id}",
-  "--allowedTools",
-  "Read,Edit,Write,Glob,Grep,Bash(git *),Bash(gh *),Bash(bun *)",
+export const ALLOWED_TOOLS: string[] = [
+  "Read",
+  "Edit",
+  "Write",
+  "Glob",
+  "Grep",
+  "Bash(git *)",
+  "Bash(gh *)",
+  "Bash(bun *)",
+  "Bash(jq *)",
+  "Bash(ls *)",
+  "Bash(cat *)",
+  "Bash(head *)",
+  "Bash(tail *)",
+  "Bash(wc *)",
+  "Bash(sed -n *)",
+  "Bash(echo *)",
 ];
+
+export const AGENT_CMD: string[] = ["claude", "-p", "/dev-task {id}", "--allowedTools", ALLOWED_TOOLS.join(",")];
 
 /** First pending task whose dependencies have all reached `pr`, else null. */
 export function pickNext(tasks: Task[]): Task | null {

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { agentRunner, LOOP_IDLE_MS, main, pickNext, runLoop, type Runner } from "./loop.ts";
+import { AGENT_CMD, agentRunner, ALLOWED_TOOLS, LOOP_IDLE_MS, main, pickNext, runLoop, type Runner } from "./loop.ts";
 import type { Task, TaskStatus } from "./tasks.schema.ts";
 import type { TaskStore } from "./tasks.store.ts";
 
@@ -224,5 +224,39 @@ describe("main", () => {
     await Bun.sleep(10);
     process.emit("SIGINT");
     expect(await done).toBe(0);
+  });
+});
+
+describe("ALLOWED_TOOLS", () => {
+  test("contains the base tools and the read-only helpers", () => {
+    const expected = [
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "Bash(git *)",
+      "Bash(gh *)",
+      "Bash(bun *)",
+      "Bash(jq *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(sed -n *)",
+      "Bash(echo *)",
+    ];
+    for (const t of expected) expect(ALLOWED_TOOLS).toContain(t);
+  });
+
+  test("excludes broad or dangerous entries", () => {
+    for (const t of ["Bash(*)", "Bash(python3 *)", "Bash(sed *)", "Bash(rm *)", "Bash(curl *)"]) {
+      expect(ALLOWED_TOOLS).not.toContain(t);
+    }
+  });
+
+  test("AGENT_CMD passes the joined list after --allowedTools", () => {
+    expect(AGENT_CMD[AGENT_CMD.indexOf("--allowedTools") + 1]).toBe(ALLOWED_TOOLS.join(","));
   });
 });
