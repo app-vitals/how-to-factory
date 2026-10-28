@@ -1,0 +1,76 @@
+# OpenHands: lesson 4 PR routing grid
+
+Scope: lesson 4 only, the step after a PR is open: what triggers a review, when it runs again, who may approve, whether the
+product fixes its own PR, what limits exist, how the next action is chosen, where PR state lives, and the handoff to a
+person. Left out on purpose: how plans are made, how tickets are picked, and how checks run before the PR (lessons 1 to 3).
+Every filled cell is a paraphrase of a first-party docs.openhands.dev page, with its URL and the date I fetched it
+(**2026-10-28**). The review and fix notes in `landscape/field-grid/openhands.md` (2026-10-23) and
+`landscape/verify-grid/openhands.md` (2026-10-23) were a starting list; every page used here was fetched again.
+
+Names are OpenHands' own, not canonical. A cell says `not documented` only after naming the pages checked. "Not documented"
+means not in their docs, not that the product cannot do it.
+
+Method: fetched the docs index (https://docs.openhands.dev/llms.txt, 2026-10-28), listed the pages that could touch PR review,
+automations, the GitHub resolver or CI, and fetched each as a raw-Markdown URL (see "Pages read"). After review, every page
+listed under "Pages read" was re-fetched with curl and read in full (not a condensed answer), and every `not documented` cell
+was re-checked against the whole page. Honest limit: pages not listed under "Pages read" were judged from the index only.
+
+## The grid
+
+Surfaces: **Automated Code Review** (a PR reviewer started by label, reviewer request or PR event), **Software Factory** (four
+automations that take an issue through develop, review and merge), **GitHub resolver** (the `@openhands` mention and label
+entry point in the Cloud and Enterprise GitHub app), **Event automations** (generic GitHub-event triggers), **Issue to Pull
+Request** (the prebuilt that opens the PR).
+
+| Dimension | Automated Code Review | Software Factory | GitHub resolver | Event automations | Issue to Pull Request |
+| --- | --- | --- | --- | --- | --- |
+| **What triggers it** | A non-draft PR opened, a draft marked ready, the `review-this` label added, or `openhands-agent` requested as reviewer. The org-wide automation variant skips `opened` and `ready_for_review` for first-time contributors. ([Automated Code Review](https://docs.openhands.dev/openhands/usage/use-cases/code-review.md), 2026-10-28) | The reviewer automation fires on the `openhands-review` label; the developer automation opens its PRs in "Ready for review" mode. All four automations check every 5 minutes. ([Software Factory](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), 2026-10-28) | An `@openhands` mention in an issue comment, PR comment or inline review comment; the `openhands` label on an issue; commands such as `/codereview`. ([GitHub Integration, Enterprise](https://docs.openhands.dev/enterprise/integrations/github.md), 2026-10-28) | `pull_request` (opened, labeled, synchronize, ready_for_review), `issues`, `issue_comment` (created), `push`, `release`, narrowed with JMESPath filters. ([Event-Based Automations](https://docs.openhands.dev/openhands/usage/automations/event-automations.md), 2026-10-28) | Not documented as a PR trigger (checked: Issue to Pull Request). The trigger is on the issue side; the page only describes the PR it opens. |
+| **Re-review after new commits** | Not by default. The workflow's trigger types do not include `synchronize`, and the org-wide automation excludes it on purpose "to avoid noisy re-reviews"; a follow-up needs the label re-added or the reviewer re-requested. The page's trigger-customization example shows how to add `synchronize` to the workflow condition. ([Automated Code Review](https://docs.openhands.dev/openhands/usage/use-cases/code-review.md), 2026-10-28) | Yes, by design: when merges make a branch stale, the watchdog updates it and waits for a fresh review of the exact new head before merging. Failed checks lead to revisions and a fresh acceptance of the changed commits. ([Software Factory](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), 2026-10-28) | Not documented (checked: GitHub Integration, Cloud; GitHub Integration, Enterprise). A new mention starts a new run. | A `synchronize` action is available as a trigger, so an automation can run on each push. Which automation does so is up to the author. ([Event-Based Automations](https://docs.openhands.dev/openhands/usage/automations/event-automations.md), 2026-10-28) | Not documented (checked: Issue to Pull Request). |
+| **Who may approve, and does AI approval count** | Only people with write access can start a review. Approval is documented: the reviewer prompt picks `APPROVE` when the PR is ready to merge with no blocking issues (otherwise `REQUEST_CHANGES` or `COMMENT`), the page's example repository guidance has a "When to APPROVE" section, and the dedicated bot account is "the identity that will approve pull requests". Whether that approval counts toward branch protection or merge rules: not documented (checked: Automated Code Review, PR Review workflow). ([Automated Code Review](https://docs.openhands.dev/openhands/usage/use-cases/code-review.md), 2026-10-28) | The reviewer posts a native review and records review and test statuses on the exact head; the watchdog merges when those statuses and any Actions runs pass. Whether a person must also approve: not documented (checked: Software Factory). ([Software Factory](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), 2026-10-28) | Formal reviews are submitted under the triggering person's identity, not the bot's. A repository skill can set the review event (for example comment instead of approve). ([GitHub Integration, Enterprise](https://docs.openhands.dev/enterprise/integrations/github.md), 2026-10-28) | Not documented (checked: Event-Based Automations). | Not documented (checked: Issue to Pull Request). |
+| **Fixes its own PR: review comments** | Not documented (checked: Automated Code Review, PR Review workflow, GitHub PR Review Assistant). | Revisions are named for failed checks; the page does not say how review comments are turned into a revision (checked: Software Factory). The reviewer token has no code-push permission, so the developer automation is the only one that can push. | A mention on a PR can ask for updates, so a person can request a fix. Automatic fixing: not documented (checked: GitHub Integration, Cloud). ([GitHub Integration, Cloud](https://docs.openhands.dev/openhands/usage/cloud/github-installation.md), 2026-10-28) | Not documented (checked: Event-Based Automations). The list shows `issue_comment` but no review-comment event. | Not documented (checked: Issue to Pull Request). |
+| **Fixes its own PR: red CI** | Not documented (checked: Automated Code Review). | Failed checks lead to revisions; the watchdog will not merge without passing Actions runs. Which automation performs the revision: not documented (checked: Software Factory). ([Software Factory](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), 2026-10-28) | Not documented (checked: GitHub Integration, Cloud; GitHub Integration, Enterprise). | No `check_run` event is in the listed events (checked: Event-Based Automations). | Not documented (checked: Issue to Pull Request). |
+| **Fixes its own PR: merge conflicts** | Not documented (checked: Automated Code Review). | The watchdog updates a stale branch before merging. Conflict resolution as such: not documented (checked: Software Factory). ([Software Factory](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), 2026-10-28) | Not documented (checked: GitHub Integration, Cloud; GitHub Integration, Enterprise). | Not documented (checked: Event-Based Automations). | Not documented (checked: Issue to Pull Request). |
+| **Caps or limits on rounds** | A cap on reviews: not documented. The page only says results arrive in 2 or 3 minutes (checked: Automated Code Review, PR Review workflow). | A cap on revision rounds: not documented (checked: Software Factory). | Not documented (checked: GitHub Integration, Cloud; GitHub Integration, Enterprise). | Rate caps and loop prevention: not documented (checked: Event-Based Automations). | The automation limits how many conversations start per poll; the number is not given. A failed attempt is retried by removing and re-adding the trigger label. ([Issue to Pull Request](https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/issue-to-pr.md), 2026-10-28) |
+| **How it chooses the next action** | Not documented (checked: Automated Code Review). | Each automation watches for its own signal (issue label, review label, branch and status state). The watchdog merges a current, passing branch and otherwise the work loops back to revisions. ([Software Factory](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), 2026-10-28) | The person decides by what they type in the mention. ([GitHub Integration, Enterprise](https://docs.openhands.dev/enterprise/integrations/github.md), 2026-10-28) | The author's filter and prompt decide. ([Event-Based Automations](https://docs.openhands.dev/openhands/usage/automations/event-automations.md), 2026-10-28) | Not documented beyond opening the PR (checked: Issue to Pull Request). |
+| **Where PR state lives** | Review comments are posted on the PR. In the org-wide automation the reviewer also posts a "Review in progress" comment and edits it to "Review complete", and its prompt says to avoid duplicating existing unresolved review comments. Other state: not documented (checked: Automated Code Review). ([Automated Code Review](https://docs.openhands.dev/openhands/usage/use-cases/code-review.md), 2026-10-28) | On GitHub: the `ready-for-dev` and `openhands-review` labels, plus commit statuses for review and tests recorded against the exact head. ([Software Factory](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), 2026-10-28) | An eyes reaction, an "I'm on it" comment and a completion comment from the app bot; a conversation holds the context. Persistence beyond that: not documented. ([GitHub Integration, Enterprise](https://docs.openhands.dev/enterprise/integrations/github.md), 2026-10-28) | Where run state is stored: not documented (checked: Event-Based Automations). | The automation keeps persistent state of which issues it has processed. ([Issue to Pull Request](https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/issue-to-pr.md), 2026-10-28) |
+| **When done: handoff to a person** | Not documented (checked: Automated Code Review). | The watchdog merges on its own when its conditions pass; a person-in-the-loop step is not documented (checked: Software Factory). ([Software Factory](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), 2026-10-28) | The person who mentioned it is the requester and the identity used for reviews; the bot posts the conversation's final response as a completion comment. A separate handoff step: not documented (checked: GitHub Integration, Cloud; GitHub Integration, Enterprise). | Not documented (checked: Event-Based Automations). | The page advises opening PRs as drafts so they get code review, and the default is draft. ([Issue to Pull Request](https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/issue-to-pr.md), 2026-10-28) |
+| **A PR it authored itself** | Not documented whether the reviewer looks at PRs the agent wrote (checked: Automated Code Review, PR Review workflow). | The reviewer and watchdog work on the developer's PRs by design. The watchdog reuses the developer token, so merges come from the same identity that wrote the PR. ([Software Factory](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), 2026-10-28) | Work runs with the triggering person's credentials. A rule for agent-authored PRs: not documented (checked: GitHub Integration, Enterprise). | Loop prevention for the agent's own events: not documented (checked: Event-Based Automations). | Not documented (checked: Issue to Pull Request). |
+
+## Findings worth carrying into the lesson
+
+- OpenHands documents two quite different routing styles. The Software Factory page describes a label-and-status pipeline that loops
+  until a branch is current and passing and then merges; the Automated Code Review page describes a one-shot reviewer that a person
+  re-triggers. ([Software Factory](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), [Automated Code Review](https://docs.openhands.dev/openhands/usage/use-cases/code-review.md), 2026-10-28)
+- Re-review on push is a choice, not a given: the review page turns it off on purpose, while the Software Factory asks for a fresh
+  review of the exact head. The 2026-10-23 field-grid note that "a new commit needs a fresh review" holds for the Software Factory
+  only.
+- PR state is kept in GitHub (labels, commit statuses, comments), not in a separate store, on the pages read.
+- Caps on review or fix rounds are not in their docs on any page checked.
+- Formal reviews from the resolver use the triggering person's identity, so an AI review there is attributed to a human account.
+  The Automated Code Review automation is the opposite: a dedicated bot account posts, and approves, under its own identity.
+  Whether an AI approval counts toward merge rules is not documented on any page read.
+
+## Pages read
+
+All fetched 2026-10-28 (index first: https://docs.openhands.dev/llms.txt). Each read in full as raw Markdown, see Method.
+
+- https://docs.openhands.dev/openhands/usage/use-cases/code-review.md
+- https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/github-pr-review.md (does not name its triggers or any routing)
+- https://docs.openhands.dev/sdk/guides/github-workflows/pr-review.md (triggers: `review-this` label, reviewer request)
+- https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md
+- https://docs.openhands.dev/openhands/usage/cloud/github-installation.md
+- https://docs.openhands.dev/enterprise/integrations/github.md
+- https://docs.openhands.dev/openhands/usage/automations/event-automations.md
+- https://docs.openhands.dev/sdk/guides/github-workflows/assign-reviews.md (reviewer assignment and nudges, not routing of a PR's fixes; see Ruled out)
+- https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/issue-to-pr.md
+
+## Ruled out (why)
+
+- **Assign Reviews**: a daily or manual job that picks a reviewer by git history and nudges stale PRs (3, 5 or 14 days idle). Read, but it
+  assigns people; it does not route work for the agent, so it has no column.
+- **Daily Workflow, Automations Overview, Creating and Managing Automations**: setup and listing of automations, not PR routing; judged from
+  index descriptions, not fetched.
+- **Prompting Best Practices, Good vs. Bad Instructions**: prompt writing; judged from index titles, not fetched.
+- **Headless Mode, Critic, TODO Management, Dependency Upgrades, Vulnerability Remediation**: covered in the 2026-10-23 grids for lessons 1 to 3; not
+  fetched again for routing. A gap, not a finding.
+- **Release notes**: not searched; newer routing features might be listed there. A gap, not a finding.
