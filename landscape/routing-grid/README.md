@@ -144,7 +144,7 @@ Counts are "N of 6" shown surfaces only (the tables above), judged from the cell
 | Fixes review comments without a person asking | **3 of 6** (Devin, Cursor Autofix, Claude Code cloud auto-fix on **another surface**); Copilot on request; Factory and OpenHands other surface, unclear |
 | Merge-conflict repair documented for a single PR | **1 of 6** (Copilot, when asked); Claude Code says it cannot react on its own; the other four not documented or stacks only |
 | PR state kept on GitHub | **6 of 6** (comments, checks, statuses or labels); Devin and Claude Code add state in their own app or session |
-| A person is the stated handoff | **5 of 6**; OpenHands' Software Factory watchdog merges on its own (**other surface**) |
+| A person is the stated handoff | **3 of 6** (Devin, Copilot, Claude Code); Cursor Bugbot posts findings and links but does not describe the merge decision; **not documented** for Factory and OpenHands (OpenHands' Software Factory watchdog merges on its own, **other surface**) |
 
 ## Observations
 
@@ -160,7 +160,7 @@ Counts are "N of 6" shown surfaces only (the tables above), judged from the cell
 | Caps on rounds | **Rare** | One numeric cap in the shown set; the limits that exist bound spend, time or event counts. |
 | How it chooses the next action | **Mostly not the product's job** | Three of six say outright that the trigger or a person decides; the rest do not document a rule. |
 | Where PR state lives | **Common: GitHub** | Comments, checks, statuses or labels in all six. |
-| Handoff to a person | **Common** | A person merges in five of six; the exception sits on another surface. |
+| Handoff to a person | **Uneven** | A person is the stated handoff in three of six; Cursor leaves the merge decision undescribed, Factory and OpenHands do not document a handoff. |
 | A PR it authored itself | **Mostly not documented** | Every file answers this in part (an identity rule, a billing note, a skip condition); none documents the full case. |
 
 ## What this grid cannot say
