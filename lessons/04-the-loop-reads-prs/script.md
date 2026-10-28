@@ -44,7 +44,7 @@ Trim order if the cut runs long, first to last:
 1. A2 (skip drafts and the agent's own PRs) and A8 (the verdict format) move from built live to a walk-through in beat 7,
    and shrink to one line each in beat 3.
 2. The conflict trigger of A4 drops from the live build; say it is the same shape as the other two triggers.
-3. Beat 6 keeps only A3, A4 and A7 (the capabilities rated crucial or documented); the rest become one closing slide.
+3. Beat 6 keeps only A3, A6 and A7 (the capabilities rated crucial or documented); the rest become one closing slide.
 4. Beat 9 shrinks to one slide.
 
 **Do not trim beat 7**, the live loop build. If time is still short, cut beat 8 down to the cap alone, never beat 7.
