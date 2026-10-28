@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Lesson 4: The loop reads PRs (sketch)</title>
+<title>Lesson 4: The loop reads PRs</title>
 <link rel="stylesheet" href="../../../decks/deck.css" />
 </head>
 <body>
@@ -35,6 +35,18 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
+      <h2 class="slide-title">A PR is not finished work</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="pr-unseen">
+          <div class="flow"><div class="node node-agent">Dev-task</div><span class="arrow"></span><div class="node node-external">PR opens</div><span class="arrow"></span><div class="node node-external">Red CI</div><span class="arrow"></span><div class="node node-human">Someone notices</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>A review verdict goes unseen</li><li>A red check goes unseen</li><li>A new push goes unseen</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
       <h2 class="slide-title">Loop: see, decide, reassess, stop</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="concept">
@@ -47,9 +59,96 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
+      <h2 class="slide-title">What we build today</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="build-flow">
+          <div class="flow"><div class="node node-external">List PRs</div><span class="arrow"></span><div class="node node-agent">Decide</div><span class="arrow"></span><div class="node node-agent">Review stub</div><span class="arrow"></span><div class="node node-agent">Patch stub</div><span class="arrow"></span><div class="node node-human">Round cap</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><p class="caption">Eight capabilities across four stages.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-demo" data-kind="demo">
+    <div class="slide-inner">
+      <h2 class="slide-title">DEMO</h2>
+      <div class="slide-body">
+        <div class="demo-label">DEMO: list and read the PRs</div>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-demo" data-kind="demo">
+    <div class="slide-inner">
+      <h2 class="slide-title">DEMO</h2>
+      <div class="slide-body">
+        <div class="demo-label">DEMO: decide what each PR needs</div>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-demo" data-kind="demo">
+    <div class="slide-inner">
+      <h2 class="slide-title">DEMO</h2>
+      <div class="slide-body">
+        <div class="demo-label">DEMO: stop at the round cap</div>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">See: state read live each tick</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="stage-see">
+          <div class="flow"><div class="node node-job">Tick</div><span class="arrow"></span><div class="node node-external">List open PRs</div><span class="arrow"></span><div class="node node-agent">Skip drafts</div><span class="arrow"></span><div class="node node-agent">Read verdict</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><p class="caption">Three capabilities: list, skip, read the verdict.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">See: list every open PR from GitHub</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-a1">
+          <div class="flow"><div class="node node-external">GitHub</div><span class="arrow"></span><div class="node node-agent">List open PRs</div><span class="arrow"></span><div class="node node-agent">Read each one</div><span class="arrow"></span><div class="node node-store">Facts per PR</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>Prevents deciding from a stale copy</li><li>e.g. Own file says PR 12 reviewed</li><li>e.g. A closed PR drops out</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">See: skip drafts and its own PRs</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-a2">
+          <div class="flow"><div class="node node-external">Open PRs</div><span class="arrow"></span><div class="node node-agent">Drop drafts</div><span class="arrow"></span><div class="node node-agent">Drop own PRs</div><span class="arrow"></span><div class="node node-store">Candidates</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>Prevents reviewing work nobody asked for</li><li>e.g. Half-finished draft costs a review</li><li>e.g. Marked ready, picked up next tick</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">See: the review leaves a readable verdict</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-a8">
+          <div class="flow"><div class="node node-agent">Stub review</div><span class="arrow"></span><div class="node node-agent">APPROVED or FINDINGS</div><span class="arrow"></span><div class="node node-store">Names head commit</div><span class="arrow"></span><div class="node node-job">Loop reads it</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>Prevents a verdict the loop cannot parse</li><li>e.g. Wall of prose, no clear answer</li><li>e.g. Verdict names commit a1b2c3</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
       <h2 class="slide-title">Decide: review, patch, or wait</h2>
       <div class="slide-body">
-        <div class="visual diagram" data-diagram="cap-a3">
+        <div class="visual diagram" data-diagram="stage-decide">
           <svg viewBox="0 0 640 300" role="img" aria-label="Routing state diagram"><defs><marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0 0 L10 4 L0 8 z" fill="rgba(255,255,255,0.5)"/></marker></defs>
             <g class="node node-external"><rect x="20" y="127" width="140" height="46"/><text x="90.0" y="150">Open PR</text></g>
             <g class="node node-agent"><rect x="440" y="20" width="180" height="46"/><text x="530.0" y="43">Needs review</text></g>
@@ -58,7 +157,210 @@
             <path class="link" d="M160 140 Q300 43 440 43"/><path class="link" d="M160 150 L440 150"/><path class="link" d="M160 160 Q300 257 440 257"/>
           </svg>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><ul class="bullets"><li>Prevents finished PRs getting more agent runs</li><li>e.g. No verdict on the head: review</li><li>e.g. Clean verdict, green CI: wait</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+        </div><p class="caption">Three capabilities, one outcome per PR.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Decide: no verdict on the head, review</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-a3">
+          <div class="flow"><div class="node node-agent">Read head</div><span class="arrow"></span><div class="node node-agent">Find verdict</div><span class="arrow"></span><div class="node node-agent">None for head</div><span class="arrow"></span><div class="node node-agent">Review</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>Prevents reviewing one commit twice</li><li>e.g. Verdict on a1b2c3, head d4e5f6</li><li>e.g. Same head, same verdict: skip</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Decide: findings, red CI or conflict, patch</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-a4">
+          <svg viewBox="0 0 640 300" role="img" aria-label="Patch triggers diagram"><defs><marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0 0 L10 4 L0 8 z" fill="rgba(255,255,255,0.5)"/></marker></defs>
+            <g class="node node-agent"><rect x="20" y="20" width="140" height="46"/><text x="90.0" y="43">Findings</text></g>
+            <g class="node node-external"><rect x="20" y="127" width="140" height="46"/><text x="90.0" y="150">Red CI</text></g>
+            <g class="node node-external"><rect x="20" y="234" width="140" height="46"/><text x="90.0" y="257">Conflict</text></g>
+            <g class="node node-agent"><rect x="440" y="127" width="180" height="46"/><text x="530.0" y="150">Needs patch</text></g>
+            <path class="link" d="M160 43 Q300 43 440 140"/><path class="link" d="M160 150 L440 150"/><path class="link" d="M160 257 Q300 257 440 160"/>
+          </svg>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>Prevents findings sitting until someone notices</li><li>e.g. Green CI, FINDINGS verdict: patch</li><li>e.g. Clean verdict, red CI: patch anyway</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Decide: otherwise wait for a human</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-a5">
+          <div class="flow"><div class="node node-agent">Clean on head</div><span class="arrow"></span><div class="node node-external">CI green</div><span class="arrow"></span><div class="node node-external">No conflict</div><span class="arrow"></span><div class="node node-human">Waiting for human</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>Prevents agent runs on finished PRs</li><li>e.g. Ready PR shows as waiting</li><li>e.g. No agent invoked for it</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Reassess: a patch means review again</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-a6">
+          <svg viewBox="0 0 640 300" role="img" aria-label="Review, patch, review cycle"><defs><marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0 0 L10 4 L0 8 z" fill="rgba(255,255,255,0.5)"/></marker></defs>
+            <g class="node node-agent"><rect x="245" y="10" width="150" height="46"/><text x="320.0" y="33">Review</text></g>
+            <g class="node node-agent"><rect x="480" y="127" width="140" height="46"/><text x="550.0" y="150">Patch</text></g>
+            <g class="node node-external"><rect x="245" y="244" width="150" height="46"/><text x="320.0" y="267">New commit</text></g>
+            <g class="node node-store"><rect x="20" y="127" width="140" height="46"/><text x="90.0" y="150">Verdict expires</text></g>
+            <path class="link" d="M395 33 Q550 40 550 127"/><path class="link" d="M550 173 Q550 262 395 267"/>
+            <path class="link" d="M245 267 Q90 262 90 173"/><path class="link" d="M90 127 Q90 40 245 33"/>
+          </svg>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>Prevents patching again on a stale verdict</li><li>e.g. Old FINDINGS verdict stays current</li><li>e.g. Head moves, next tick reviews</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Stop: cap the rounds, flag a person</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-a7">
+          <div class="flow"><div class="node node-agent">Patch round</div><span class="arrow"></span><div class="node node-store">Count rounds</div><span class="arrow"></span><div class="node node-agent">At the cap</div><span class="arrow"></span><div class="node node-human">Flag a person</div><span class="arrow"></span><div class="node node-agent">Skip the PR</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>Prevents an unfixable PR looping all night</li><li>e.g. Flaky test: review, patch, repeat</li><li>e.g. At 3 rounds, label needs human</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-demo" data-kind="demo">
+    <div class="slide-inner">
+      <h2 class="slide-title">DEMO</h2>
+      <div class="slide-body">
+        <div class="demo-label">DEMO: patch, re-review, cap</div>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">After: a PR gets one outcome</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="slice">
+          <div class="flow"><div class="node node-store">Tasks</div><span class="arrow"></span><div class="node node-job">Loop</div><span class="arrow"></span><div class="node node-agent">Dev-task</div><span class="arrow"></span><div class="node node-external">PRs</div><span class="arrow"></span><div class="node node-agent">Review</div><span class="arrow"></span><div class="node node-agent">Patch</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><p class="caption">Ready PRs wait for a person to merge.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">State sits on GitHub almost everywhere</h2>
+      <div class="slide-body">
+        <div class="visual">
+          <table class="comp-table">
+            <thead><tr><th>Checked 10/2026</th><th>Where PR state lives</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>GitHub + Own app</td></tr><tr><td>Factory</td><td>GitHub</td></tr><tr><td>OpenHands</td><td>GitHub</td></tr><tr><td>Cursor</td><td>GitHub</td></tr><tr><td>GitHub Copilot</td><td>GitHub</td></tr><tr><td>Claude Code</td><td>GitHub</td></tr><tr><td>This sample</td><td>GitHub</td></tr></tbody>
+          </table>
+          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
+        </div><p class="caption">Links in the video description.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Re-review after a push: mostly a setting</h2>
+      <div class="slide-body">
+        <div class="visual">
+          <table class="comp-table">
+            <thead><tr><th>Checked 10/2026</th><th>Review after a push</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>◐</td></tr><tr><td>Factory</td><td>◐</td></tr><tr><td>OpenHands</td><td>◐</td></tr><tr><td>Cursor</td><td>✓</td></tr><tr><td>GitHub Copilot</td><td>◐</td></tr><tr><td>Claude Code</td><td>◐</td></tr><tr><td>This sample</td><td>✓</td></tr></tbody>
+          </table>
+          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
+        </div><p class="caption">Links in the video description.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Conflict repair is the weakest column</h2>
+      <div class="slide-body">
+        <div class="visual">
+          <table class="comp-table">
+            <thead><tr><th>Checked 10/2026</th><th>Fixes findings</th><th>Fixes red CI</th><th>Repairs conflicts</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>✓</td><td>✓</td><td>◐</td></tr><tr><td>Factory</td><td>◐</td><td>–</td><td>–</td></tr><tr><td>OpenHands</td><td>–</td><td>◐</td><td>◐</td></tr><tr><td>Cursor</td><td>◐</td><td>✓</td><td>–</td></tr><tr><td>GitHub Copilot</td><td>◐</td><td>◐</td><td>◐</td></tr><tr><td>Claude Code</td><td>◐</td><td>◐</td><td>◐</td></tr><tr><td>This sample</td><td>✓</td><td>✓</td><td>✓</td></tr></tbody>
+          </table>
+          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
+        </div><p class="caption">Links in the video description.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">A numeric round cap is rare</h2>
+      <div class="slide-body">
+        <div class="visual">
+          <table class="comp-table">
+            <thead><tr><th>Checked 10/2026</th><th>Caps rounds</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>◐</td></tr><tr><td>Factory</td><td>–</td></tr><tr><td>OpenHands</td><td>–</td></tr><tr><td>Cursor</td><td>✓</td></tr><tr><td>GitHub Copilot</td><td>◐</td></tr><tr><td>Claude Code</td><td>◐</td></tr><tr><td>This sample</td><td>✓</td></tr></tbody>
+          </table>
+          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
+        </div><p class="caption">Links in the video description.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Same job, different names</h2>
+      <div class="slide-body">
+        <div class="visual">
+          <table class="comp-table">
+            <thead><tr><th>Checked 10/2026</th><th>Reviewer</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>Devin Review</td></tr><tr><td>Factory</td><td>Droid Review</td></tr><tr><td>OpenHands</td><td>Automated Code Review</td></tr><tr><td>Cursor</td><td>Bugbot</td></tr><tr><td>GitHub Copilot</td><td>Copilot code review</td></tr><tr><td>Claude Code</td><td>Code Review</td></tr><tr><td>This sample</td><td>review</td></tr></tbody>
+          </table>
+        </div><p class="caption">Links in the video description.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Where factories take it</h2>
+      <div class="slide-body">
+        <div class="visual options-grid">
+          <div class="option"><h3>Review</h3><div class="pick">Quality, real approval</div></div><div class="option"><h3>Patch</h3><div class="pick">Findings to commits</div></div><div class="option"><h3>Release</h3><div class="pick">Merge, canary, promote</div></div><div class="option"><h3>Many agents</h3><div class="pick">Claims, ordering</div></div>
+        </div><p class="caption">Destinations, not prescriptions.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Around the loop, later</h2>
+      <div class="slide-body">
+        <div class="visual options-grid">
+          <div class="option"><h3>The tick</h3><div class="pick">Cron, cooldowns</div></div><div class="option"><h3>Trust</h3><div class="pick">Author allowlist</div></div><div class="option"><h3>Upkeep</h3><div class="pick">Queue snapshot</div></div>
+        </div><p class="caption">Destinations, not prescriptions.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-exercise" data-kind="exercise">
+    <div class="slide-inner">
+      <h2 class="slide-title">Your turn: make the loop read PRs</h2>
+      <div class="slide-body">
+        <div class="eyebrow">Exercise</div>
+        <div class="visual diagram" data-diagram="exercise-steps">
+          <div class="flow"><div class="node node-external">Read PRs</div><span class="arrow"></span><div class="node node-agent">Route each</div><span class="arrow"></span><div class="node node-agent">Re-review</div><span class="arrow"></span><div class="node node-human">Round cap</div></div>
+          
+        </div><ul class="bullets"><li>Any agent, any language</li><li>Each PR gets exactly one outcome</li><li>A capped PR flags a person</li></ul>
       </div>
       <div class="facecam-zone"></div>
     </div>
