@@ -76,3 +76,4 @@ are a template, not a fixed list.
   brief.
 - [`planning/lesson3-verification`](../planning/lesson3-verification/PLAN.md): research first, then the brief, built
   from the start in this order.
+- [`planning/lesson4-pr-routing`](../planning/lesson4-pr-routing/PLAN.md): the same order for a lesson on PR routing.
