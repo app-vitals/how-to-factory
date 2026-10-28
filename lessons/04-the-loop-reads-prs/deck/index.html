@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lesson 4: The loop reads PRs (sketch)</title>
+<link rel="stylesheet" href="../../../decks/deck.css" />
+</head>
+<body>
+<div id="counter"></div>
+<main>
+  <section class="slide slide-title-slide" data-kind="title">
+    <div class="slide-inner">
+      <h2 class="slide-title">The Loop Reads PRs</h2>
+      <div class="slide-body">
+        <p class="subtitle">Loop: see, decide, reassess, stop</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Factory map: the loop gets a closer look</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="factory-map">
+          <div class="grid-arch">
+            <div class="node node-human is-built">Intake</div><div class="node node-agent is-built">Planning</div><div class="node node-agent is-built">Execution</div><div class="node node-agent is-built">Verification</div>
+            <div class="node node-agent is-planned">Review</div><div class="node node-external is-planned">Release</div><div class="node node-job is-active">Loop</div><div class="node node-human is-built">Chat</div>
+          </div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><p class="caption">Governance, feedback and memory support all of these.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Loop: see, decide, reassess, stop</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="concept">
+          <div class="flow"><div class="node node-external">See</div><span class="arrow"></span><div class="node node-agent">Decide</div><span class="arrow"></span><div class="node node-agent">Reassess</div><span class="arrow"></span><div class="node node-human">Stop</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><p class="caption">Input is an open PR; output is one outcome.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Decide: review, patch, or wait</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-a3">
+          <svg viewBox="0 0 640 300" role="img" aria-label="Routing state diagram"><defs><marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0 0 L10 4 L0 8 z" fill="rgba(255,255,255,0.5)"/></marker></defs>
+            <g class="node node-external"><rect x="20" y="127" width="140" height="46"/><text x="90.0" y="150">Open PR</text></g>
+            <g class="node node-agent"><rect x="440" y="20" width="180" height="46"/><text x="530.0" y="43">Needs review</text></g>
+            <g class="node node-agent"><rect x="440" y="127" width="180" height="46"/><text x="530.0" y="150">Needs patch</text></g>
+            <g class="node node-human"><rect x="440" y="234" width="180" height="46"/><text x="530.0" y="257">Waiting for human</text></g>
+            <path class="link" d="M160 140 Q300 43 440 43"/><path class="link" d="M160 150 L440 150"/><path class="link" d="M160 160 Q300 257 440 257"/>
+          </svg>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>Prevents finished PRs getting more agent runs</li><li>e.g. No verdict on the head: review</li><li>e.g. Clean verdict, green CI: wait</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+</main>
+<script src="../../../decks/deck.js"></script>
+</body>
+</html>
