@@ -55,6 +55,14 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
     { id: "verify-test-guard", label: "verify-test-guard" },
     { id: "verify-evidence", label: "verify-evidence" },
     { id: "verify-pr-fix", label: "verify-pr-fix" },
+    { id: "route-trigger", label: "route-trigger" },
+    { id: "route-rereview", label: "route-rereview" },
+    { id: "route-approve", label: "route-approve" },
+    { id: "route-fix-comments", label: "route-fix-comments" },
+    { id: "route-fix-ci", label: "route-fix-ci" },
+    { id: "route-fix-conflicts", label: "route-fix-conflicts" },
+    { id: "route-limits", label: "route-limits" },
+    { id: "route-state", label: "route-state" },
   ],
   products: [
     {
@@ -98,6 +106,14 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
         "verify-test-guard": cell({ chip: "✓" }),
         "verify-evidence": cell({ chip: "Logs + Visual" }),
         "verify-pr-fix": cell({ chip: "✓" }),
+        "route-trigger": cell({ chip: "✓" }),
+        "route-rereview": cell({ chip: "✓" }),
+        "route-approve": cell({ chip: "✓" }),
+        "route-fix-comments": cell({ chip: "✓" }),
+        "route-fix-ci": cell({ chip: "✓" }),
+        "route-fix-conflicts": cell({ chip: "✓" }),
+        "route-limits": cell({ chip: "✓" }),
+        "route-state": cell({ chip: "GitHub" }),
       },
       demoable: { kind: "unknown" },
       destination: { summary: "unknown" },
@@ -154,7 +170,7 @@ describe("validateLandscape", () => {
     expect(validateLandscape(e, TODAY).join()).toContain("cell verify-runs-app");
   });
   test("every component cell is required for a factory", () => {
-    for (const id of ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks", "plan-clarify", "plan-assumptions", "plan-editable", "plan-saved", "plan-ordering", "plan-parallel", "plan-replan", "plan-critique", "plan-readonly", "plan-tracker", "plan-human-only", "plan-rollout", "verify-checks", "verify-criteria", "verify-test-plan", "verify-ci-gate", "verify-limits", "verify-test-guard", "verify-evidence", "verify-pr-fix"]) {
+    for (const id of ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks", "plan-clarify", "plan-assumptions", "plan-editable", "plan-saved", "plan-ordering", "plan-parallel", "plan-replan", "plan-critique", "plan-readonly", "plan-tracker", "plan-human-only", "plan-rollout", "verify-checks", "verify-criteria", "verify-test-plan", "verify-ci-gate", "verify-limits", "verify-test-guard", "verify-evidence", "verify-pr-fix", "route-trigger", "route-rereview", "route-approve", "route-fix-comments", "route-fix-ci", "route-fix-conflicts", "route-limits", "route-state"]) {
       const d = make();
       delete (factory(d).cells as Record<string, unknown>)[id];
       expect(validateLandscape(d, TODAY).join()).toContain(`cell ${id}: missing`);
@@ -382,5 +398,31 @@ describe("CLI", () => {
     expect(r.code).toBe(1);
     expect(r.err).toContain("landscape: landscape/README.md is stale");
     expect(r.out).toBe("");
+  });
+  test("routing dimension chips follow their format", () => {
+    const withCell = (id: "route-rereview" | "route-state", chip: string) => {
+      const d = make();
+      factory(d).cells[id] = cell({ chip });
+      return validateLandscape(d, TODAY).join();
+    };
+    expect(withCell("route-rereview", "◐")).toBe("");
+    expect(withCell("route-rereview", "Yes")).toContain("must be one of");
+    expect(withCell("route-state", "GitHub + Own app")).toBe("");
+    expect(withCell("route-state", "Slack")).toContain("chip label");
+    expect(withCell("route-state", "GitHub + Own app + GitHub")).toContain("labels (max 2)");
+  });
+  test("routing dimension cells need chip, short, sourceUrl and asOf", () => {
+    for (const id of ["route-trigger", "route-fix-ci"] as const) {
+      for (const [field, msg] of [["chip", "missing chip"], ["short", "missing short"], ["sourceUrl", "missing sourceUrl"], ["asOf", "missing asOf"]] as const) {
+        const d = make();
+        factory(d).cells[id] = cell({ chip: "✓", [field]: "" });
+        expect(validateLandscape(d, TODAY).join()).toContain(`cell ${id}: ${msg}`);
+      }
+    }
+  });
+  test("routing dimension cell may be omitted with a reason", () => {
+    const d = make();
+    factory(d).cells["route-fix-conflicts"] = { omitted: "not documented; checked the cloud agent page" };
+    expect(validateLandscape(d, TODAY)).toEqual([]);
   });
 });

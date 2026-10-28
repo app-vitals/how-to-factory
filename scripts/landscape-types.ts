@@ -1,4 +1,4 @@
-export const COMPONENT_IDS = ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks", "plan-clarify", "plan-assumptions", "plan-editable", "plan-saved", "plan-ordering", "plan-parallel", "plan-replan", "plan-critique", "plan-readonly", "plan-tracker", "plan-human-only", "plan-rollout", "verify-checks", "verify-criteria", "verify-test-plan", "verify-ci-gate", "verify-limits", "verify-test-guard", "verify-evidence", "verify-pr-fix"] as const;
+export const COMPONENT_IDS = ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks", "plan-clarify", "plan-assumptions", "plan-editable", "plan-saved", "plan-ordering", "plan-parallel", "plan-replan", "plan-critique", "plan-readonly", "plan-tracker", "plan-human-only", "plan-rollout", "verify-checks", "verify-criteria", "verify-test-plan", "verify-ci-gate", "verify-limits", "verify-test-guard", "verify-evidence", "verify-pr-fix", "route-trigger", "route-rereview", "route-approve", "route-fix-comments", "route-fix-ci", "route-fix-conflicts", "route-limits", "route-state"] as const;
 type ComponentId = (typeof COMPONENT_IDS)[number];
 
 /** Longest `short` a slide cell may carry, in words. */
@@ -56,6 +56,14 @@ export const CHIP_RULES: Record<ComponentId, ChipRule> = {
   "verify-test-guard": MARK,
   "verify-evidence": { kind: "labels", allowed: ["Logs", "Visual"] },
   "verify-pr-fix": MARK,
+  "route-trigger": MARK,
+  "route-rereview": MARK,
+  "route-approve": MARK,
+  "route-fix-comments": MARK,
+  "route-fix-ci": MARK,
+  "route-fix-conflicts": MARK,
+  "route-limits": MARK,
+  "route-state": { kind: "labels", allowed: ["GitHub", "Own app"] },
 };
 
 /** Task-queue products have no component; their `queue` cell chip is the product's own term. */

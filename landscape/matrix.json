@@ -139,6 +139,38 @@
     {
       "id": "verify-pr-fix",
       "label": "Fixes after the PR opens"
+    },
+    {
+      "id": "route-trigger",
+      "label": "Reviews new PRs on its own"
+    },
+    {
+      "id": "route-rereview",
+      "label": "Re-reviews after a push"
+    },
+    {
+      "id": "route-approve",
+      "label": "Reviewer can approve the PR"
+    },
+    {
+      "id": "route-fix-comments",
+      "label": "Fixes review comments itself"
+    },
+    {
+      "id": "route-fix-ci",
+      "label": "Fixes red CI itself"
+    },
+    {
+      "id": "route-fix-conflicts",
+      "label": "Repairs merge conflicts"
+    },
+    {
+      "id": "route-limits",
+      "label": "Limits on review or fix rounds"
+    },
+    {
+      "id": "route-state",
+      "label": "Where PR state lives"
     }
   ],
   "products": [
@@ -369,6 +401,70 @@
           "asOf": "2026-10-21",
           "short": "Pushes commits for CI and review",
           "chip": "✓"
+        },
+        "route-trigger": {
+          "name": "Devin Review",
+          "summary": "Auto-review starts when a PR is created (drafts included) or marked ready, or when someone with write access comments /devin review.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-review.md",
+          "asOf": "2026-10-28",
+          "short": "On PR created or ready, or /devin review",
+          "chip": "✓"
+        },
+        "route-rereview": {
+          "name": "Devin Review cadence",
+          "summary": "Cadence is a setting: Only once, or Every push; otherwise a person re-runs the review from the PR actions menu.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-review.md",
+          "asOf": "2026-10-28",
+          "short": "Setting: only once or every push",
+          "chip": "◐"
+        },
+        "route-approve": {
+          "name": "Autoapprover",
+          "summary": "Devin Review does not approve or request changes; people do. A beta Autoapprover can approve the reviewed commit, and whether the repo counts that toward merge is not documented.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-review.md",
+          "asOf": "2026-10-28",
+          "short": "Beta Autoapprover only; reviewer does not",
+          "chip": "◐"
+        },
+        "route-fix-comments": {
+          "name": "Devin Review auto-fix",
+          "summary": "On a PR a Devin session owns, findings go to the session first and only unfixed ones post as comments; on other PRs Auto-fix starts a new session.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-review.md",
+          "asOf": "2026-10-28",
+          "short": "Session fixes findings on its own PRs",
+          "chip": "✓"
+        },
+        "route-fix-ci": {
+          "name": "Auto-Fix",
+          "summary": "With Auto-Fix on, Devin iterates on failing CI checks on PRs its sessions work on.",
+          "sourceUrl": "https://docs.devin.ai/essential-guidelines/sdlc-integration.md",
+          "asOf": "2026-10-28",
+          "short": "Auto-Fix iterates on failing CI",
+          "chip": "✓"
+        },
+        "route-fix-conflicts": {
+          "name": "Stacked PRs",
+          "summary": "Conflicts are resolved quietly for stacked PRs. For a single PR, conflict repair is not documented on the Devin Review or Auto-Fix pages.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/stacked-prs.md",
+          "asOf": "2026-10-28",
+          "short": "Stacks only; single PR not documented",
+          "chip": "◐"
+        },
+        "route-limits": {
+          "name": "Per-PR spend limit",
+          "summary": "One cost cap per PR for auto-review (ACUs or dollars); once hit, auto-review stops for that PR. A cap on fix rounds is not documented.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-review.md",
+          "asOf": "2026-10-28",
+          "short": "Per-PR spend cap, no round cap",
+          "chip": "◐"
+        },
+        "route-state": {
+          "name": "Devin Review",
+          "summary": "State sits on GitHub (optional commit status, PR comments) and in Devin (review history in the webapp, the owning session).",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-review.md",
+          "asOf": "2026-10-28",
+          "short": "GitHub comments plus webapp review history",
+          "chip": "GitHub + Own app"
         }
       },
       "demoable": {
@@ -604,6 +700,55 @@
         },
         "verify-pr-fix": {
           "omitted": "Pages checked: Missions overview, planning, reference, running-cli, running-app (docs.factory.com). Post-PR fixes are not documented for Missions."
+        },
+        "route-trigger": {
+          "name": "Droid Review",
+          "summary": "The review workflow runs on PR opened, pushed, reopened or marked ready (drafts skipped), or on an @droid comment; automatic_review defaults to false, so automatic is opt-in.",
+          "sourceUrl": "https://docs.factory.com/software-factory/code-review-ci.md",
+          "asOf": "2026-10-28",
+          "short": "Opt-in: automatic_review defaults to false",
+          "chip": "◐"
+        },
+        "route-rereview": {
+          "name": "Droid Review",
+          "summary": "The workflow fires again on each push, so a push starts a review where automatic review is on. How old comments are deduplicated is not documented.",
+          "sourceUrl": "https://docs.factory.com/software-factory/code-review-ci.md",
+          "asOf": "2026-10-28",
+          "short": "Each push, if automatic review is on",
+          "chip": "◐"
+        },
+        "route-approve": {
+          "name": "Droid Review",
+          "summary": "The reviewer submits an approval when it finds no issues. Whether that satisfies branch protection is not documented.",
+          "sourceUrl": "https://docs.factory.com/software-factory/code-review-ci.md",
+          "asOf": "2026-10-28",
+          "short": "Approves when it finds no issues",
+          "chip": "✓"
+        },
+        "route-fix-comments": {
+          "name": "Review Comment Fixer",
+          "summary": "A Custom Automations starter makes the change a teammate asks for in a PR comment, pushes one commit and replies. Droid Review itself is not documented as fixing.",
+          "sourceUrl": "https://docs.factory.com/software-factory/automations.md",
+          "asOf": "2026-10-28",
+          "short": "Starter automation pushes one fix commit",
+          "chip": "◐"
+        },
+        "route-fix-ci": {
+          "omitted": "not documented; checked Automated Code Review, Custom Automations (a checks-completed trigger exists, no CI-fix starter), Delegations"
+        },
+        "route-fix-conflicts": {
+          "omitted": "not documented; checked Automated Code Review, Custom Automations, Delegations"
+        },
+        "route-limits": {
+          "omitted": "not documented; a review-round cap is not on Automated Code Review or Delegations (only platform rate limits on automations)"
+        },
+        "route-state": {
+          "name": "Droid Review",
+          "summary": "The workflow needs a token with write access to pull requests, contents and issues, so comments land on the PR in GitHub. Other state is not documented.",
+          "sourceUrl": "https://docs.factory.com/software-factory/code-review-ci.md",
+          "asOf": "2026-10-28",
+          "short": "Comments on the PR in GitHub",
+          "chip": "GitHub"
         }
       },
       "demoable": {
@@ -831,6 +976,70 @@
           "asOf": "2026-10-21",
           "short": "Fixes only when a person asks",
           "chip": "✗"
+        },
+        "route-trigger": {
+          "name": "Copilot code review",
+          "summary": "By default Copilot reviews only when someone requests it as reviewer. Automatic reviews (PR opened, or draft marked ready) are a setting per user, repository or organization.",
+          "sourceUrl": "https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/code-review.md",
+          "asOf": "2026-10-28",
+          "short": "Automatic is a setting, off by default",
+          "chip": "◐"
+        },
+        "route-rereview": {
+          "name": "Review new pushes",
+          "summary": "Copilot reviews a PR once unless Review new pushes is on; a person can re-request a review.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review.md",
+          "asOf": "2026-10-28",
+          "short": "Once, unless Review new pushes is on",
+          "chip": "◐"
+        },
+        "route-approve": {
+          "name": "Copilot approvals",
+          "summary": "The default is a Comment review that counts for nothing. With approvals on (public preview, off by default) Copilot can approve like a teammate, and a later push dismisses it.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review.md",
+          "asOf": "2026-10-28",
+          "short": "Preview setting; push dismisses approval",
+          "chip": "◐"
+        },
+        "route-fix-comments": {
+          "name": "Fix with Copilot",
+          "summary": "When asked (Fix with Copilot, or an @copilot mention), the cloud agent implements review comments as commits or a new PR. Starting on its own is not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github.md",
+          "asOf": "2026-10-28",
+          "short": "Cloud agent fixes when asked",
+          "chip": "◐"
+        },
+        "route-fix-ci": {
+          "name": "Fix with Copilot",
+          "summary": "When asked from a failing Actions run page, the cloud agent investigates and pushes a fix. A person must approve workflow runs on its push. Starting without a person is not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github.md",
+          "asOf": "2026-10-28",
+          "short": "Cloud agent fixes CI when asked",
+          "chip": "◐"
+        },
+        "route-fix-conflicts": {
+          "name": "Fix with Copilot",
+          "summary": "When asked (Fix with Copilot in the merge box, or @copilot), the cloud agent resolves the conflict, checks build, tests and linter, then asks the person for review.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github.md",
+          "asOf": "2026-10-28",
+          "short": "Cloud agent resolves when asked",
+          "chip": "◐"
+        },
+        "route-limits": {
+          "name": "Code review budget",
+          "summary": "A round cap per PR is not documented. Reviews are billed per review and stop when the applicable budget is used up; a cloud agent session runs at most 59 minutes.",
+          "sourceUrl": "https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/code-review.md",
+          "asOf": "2026-10-28",
+          "short": "Budget limits only, no round cap",
+          "chip": "◐"
+        },
+        "route-state": {
+          "name": "Copilot code review",
+          "summary": "State sits on the PR: review comments, an overview comment with the approval assessment, and the approval itself as a PR review.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review.md",
+          "asOf": "2026-10-28",
+          "short": "Review comments and overview on the PR",
+          "chip": "GitHub"
         }
       },
       "demoable": {
@@ -1059,6 +1268,60 @@
         },
         "verify-pr-fix": {
           "omitted": "Pages checked: Goal Completion Loop (docs.openhands.dev). Post-PR fixes are not documented for the goal loop."
+        },
+        "route-trigger": {
+          "name": "Automated Code Review",
+          "summary": "Reviews start on a non-draft PR opened, a draft marked ready, the review-this label, or openhands-agent requested as reviewer.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/code-review.md",
+          "asOf": "2026-10-28",
+          "short": "On open, ready, label or reviewer request",
+          "chip": "✓"
+        },
+        "route-rereview": {
+          "name": "Automated Code Review",
+          "summary": "Not by default: the synchronize trigger is left out on purpose to avoid noisy re-reviews. Re-add the label, re-request the reviewer, or add synchronize to the condition.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/code-review.md",
+          "asOf": "2026-10-28",
+          "short": "Not by default; re-label or re-request",
+          "chip": "◐"
+        },
+        "route-approve": {
+          "name": "Automated Code Review",
+          "summary": "The reviewer prompt picks APPROVE when nothing blocks, and a dedicated bot account is the identity that approves. Whether that counts toward merge rules is not documented.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/code-review.md",
+          "asOf": "2026-10-28",
+          "short": "Picks APPROVE when nothing blocks",
+          "chip": "✓"
+        },
+        "route-fix-comments": {
+          "omitted": "not documented; checked Automated Code Review, PR Review workflow, Software Factory (does not say how comments become a revision), GitHub Integration"
+        },
+        "route-fix-ci": {
+          "name": "Software Factory",
+          "summary": "Failed checks lead to revisions, and the watchdog will not merge without passing Actions runs. Which automation performs the revision is not documented.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md",
+          "asOf": "2026-10-28",
+          "short": "Failed checks lead to revisions",
+          "chip": "◐"
+        },
+        "route-fix-conflicts": {
+          "name": "Software Factory",
+          "summary": "The watchdog updates a stale branch before merging. Conflict resolution as such is not documented.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md",
+          "asOf": "2026-10-28",
+          "short": "Watchdog updates stale branch only",
+          "chip": "◐"
+        },
+        "route-limits": {
+          "omitted": "not documented; checked Automated Code Review, PR Review workflow, Software Factory"
+        },
+        "route-state": {
+          "name": "Automated Code Review",
+          "summary": "Review comments land on the PR, with a Review in progress comment edited to Review complete. Other state is not documented.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/code-review.md",
+          "asOf": "2026-10-28",
+          "short": "Comments on the PR in GitHub",
+          "chip": "GitHub"
         }
       },
       "demoable": {
@@ -1303,6 +1566,65 @@
           "asOf": "2026-10-21",
           "short": "Fixes CI failures on PRs it created",
           "chip": "✓"
+        },
+        "route-trigger": {
+          "name": "Bugbot",
+          "summary": "Bugbot runs automatically on every PR update, or on a cursor review or bugbot run comment. Drafts are skipped unless turned on.",
+          "sourceUrl": "https://cursor.com/docs/bugbot.md",
+          "asOf": "2026-10-28",
+          "short": "Automatic on every PR update",
+          "chip": "✓"
+        },
+        "route-rereview": {
+          "name": "Bugbot",
+          "summary": "Each push is reviewed, looking only at changes since the last review; a newer commit cancels a run in progress, and a setting limits it to one review per PR.",
+          "sourceUrl": "https://cursor.com/docs/bugbot.md",
+          "asOf": "2026-10-28",
+          "short": "Every push, incremental by default",
+          "chip": "✓"
+        },
+        "route-approve": {
+          "name": "PR Routing & Approval",
+          "summary": "Bugbot posts findings and a check, not approvals. A separate PR Routing & Approval agent can approve low-risk PRs; whether that satisfies a required reviewer is not documented.",
+          "sourceUrl": "https://cursor.com/docs/approval-agents.md",
+          "asOf": "2026-10-28",
+          "short": "Bugbot no; routing agent approves low-risk",
+          "chip": "◐"
+        },
+        "route-fix-comments": {
+          "name": "Bugbot Autofix",
+          "summary": "Optional Autofix starts a cloud agent to fix the bugs Bugbot found: off, commit to a new branch, or commit to the existing branch.",
+          "sourceUrl": "https://cursor.com/docs/bugbot.md",
+          "asOf": "2026-10-28",
+          "short": "Optional Autofix on Bugbot findings",
+          "chip": "◐"
+        },
+        "route-fix-ci": {
+          "name": "Cloud agent CI fix",
+          "summary": "Cloud agents try to fix CI failures on GitHub Actions for PRs they created, skipping after a person pushes. Teams and Enterprise plans.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent/capabilities.md",
+          "asOf": "2026-10-28",
+          "short": "Cloud agents fix CI on their own PRs",
+          "chip": "✓"
+        },
+        "route-fix-conflicts": {
+          "omitted": "not documented; checked Bugbot, Bugbot help, PR Routing & Approval, Cloud agent capabilities, Cloud agents help, Automations"
+        },
+        "route-limits": {
+          "name": "Autofix attempts",
+          "summary": "Autofix on the existing branch is capped at 3 attempts per PR, and cloud agents stop after 10 CI-failure follow-ups per PR.",
+          "sourceUrl": "https://cursor.com/docs/bugbot.md",
+          "asOf": "2026-10-28",
+          "short": "3 Autofix attempts, 10 CI follow-ups",
+          "chip": "✓"
+        },
+        "route-state": {
+          "name": "Bugbot",
+          "summary": "State sits on the PR: inline comments, a Cursor Bugbot check, and a summary comment or description.",
+          "sourceUrl": "https://cursor.com/docs/bugbot.md",
+          "asOf": "2026-10-28",
+          "short": "Comments and a check on the PR",
+          "chip": "GitHub"
         }
       },
       "demoable": {
@@ -1554,6 +1876,70 @@
           "asOf": "2026-10-21",
           "short": "Other surface: cloud session auto-fix",
           "chip": "◐"
+        },
+        "route-trigger": {
+          "name": "Code Review",
+          "summary": "An Owner sets it per repository: once when a PR opens or is ready, after every push, or manual only. A person with write access can always comment @claude review.",
+          "sourceUrl": "https://code.claude.com/docs/en/code-review-setup.md",
+          "asOf": "2026-10-28",
+          "short": "Per-repo: on open, every push, or manual",
+          "chip": "✓"
+        },
+        "route-rereview": {
+          "name": "Code Review",
+          "summary": "Only where pushes trigger reviews (the every-push setting, or a PR subscribed with @claude review always); later reviews focus on what changed since the last one.",
+          "sourceUrl": "https://code.claude.com/docs/en/code-review-pull-requests.md",
+          "asOf": "2026-10-28",
+          "short": "Only with every-push or subscribed PRs",
+          "chip": "◐"
+        },
+        "route-approve": {
+          "name": "Code Review",
+          "summary": "The page says a review never approves or blocks the PR, and its check run never concludes as a failure, so the merge decision stays with the team.",
+          "sourceUrl": "https://code.claude.com/docs/en/code-review.md",
+          "asOf": "2026-10-28",
+          "short": "Never approves or blocks",
+          "chip": "✗"
+        },
+        "route-fix-comments": {
+          "name": "Cloud auto-fix",
+          "summary": "The review itself is read-only and pushes nothing. On another surface, cloud session auto-fix decides per review comment whether to fix it, ask the person or skip it.",
+          "sourceUrl": "https://code.claude.com/docs/en/claude-code-on-the-web.md",
+          "asOf": "2026-10-28",
+          "short": "Cloud auto-fix, not the reviewer",
+          "chip": "◐"
+        },
+        "route-fix-ci": {
+          "name": "Cloud auto-fix",
+          "summary": "While auto-fix is on for a PR, the cloud session receives failed CI check events and pushes a fix when it is clear; the review service does not fix.",
+          "sourceUrl": "https://code.claude.com/docs/en/claude-code-on-the-web.md",
+          "asOf": "2026-10-28",
+          "short": "Cloud auto-fix reacts to failed checks",
+          "chip": "◐"
+        },
+        "route-fix-conflicts": {
+          "name": "Cloud auto-fix",
+          "summary": "GitHub sends no event when the base branch moves, so auto-fix cannot react on its own; the person asks Claude to rebase. Projects threads have a Resolve conflicts button.",
+          "sourceUrl": "https://code.claude.com/docs/en/claude-code-on-the-web.md",
+          "asOf": "2026-10-28",
+          "short": "No event; person asks for a rebase",
+          "chip": "◐"
+        },
+        "route-limits": {
+          "name": "Code Review spend limits",
+          "summary": "No cap on review rounds per PR is stated. Limits are a monthly spend limit, the organization's spend limit and the credit balance; a skipped review gets a comment naming the cause.",
+          "sourceUrl": "https://code.claude.com/docs/en/code-review-costs.md",
+          "asOf": "2026-10-28",
+          "short": "Spend and credit limits, no round cap",
+          "chip": "◐"
+        },
+        "route-state": {
+          "name": "Code Review",
+          "summary": "State sits on the PR in GitHub: inline comments, the review body, and a check run named Claude Code Review.",
+          "sourceUrl": "https://code.claude.com/docs/en/code-review-pull-requests.md",
+          "asOf": "2026-10-28",
+          "short": "Comments and a check run on the PR",
+          "chip": "GitHub"
         }
       },
       "demoable": {
