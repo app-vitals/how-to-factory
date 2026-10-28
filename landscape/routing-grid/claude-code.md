@@ -1,0 +1,84 @@
+# Claude Code: routing grid (lesson 4)
+
+Scope: how Claude Code decides what a pull request needs next and when it looks at the PR again, meaning what triggers a review,
+re-review after new commits, who approves, whether the product fixes its own PR, caps on rounds, how the next action is chosen,
+where PR state lives, the hand-off to a person, and how it treats a PR it wrote itself. Every filled cell is a paraphrase of a
+first-party page, with its URL and the date I fetched it (**2026-10-28**). Names are Anthropic's own (Code Review, auto-fix, Projects,
+scheduled tasks, formerly routines), not canonical. No single surface covers every dimension, so each row names its surface. Where a
+cell says "not in their docs", it lists the pages checked; that is a statement about those pages, not about the product.
+
+Method: fetched the docs index (https://code.claude.com/docs/llms.txt, 2026-10-28) and listed every page that could touch PRs: Code Review
+and its setup, customize, PR, costs and troubleshooting pages, `/code-review`, ultrareview, GitHub Actions, cloud sessions with
+auto-fix, scheduled tasks, Projects. Read the pages under "Pages read" as Markdown (`<url>.md`) through a fetch tool that passes the
+page through a small model and returns its answer, so quoted phrases are short and I cannot certify any page as verbatim. Started
+from the review and fix notes in `landscape/field-grid/claude-code.md` and `landscape/verify-grid/claude-code.md` (both dated before
+this pass) and re-fetched every page; nothing there was carried over unchecked. The scheduled-tasks and Projects pages came back long;
+I searched them for the PR passages rather than reading every line, and say so below.
+
+Surfaces: **Code Review** (managed GitHub service), **GitHub Action** (`claude-code-action`), **Cloud session auto-fix**,
+**Projects thread**, **Scheduled task with a GitHub trigger**.
+
+## The grid
+
+| Surface | Dimension | Value | Source | As of |
+| --- | --- | --- | --- | --- |
+| Code Review (managed service) | review trigger | Set per repository by an Owner: once when a PR opens, reopens or is marked ready; after every push; or manual only. Whatever the setting, a person with write access can comment `@claude review` for one review, or `@claude review always` to subscribe that PR to push-triggered reviews. Automatic reviews skip drafts and fork PRs (a comment command still works on both) | https://code.claude.com/docs/en/code-review-setup.md; https://code.claude.com/docs/en/code-review-pull-requests.md | 2026-10-28 |
+| Code Review (managed service) | re-review after new commits | Only where pushes trigger reviews (after-every-push setting, or a PR subscribed with `@claude review always`). A later automatic review focuses on what changed since the last one and posts fewer nits and pre-existing findings; the review body counts what it left out. If a push leaves the PR adding and removing the same lines (empty commit, clean rebase or merge) and no Important thread was resolved, the earlier result is kept and the check run says so. `@claude review` re-reviews the whole PR | https://code.claude.com/docs/en/code-review-pull-requests.md | 2026-10-28 |
+| Code Review (managed service) | who approves; does an AI approval count | The page says a review never approves or blocks the PR, and its check run never concludes as a failure, so the merge decision stays with the team. Whether a repository's own rules count an AI approval: not in their docs (pages checked: code-review, code-review-pull-requests, code-review-setup) | https://code.claude.com/docs/en/code-review.md; https://code.claude.com/docs/en/code-review-pull-requests.md | 2026-10-28 |
+| Code Review (managed service) | does it fix its own PR | A review's repository access is read-only and it does not push commits. It does resolve its own earlier comment threads when it judges the issue fixed. Fixing is left to the author (or to another surface below) | https://code.claude.com/docs/en/code-review.md; https://code.claude.com/docs/en/code-review-pull-requests.md | 2026-10-28 |
+| Code Review (managed service) | caps or limits | No cap on review rounds per PR is stated. The limits that are: a monthly spend limit for the review service, the organization's spend limit, and the usage-credit balance; when one runs out or too little is left for one review, the review is skipped and the PR gets a comment naming the cause. Within a review, the root review-instructions file may cap nits and may include at most eight other files | https://code.claude.com/docs/en/code-review-costs.md; https://code.claude.com/docs/en/code-review-troubleshooting.md; https://code.claude.com/docs/en/code-review-customize.md | 2026-10-28 |
+| Code Review (managed service) | how it chooses the next action | It does not pick between actions: each review is a find, verify, rank, post run. What starts the next one is the repository setting, a subscribed push, a comment command, a re-run click, or one automatic retry of an interrupted session | https://code.claude.com/docs/en/code-review.md; https://code.claude.com/docs/en/code-review-pull-requests.md; https://code.claude.com/docs/en/code-review-troubleshooting.md | 2026-10-28 |
+| Code Review (managed service) | where PR state lives | On the PR in GitHub: inline comments, review body, a check run named Claude Code Review (titles such as queued, in progress, found no issues, skipped no new changes, not repeated), and comment threads. The check run Details text ends with a line holding severity counts that a script can read. Subscription state for `always` is set by comment; where it is stored is not in their docs (pages checked: code-review-pull-requests, code-review-troubleshooting) | https://code.claude.com/docs/en/code-review-pull-requests.md; https://code.claude.com/docs/en/code-review-troubleshooting.md | 2026-10-28 |
+| Code Review (managed service) | hand-off to a person | Findings arrive as ranked inline comments with a summary. The reader resolves a thread to dismiss, pushes a fix, or replies; a reply does not start a review. If branch protection requires conversation resolution, threads must be resolved before merge | https://code.claude.com/docs/en/code-review-pull-requests.md | 2026-10-28 |
+| Code Review (managed service) | treats a PR it authored itself | Not in their docs for this service (pages checked: code-review, code-review-pull-requests, code-review-setup, code-review-customize). The comment-command rules say comments from bots do not start reviews | https://code.claude.com/docs/en/code-review.md; https://code.claude.com/docs/en/code-review-pull-requests.md | 2026-10-28 |
+| GitHub Action (claude-code-action) | trigger | Interactive mode: the `@claude` phrase in an issue or PR comment, a PR review, or a new issue's title or body. Automation mode: whatever GitHub event the workflow names, for example PR opened, synchronize, ready for review, reopened, or a cron schedule. Both modes check that the actor has write access (not for events no user authors) and reject bot actors unless listed in `allowed_bots` | https://code.claude.com/docs/en/github-actions.md | 2026-10-28 |
+| GitHub Action (claude-code-action) | re-review after new commits | Follows the workflow's own triggers; the review example runs on opened, synchronize, ready_for_review and reopened. That example's skill skips draft and closed PRs, PRs it judges not to need review, and PRs that already have a comment from Claude. Whether a second push gets a new review is therefore set by the workflow author | https://code.claude.com/docs/en/github-actions.md | 2026-10-28 |
+| GitHub Action (claude-code-action) | who approves; does an AI approval count | Not in their docs (pages checked: github-actions). The review example posts inline comments or one summary comment | https://code.claude.com/docs/en/github-actions.md | 2026-10-28 |
+| GitHub Action (claude-code-action) | does it fix its own PR | On request: a comment such as `@claude fix the TypeError ...` has Claude implement changes and push commits, and the app holds pull-request and contents write permission. Reacting to red CI or conflicts on its own, without a prompt that asks for it: not in their docs (pages checked: github-actions). The page notes that pushes made with the default workflow token do not trigger CI workflows | https://code.claude.com/docs/en/github-actions.md | 2026-10-28 |
+| GitHub Action (claude-code-action) | caps or limits | `--max-turns` in `claude_args` limits iterations, plus workflow timeouts and GitHub concurrency controls; the page lists these as cost controls. No default round cap is stated | https://code.claude.com/docs/en/github-actions.md | 2026-10-28 |
+| GitHub Action (claude-code-action) | where PR state lives | In the workflow run and in comments on the issue or PR (interactive mode updates one comment as it works; automation mode writes to the run log unless the prompt directs a post). Anything else: not in their docs (pages checked: github-actions) | https://code.claude.com/docs/en/github-actions.md | 2026-10-28 |
+| Cloud session auto-fix | trigger and next action | Turned on per PR (Changes card menu, `/autofix-pr` from the PR's branch, mobile, or by pasting a PR URL into a session). While on, the session receives GitHub events for new review comments and failed CI checks. For each event Claude decides: a clear fix that does not conflict with earlier instructions is made and pushed; an ambiguous or architecturally significant comment is put to the person first; a duplicate or no-action event is noted and skipped | https://code.claude.com/docs/en/claude-code-on-the-web.md | 2026-10-28 |
+| Cloud session auto-fix | merge conflicts | GitHub sends no event when the base branch moves and creates a conflict, so auto-fix cannot react on its own; the person asks Claude in the session to rebase | https://code.claude.com/docs/en/claude-code-on-the-web.md | 2026-10-28 |
+| Cloud session auto-fix | caps or limits | No cap on fix rounds is stated (pages checked: claude-code-on-the-web, claude-projects). Sessions share account rate limits, and an idle environment expires. Stopping is by turning auto-fix off or telling Claude to stop watching | https://code.claude.com/docs/en/claude-code-on-the-web.md | 2026-10-28 |
+| Cloud session auto-fix | approval and hand-off | Replies on review threads are posted under the person's GitHub account, labelled as written by Claude Code. Who approves or merges: not in their docs for this page (pages checked: claude-code-on-the-web). The page warns that those replies can trigger comment-driven automation such as `issue_comment` workflows | https://code.claude.com/docs/en/claude-code-on-the-web.md | 2026-10-28 |
+| Cloud session auto-fix | where PR state lives | In the cloud session (its conversation and Changes card) plus the PR on GitHub. The session is the watcher; the PR is the record | https://code.claude.com/docs/en/claude-code-on-the-web.md | 2026-10-28 |
+| Projects thread (public beta) | what it does with a PR it opened | A cloud thread works on a new branch off the default branch, opens a PR when asked or on its own for a concrete change, then watches it with auto-fix on whether or not auto-fix is on elsewhere. It pushes fixes for CI failures, addresses review comments, and replies in the thread when checks pass and the PR is ready. Card buttons (Resolve conflicts, Fix CI, Address comments, Merge it) send that instruction to the thread as a message from the person | https://code.claude.com/docs/en/claude-projects.md | 2026-10-28 |
+| Projects thread (public beta) | state and hand-off | The Overview pane groups threads: Ready for review (PR open, awaiting review), Landing (PR approved or queued to merge), Resolved (marked done, done by Claude after the person's last step such as merging, or automatically after a week idle). A Pull requests tab lists those the threads opened. Merging is the person's step unless the project instructions or a message say otherwise | https://code.claude.com/docs/en/claude-projects.md | 2026-10-28 |
+| Projects thread (public beta) | caps or limits | Enforced: 200 new threads per day across a person's projects, and plan usage limits. A thread-concurrency limit given in the conversation is a preference, not a cap. An idle thread wakes and uses the plan again when CI fails or a review comment arrives on its PR | https://code.claude.com/docs/en/claude-projects.md | 2026-10-28 |
+| Scheduled task with a GitHub trigger | trigger and filters | A GitHub trigger starts a new session per matching event; two PR updates make two independent sessions. PR actions include opened, closed, assigned, labeled, synchronized. Filters: author, title, body, base branch, head branch, labels, is draft, is merged, with equals, contains, starts with, is one of, is not one of, matches regex | https://code.claude.com/docs/en/routines.md | 2026-10-28 |
+| Scheduled task with a GitHub trigger | caps and push rules | Webhook events are subject to per-task and per-account hourly caps; events past the cap are dropped. Scheduled runs are limited to 100 per hour per account. Claude pushes to a `claude/`-prefixed branch unless the prompt names another; branch protection and rulesets on GitHub control where a run may push. Commits and PRs appear under the person's GitHub identity | https://code.claude.com/docs/en/routines.md | 2026-10-28 |
+| Scheduled task with a GitHub trigger | state | None carried between events: sessions are not reused across events. Each run opens as a full session in the run history. Whether it avoids repeat work on a PR it already handled: not in their docs (pages checked: routines) | https://code.claude.com/docs/en/routines.md | 2026-10-28 |
+
+## Not in their docs (with pages checked)
+
+- Whether an AI approval counts toward a repository's approval rule, for any surface: code-review, code-review-pull-requests, code-review-setup, github-actions, claude-code-on-the-web, claude-projects. The managed review states it never approves; the other surfaces say nothing either way.
+- A cap on the number of review or fix rounds on one PR: code-review, code-review-costs, code-review-pull-requests, code-review-troubleshooting, github-actions, claude-code-on-the-web, claude-projects. Limits shown are spend, hourly event caps, turns, or thread counts.
+- How Code Review treats a PR written by Claude (a cloud session, Projects thread or the Action): the same pages as above. The only related rule is that comments from bots do not start a review.
+- One shared record of PR state across surfaces: each surface keeps its own (a check run, a workflow comment, a cloud session, a project Overview, a run history). No page describes joining them.
+- Whether a scheduled-task GitHub trigger remembers a PR it already handled: routines.
+
+## Pages read
+
+All fetched 2026-10-28 as Markdown (`<url>.md`) through a tool that returns a processed answer. "Searched" means the page came back long
+and I searched it for the PR passages; the rest were read through in what the tool returned.
+
+- https://code.claude.com/docs/llms.txt (the docs index)
+- https://code.claude.com/docs/en/code-review.md
+- https://code.claude.com/docs/en/code-review-pull-requests.md
+- https://code.claude.com/docs/en/code-review-setup.md
+- https://code.claude.com/docs/en/code-review-customize.md
+- https://code.claude.com/docs/en/code-review-costs.md
+- https://code.claude.com/docs/en/code-review-troubleshooting.md
+- https://code.claude.com/docs/en/github-actions.md
+- https://code.claude.com/docs/en/claude-code-on-the-web.md (read; auto-fix section used)
+- https://code.claude.com/docs/en/routines.md (searched: GitHub trigger, filters, repositories and branch permissions, usage and limits)
+- https://code.claude.com/docs/en/claude-projects.md (searched: pull request handling, Overview states, usage and cost)
+
+## Ruled out (why)
+
+- **ultrareview** (https://code.claude.com/docs/en/ultrareview.md) and **local `/code-review`** (https://code.claude.com/docs/en/code-review-local.md): the person starts them from a session; they do not decide what a PR needs next or watch for new commits. Listed in the index, not fetched this pass.
+- **GitLab CI/CD** (https://code.claude.com/docs/en/gitlab-ci-cd.md) and **GitHub Enterprise Server**: other hosts for surfaces already read; not fetched.
+- **github-actions-cloud-providers**: authentication paths for the Action; not fetched.
+- **Desktop scheduled tasks, `/loop`, hooks, agent teams, subagents, skills**: they repeat or split work inside a session, not decide a PR's next step; not fetched again (read for earlier grids).
+- **Remote Control and session-management pages** (remote-control, sessions): move a session between devices; not about PR routing; not fetched.
+- **Anthropic engineering blog posts** linked from the Code Review page: not a docs page; not fetched, no claim from them.
