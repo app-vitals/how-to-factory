@@ -26,7 +26,7 @@ Verification, Review and Release, plus the instructions and standards the factor
 - Make the agent run lint, typecheck and tests before it says "done"
 - Require CI to pass before anything merges
 - Design a test system for a repo that has none
-- Compare how factories verify: who decides it is done, whether it runs the app itself, how it keeps going. Taught by [lesson 3, Done means checked](03-done-means-checked/brief.md) (in progress: brief, options, deck skeleton, script outline and exercise outcomes drafted). Research is banked in `landscape/field-grid`, the six-product [`landscape/verify-grid/`](../landscape/verify-grid/README.md) and the `verify-*` columns of `landscape/matrix.json`
+- Compare how factories verify: who decides it is done, whether it runs the app itself, how it keeps going. Taught by [lesson 3, Done means checked](03-done-means-checked/brief.md) (taught). Research is banked in `landscape/field-grid`, the six-product [`landscape/verify-grid/`](../landscape/verify-grid/README.md) and the `verify-*` columns of `landscape/matrix.json`
 
 ### Review
 - Have a second agent review the PR
@@ -143,6 +143,13 @@ _Depends on: the execution environment lesson, before parallel runs._
 - Have a coordinator assign work to specialist agents
 - Claim a task in a shared queue so two agents never take the same one (new candidate: multi-agent coordination)
 - Cap how many agents run at once (new candidate: multi-agent coordination)
+- Have the loop read each open PR and route it to a review, a patch or a person. Taught by [lesson 4, The loop reads PRs](04-the-loop-reads-prs/brief.md) (Tier A: see, route and stop; the round cap is shown as a choice, not a rule)
+
+Follow-on candidates from lesson 4, unordered, none scheduled:
+- Review deep dive: finding grading, inline comments, posting policy, reviewing against principles, real approval
+- Patch deep dive: how a finding becomes a commit, reading CI logs, resolving a conflict, a second-round disagreement
+- Starvation across many workers (a backlog of one kind ageing out the others): a destination, owned by the multi-agent coordination deep dive
+- The production round cap (a per-PR cooldown and a skip counter that clears when the head moves): a destination, owned by a later loop lesson
 
 ### Chat interface
 - Drive an agent from a chat app
