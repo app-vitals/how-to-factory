@@ -92,7 +92,7 @@ One column. The chip is a mark: ✓ the pages document the gate, ◐ they docume
 | OpenHands | – | **Goal Completion Loop**: Not in their docs. CI or branch gating is not documented for the goal loop. Page checked: Goal Completion Loop. ([source](https://docs.openhands.dev/sdk/guides/convo-goal.md), as of 2026-10-21) |
 | Cursor | ◐ | **CI subscriptions**: Subscriptions wait until every check on the commit completes and return one result. Whether CI is required before a PR opens is not documented. ([source](https://cursor.com/docs/cloud-agent/capabilities.md), as of 2026-10-21) |
 | Claude Code | – | **GitHub Actions and Code Review**: Not in their docs as a default gate. Pages checked: github-actions, code-review, code-review-pull-requests. The Code Review page does show gating from your own CI by reading the severity counts, and notes that branch protection can require conversation resolution. ([source](https://code.claude.com/docs/en/code-review-pull-requests.md), as of 2026-10-21) |
-| This sample | ✓ | Target: a CI job runs the repo's validate command, and a person sets the branch-protection rule that requires it before merge ([source](brief.md)) |
+| This sample | ✓ | Target: a CI job runs the repo's validate command, and a branch-protection rule, set once per repo, requires it before merge ([source](brief.md)) |
 
 ## Not compared here
 

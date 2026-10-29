@@ -58,11 +58,11 @@ user-facing criterion the app is started and the path exercised.
 
 ### 5. A gate that binds
 
-A CI job runs the repo's checks, and the main branch cannot be merged while it is red. This is the beat where a person
-comes in.
+A CI job runs the repo's checks, and the main branch cannot be merged while it is red. This is a guardrail on the
+agent, set up once per repo and not per task.
 
 - [ ] a CI workflow runs the same validate command you run locally, and its file exists in your repo
-- [ ] a rule on the main branch requires that job before merge, you can see the rule in your settings, and you can say who set it
+- [ ] a rule on the main branch requires that job before merge, you can see the rule in your settings, and it applies to every task without anyone acting per task
 - [ ] open a PR with a failing check: the merge is blocked until it is fixed
 
 ### 6. Where independence runs out
