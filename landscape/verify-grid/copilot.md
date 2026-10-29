@@ -126,3 +126,61 @@ summary; none of the pages was seen as verbatim text. Every page below except th
 - **Model selection, billing, policy and enterprise pages, give-access-to-resources, secrets and variables**: not verification.
 - **Third-party agents and partner agent apps**: other agents, not Copilot's own flow.
 - **Shipwright site pages and any third-party comparison**: marketing for other products; no wording or claims used.
+
+## Added dimensions: hidden tests and test quality (fetched 2026-10-29)
+
+Two new dimensions, plus property-based and fuzz testing where documented. The dimensions above are not repeated. Method: the docs
+index (https://docs.github.com/llms.txt, 2026-10-29) was fetched first. It lists few Copilot pages and no page for Code Quality,
+agent hooks, Agentic Workflows or autopilot, so candidates came from the page set in "Pages read" above plus two code-security pages
+(Code Quality and code scanning concepts) that the guardrails tutorial points to. Each was fetched again and asked about these topics
+only. As above, the fetch tool returns a condensed extraction, so each "not documented" rests on that tool reporting the topic absent
+from the page. Surfaces covered: cloud agent session, cloud agent hooks, PR follow-up, Copilot CLI (including autopilot and its code
+review agent), code review, automation, Agentic Workflows, dynamic workflows, and repository guardrails with Code Quality and code
+scanning.
+
+| Surface | HIDDEN OR HELD-OUT TESTS | TEST-QUALITY MEASURE (mutation score or similar) | PROPERTY-BASED OR FUZZ TESTING |
+| --- | --- | --- | --- |
+| **Cloud agent session** | Not documented (checked: get-the-best-results, improve-a-project, configuring-agent-settings). The agent runs the repo's own tests and linters in its environment, so nothing says any check is withheld from it. ([Best practices](https://docs.github.com/en/copilot/tutorials/cloud-agent/get-the-best-results), [Agent settings](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/configuring-agent-settings), 2026-10-29) | Not documented (checked: get-the-best-results, improve-a-project). No grading of the tests the agent writes. The only second look is the built-in validation, where the agent asks Copilot code review for an opinion on its own code and tries to resolve what comes back; the page frames this around security issues such as hardcoded secrets and insecure dependencies, not test quality. ([Agent settings](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/configuring-agent-settings), 2026-10-29) | Not documented (checked: get-the-best-results, improve-a-project, configuring-agent-settings). |
+| **Cloud agent hooks** | Not documented (checked: hooks-reference, use-hooks, hooks concepts). The how-to says the hooks configuration file must be on the repository's default branch, under `.github/hooks/`. No page says whether this keeps the agent from editing it or treats hook scripts as held-out checks; reference and concepts pages are silent on agent permission to change hook config. ([Use hooks](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/use-hooks), [Hooks reference](https://docs.github.com/en/copilot/reference/hooks-reference), [Hooks concepts](https://docs.github.com/en/copilot/concepts/agents/hooks), 2026-10-29) | Not documented (checked: use-hooks, hooks-reference, hooks concepts). A person-written hook could run any script, but no page offers a test-grading one. | Not documented (checked: use-hooks, hooks-reference, hooks concepts). |
+| **PR follow-up** | Not documented (checked: use-cloud-agent-on-github, as read for the grid above; code scanning concepts). Code scanning findings appear as alerts in the repository, so authors see them; no withheld checks are mentioned. ([Code scanning](https://docs.github.com/en/code-security/concepts/code-scanning/about-code-scanning), 2026-10-29) | Not documented (checked: code scanning concepts, use-cloud-agent-on-github). | Not documented (checked: code scanning concepts). |
+| **Copilot CLI** | Not documented (checked: CLI overview, autopilot). The overview lists a code review agent that reports only genuine issues; nothing says it sees material the coding agent does not, or the reverse. ([CLI overview](https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/overview), [Autopilot](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/autopilot), 2026-10-29) | Not documented (checked: CLI overview, autopilot). Autopilot's page only advises the person to run relevant tests, linters and security checks before committing. | Not documented (checked: CLI overview, autopilot). |
+| **Code review** | Not documented (checked: use-code-review). The page does not say what the reviewer is given or withheld, nor whether it can see the full test suite. ([Use code review](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review), 2026-10-29) | Not documented (checked: use-code-review). No assessment of the quality or coverage of the tests in a PR is described. | Not documented (checked: use-code-review). |
+| **Automation** | Not documented (checked: about-automations). The page covers triggers, tools, billing and security, and no withheld checks. ([About automations](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-automations), 2026-10-29) | Not documented (checked: about-automations). | Not documented (checked: about-automations). |
+| **Agentic Workflows (public preview)** | Not documented (checked: about-github-agentic-workflows). ([Agentic Workflows](https://docs.github.com/en/copilot/concepts/agents/about-github-agentic-workflows), 2026-10-29) | Not documented as a measure. The page lists improving test coverage as a use case but, per the extraction, does not say how a workflow would judge whether the added tests are any good (checked: about-github-agentic-workflows). | Not documented (checked: about-github-agentic-workflows). |
+| **Dynamic workflows (public preview)** | Not documented (checked: dynamic-workflows). The page's cross-checking example has two models judge whether review comments still matter and reports a finding only when both agree, but the extraction does not say what the second model is shown versus the first. ([Dynamic workflows](https://docs.github.com/en/copilot/concepts/agents/dynamic-workflows), 2026-10-29) | Not documented (checked: dynamic-workflows). | Not documented (checked: dynamic-workflows). |
+| **Repository guardrails, Code Quality, code scanning** | Closest thing, and not a hidden-test design: the agent is subject to rulesets like a human developer, so a required result (the tutorial names code scanning or Code Quality) can block its PR. Nothing says the agent cannot see or run those checks. ([Build guardrails](https://docs.github.com/en/copilot/tutorials/cloud-agent/build-guardrails), 2026-10-29) | Partly, as coverage only. Code Quality shows line coverage on a PR, whether the change raises or lowers it against the default branch, and rulesets can enforce quality and coverage thresholds to block PRs. It does not grade whether tests would catch a broken change; the page describes no mutation or similar measure, and the extraction did not tie coverage to the cloud agent's own PRs. Its other checks are CodeQL rules and AI analysis of changed files, which look at code, not at test strength. ([About Code Quality](https://docs.github.com/en/code-security/code-quality/concepts/about-code-quality), 2026-10-29) | Not documented (checked: About Code Quality, code scanning concepts, build-guardrails). |
+
+Takeaways for the lesson, all from the cells above:
+
+- No page read documents held-out or hidden tests. The only nearby design is the guardrail route: rulesets and required checks apply to the agent's PR, and hook config is read from the default branch, but no page says either is meant to keep checks out of the agent's view.
+- The nearest test-quality measure is Code Quality's line coverage with threshold rules. That is coverage, not mutation score; nothing documented checks that the tests an agent wrote would fail on broken code.
+- Property-based and fuzz testing are not documented on any page read.
+
+### Pages read (added dimensions)
+
+All fetched 2026-10-29, index first (https://docs.github.com/llms.txt). Condensed extraction, see Method above.
+
+- https://docs.github.com/en/copilot/tutorials/cloud-agent/get-the-best-results
+- https://docs.github.com/en/copilot/tutorials/cloud-agent/build-guardrails
+- https://docs.github.com/en/copilot/tutorials/cloud-agent/improve-a-project
+- https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/configuring-agent-settings
+- https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review
+- https://docs.github.com/en/copilot/reference/hooks-reference
+- https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/use-hooks
+- https://docs.github.com/en/copilot/concepts/agents/hooks
+- https://docs.github.com/en/copilot/concepts/agents/copilot-cli/autopilot
+- https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/overview
+- https://docs.github.com/en/copilot/concepts/agents/about-github-agentic-workflows
+- https://docs.github.com/en/copilot/concepts/agents/dynamic-workflows
+- https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-automations
+- https://docs.github.com/en/code-security/code-quality/concepts/about-code-quality
+- https://docs.github.com/en/code-security/concepts/code-scanning/about-code-scanning
+
+### Ruled out (why), added dimensions
+
+- **use-cloud-agent-on-github, manage-and-track-agents, review-copilot-output, research-plan-iterate, customize-the-agent-environment, troubleshoot-cloud-agent, copilot-on-github**: read for the grid above on 2026-10-23; not fetched again on 2026-10-29 for these dimensions, so the PR follow-up row leans on the earlier reading plus the code scanning page.
+- **Release notes and GitHub changelog**: not searched; a newer entry could announce a held-out-test or test-quality feature the docs pages do not describe. A gap, not a finding.
+- **Copilot Autofix and other code scanning sub-pages, Code Quality setup and ruleset pages**: not fetched; they may say more about coverage thresholds for agent PRs.
+- **gh-aw site (github.github.com/gh-aw)**: not docs.github.com; not read, so Agentic Workflows internals beyond the concepts page are unchecked.
+- **Custom agents, skills, MCP, plugins, models, billing, policy and enterprise pages**: shape what an agent knows or costs, not how its tests are hidden or graded.
+- **Third-party agents, benchmark papers and any comparison or marketing page**: other products or not first-party docs; no wording or claims used.
