@@ -124,3 +124,72 @@ All fetched 2026-10-23 (index first: https://docs.openhands.dev/llms.txt). Conde
 - **Sandboxes, Docker execution, backends, secrets, token scopes, Enterprise pages**: isolation and operations, not task verification.
 - **COBOL Modernization, Spark Migrations, plugin and ACP agent pages**: domain recipes or setup; they may hold verification examples that I did not open. The Iterative Refinement page is the COBOL-to-Java example and was read for its loop.
 - **Shipwright marketing pages**: not consulted; no wording or claims reused.
+
+## Added dimensions: hidden tests and test quality (fetched 2026-10-29)
+
+Two new dimensions, plus property-based and fuzz testing where documented. The dimensions above are not repeated. Method: the docs
+index (https://docs.openhands.dev/llms.txt, 2026-10-29) was fetched first and the candidate pages listed from it (testing, QA, critic,
+goal loop, refinement, review, hooks, skills monitoring, the Software Factory, the prebuilt automations and the guidance and use-case pages).
+Each was fetched again and asked about these topics only. As above, the fetch tool returns a condensed extraction, so each "not
+documented" rests on that tool reporting the topic absent from the page. One extraction claimed the Software Factory keeps checks from
+the developer stage; a stricter second question showed the page does not say that, and the cell below follows the second answer.
+Surfaces covered: goal loop, critic, multi-agent refinement, QA changes agent, automated code review, Software Factory, hooks, Issue to
+PR automation, skills monitoring and the prompt-guidance and use-case pages.
+
+| Surface | HIDDEN OR HELD-OUT TESTS | TEST-QUALITY MEASURE (mutation score or similar) | PROPERTY-BASED OR FUZZ TESTING |
+| --- | --- | --- | --- |
+| **Goal loop** | Not documented as a hidden check. The judge reads the same transcript the agent produced, with only the agent's system prompt left out to save tokens, so it holds no criteria the agent cannot see (checked: Goal Completion Loop). ([Goal Completion Loop](https://docs.openhands.dev/sdk/guides/convo-goal.md), 2026-10-29) | Not documented (checked: Goal Completion Loop). The judge looks for command output and test results, and nothing grades the tests. | Not documented (checked: Goal Completion Loop). |
+| **Critic** | Not documented (checked: SDK Critic, Agent Canvas Critic). The pages say the critic reads the agent's actions and conversation, and nothing about withholding tests from the agent. ([Critic, SDK](https://docs.openhands.dev/sdk/guides/critic.md), [Critic, Agent Canvas](https://docs.openhands.dev/openhands/usage/agent-canvas/critic.md), 2026-10-29) | Not documented (checked: both Critic pages). Both link a technical report on a critic trained from sparse real-world outcomes; what signal it was trained on is not stated on the pages, and the report itself was not read. | Not documented (checked: both Critic pages). |
+| **Multi-agent refinement** | Not documented as a hidden check. The critique agent is a separate agent from the worker, but both get the same source files and outputs and the four-dimension rubric is open to both (checked: Iterative Refinement). ([Iterative Refinement](https://docs.openhands.dev/sdk/guides/iterative-refinement.md), 2026-10-29) | Not documented (checked: Iterative Refinement). The score grades converted code, not tests. | Not documented (checked: Iterative Refinement). |
+| **QA changes agent** | Not documented as a hidden check. The page places it as the second layer of a verification stack after code review, run by a separate agent that reads the PR and exercises the change; nothing says its checks are kept from the author (checked: Automated QA Testing). ([Automated QA Testing](https://docs.openhands.dev/openhands/usage/use-cases/qa-changes.md), 2026-10-29) | Not documented (checked: Automated QA Testing). It leaves running the test suite to CI, and no layer of the stack grades the author's tests. | Not documented (checked: Automated QA Testing). |
+| **Automated code review** | Not documented (checked: Automated Code Review). ([Automated Code Review](https://docs.openhands.dev/openhands/usage/use-cases/code-review.md), 2026-10-29) | Not documented (checked: Automated Code Review). The page lists test-only changes as something that can be approved, and nothing about judging whether the tests are good. The SDK PR Review page also has nothing on test adequacy (checked: PR Review). ([PR Review](https://docs.openhands.dev/sdk/guides/github-workflows/pr-review.md), 2026-10-29) | Not documented (checked: both pages). |
+| **Software Factory** | Not stated. The reviewer stage runs the PR's relevant tests and records its own review and test statuses, and the watchdog merges only on those independent statuses. That is a different stage from the developer, but the page does not say the developer cannot see the checks (checked: Software Factory). ([Software Factory](https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md), 2026-10-29) | Not documented (checked: Software Factory). No coverage or mutation measure is named. | Not documented (checked: Software Factory). |
+| **Hooks** (repository hooks; SDK hooks) | Not documented. Neither page mentions protecting, hiding or locking test files; a hook script could be written to do it, but the pages do not say so (checked: Repository Hooks, SDK Hooks). ([Repository Hooks](https://docs.openhands.dev/openhands/usage/customization/hooks.md), [SDK Hooks](https://docs.openhands.dev/sdk/guides/hooks.md), 2026-10-29) | Not documented (checked: both Hooks pages). The examples are lint, pre-commit and pytest runs. | Not documented (checked: both Hooks pages). |
+| **Issue to PR automation** | Not documented (checked: Issue to Pull Request). ([Issue to Pull Request](https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/issue-to-pr.md), 2026-10-29) | Not documented (checked: Issue to Pull Request). It says the agent runs tests, and nothing grades them. | Not documented (checked: Issue to Pull Request). |
+| **Prompt guidance and use-case pages** (SDLC integration, Good vs. Bad Instructions, Prompting Best Practices, When to Use, Dependency Upgrades, Vulnerability Remediation, Daily Workflow) | Not documented (checked: all seven). | Coverage only, as advice and not a product measure: SDLC integration lists dropping coverage as a trigger and a coverage target, Dependency Upgrades says to check coverage has not decreased, and Good vs. Bad Instructions says to keep coverage. Mutation score or similar: not documented (checked: all seven). ([OpenHands in Your SDLC](https://docs.openhands.dev/openhands/usage/essential-guidelines/sdlc-integration.md), [Dependency Upgrades](https://docs.openhands.dev/openhands/usage/use-cases/dependency-upgrades.md), 2026-10-29) | Not documented as property-based or fuzz testing. Vulnerability Remediation only suggests trying malicious inputs by hand (checked: Vulnerability Remediation). ([Vulnerability Remediation](https://docs.openhands.dev/openhands/usage/use-cases/vulnerability-remediation.md), 2026-10-29) |
+| **Skills monitoring** | Not documented (checked: Monitoring and Improving Skills). ([Monitoring and Improving Skills](https://docs.openhands.dev/overview/skills/monitoring.md), 2026-10-29) | Not about tests. It suggests judging deployed skills by real-world outcomes such as suggestion acceptance rate, with an LLM as judge; that measures a skill, not the tests an agent wrote (checked: Monitoring and Improving Skills). | Not documented (checked: Monitoring and Improving Skills). |
+
+Takeaways for the lesson, all from the cells above:
+
+- No page documents held-out tests. The nearest design is the Software Factory's reviewer stage, a different stage from the developer that writes the statuses the merge step reads, but nothing says the developer cannot see the checks. The goal-loop judge and the refinement critic read the same material as the worker.
+- Test quality is mentioned, where at all, as coverage advice. No page documents mutation score or a check that the new tests would fail on a broken change; the QA page hands the test suite to CI and no layer grades it.
+- Property-based and fuzz testing are not documented on any page read.
+
+### Pages read (added dimensions)
+
+All fetched 2026-10-29, index first (https://docs.openhands.dev/llms.txt). Condensed extraction, see Method above.
+
+- https://docs.openhands.dev/sdk/guides/convo-goal.md
+- https://docs.openhands.dev/sdk/guides/critic.md
+- https://docs.openhands.dev/openhands/usage/agent-canvas/critic.md
+- https://docs.openhands.dev/sdk/guides/iterative-refinement.md
+- https://docs.openhands.dev/openhands/usage/use-cases/qa-changes.md
+- https://docs.openhands.dev/openhands/usage/use-cases/code-review.md
+- https://docs.openhands.dev/sdk/guides/github-workflows/pr-review.md
+- https://docs.openhands.dev/openhands/usage/use-cases/software-factory.md
+- https://docs.openhands.dev/openhands/usage/customization/hooks.md
+- https://docs.openhands.dev/sdk/guides/hooks.md
+- https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/issue-to-pr.md
+- https://docs.openhands.dev/openhands/usage/essential-guidelines/sdlc-integration.md
+- https://docs.openhands.dev/openhands/usage/essential-guidelines/good-vs-bad-instructions.md
+- https://docs.openhands.dev/openhands/usage/tips/prompting-best-practices.md
+- https://docs.openhands.dev/openhands/usage/essential-guidelines/when-to-use-openhands.md
+- https://docs.openhands.dev/openhands/usage/use-cases/dependency-upgrades.md
+- https://docs.openhands.dev/openhands/usage/use-cases/vulnerability-remediation.md
+- https://docs.openhands.dev/openhands/usage/use-cases/daily-workflow.md
+- https://docs.openhands.dev/overview/skills/monitoring.md
+- https://docs.openhands.dev/sdk/guides/agent-stuck-detector.md
+- https://docs.openhands.dev/openhands/usage/key-features.md
+
+### Ruled out (why), added dimensions
+
+- **Critic technical report** ("A Rubric-Supervised Critic from Sparse Real-World Outcomes", linked from the Critic pages): third-party-hosted paper, not a docs page; not fetched, so what the critic was trained on stays unchecked.
+- **Release notes, Agent Canvas changelog, SDK changelog**: not searched; a newer entry could announce a held-out-test or test-quality feature the pages above do not describe. A gap, not a finding.
+- **OpenHands benchmark and evaluation repositories**: product evaluations of the agent, not a check applied to a user's work; not read.
+- **Skills pages (overview, repo, keyword, path, org, public, adding, creating) and Agent Skills & Context**: about how skills are loaded; not fetched, so a test-related skill example there would be missed.
+- **Metrics Tracking, Observability & Tracing**: cost and trace data, not checks on work; not fetched.
+- **Task Tool Set, File-Based Agents, Ask Oracle, Theory of Mind, Structured Output**: agent-building features; not fetched.
+- **Event-Based Automations, Creating/Managing Automations, GitHub Event Automations, Incident Triage, COBOL Modernization, Spark Migrations**: triggers and domain recipes; not fetched, so they could hold an unseen verification example.
+- **Agent-server API reference, sandbox, cloud and enterprise pages**: operations and isolation, not task verification.
+- **Stuck Detector**: read, about repeated-action loops; no content for these dimensions.
+- **Key Features**: read, about interface panels; no content for these dimensions.
