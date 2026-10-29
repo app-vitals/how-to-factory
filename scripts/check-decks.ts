@@ -41,7 +41,7 @@ function parseHtml(html: string): El {
   const stack: El[] = [root];
   const re = /<!--[\s\S]*?-->|<(\/?)([a-zA-Z][\w:-]*)((?:"[^"]*"|'[^']*'|[^>"'])*)>|([^<]+)/g;
   let m: RegExpExecArray | null;
-  while ((m = re.exec(html))) {
+  for (m = re.exec(html); m; m = re.exec(html)) {
     const top = stack[stack.length - 1] as El;
     if (m[4] !== undefined) {
       top.children.push(m[4]);

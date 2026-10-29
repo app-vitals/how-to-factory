@@ -38,7 +38,7 @@ describe("findBadUrls", () => {
 
   test("reports non-2xx and errors with file and line, probing each url once", async () => {
     const calls: string[] = [];
-    const bad = await findBadUrls(refs, async (u) => (calls.push(u), probe(u)));
+    const bad = await findBadUrls(refs, async (u) => { calls.push(u); return probe(u); });
     expect(calls.length).toBe(4);
     expect(bad.map((r) => formatResult(r))).toEqual([
       "a:2 DEAD 404 https://gone.example",

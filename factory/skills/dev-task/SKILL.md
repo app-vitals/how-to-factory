@@ -46,8 +46,8 @@ Takes one task and produces one pull request, built test-first: red, green, refa
    skip or weaken a check (or the test or config it runs) to get green. If a check already fails on the base branch,
    confirm it there and record it as such. Then walk each `acceptanceCriteria` item and confirm it is met, naming the
    covering test or check. If a criterion cannot be met, stop and report instead of opening the PR.
-8. **Check for weakened tests.** After the last code change, run `git diff <red-sha>..HEAD` over the test files and
-   read it against the weakening list in step 4. The expected result is no change. Every change must trace to a
+8. **Check for weakened tests.** After the last code change, run `git diff <red-sha> -- <test files and check config>`
+   (no `..HEAD`, so uncommitted edits show too) and read it against the weakening list in step 4. The expected result is no change. Every change must trace to a
    `test: fix <what> in <task title>` commit with a reason. If a change is unexplained, or matches the weakening list,
    revert it, fix the code instead, and rerun the checks from step 7. If there is no red commit (no test could express
    the criteria), diff the test files against the branch point instead and expect only the tests you added.

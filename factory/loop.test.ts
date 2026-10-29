@@ -118,7 +118,7 @@ describe("runLoop", () => {
   test("passes the picked task to the runner", async () => {
     const { store } = memStore([task("A")]);
     const got: string[] = [];
-    await runLoop(store, async (t) => (got.push(t.title), 0), undefined, fakeSleep());
+    await runLoop(store, async (t) => { got.push(t.title); return 0; }, undefined, fakeSleep());
     expect(got).toEqual(["Task A"]);
   });
 
@@ -251,8 +251,8 @@ describe("runLoop PR routing", () => {
     const w = world([pr(7, { createdAt: "2026-10-29T10:00:00.000Z" }), pr(9, { createdAt: "2026-10-29T12:00:00.000Z" })]);
     const { store } = memStore([stamped("T1", "2026-10-29T11:00:00.000Z")]);
     const order: string[] = [];
-    const run: Runner = async (t) => (order.push(`task ${t.id}`), 0);
-    const runPr: PrRunner = async (p, a) => (order.push(`${a} ${p.number}`), 0);
+    const run: Runner = async (t) => { order.push(`task ${t.id}`); return 0; };
+    const runPr: PrRunner = async (p, a) => { order.push(`${a} ${p.number}`); return 0; };
     await runLoop(store, run, undefined, { ...fakeSleep(), prs: w.source, attempts: w.attempts, runPr });
     expect(order.slice(0, 3)).toEqual(["review 7", "task T1", "review 9"]);
   });
@@ -276,7 +276,7 @@ describe("runLoop PR routing", () => {
     const w = world([pr(5, { ci: "fail" })]);
     const { store } = memStore([task("A")]);
     const s = fakeSleep();
-    const runPr: PrRunner = async (p, a) => (w.calls.push(`${a} ${p.number}`), 1);
+    const runPr: PrRunner = async (p, a) => { w.calls.push(`${a} ${p.number}`); return 1; };
     const result = await runLoop(store, ok, undefined, { ...s, prs: w.source, attempts: w.attempts, runPr });
     expect(result.stoppedOn).toBeNull();
     expect(w.calls[0]).toBe("patch 5");
@@ -287,7 +287,7 @@ describe("runLoop PR routing", () => {
   test("a failed review counts as an attempt but leaves the SHA unreviewed so it is retried", async () => {
     const w = world([pr(5)]);
     const { store } = memStore([]);
-    const runPr: PrRunner = async (p, a) => (w.calls.push(`${a} ${p.number}`), 1);
+    const runPr: PrRunner = async (p, a) => { w.calls.push(`${a} ${p.number}`); return 1; };
     await runLoop(store, ok, undefined, { ...fakeSleep(2), prs: w.source, attempts: w.attempts, runPr });
     expect(w.calls.length).toBeGreaterThan(1);
     expect(w.attempts.get(5)?.reviewedSha).toBeUndefined();
@@ -297,7 +297,7 @@ describe("runLoop PR routing", () => {
   test("a PR reaching the limit is flagged once and never run again", async () => {
     const w = world([pr(5, { ci: "fail" })]);
     const { store } = memStore([]);
-    const runPr: PrRunner = async (p, a) => (w.calls.push(`${a} ${p.number}`), 1);
+    const runPr: PrRunner = async (p, a) => { w.calls.push(`${a} ${p.number}`); return 1; };
     await runLoop(store, ok, undefined, { ...fakeSleep(2), prs: w.source, attempts: w.attempts, runPr });
     expect(w.calls).toHaveLength(MAX_PR_ATTEMPTS);
     expect(w.flagged).toEqual([5]);
