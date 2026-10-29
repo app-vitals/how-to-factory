@@ -23,10 +23,11 @@ operations come later. The tiers are a reading aid, not a syllabus. New lessons 
 Verification, Review and Release, plus the instructions and standards the factory reads from day one.
 
 ### Verification
-- Make the agent run lint, typecheck and tests before it says "done"
-- Require CI to pass before anything merges
+- Make the agent run lint, typecheck and tests before it says "done", and show what ran
+- Make the checks independent of the builder: tests written first, a fresh-context check of the criteria
+- Require CI to pass before anything merges, with a branch-protection rule a person sets
 - Design a test system for a repo that has none
-- Compare how factories verify: who decides it is done, whether it runs the app itself, how it keeps going. Taught by [lesson 3, Done means checked](03-done-means-checked/brief.md) (taught). Research is banked in `landscape/field-grid`, the six-product [`landscape/verify-grid/`](../landscape/verify-grid/README.md) and the `verify-*` columns of `landscape/matrix.json`
+- Compare how factories verify: who decides it is done, whether it runs the app itself, how it keeps going. Redone as [lesson 3, Done means checked](03-done-means-checked/brief.md) around one idea, independence of the check from the builder (redone, not yet taught); it builds four capabilities (red-first tests with layer choice, run the checks with an evidence table, a weakened-test guard, a fresh-context check) and mentions held-out, mutation and property-based testing. Research is banked in `landscape/field-grid`, the six-product [`landscape/verify-grid/`](../landscape/verify-grid/README.md) and the `verify-*` columns of `landscape/matrix.json`
 
 ### Review
 - Have a second agent review the PR

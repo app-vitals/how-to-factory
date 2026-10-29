@@ -52,7 +52,7 @@ Trim order if the cut runs long, first to last:
 ## Beats
 
 1. **Opening: a PR is not finished work** (about 3 min).
-   - Hand-off from lesson 1: the loop picks a task, builds it, opens a PR and stops. Lesson 3 made the PR carry checks.
+   - Hand-off from lesson 1: the loop picks a task, builds it, opens a PR and stops. Lesson 3 made the PR carry its evidence: a table of each criterion and check with its outcome, and a CI result behind a branch-protection rule a person sets.
      Nothing looks at that PR again, so a verdict, a red check or a new push goes unseen until a person notices.
    - The one idea: each tick the loop looks at every open PR and decides whether it needs a review, needs a patch, or
      needs nothing but a person.
