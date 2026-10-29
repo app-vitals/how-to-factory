@@ -1,0 +1,17 @@
+{
+  "name": "lesson3-scorer",
+  "private": true,
+  "type": "module",
+  "description": "Pre-filming before/after scorer for lesson 3. Not part of factory/, not run in CI.",
+  "scripts": {
+    "test": "bun test",
+    "score": "bun src/score.ts",
+    "report": "bun src/report.ts"
+  },
+  "devDependencies": {
+    "@stryker-mutator/core": "^10.1.1",
+    "@stryker-mutator/typescript-checker": "^10.1.1",
+    "@types/bun": "1.4.3",
+    "typescript": "5"
+  }
+}
