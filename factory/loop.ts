@@ -141,9 +141,10 @@ export async function runLoop(
         log(`PR #${pr.number} ${action} threw: ${errMsg(err)}`);
         code = -1;
       }
-      // Every run counts, pass or fail, so a PR that never settles ends up with a human.
+      // Every run counts, pass or fail, so a PR that never settles ends up with a human; only a
+      // successful review marks the SHA reviewed, so a crashed one is retried.
       // A failed write is not caught: without the count the same PR would be rerun forever.
-      attempts.record(pr.number, action, pr.headSha);
+      attempts.record(pr.number, action, pr.headSha, code === 0);
       if (code !== 0) log(`PR #${pr.number} ${action} failed (exit ${code}); continuing`);
       continue;
     }

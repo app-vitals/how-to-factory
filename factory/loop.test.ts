@@ -284,6 +284,16 @@ describe("runLoop PR routing", () => {
     expect(result.ran).toEqual(["A"]);
   });
 
+  test("a failed review counts as an attempt but leaves the SHA unreviewed so it is retried", async () => {
+    const w = world([pr(5)]);
+    const { store } = memStore([]);
+    const runPr: PrRunner = async (p, a) => (w.calls.push(`${a} ${p.number}`), 1);
+    await runLoop(store, ok, undefined, { ...fakeSleep(2), prs: w.source, attempts: w.attempts, runPr });
+    expect(w.calls.length).toBeGreaterThan(1);
+    expect(w.attempts.get(5)?.reviewedSha).toBeUndefined();
+    expect(w.attempts.get(5)?.reviews).toBeGreaterThanOrEqual(2);
+  });
+
   test("a PR reaching the limit is flagged once and never run again", async () => {
     const w = world([pr(5, { ci: "fail" })]);
     const { store } = memStore([]);
