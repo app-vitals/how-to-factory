@@ -25,8 +25,17 @@ Takes one task and produces one pull request, built test-first: red, green, refa
    with the message `test: <task title> (red)`, and note the commit SHA.
 4. **Green: minimum code.** Implement the task's `description`, only as much as needed to make the red tests pass.
    Stay inside its scope: anything the description calls out of scope stays out. Do not edit, weaken or skip the red
-   tests. If a red test is wrong, fix it in its own commit (`test: fix <what> in <task title>`) and give the reason in
-   the PR; never change it inside an implementation commit.
+   tests. These all count as weakening a test or check:
+   - deleting, loosening or commenting out an assertion
+   - adding `skip`, `only`, `todo` or an early return
+   - widening an expected value to match wrong output
+   - mocking out the behavior under test
+   - raising a timeout or lowering a threshold
+   - editing a check's config to make it pass
+
+   When a test or check fails after the code is written, fix the implementation. A test changes only if it
+   demonstrably contradicts the `acceptanceCriteria`; then fix it in its own commit (`test: fix <what> in <task
+   title>`) and give the reason in the PR. Never change a test inside an implementation commit.
 5. **Refactor.** Clean up the new code and tests (naming, duplication, structure) with the suite still green after
    each change. Add no behavior in this step.
 6. **Discover CI's checks.** Read the project's CI config (`.github/workflows/*`) and list every command CI runs on a
@@ -37,7 +46,12 @@ Takes one task and produces one pull request, built test-first: red, green, refa
    skip or weaken a check (or the test or config it runs) to get green. If a check already fails on the base branch,
    confirm it there and record it as such. Then walk each `acceptanceCriteria` item and confirm it is met, naming the
    covering test or check. If a criterion cannot be met, stop and report instead of opening the PR.
-8. **Create the PR.** Commit the implementation with a Conventional Commit message (`<type>: <task title>`), push the
+8. **Check for weakened tests.** After the last code change, run `git diff <red-sha>..HEAD` over the test files and
+   read it against the weakening list in step 4. The expected result is no change. Every change must trace to a
+   `test: fix <what> in <task title>` commit with a reason. If a change is unexplained, or matches the weakening list,
+   revert it, fix the code instead, and rerun the checks from step 7. If there is no red commit (no test could express
+   the criteria), diff the test files against the branch point instead and expect only the tests you added.
+9. **Create the PR.** Commit the implementation with a Conventional Commit message (`<type>: <task title>`), push the
    branch, and open a PR against the base branch. Title it the same way. The body is a short summary plus the
    acceptance criteria as a checklist. For each criterion give the covering test name, and give once the red commit
    SHA and the observed failure. A criterion that cannot be automated (docs or config tasks) is not skipped
@@ -45,12 +59,14 @@ Takes one task and produces one pull request, built test-first: red, green, refa
    a table with one row per CI check, with columns command, result (`pass`, `fail` or `not run`) and note. Under the
    table, call out plainly every check that failed, was not run, or already fails on the base branch, with the reason.
    Never mark a check `pass` unless you ran it and it exited 0. If a check fails and cannot be fixed, still open the
-   PR and mark it failing locally at the top of the body. Report the PR URL.
+   PR and mark it failing locally at the top of the body. Add a **Test changes since red** section from step 8: say
+   `none`, otherwise list each change with its commit and reason. Report the PR URL.
 
 ## Rules
 
 - One task, one branch, one PR.
 - Tests are committed and seen failing before the code that satisfies them exists.
+- Never weaken a test or check to get green; fix the code. The PR shows the test diff since red as proof.
 - Stage specific files, never everything; do not commit unrelated changes.
 - Do not edit `factory/tasks.json`; tasks are added by the plan skill and `status` is moved by the loop.
 - An unfixable check failure still opens the PR, marked failing locally; an unmet acceptance criterion stops the run
