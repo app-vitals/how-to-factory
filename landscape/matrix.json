@@ -141,6 +141,14 @@
       "label": "Fixes after the PR opens"
     },
     {
+      "id": "verify-hidden-tests",
+      "label": "Hidden or held-out tests"
+    },
+    {
+      "id": "verify-test-quality",
+      "label": "Test-quality measure (mutation score or similar)"
+    },
+    {
       "id": "route-trigger",
       "label": "Reviews new PRs on its own"
     },
@@ -465,6 +473,17 @@
           "asOf": "2026-10-28",
           "short": "GitHub comments plus webapp review history",
           "chip": "GitHub + Own app"
+        },
+        "verify-hidden-tests": {
+          "omitted": "Pages checked: SDLC integration, Instructing Devin Effectively, Best Practices, Code Coverage tutorial, Testing & Refactoring prompts (docs.devin.ai); every page has the same session write and run its own tests. Not documented; checked on 2026-10-29."
+        },
+        "verify-test-quality": {
+          "name": "Code coverage",
+          "summary": "Only coverage and assertion style. The Code Coverage tutorial measures the share of functions covered; no page documents a check that the new tests would catch a bug.",
+          "sourceUrl": "https://docs.devin.ai/use-cases/tutorials/code-coverage.md",
+          "asOf": "2026-10-29",
+          "short": "Coverage only; nothing checks test strength",
+          "chip": "◐"
         }
       },
       "demoable": {
@@ -749,6 +768,12 @@
           "asOf": "2026-10-28",
           "short": "Comments on the PR in GitHub",
           "chip": "GitHub"
+        },
+        "verify-hidden-tests": {
+          "omitted": "Pages checked: missions overview, planning, reference, running-app, factory.com/news/missions. Validators are a different worker from the builder, but whether criteria are kept from the builder is not stated. Not documented; checked on 2026-10-29."
+        },
+        "verify-test-quality": {
+          "omitted": "Pages checked: missions overview, planning, reference, running-app, factory.com/news/missions. Validators run tests and look for regressions; nothing measures the tests. Not documented; checked on 2026-10-29."
         }
       },
       "demoable": {
@@ -1040,6 +1065,12 @@
           "asOf": "2026-10-28",
           "short": "Review comments and overview on the PR",
           "chip": "GitHub"
+        },
+        "verify-hidden-tests": {
+          "omitted": "Pages checked: get-the-best-results, improve-a-project, configuring-agent-settings (docs.github.com). The agent runs the repo's own tests, so nothing says any check is withheld. Not documented; checked on 2026-10-29."
+        },
+        "verify-test-quality": {
+          "omitted": "Pages checked: get-the-best-results, improve-a-project (docs.github.com). Code Quality coverage thresholds exist on another surface; coverage, not strength. Not documented; checked on 2026-10-29."
         }
       },
       "demoable": {
@@ -1322,6 +1353,12 @@
           "asOf": "2026-10-28",
           "short": "Comments on the PR in GitHub",
           "chip": "GitHub"
+        },
+        "verify-hidden-tests": {
+          "omitted": "Page checked: Goal Completion Loop (docs.openhands.dev). The judge reads the same transcript the agent produced. Not documented; checked on 2026-10-29."
+        },
+        "verify-test-quality": {
+          "omitted": "Page checked: Goal Completion Loop (docs.openhands.dev). Nothing grades the tests. Not documented; checked on 2026-10-29."
         }
       },
       "demoable": {
@@ -1625,6 +1662,17 @@
           "asOf": "2026-10-28",
           "short": "Comments and a check on the PR",
           "chip": "GitHub"
+        },
+        "verify-hidden-tests": {
+          "name": "Verifier subagent",
+          "summary": "Partly, as isolation and not as hidden tests: a subagent starts with a clean context and gets only what the parent puts in the prompt. Nothing says the verifier holds checks the writing agent cannot see.",
+          "sourceUrl": "https://cursor.com/docs/subagents.md",
+          "asOf": "2026-10-29",
+          "short": "Clean-context verifier, no hidden checks",
+          "chip": "◐"
+        },
+        "verify-test-quality": {
+          "omitted": "Pages checked: cloud-agent, capabilities, best-practices, automations, subagents (cursor.com). A Bugbot rule can require that tests exist in a diff: presence, not strength. Not documented; checked on 2026-10-29."
         }
       },
       "demoable": {
@@ -1940,6 +1988,17 @@
           "asOf": "2026-10-28",
           "short": "Comments and a check run on the PR",
           "chip": "GitHub"
+        },
+        "verify-hidden-tests": {
+          "omitted": "Pages checked: best-practices, common-workflows, prompt-library (code.claude.com). Plugin evals hide cases on another surface, but they test a plugin, not code Claude wrote. Not documented; checked on 2026-10-29."
+        },
+        "verify-test-quality": {
+          "name": "Coverage prompts",
+          "summary": "Coverage and edge cases only as prompts: ask Claude to find untested functions and add edge-case tests, with a coverage target as the goal. No tool measures whether the new tests catch a broken change.",
+          "sourceUrl": "https://code.claude.com/docs/en/common-workflows.md",
+          "asOf": "2026-10-29",
+          "short": "Only when the prompt asks, as coverage",
+          "chip": "◐"
         }
       },
       "demoable": {

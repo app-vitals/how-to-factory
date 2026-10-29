@@ -96,7 +96,7 @@ export function renderLandscape(data: Landscape): string {
     "     `design-reads`, `design-reuse`, and the depth marks `plan-clarify`, `plan-assumptions`, `plan-editable`,",
     "     `plan-ordering`, `plan-parallel`, `plan-replan`, `plan-critique`, `plan-tracker`, `plan-human-only`, `plan-rollout`, and the",
     "     verify marks `verify-checks`, `verify-criteria`, `verify-test-plan`, `verify-ci-gate`, `verify-limits`,",
-    "     `verify-test-guard`, `verify-pr-fix`, and the routing marks `route-trigger`, `route-rereview`,",
+    "     `verify-test-guard`, `verify-pr-fix`, `verify-hidden-tests`, `verify-test-quality`, and the routing marks `route-trigger`, `route-rereview`,",
     "     `route-approve`, `route-fix-comments`, `route-fix-ci`, `route-fix-conflicts`, `route-limits`):",
     "     exactly one of `✓` (yes), `✗` (no, only where a cited page states it), `◐` (partly or mixed).",
     "   - Labels, one or two joined by ` + `: `verify-judge` from Check, Model, Agent, Person;",

@@ -55,6 +55,8 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
     { id: "verify-test-guard", label: "verify-test-guard" },
     { id: "verify-evidence", label: "verify-evidence" },
     { id: "verify-pr-fix", label: "verify-pr-fix" },
+    { id: "verify-hidden-tests", label: "verify-hidden-tests" },
+    { id: "verify-test-quality", label: "verify-test-quality" },
     { id: "route-trigger", label: "route-trigger" },
     { id: "route-rereview", label: "route-rereview" },
     { id: "route-approve", label: "route-approve" },
@@ -106,6 +108,8 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
         "verify-test-guard": cell({ chip: "✓" }),
         "verify-evidence": cell({ chip: "Logs + Visual" }),
         "verify-pr-fix": cell({ chip: "✓" }),
+        "verify-hidden-tests": cell({ chip: "✓" }),
+        "verify-test-quality": cell({ chip: "✓" }),
         "route-trigger": cell({ chip: "✓" }),
         "route-rereview": cell({ chip: "✓" }),
         "route-approve": cell({ chip: "✓" }),
@@ -170,7 +174,7 @@ describe("validateLandscape", () => {
     expect(validateLandscape(e, TODAY).join()).toContain("cell verify-runs-app");
   });
   test("every component cell is required for a factory", () => {
-    for (const id of ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks", "plan-clarify", "plan-assumptions", "plan-editable", "plan-saved", "plan-ordering", "plan-parallel", "plan-replan", "plan-critique", "plan-readonly", "plan-tracker", "plan-human-only", "plan-rollout", "verify-checks", "verify-criteria", "verify-test-plan", "verify-ci-gate", "verify-limits", "verify-test-guard", "verify-evidence", "verify-pr-fix", "route-trigger", "route-rereview", "route-approve", "route-fix-comments", "route-fix-ci", "route-fix-conflicts", "route-limits", "route-state"]) {
+    for (const id of ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks", "plan-clarify", "plan-assumptions", "plan-editable", "plan-saved", "plan-ordering", "plan-parallel", "plan-replan", "plan-critique", "plan-readonly", "plan-tracker", "plan-human-only", "plan-rollout", "verify-checks", "verify-criteria", "verify-test-plan", "verify-ci-gate", "verify-limits", "verify-test-guard", "verify-evidence", "verify-pr-fix", "verify-hidden-tests", "verify-test-quality", "route-trigger", "route-rereview", "route-approve", "route-fix-comments", "route-fix-ci", "route-fix-conflicts", "route-limits", "route-state"]) {
       const d = make();
       delete (factory(d).cells as Record<string, unknown>)[id];
       expect(validateLandscape(d, TODAY).join()).toContain(`cell ${id}: missing`);
@@ -424,5 +428,17 @@ describe("CLI", () => {
     const d = make();
     factory(d).cells["route-fix-conflicts"] = { omitted: "not documented; checked the cloud agent page" };
     expect(validateLandscape(d, TODAY)).toEqual([]);
+  });
+});
+
+describe("committed matrix", () => {
+  test("every factory product carries the hidden-test and test-quality dimensions", () => {
+    const data = JSON.parse(readFileSync(resolve(import.meta.dir, "../landscape/matrix.json"), "utf8")) as Landscape;
+    const factories = data.products.filter((p): p is FactoryProduct => p.kind === "factory");
+    expect(factories.length).toBe(6);
+    for (const id of ["verify-hidden-tests", "verify-test-quality"] as const) {
+      expect(data.components.map((c) => c.id)).toContain(id);
+      for (const p of factories) expect(p.cells[id]).toBeDefined();
+    }
   });
 });
