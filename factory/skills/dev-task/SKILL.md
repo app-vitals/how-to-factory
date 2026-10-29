@@ -57,7 +57,8 @@ Takes one task and produces one pull request, built test-first: red, green, refa
    runs the check or reads the code or file the criterion names. Tell it to be skeptical and to prefer `fail` or
    `unverifiable` over guessing. It returns one verdict per criterion, `pass`, `fail` or `unverifiable`, with
    evidence: the command and an output excerpt, the test name, or the file and line. Keep the report as written; you
-   may not change, soften or reword a verdict. On any `fail`, fix the code (never the tests), rerun steps 7 and 8, and
+   may not change, soften or reword a verdict. On any `fail`, fix the code (never the tests), commit the fix (`fix: <what> in <task title>`, code files only) so the
+   branch diff contains it, rerun steps 7 and 8, and
    launch a new subagent the same way. Retry at most 2 times. After that, open the PR anyway with the still-failing
    criteria clearly marked.
 10. **Create the PR.** Push the branch (the implementation is already committed with a Conventional Commit message,
