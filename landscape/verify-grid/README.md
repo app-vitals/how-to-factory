@@ -1,6 +1,6 @@
 # Verify grid: finished work is checked (lesson 3)
 
-**As of 2026-10-23** (every product file was re-fetched and spot-checked that day; the first pass was 2026-10-21). Every product cell below is a short pointer to the matching cell in
+**As of 2026-10-23** (every product file was re-fetched and spot-checked that day; the first pass was 2026-10-21). The hidden-test and test-quality dimensions were added on **2026-10-29** from a separate pass over the same six products; they have their own table, counts and cross-check below. Every product cell below is a short pointer to the matching cell in
 that product's own file, which holds the full wording, the first-party URLs, the pages read and the pages ruled out. This README
 adds no claim that the per-product files do not source; the cross-check and observations are counts and comparisons computed from
 those files. The "This sample" row is the one exception: it comes from our own inventory, not from a product page.
@@ -58,6 +58,33 @@ Copilot, cloud agent session; Claude Code, interactive session.
 The "This sample" row comes from `planning/lesson3-verification/shipwright-inventory.md` (Shipwright commit `7662e5e`, read
 2026-10-20; capabilities 3 to 14 and 16): our own design, not a sourced claim about anyone else. Where the inventory is silent the
 cell says so.
+
+**Hidden tests and test quality** (added 2026-10-29)
+
+Same surfaces as above, one cell per dimension, each a pointer to the "Added dimensions: hidden tests and test quality" table in the
+product's own file. "Not documented" is only written with the pages named; **Partly**, **When the prompt asks** and **Other surface**
+are kept apart from a plain answer. Where the shown surface says nothing and another surface of the same product does, the cell says
+**Other surface** and names it. Mutation score is the measure the lesson is after: whether the tests an agent wrote would fail on a
+broken change.
+
+| Product (surface shown) | Hidden or held-out tests | Test-quality measure (mutation score or similar) | Property-based or fuzz testing |
+| --- | --- | --- | --- |
+| [Devin](devin.md) (cloud session self-check) | Not documented (checked: SDLC integration, Instructing Devin Effectively, Best Practices, Code Coverage tutorial, Testing & Refactoring prompts); every page has the same session write and run its own tests | **Partly**: coverage and assertion style only; no check that new tests catch a bug (checked: SDLC integration, Code Coverage tutorial, Best Practices) | Not documented (checked: SDLC integration, Code Coverage tutorial, Testing & Refactoring prompts, Instructing Devin Effectively) |
+| [Factory](factory.md) (Mission validation workers) | Not documented as a hidden check; validators are a different worker from the builder, but whether criteria are kept from the builder is not stated (checked: missions overview, planning, reference, running-app, news post) | Not documented (checked: the same five pages); validators run tests and look for regressions, nothing measures the tests | Not documented (checked: the same five pages) |
+| [OpenHands](openhands.md) (goal loop) | Not documented as a hidden check; the judge reads the same transcript the agent produced (checked: Goal Completion Loop) | Not documented (checked: Goal Completion Loop); nothing grades the tests | Not documented (checked: Goal Completion Loop) |
+| [Cursor](cursor.md) (cloud agent) | Not documented (checked: cloud-agent, capabilities, best-practices, automations). **Other surface**, partly: the verifier subagent gets a clean context, not hidden checks | Not documented (checked: the same four pages). **Other surface**: Bugbot can require that tests exist in a diff; presence, not strength | Not documented (checked: the same four pages) |
+| [Copilot](copilot.md) (cloud agent session) | Not documented (checked: get-the-best-results, improve-a-project, configuring-agent-settings) | Not documented (checked: get-the-best-results, improve-a-project). **Other surface**, partly: Code Quality shows line coverage and rulesets can set thresholds; coverage, not strength | Not documented (checked: get-the-best-results, improve-a-project, configuring-agent-settings) |
+| [Claude Code](claude-code.md) (interactive session) | Not documented as a feature (checked: best-practices, common-workflows, prompt-library). **Other surface**: plugin evals hide their cases from the agent under test, but they test a plugin, not code Claude wrote | **When the prompt asks**: coverage and edge-case prompts, with a coverage target as the goal; mutation score not documented (checked: best-practices, common-workflows, prompt-library) | Not documented (checked: best-practices, common-workflows, prompt-library) |
+| **This sample** | Not part of the flow; lesson 3's recorded Stryker run on lesson 1's suite is the only test-quality measure we hold | Not part of the flow (a recorded one-off result: 68% score, 65 survivors) | Not part of the flow |
+
+The "This sample" row for the three new columns comes from `planning/lesson3-validation-depth/PRODUCT-SPEC.md` (decisions 3 and 7),
+our own design and not a sourced claim about anyone else.
+
+**Pages read (added dimensions).** All fetched 2026-10-29, docs index first, for 103 pages across the six files: Devin 13, Factory 13,
+OpenHands 21, Cursor 24, Copilot 15, Claude Code 17. Each file's "Pages read (added dimensions)" list holds the URLs and its
+"Ruled out (why), added dimensions" list holds the pages not opened. Five of six fetched through a tool that returns a condensed
+extraction (Cursor was read as raw Markdown); three Claude Code pages (sandboxing, subagents, skills) were cut off at 100,000
+characters. So "not documented" here means "the extraction did not mention it", and the Claude Code cells for those three pages rest on the part read.
 
 ## CROSS-CHECK
 
@@ -191,6 +218,57 @@ Counts are "N of 6" shown surfaces only (the table above), judged from the cells
 | Guard against weakening tests | **0 of 6**; none of the 79 surfaces documents a built-in guard for test files either |
 | Visual evidence attached for the person | **2 of 6** (Devin can send screenshots and video back; Cursor attaches artifacts to the PR); the other four give logs or advice |
 | Post-PR fix without a person asking | **2 of 6** (Devin, Cursor); Copilot is person-started; Factory and Claude Code on another surface; OpenHands none |
+| Hidden or held-out tests | **0 of 6** documented; partly 0; when the prompt asks 0; not documented 6 (Devin, Factory, OpenHands, Cursor, Copilot, Claude Code, each with pages named). Other surface 2: Cursor (verifier subagent, partly: a clean context, not hidden checks) and Claude Code (plugin evals hide their cases, but test a plugin, not the person's code). Across all 54 surfaces read, one hidden-check design (plugin evals), two partly (Factory daily recipe, Cursor verifier) and three near-misses that are not hidden (Cursor Security Agents, Copilot guardrails, Claude Security patch review) |
+| Test-quality measure of mutation-score kind (would the new tests fail on a broken change) | **0 of 6**, and 0 of 54 surfaces read. Coverage or presence as the stand-in: partly 1 (Devin, coverage and assertion style); when the prompt asks 1 (Claude Code); not documented 4 (Factory, OpenHands, Cursor, Copilot). Other surface: Factory (Test Coverage starter), Cursor (Bugbot missing-tests rule), Copilot (Code Quality coverage thresholds); OpenHands only as coverage advice on guidance pages |
+| Property-based or fuzz testing | **0 of 6**, and 0 of 54 surfaces read; not documented on all six shown surfaces, each with pages named. OpenHands' Vulnerability Remediation page only suggests trying malicious inputs by hand |
+
+### 6. Hidden tests and test quality: cell-by-cell check (2026-10-29)
+
+Method: the "Added dimensions" table in each of the six product files was parsed (throwaway script, not in the repo), giving 54
+surface rows and 162 cells (3 dimensions each). Every cell in the new grid table above was then compared with its source cell by
+hand, and the counts below were recomputed from the parse. A cell counts as a **lead "not documented"** when its source text opens
+with "Not documented" or "Not stated"; any other opening ("Partly", "Closest design found", "Only coverage", "Rubric only", "Not
+about ...") is an **other** cell that holds some answer or context.
+
+| Product | Surfaces | Cells | Lead "not documented" | Other | Lead cells missing a page list |
+| --- | --- | --- | --- | --- | --- |
+| Devin | 7 | 21 | 18 | 3 | 0 |
+| Factory | 9 | 27 | 23 | 4 | 0 |
+| OpenHands | 10 | 30 | 28 | 2 | 0 |
+| Cursor | 8 | 24 | 19 | 5 | 0 |
+| Copilot | 9 | 27 | 25 | 2 | 0 |
+| Claude Code | 11 | 33 | 26 | 7 | 0 |
+| **All** | **54** | **162** | **139** | **23** | **0** |
+
+Every lead "not documented" cell carries a `checked:`, "same pages" or "read in full" list, so the earlier gap in section 2 (cells that
+name no page) does not recur in the new dimensions. Cell by cell, shown surface against source row:
+
+| Product | Source row | Hidden | Quality | Property | Result |
+| --- | --- | --- | --- | --- | --- |
+| Devin | Cloud session, self-check before the PR | Not documented | Only coverage and assertion style | Not documented | Match |
+| Factory | Mission validation workers | Not documented as a hidden check | Not documented | Not documented | Match; the file's different-worker remark is kept in the grid cell |
+| OpenHands | Goal loop | Not documented as a hidden check | Not documented | Not documented | Match |
+| Cursor | Cloud agent and Automations | Not documented | Not documented | Not documented | Match; the grid adds two **Other surface** notes (Verifier subagent, Bugbot) that the shown row does not hold |
+| Copilot | Cloud agent session | Not documented | Not documented | Not documented | Match; the grid adds one **Other surface** note (Code Quality) |
+| Claude Code | Interactive session | Not documented as a feature | Coverage and edge cases, as prompts | Not documented | Match; the grid adds one **Other surface** note (plugin evals) |
+
+Mismatches found and fixed in this pass:
+
+- **Claude Code hidden-test wording.** The source row for plugin evals opens "The one hidden-check design I found", which, read
+  alone in a grid, could look like Claude Code documents hidden tests. The grid cell says the cases are hidden from the agent under
+  test but test a plugin, not code Claude wrote, and counts it as **Other surface**, not as a yes.
+- **First-person phrasing.** The Claude Code source row says "I found"; that note-taker's voice was not carried into the grid.
+- **Count basis.** The earlier section 1 counts (375 cells, 79 surfaces) cover the eleven original dimensions only. The new 54 surfaces
+  and 162 cells are counted separately above; the two sets overlap in surfaces and are not summed.
+- **Wording "has none".** No new cell claims a product has no such check. Every absence is "not documented" with pages named, and
+  the grid text above and the counts below use the same wording.
+- **Stale "none of the 79 surfaces" remark.** The section 5 line on guards against weakening tests was written before this pass.
+  It still holds (no new page documents a built-in guard for test files), but two near-misses surfaced: Cursor's Hillclimbing page says
+  to hold fixtures fixed and never loosen an existing eval to make a change pass (a rule for an agent's evals, not for a repository's
+  tests), and Claude Code's `PreToolUse` hook example blocks edits to protected files such as `.env` (protection of named files, with no
+  mention of tests). Neither changes the 0 of 6 count.
+
+Counts on the six shown surfaces are in section 5 below, extended with the new dimensions.
 
 ## Observations
 
@@ -209,6 +287,9 @@ Counts are "N of 6" shown surfaces only (the table above), judged from the cells
 | Guard against weakening tests | **Absent** | 0 of 6 shown and none of 79 surfaces document a built-in guard. Near-misses: a Claude Code `/goal` constraint the person writes, hooks that could deny edits (Cursor, Copilot), OpenHands' role split where the QA agent cannot edit code. |
 | Evidence shown to the person | **Common as logs, rare as video** | Logs or diffs are everywhere; screenshots or video are attached by 2 of 6. |
 | Post-PR auto-fix | **Differs** | Two shown surfaces fix on their own; the rest need a person or another surface. |
+| Hidden or held-out tests | **Absent** | 0 of 6 shown; the documented parts are independence of the reviewer (clean-context subagent, separate worker, second session), not tests the builder cannot see. A person could assemble one from file deny rules or hooks (Claude Code, Cursor, Factory, OpenHands, Copilot), but no page says to. |
+| Test-quality measure | **Absent; coverage is the stand-in** | 0 of 6 and 0 of 54 surfaces document mutation score or a check that new tests fail on a broken change. Coverage appears as a figure, a prompt goal or advice (Devin, Claude Code, Copilot, Factory, OpenHands); Cursor's Bugbot checks only that a test exists. |
+| Property-based or fuzz testing | **Absent** | 0 of 6 and 0 of 54 surfaces. |
 
 For the lesson, against the "This sample" row:
 
@@ -219,6 +300,10 @@ For the lesson, against the "This sample" row:
 - **Documented by none of the shown surfaces:** converting criteria into checks automatically, a product-made test plan, a coverage
   threshold the product enforces, a guard against weakening tests. The sample has a spec check and a coverage warning but no guard
   either (not in the inventory files); that is a statement about what these docs say, not about what the products can do.
+- **Hidden tests, test-quality measure, property-based testing (added 2026-10-29):** documented by none of the shown surfaces, and by
+  none of the 54 surfaces in the new pass, as a way to check tests an agent wrote. The sample does not do them either. Wording for the lesson:
+  "not documented in the pages read (named per cell)", never "has none". The nearest pieces are independence of the reviewer and
+  coverage numbers, which check different things.
 - **Handle with care:** "Human" and "Automated" are not the only answers. The lesson should not present them as a complete scale.
 
 ## Product files
