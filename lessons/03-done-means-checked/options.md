@@ -5,128 +5,102 @@ Names are not canonical. Every claim below is a paraphrase of a first-party page
 (rendered in [landscape/README.md](../../landscape/README.md)). Each claim carries its source URL and the date that page was
 fetched. Re-check before filming. These appear on slides only; the lesson does not run other products live.
 
-Scope is the lesson 3 step only: finished work is checked before it counts as done. Plan making (lesson 2), ticket selection,
-and review as a general activity are left out on purpose (see [brief.md](brief.md)).
+Scope is the lesson 3 step only: finished work is checked before it counts as done, and the check is only as strong as its
+independence from the builder (see [brief.md](brief.md)). Plan making (lesson 2), ticket selection, and review as a general
+activity are left out on purpose.
 
 ## How the field differs
 
-One table per Tier A capability of the [brief](brief.md), in the brief's own ids (A1 to A9). Where a table's dimension is
-the same as a column of the verify grid, the cell is that grid cell, in fewer words. In each cell the bold text names the
-surface the claim is about, because most products have several (a cloud session, a goal loop, a mission), then a paraphrase of
-the first-party page, the source URL and the as-of date. The surface shown is the one closest to the sample's flow: an agent
-finishes a task and something decides it is done. Dates differ by cell: "who decides", "starts the app" and "keeps going" were
-fetched on 2026-10-13, the rest on 2026-10-21. A cell reads "not in their docs" when the pages checked do not say, and lists
-the pages checked. That is a statement about those pages, not about what the product can do: the fetch tool returned condensed
-extractions, so a gap can also be a page the extraction left out. The last row of each table is the target for this lesson's
-sample. It comes from the [brief](brief.md) and is our own design, not a claim about anyone else.
+Two field slides, and two tables here, one per slide. The slide shows a mark or a chip per product and nothing else; every
+qualifier lives in this file. Marks: ✓ documented, ◐ partly, – not in their docs. A chip is the matrix cell's chip, copied
+from `landscape/matrix.json`. Where a slide shows more than one dimension, each dimension has its own column.
 
-### A1. The repo's own checks before done
+In each cell the bold text names the surface the claim is about, because most products have several (a cloud session, a goal
+loop, a mission), then a paraphrase of the first-party page, the source URL and the as-of date. The surface shown is the one
+closest to the sample's flow: an agent finishes a task and something decides it is done. "Who decides" was fetched on
+2026-10-13, "CI gating" on 2026-10-21, and the hidden-test and test-quality dimensions on 2026-10-29. A cell reads "not in
+their docs" when the pages checked do not say, and lists the pages checked. That is a statement about those pages, not about
+what the product does: the fetch tool returned condensed extractions, so a gap can also be a page the extraction left out. The
+last row of each table is the target for this lesson's sample. It comes from the [brief](brief.md) and is our own design, not
+a claim about anyone else.
 
-| Product | Runs the checks before done |
-|---|---|
-| Devin | **Self-check before PR**: In a cloud session Devin runs existing test suites, linting and type checks before it opens the PR, and iterates until the tests pass. Which checks run is set by the prompt, playbook, AGENTS.md or a skill. ([source](https://docs.devin.ai/essential-guidelines/sdlc-integration.md), as of 2026-10-21) |
-| Factory (Droid) | **Validation workers**: Validation workers run at the end of each milestone, in scrutiny and user-testing kinds: tests, regressions and integration. Which exact commands run is not named; it follows the project. ([source](https://docs.factory.com/missions/planning), as of 2026-10-21) |
-| GitHub Copilot | **Cloud agent session**: The agent works in its own Actions-powered environment, where it can run automated tests and linters before it pushes. Which commands run comes from the repo's custom instructions. ([source](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents), as of 2026-10-21) |
-| OpenHands | **Goal loop**: The agent runs whatever command the objective names (the example is a pytest run); a separate judge model audits the output from the transcript. ([source](https://docs.openhands.dev/sdk/guides/convo-goal.md), as of 2026-10-21) |
-| Cursor | **Cloud agent**: The cloud agent can build, test and interact with the changed software in its own VM. Which checks run is its choice from the prompt, skills, agents.md and rules. ([source](https://cursor.com/docs/cloud-agent.md), as of 2026-10-21) |
-| Claude Code | Claude runs whatever check the person or project instructions name. A built-in test, lint or typecheck step is not in their docs. ([source](https://code.claude.com/docs/en/best-practices.md), as of 2026-10-21) |
-| This sample | Target: runs the install, lint, typecheck and test commands named in the repo's instructions, and reports each outcome ([source](brief.md)) |
+### Field slide 1. Who decides done, who keeps checks hidden, who measures test quality
 
-### A2. Acceptance criteria become checks
+Three columns on one slide. Chips: "who decides" uses the matrix chip (Check, Model, Agent, Person, joined with " + ");
+hidden tests and test quality use a mark.
 
-| Product | Criteria turned into checks |
-|---|---|
-| Devin | The guide tells the person to state success in measurable terms, and a playbook's Specifications section lists what must be true when the work is done. A product step that turns criteria into checks is not in their docs. ([source](https://docs.devin.ai/product-guides/creating-playbooks.md), as of 2026-10-21) |
-| Factory (Droid) | **Validation criteria**: Each feature carries validation criteria, visible with its commits in the Factory App. How they map to test files is not documented. ([source](https://docs.factory.com/missions/running-app), as of 2026-10-21) |
-| GitHub Copilot | **Task acceptance criteria**: A well-scoped task carries acceptance criteria Copilot can use to verify its work. Conversion into test files is not described. ([source](https://docs.github.com/en/copilot/tutorials/cloud-agent/get-the-best-results), as of 2026-10-21) |
-| OpenHands | **Goal objective**: The written objective is the check: the judge tests each run against it, and the page's pattern is an objective that names the command that must pass. ([source](https://docs.openhands.dev/sdk/guides/convo-goal.md), as of 2026-10-21) |
-| Cursor | Not in their docs. Pages checked: cloud-agent, capabilities, best-practices, skills (cursor.com/docs). Not documented; the person states criteria in the prompt, a skill or a rule. (as of 2026-10-21) |
-| Claude Code | **Goal condition**: The person writes the condition in a goal: one measurable end state and a stated check. The goal page's example uses include implementing a design doc until all acceptance criteria hold. Automatic conversion of criteria into tests is not in their docs. ([source](https://code.claude.com/docs/en/goal.md), as of 2026-10-21) |
-| This sample | Target: each acceptance criterion becomes a test that is written first and seen failing ([source](brief.md)) |
+| Product | Who decides | Hidden or held-out tests | Test quality measured |
+|---|---|---|---|
+| Devin | **Check** | – | ◐ |
+| Factory (Droid) | **Agent** | – | – |
+| GitHub Copilot | **Check** | – | – |
+| OpenHands | **Model** | – | – |
+| Cursor | **Check** | ◐ | – |
+| Claude Code | **Check + Model** | – | ◐ |
+| This sample | Agent (a fresh one, from criteria and diff) | – (recorded one-off only) | – (recorded one-off only) |
 
-### A3. Retired
+#### Who decides it is done
 
-Folded into A2 (see [brief](brief.md)): the per-task test guidance is one acceptance criterion, so there is no separate
-comparison. The id stays so A4 to A9 keep their numbers.
+| Product | Chip | What decides the work is done |
+|---|---|---|
+| Devin | Check | **Cloud session**: Devin runs existing tests, lint and type checks in its own environment before submitting a PR. Which checks run is set by the prompt, playbook or repo skill, not by a fixed pipeline. ([source](https://docs.devin.ai/essential-guidelines/sdlc-integration.md), as of 2026-10-13) |
+| Factory (Droid) | Agent | **Validation workers**: Validation workers run at the end of each milestone, verifying its work, and Missions validate their own work by exercising the running application. ([source](https://docs.factory.com/missions/planning), as of 2026-10-13) |
+| GitHub Copilot | Check | **Cloud agent session**: The agent works in its own GitHub Actions environment, where it runs tests and linters to validate changes. How the results decide whether it keeps going before opening the PR is not documented. ([source](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents), as of 2026-10-13) |
+| OpenHands | Model | **Goal Completion Loop**: In the SDK, a second judge LLM audits the transcript for evidence, such as test output, that proves the objective is complete. The Issue to PR automation lists running tests as a step but does not document what happens when they fail. ([source](https://docs.openhands.dev/sdk/guides/convo-goal.md), as of 2026-10-13) |
+| Cursor | Check | **CI auto-fix**: Cloud agents automatically try to fix CI failures in PRs they create, and the repository's own CI checks are the judge. A fixed pre-delivery gate that always runs is not documented. ([source](https://cursor.com/docs/cloud-agent/capabilities.md), as of 2026-10-13) |
+| Claude Code | Check + Model | **/goal**: After every turn a separate small model checks the condition. The evaluator runs no commands and reads no files, so the condition must be something the transcript shows, such as a test result the agent's own check produced. ([source](https://code.claude.com/docs/en/goal.md), as of 2026-10-13) |
+| This sample | Agent | Target: a fresh agent given only the criteria and the diff marks each criterion MET, PARTIAL or NOT MET ([source](brief.md)) |
 
-### A4. Never weaken a test to get green
+#### Hidden or held-out tests
 
-| Product | A guard against weakened tests |
-|---|---|
-| Devin | The gallery test playbook forbids changing source modules to ease testing; it is not shown forbidding deleting or loosening existing tests. A built-in guard is not in their docs. ([source](https://docs.devin.ai/use-cases/gallery/test-coverage-playbook.md), as of 2026-10-21) |
-| Factory (Droid) | Not in their docs. Pages checked: Missions overview, planning, reference, running-cli, running-app, factory.com/news/missions. Not documented; the pages only say validators start in a fresh session with clean context. (as of 2026-10-21) |
-| GitHub Copilot | Not in their docs. Pages checked: get-the-best-results, review-copilot-output, use-cloud-agent-on-github, copilot-on-github, build-guardrails (docs.github.com). Not documented; weakened tests are left to the person's review. (as of 2026-10-21) |
-| OpenHands | Not in their docs. Pages checked: Goal Completion Loop (docs.openhands.dev). Not documented as a rule; the judge reads real output, which covers false claims, not edited tests. (as of 2026-10-21) |
-| Cursor | Not in their docs. Pages checked: cloud-agent, capabilities, best-practices (cursor.com/docs). Not documented as a built-in; hooks run in cloud agents and could be written to do it. (as of 2026-10-21) |
-| Claude Code | Advice only: ask for the root cause and not to suppress the error, or have one session write tests and another the code. A built-in protection for test files is not in their docs. ([source](https://code.claude.com/docs/en/best-practices.md), as of 2026-10-21) |
-| This sample | Target: a diff rule in the criteria check; no removed or weakened assertions in test files unless the task says the criterion changed ([source](brief.md)) |
+A hidden test is a check the builder is not shown. The chip is – where the pages checked do not describe one.
 
-### A5. Who decides done, and with what
+| Product | Mark | Checks kept from the builder |
+|---|---|---|
+| Devin | – | **Cloud session**: Not in their docs. Pages checked: SDLC integration, Instructing Devin Effectively, Best Practices, Code Coverage tutorial, Testing & Refactoring prompts (docs.devin.ai); every page has the same session write and run its own tests. ([SDLC integration](https://docs.devin.ai/essential-guidelines/sdlc-integration.md), as of 2026-10-29) |
+| Factory (Droid) | – | **Validation workers**: Not in their docs as a hidden check. The workers are a different worker from the builder, but whether criteria are kept from the builder is not stated. Pages checked: Missions overview, planning, reference, running-app, the Missions news post. ([planning](https://docs.factory.com/missions/planning.md), as of 2026-10-29) |
+| GitHub Copilot | – | **Cloud agent session**: Not in their docs. Pages checked: get-the-best-results, improve-a-project, configuring-agent-settings (docs.github.com). The agent runs the repo's own tests, so nothing says any check is withheld. ([get the best results](https://docs.github.com/en/copilot/tutorials/cloud-agent/get-the-best-results), as of 2026-10-29) |
+| OpenHands | – | **Goal Completion Loop**: Not in their docs as a hidden check. The judge reads the same transcript the agent produced. Page checked: Goal Completion Loop. ([source](https://docs.openhands.dev/sdk/guides/convo-goal.md), as of 2026-10-29) |
+| Cursor | ◐ | **Verifier subagent**: Partly, as isolation and not as hidden tests: a subagent starts with a clean context and gets only what the parent puts in the prompt. Nothing says the verifier holds checks the writing agent is kept from seeing. ([source](https://cursor.com/docs/subagents.md), as of 2026-10-29) |
+| Claude Code | – | **Interactive session**: Not in their docs as a feature. Pages checked: best-practices, common-workflows, prompt-library. On another surface, plugin evals hide their cases from the agent under test, but they test a plugin, not code Claude wrote. ([plugin evals](https://code.claude.com/docs/en/plugin-evals.md), as of 2026-10-29) |
+| This sample | – | Not part of the flow. Held-out tests are mentioned, not built ([source](brief.md)) |
 
-| Product | What decides the work is done |
-|---|---|
-| Devin | **Cloud session**: Devin runs existing tests, lint and type checks in its own environment before submitting a PR. Which checks run is set by the prompt, playbook or repo skill. ([source](https://docs.devin.ai/essential-guidelines/sdlc-integration.md), as of 2026-10-13) |
-| Factory (Droid) | **Validation workers**: Validation workers run at the end of each milestone, verifying its work, and Missions validate their own work by exercising the running application. ([source](https://docs.factory.com/missions/planning), as of 2026-10-13) |
-| GitHub Copilot | **Cloud agent session**: The agent works in its own GitHub Actions environment, where it runs tests and linters to validate changes. How the results decide whether it keeps going before opening the PR is not documented. ([source](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents), as of 2026-10-13) |
-| OpenHands | **Goal Completion Loop**: In the SDK, a second judge LLM audits the transcript for evidence, such as test output, that proves the objective is complete. The Issue to PR automation lists running tests as a step; what happens when they fail is not in their docs. ([source](https://docs.openhands.dev/sdk/guides/convo-goal.md), as of 2026-10-13) |
-| Cursor | **CI auto-fix**: Cloud agents automatically try to fix CI failures in PRs they create, and the repository's own CI checks are the judge. A fixed pre-delivery gate that always runs is not documented. ([source](https://cursor.com/docs/cloud-agent/capabilities.md), as of 2026-10-13) |
-| Claude Code | **/goal**: After every turn a separate small model checks the condition. The page says the condition must be something the transcript shows, such as a test result the agent's own check produced. ([source](https://code.claude.com/docs/en/goal.md), as of 2026-10-13) |
-| This sample | Target: a fresh agent given only the criteria and the diff marks each criterion MET, PARTIAL or NOT MET ([source](brief.md)) |
+#### Test quality measured
 
-### A6. Runs the app where it matters
+Test quality here means whether the tests an agent wrote would fail on a broken change (a mutation score or similar). Coverage
+is not that: it counts lines the tests run, not whether they notice a change.
 
-| Product | Starts the app itself |
-|---|---|
-| Devin | **Testing mode**: After a PR is created Devin can enter a testing mode: it writes a test plan for the main end-to-end flow, then once CI is green records a video of itself running the plan in the browser. The page calls the recording a quick sanity check. ([source](https://docs.devin.ai/work-with-devin/testing-and-recordings.md), as of 2026-10-13) |
-| Factory (Droid) | **User-testing validation**: Missions validate their own work by exercising the running application; each feature is checked by user-facing QA against the running app, which needs a script that can start or mock the app. ([source](https://docs.factory.com/missions/planning), as of 2026-10-13) |
-| GitHub Copilot | Not in their docs. Pages checked: Managing agent sessions, Using cloud agent on GitHub, Best practices for the cloud agent (docs.github.com). They say the agent runs tests and linters and can build and validate in its environment, but none says it starts the app or drives it as a user. (as of 2026-10-21) |
-| OpenHands | **QA agent**: The QA agent (a GitHub Actions plugin, or the /qa-changes skill) runs the changed software rather than the test suite and posts a PASS, FAIL or PARTIAL report as a PR comment. It works from the PR after it is open. ([source](https://docs.openhands.dev/openhands/usage/use-cases/qa-changes.md), as of 2026-10-13) |
-| Cursor | **Cloud Agents**: The cloud agent works in a cloud VM and can build, test and interact with the changed software, controlling a desktop and browser. ([source](https://cursor.com/docs/cloud-agent), as of 2026-10-13) |
-| Claude Code | Not in their docs. Pages checked: Best practices, Common workflows, Run Claude Code programmatically, Use Claude Code in the cloud (code.claude.com). They advise asking for evidence such as test output or a screenshot but do not document Claude Code starting the app and driving it as a built-in step. (as of 2026-10-21) |
-| This sample | Target: for a user-facing criterion, starts the app and exercises the path, with the output attached ([source](brief.md)) |
+| Product | Mark | What measures the tests |
+|---|---|---|
+| Devin | ◐ | **Code coverage tutorial**: Only coverage and assertion style. The tutorial measures the share of functions covered; no page checked documents a check that the new tests would catch a bug. ([source](https://docs.devin.ai/use-cases/tutorials/code-coverage.md), as of 2026-10-29) |
+| Factory (Droid) | – | **Validation workers**: Not in their docs. The workers run tests and look for regressions; nothing checked measures the tests. Pages checked: Missions overview, planning, reference, running-app, the Missions news post. ([planning](https://docs.factory.com/missions/planning.md), as of 2026-10-29) |
+| GitHub Copilot | – | **Cloud agent session**: Not in their docs. Pages checked: get-the-best-results, improve-a-project. On another surface, Code Quality shows line coverage and rulesets can set thresholds: coverage, not strength. ([about Code Quality](https://docs.github.com/en/code-security/code-quality/concepts/about-code-quality), as of 2026-10-29) |
+| OpenHands | – | **Goal Completion Loop**: Not in their docs. Nothing grades the tests. Page checked: Goal Completion Loop. ([source](https://docs.openhands.dev/sdk/guides/convo-goal.md), as of 2026-10-29) |
+| Cursor | – | **Cloud agent**: Not in their docs. Pages checked: cloud-agent, capabilities, best-practices, automations, subagents. On another surface, a Bugbot rule can require that tests exist in a diff: presence, not strength. ([Bugbot](https://cursor.com/docs/bugbot.md), as of 2026-10-29) |
+| Claude Code | ◐ | **Coverage prompts**: Coverage and edge cases only as prompts: ask Claude to find untested functions and add edge-case tests, with a coverage target as the goal. No tool checked measures whether the new tests catch a broken change. ([source](https://code.claude.com/docs/en/common-workflows.md), as of 2026-10-29) |
+| This sample | – | Not part of the flow. A recorded one-off Stryker run on lesson 1's suite: 68% score, 65 surviving mutants, five checked by hand ([source](../../planning/lesson3-validation-depth/PRODUCT-SPEC.md)) |
 
-### A7. A bounded loop until checks pass
+### Field slide 2. CI gating
 
-| Product | How it keeps going |
-|---|---|
-| Devin | **Auto-Fix**: Devin iterates in its own environment until tests pass before submitting a PR, and the page says Auto-Fix lets it respond to review comments and CI failures until the PR is merge-ready. The in-session loop is set up by the prompt; a retry cap is not documented. ([source](https://docs.devin.ai/essential-guidelines/sdlc-integration.md), as of 2026-10-13) |
-| Factory (Droid) | **Stop hook**: A user-written hook runs when Droid is about to finish; a block decision with a reason keeps it working, so a script can require a check before it stops. A built-in retry loop for plain sessions and droid exec is not in their docs. ([source](https://docs.factory.com/harness/hooks), as of 2026-10-13) |
-| GitHub Copilot | **agentStop hook**: An agentStop hook fires when the agent finishes; its output can set decision block with a reason, which forces another agent turn. A built-in rule that the cloud agent keeps retrying until a check passes is not documented. ([source](https://docs.github.com/en/copilot/reference/hooks-reference), as of 2026-10-13) |
-| OpenHands | **Goal Completion Loop**: After each agent run the judge decides whether the objective is provably complete; if not, the agent is re-prompted with what is missing and runs again, up to a cap, after which the result is capped. ([source](https://docs.openhands.dev/sdk/guides/convo-goal.md), as of 2026-10-13) |
-| Cursor | **stop hook**: Cloud agents run the stop and subagentStop hooks, which the help page says let you build self-correcting loops, and automatically try to fix CI failures in PRs they create (switch off with @cursor autofix off). ([source](https://cursor.com/help/ai-features/cloud-agents.md), as of 2026-10-13) |
-| Claude Code | **/goal**: After every turn a model checks the condition; if it is not met, Claude starts another turn using the evaluator's reason as guidance. The loop ends when the condition is met, judged impossible, or cleared by the person. ([source](https://code.claude.com/docs/en/goal.md), as of 2026-10-13) |
-| This sample | Target: a failing check sends the agent back with the failure log and earlier attempts, up to a cap, then it stops and asks ([source](brief.md)) |
+One column. The chip is a mark: ✓ the pages document the gate, ◐ they document part of it, – not in their docs.
 
-### A8. Evidence, not a claim
-
-| Product | Evidence shown to the person |
-|---|---|
-| Devin | **Session Tools**: Browser screenshots and videos can be sent back as proof of testing, and a Progress tab shows command history and output. Testing mode attaches a processed recording. ([source](https://docs.devin.ai/work-with-devin/devin-session-tools.md), as of 2026-10-21) |
-| Factory (Droid) | **Mission Control**: Mission Control lists every worker and milestone in a live progress log, shows each worker's terminal output and reasoning, and opens a feature's validation criteria and commits. Screenshots from Mission QA are not documented. ([source](https://docs.factory.com/missions/running-app), as of 2026-10-21) |
-| GitHub Copilot | **Session log**: The person sees the session log of reasoning and tools used, commit messages linking back to it, and the PR diff. Screenshots or recordings are not documented. ([source](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents), as of 2026-10-21) |
-| OpenHands | **Goal loop outcome**: Command output, test results and file contents sit in the conversation history the judge reads, and the outcome object carries the judge's last verdict. ([source](https://docs.openhands.dev/sdk/guides/convo-goal.md), as of 2026-10-21) |
-| Cursor | **Artifacts**: Artifacts (screenshots, videos and log references) are attached to the PR so the person can validate without checking out the branch. ([source](https://cursor.com/docs/cloud-agent/capabilities.md), as of 2026-10-21) |
-| Claude Code | **Show evidence**: The guide says to have Claude show test output, the command and its result, or a screenshot. This is advice for the prompt; automatic evidence is not in their docs. ([source](https://code.claude.com/docs/en/best-practices.md), as of 2026-10-21) |
-| This sample | Target: a table in the PR of each criterion and each check with its outcome ([source](brief.md)) |
-
-### A9. CI is the arbiter, required by branch protection
-
-| Product | CI or branch gating |
-|---|---|
-| Devin | **Branch protections**: Devin is bound by the same branch protections and policies as a human engineer. Specific required checks are not named on the page. ([source](https://docs.devin.ai/essential-guidelines/sdlc-integration.md), as of 2026-10-21) |
-| Factory (Droid) | Not in their docs. Pages checked: Missions overview, planning, reference, running-cli, running-app, Software Factory overview, Droid Exec overview (docs.factory.com). Not documented for Missions. (as of 2026-10-21) |
-| GitHub Copilot | **Rulesets and approval**: Workflows do not run on Copilot's pushes until a person approves them, and the agent is blocked from default branches and subject to rulesets like a human. ([source](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/review-copilot-output), as of 2026-10-21) |
-| OpenHands | Not in their docs. Pages checked: Goal Completion Loop (docs.openhands.dev). CI or branch gating is not documented for the goal loop. (as of 2026-10-21) |
-| Cursor | **CI subscriptions**: Subscriptions wait until every check on the commit completes and return one result. Whether CI is required before a PR opens is not documented. ([source](https://cursor.com/docs/cloud-agent/capabilities.md), as of 2026-10-21) |
-| Claude Code | Not in their docs. Pages checked: github-actions, code-review, code-review-pull-requests (code.claude.com). CI or branch gating is not documented. (as of 2026-10-21) |
-| This sample | Target: a CI job runs the repo's validate command, and branch protection requires it before merge ([source](brief.md)) |
+| Product | Mark | CI or branch gating |
+|---|---|---|
+| Devin | ◐ | **Branch protections**: Devin is bound by the same branch protections and policies as a human engineer. The page names no specific required checks. ([source](https://docs.devin.ai/essential-guidelines/sdlc-integration.md), as of 2026-10-21) |
+| Factory (Droid) | – | **Missions**: Not in their docs. Pages checked: Missions overview, planning, reference, running-cli, running-app, Software Factory overview, Droid Exec overview (docs.factory.com). ([planning](https://docs.factory.com/missions/planning.md), as of 2026-10-21) |
+| GitHub Copilot | ✓ | **Rulesets and approval**: Workflows do not run on Copilot's pushes until a person approves them, and the agent is blocked from default branches and subject to rulesets like a human. ([source](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/review-copilot-output), as of 2026-10-21) |
+| OpenHands | – | **Goal Completion Loop**: Not in their docs. CI or branch gating is not documented for the goal loop. Page checked: Goal Completion Loop. ([source](https://docs.openhands.dev/sdk/guides/convo-goal.md), as of 2026-10-21) |
+| Cursor | ◐ | **CI subscriptions**: Subscriptions wait until every check on the commit completes and return one result. Whether CI is required before a PR opens is not documented. ([source](https://cursor.com/docs/cloud-agent/capabilities.md), as of 2026-10-21) |
+| Claude Code | – | **GitHub Actions and Code Review**: Not in their docs as a default gate. Pages checked: github-actions, code-review, code-review-pull-requests. The Code Review page does show gating from your own CI by reading the severity counts, and notes that branch protection can require conversation resolution. ([source](https://code.claude.com/docs/en/code-review-pull-requests.md), as of 2026-10-21) |
+| This sample | ✓ | Target: a CI job runs the repo's validate command, and a person sets the branch-protection rule that requires it before merge ([source](brief.md)) |
 
 ## Not compared here
 
 Some Tier A steps have no column in the verify grid, so nothing is said about the field for them: the red-first step (a test
-seen failing before the code exists), a fresh agent that sees only the criteria and the diff (the grid records who decides
-done, not the checker's inputs), and a table of every check with its outcome (the evidence column records what the person
-sees, not a per-check record). Where the grid is silent, the lesson says so rather than guessing.
+seen failing before the code exists), the guard against weakened tests as a slide, running the app, evidence shown, and a
+table of every check with its outcome. Property-based and fuzz testing were looked for on the same pages as the hidden-test
+dimension; the grid lists them with the pages checked, and this lesson mentions the technique without comparing products.
+Where the grid is silent, the lesson says so rather than guessing.
 
 ## What other factories call it
 
@@ -135,10 +109,10 @@ and its spec check are only this sample's names.
 
 | Product | What it calls the check |
 |---|---|
-| Devin | Self-check before the PR, in a cloud session ([source](https://docs.devin.ai/essential-guidelines/sdlc-integration.md), as of 2026-10-21) |
-| Factory | Validation workers, at each Mission milestone ([source](https://docs.factory.com/missions/planning), as of 2026-10-21) |
-| GitHub Copilot | Cloud agent session, running tests and linters in its Actions environment ([source](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents), as of 2026-10-21) |
-| OpenHands | Goal Completion Loop, with a judge model ([source](https://docs.openhands.dev/sdk/guides/convo-goal.md), as of 2026-10-21) |
+| Devin | Self-check before the PR, in a cloud session ([source](https://docs.devin.ai/essential-guidelines/sdlc-integration.md), as of 2026-10-13) |
+| Factory | Validation workers, at each Mission milestone ([source](https://docs.factory.com/missions/planning), as of 2026-10-13) |
+| GitHub Copilot | Cloud agent session, running tests and linters in its Actions environment ([source](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents), as of 2026-10-13) |
+| OpenHands | Goal Completion Loop, with a judge model ([source](https://docs.openhands.dev/sdk/guides/convo-goal.md), as of 2026-10-13) |
 | Cursor | Cloud agent, with CI auto-fix ([source](https://cursor.com/docs/cloud-agent/capabilities.md), as of 2026-10-13) |
 | Claude Code | `/goal`, a condition checked by a separate model after each turn ([source](https://code.claude.com/docs/en/goal.md), as of 2026-10-13) |
 
@@ -175,7 +149,6 @@ that owns one is named in the brief. Each item below is one product's own surfac
   review comments and pushes a fix when one is clear; the interactive session is not described doing this
   ([Claude Code on the web](https://code.claude.com/docs/en/claude-code-on-the-web.md), as of 2026-10-21).
 - **Not compared.** A canary suite after deploy (release lesson), testing principles as review criteria (review lesson),
-  recording every check outcome and skipping a check that has failed to run before, and measuring test quality (feedback and
-  maintenance lesson), required-step lists with proof signals (governance lesson), and designing the whole test system
-  before features are built (test-readiness destination) have no column in the verify grid, so nothing is claimed about the
-  field for them.
+  recording every check outcome and skipping a check that has failed to run before (feedback and maintenance lesson),
+  required-step lists with proof signals (governance lesson), and designing the whole test system before features are built
+  (test-readiness destination) have no column in the verify grid, so nothing is claimed about the field for them.
