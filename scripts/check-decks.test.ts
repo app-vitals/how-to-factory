@@ -68,7 +68,7 @@ describe("check-decks rules", () => {
   test("fails content placed in the safe zone (inline style or class)", () => {
     const style = `<div style="position:absolute; right:2%; bottom:2%">x</div>`;
     expect(rules(deck(slide(VISUAL + style)))).toEqual(["safe-zone"]);
-    expect(rules(deck(slide(VISUAL + `<div class="in-safe-zone">x</div>`)))).toEqual(["safe-zone"]);
+    expect(rules(deck(slide(`${VISUAL}<div class="in-safe-zone">x</div>`)))).toEqual(["safe-zone"]);
     const clear = `<div style="position:absolute; right:30%; bottom:2%">x</div>`;
     expect(rules(deck(slide(VISUAL + clear)))).toEqual([]);
   });
