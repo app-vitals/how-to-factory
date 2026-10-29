@@ -9,304 +9,36 @@
 <body>
 <div id="counter"></div>
 <main>
+  <!-- SKETCH (LVR-2.2): title, one stage slide, one capability slide. Not the full deck; shape review first. -->
   <section class="slide slide-title-slide" data-kind="title">
     <div class="slide-inner">
       <h2 class="slide-title">Done Means Checked</h2>
       <div class="slide-body">
-        <p class="subtitle">Verification: define, run, gate</p>
+        <p class="subtitle">Who wrote the check?</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">Factory map: verification gets a closer look</h2>
+      <h2 class="slide-title">Validation: how independent is the check?</h2>
       <div class="slide-body">
-        <div class="visual diagram" data-diagram="factory-map">
-          <div class="grid-arch">
-            <div class="node node-human is-built">Intake</div><div class="node node-agent is-built">Planning</div><div class="node node-agent is-built">Execution</div><div class="node node-agent is-active">Verification</div>
-            <div class="node node-agent is-planned">Review</div><div class="node node-external is-planned">Release</div><div class="node node-job is-built">Loop</div><div class="node node-human is-built">Chat</div>
-          </div>
+        <div class="visual diagram" data-diagram="independence-ladder">
+          <div class="flow"><div class="node node-agent">Builder's tests</div><span class="arrow"></span><div class="node node-agent">Red first</div><span class="arrow"></span><div class="node node-agent">Fresh agent</div><span class="arrow"></span><div class="node node-human">Hidden tests</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><p class="caption">Governance, feedback and memory support all of these.</p>
+        </div><p class="caption">Each step trusts the builder less.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
-      <h2 class="slide-title">What the human does</h2>
+      <h2 class="slide-title">Define: criteria become red-first tests</h2>
       <div class="slide-body">
-        <div class="visual diagram" data-diagram="human-role">
-          <div class="flow"><div class="node node-human">Write criteria</div><span class="arrow"></span><div class="node node-human">Set CI rule</div><span class="arrow"></span><div class="node node-human">Read PR evidence</div></div>
+        <div class="visual diagram" data-diagram="cap-define">
+          <div class="flow"><div class="node node-human">Criterion</div><span class="arrow"></span><div class="node node-agent">Pick layer</div><span class="arrow"></span><div class="node node-agent">Write test</div><span class="arrow"></span><div class="node node-agent">See it fail</div><span class="arrow"></span><div class="node node-agent">Then code</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><p class="caption">Nobody takes the agent's word for it.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">What we build today</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="build-flow">
-          <div class="flow"><div class="node node-agent">Red tests</div><span class="arrow"></span><div class="node node-agent">Checks</div><span class="arrow"></span><div class="node node-agent">Fix loop</div><span class="arrow"></span><div class="node node-agent">Fresh check</div><span class="arrow"></span><div class="node node-external">CI gate</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><p class="caption">Eight capabilities across three stages.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-demo" data-kind="demo">
-    <div class="slide-inner">
-      <h2 class="slide-title">DEMO</h2>
-      <div class="slide-body">
-        <div class="demo-label">DEMO: dev-task verifies work</div>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">What a claimed done gets wrong</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="claimed-done">
-          <div class="flow"><div class="node node-human">Task</div><span class="arrow"></span><div class="node node-agent">Builds it</div><span class="arrow"></span><div class="node node-agent">Says done</div><span class="arrow"></span><div class="node node-external">PR opens</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><ul class="bullets"><li>Says all green, ran nothing</li><li>Passes by editing the test</li><li>Loops on one failure forever</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Verification: define, run, gate</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="concept">
-          <div class="flow"><div class="node node-agent">Define</div><span class="arrow"></span><div class="node node-agent">Run</div><span class="arrow"></span><div class="node node-external">Gate</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><p class="caption">Input is a task; output is checked work.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Define: criteria become tests, written first</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="cap-a2">
-          <div class="flow"><div class="node node-human">Criterion</div><span class="arrow"></span><div class="node node-agent">Write test</div><span class="arrow"></span><div class="node node-agent">Run: it fails</div><span class="arrow"></span><div class="node node-agent">Then code</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><ul class="bullets"><li>Prevents tests shaped by the code</li><li>e.g. "Rejects empty name" fails first</li><li>e.g. A test passing at once is rewritten</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Run: the repo's own checks</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="cap-a1">
-          <div class="flow"><div class="node node-agent">Install</div><span class="arrow"></span><div class="node node-agent">Lint</div><span class="arrow"></span><div class="node node-agent">Typecheck</div><span class="arrow"></span><div class="node node-agent">Test</div><span class="arrow"></span><div class="node node-agent">Report each</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><ul class="bullets"><li>Done means a machine ran the checks</li><li>e.g. Says "all green", ran nothing</li><li>e.g. Missing import fixed before the PR</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Run: never weaken a test to get green</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="cap-a4">
-          <div class="flow"><div class="node node-agent">Check fails</div><span class="arrow"></span><div class="node node-agent">Fix the code</div><span class="arrow"></span><div class="node node-agent">Diff rule</div><span class="arrow"></span><div class="node node-human">Reason if changed</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><ul class="bullets"><li>Prevents the easy way out: edit the check</li><li>e.g. "Expect 3" loosened to "at least 1"</li><li>e.g. Flaky test skipped, flagged for a person</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Run: a bounded loop until checks pass</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="cap-a7">
-          <div class="flow"><div class="node node-agent">Check fails</div><span class="arrow"></span><div class="node node-agent">Fix with log</div><span class="arrow"></span><div class="node node-agent">Re-run</div><span class="arrow"></span><div class="node node-human">Cap: ask</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><ul class="bullets"><li>Prevents repeated fixes and endless loops</li><li>e.g. Same fix three times, no history</li><li>e.g. At the cap, stop and ask</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Run: a fresh agent checks the criteria</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="cap-a5">
-          <div class="flow"><div class="node node-human">Criteria + diff</div><span class="arrow"></span><div class="node node-agent">Fresh agent</div><span class="arrow"></span><div class="node node-agent">Mark each</div><span class="arrow"></span><div class="node node-agent">Fix or pass</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><ul class="bullets"><li>Prevents the builder grading its own work</li><li>e.g. Validation error missing from diff: NOT MET</li><li>e.g. Only the happy path: PARTIAL</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Run: start the app where it matters</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="cap-a6">
-          <div class="flow"><div class="node node-agent">Build</div><span class="arrow"></span><div class="node node-agent">Start app</div><span class="arrow"></span><div class="node node-agent">Use the path</div><span class="arrow"></span><div class="node node-agent">Attach output</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><ul class="bullets"><li>Prevents MET ratings on code never run</li><li>e.g. Button wired to wrong handler</li><li>e.g. Page builds but renders blank</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Run: show evidence, not a claim</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="cap-a8">
-          <div class="flow"><div class="node node-human">Criteria</div><span class="arrow"></span><div class="node node-agent">Run checks</div><span class="arrow"></span><div class="node node-agent">Record outcomes</div><span class="arrow"></span><div class="node node-store">PR table</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><ul class="bullets"><li>Prevents a done no one can verify</li><li>e.g. PR says "tested", nothing more</li><li>e.g. Table shows lint skipped, missing tool</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Gate: CI decides, branch protection binds</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="cap-a9">
-          <div class="flow"><div class="node node-agent">Local checks</div><span class="arrow"></span><div class="node node-external">PR opens</div><span class="arrow"></span><div class="node node-external">CI job</div><span class="arrow"></span><div class="node node-external">Branch rule</div><span class="arrow"></span><div class="node node-human">Merge</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><ul class="bullets"><li>Prevents a check nobody is forced to obey</li><li>e.g. CI red, and the merge still happens</li><li>e.g. Run green first, then require it</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">After: done means a check ran</h2>
-      <div class="slide-body">
-        <div class="visual diagram" data-diagram="slice">
-          <div class="flow"><div class="node node-store">Tasks</div><span class="arrow"></span><div class="node node-job">Loop</div><span class="arrow"></span><div class="node node-agent">Dev-task</div><span class="arrow"></span><div class="node node-store">Evidence</div><span class="arrow"></span><div class="node node-external">CI</div><span class="arrow"></span><div class="node node-external">PRs</div></div>
-          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><p class="caption">Each PR carries its criteria and outcomes.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Most use a check; four run the app</h2>
-      <div class="slide-body">
-        <div class="visual">
-          <table class="comp-table">
-            <thead><tr><th>Checked 10/2026</th><th>Decides done</th><th>Runs the app</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>Check</td><td>✓</td></tr><tr><td>Factory</td><td>Agent</td><td>✓</td></tr><tr><td>OpenHands</td><td>Model</td><td>✓</td></tr><tr><td>Cursor</td><td>Check</td><td>✓</td></tr><tr><td>GitHub Copilot</td><td>Check</td><td>–</td></tr><tr><td>Claude Code</td><td>Check + Model</td><td>–</td></tr><tr><td>This sample</td><td>Agent</td><td>✓</td></tr></tbody>
-          </table>
-          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
-        </div><p class="caption">Links in the video description.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Four run checks themselves; loops differ</h2>
-      <div class="slide-body">
-        <div class="visual">
-          <table class="comp-table">
-            <thead><tr><th>Checked 10/2026</th><th>Runs checks</th><th>Keeps going</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>✓</td><td>Prompt + Auto-fix</td></tr><tr><td>Factory</td><td>✓</td><td>Hook</td></tr><tr><td>OpenHands</td><td>◐</td><td>Goal</td></tr><tr><td>Cursor</td><td>✓</td><td>Hook + Auto-fix</td></tr><tr><td>GitHub Copilot</td><td>✓</td><td>Hook</td></tr><tr><td>Claude Code</td><td>◐</td><td>Goal</td></tr><tr><td>This sample</td><td>✓</td><td>Prompt</td></tr></tbody>
-          </table>
-          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
-        </div><p class="caption">Links in the video description.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Criteria to checks: partial at best</h2>
-      <div class="slide-body">
-        <div class="visual">
-          <table class="comp-table">
-            <thead><tr><th>Checked 10/2026</th><th>Criteria to checks</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>◐</td></tr><tr><td>Factory</td><td>◐</td></tr><tr><td>OpenHands</td><td>◐</td></tr><tr><td>Cursor</td><td>–</td></tr><tr><td>GitHub Copilot</td><td>◐</td></tr><tr><td>Claude Code</td><td>◐</td></tr><tr><td>This sample</td><td>✓</td></tr></tbody>
-          </table>
-          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
-        </div><p class="caption">Links in the video description.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Logs reach everyone; test guards are rarely documented</h2>
-      <div class="slide-body">
-        <div class="visual">
-          <table class="comp-table">
-            <thead><tr><th>Checked 10/2026</th><th>Guards test edits</th><th>Evidence shown</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>◐</td><td>Logs + Visual</td></tr><tr><td>Factory</td><td>–</td><td>Logs</td></tr><tr><td>OpenHands</td><td>–</td><td>Logs</td></tr><tr><td>Cursor</td><td>–</td><td>Logs + Visual</td></tr><tr><td>GitHub Copilot</td><td>–</td><td>Logs</td></tr><tr><td>Claude Code</td><td>◐</td><td>Logs</td></tr><tr><td>This sample</td><td>✓</td><td>Logs + Visual</td></tr></tbody>
-          </table>
-          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
-        </div><p class="caption">Links in the video description.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">CI gating is rarely spelled out</h2>
-      <div class="slide-body">
-        <div class="visual">
-          <table class="comp-table">
-            <thead><tr><th>Checked 10/2026</th><th>CI gates</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>◐</td></tr><tr><td>Factory</td><td>–</td></tr><tr><td>OpenHands</td><td>–</td></tr><tr><td>Cursor</td><td>◐</td></tr><tr><td>GitHub Copilot</td><td>✓</td></tr><tr><td>Claude Code</td><td>–</td></tr><tr><td>This sample</td><td>✓</td></tr></tbody>
-          </table>
-          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
-        </div><p class="caption">Links in the video description.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Same job, different names</h2>
-      <div class="slide-body">
-        <div class="visual">
-          <table class="comp-table">
-            <thead><tr><th>Checked 10/2026</th><th>Check</th><th>Decides done</th></tr></thead>
-            <tbody><tr><td>Devin</td><td>Self-check</td><td>Check</td></tr><tr><td>Factory</td><td>Validation workers</td><td>Agent</td></tr><tr><td>OpenHands</td><td>Goal Completion Loop</td><td>Model</td></tr><tr><td>Cursor</td><td>CI auto-fix</td><td>Check</td></tr><tr><td>GitHub Copilot</td><td>Cloud agent session</td><td>Check</td></tr><tr><td>Claude Code</td><td>/goal</td><td>Check + Model</td></tr><tr><td>This sample</td><td>dev-task</td><td>Agent</td></tr></tbody>
-          </table>
-        </div><p class="caption">Links in the video description.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-content" data-kind="content">
-    <div class="slide-inner">
-      <h2 class="slide-title">Where factories take it</h2>
-      <div class="slide-body">
-        <div class="visual options-grid">
-          <div class="option"><h3>Release</h3><div class="pick">Blocking limits, canary suites</div></div><div class="option"><h3>Review</h3><div class="pick">Principles, post-PR fixes</div></div><div class="option"><h3>Feedback</h3><div class="pick">Check history, test quality</div></div><div class="option"><h3>Test system</h3><div class="pick">Speed budgets, whole design</div></div>
-        </div><p class="caption">Destinations, not prescriptions.</p>
-      </div>
-      <div class="facecam-zone"></div>
-    </div>
-  </section>
-  <section class="slide slide-exercise" data-kind="exercise">
-    <div class="slide-inner">
-      <h2 class="slide-title">Your turn: make done mean checked</h2>
-      <div class="slide-body">
-        <div class="eyebrow">Exercise</div>
-        <div class="visual diagram" data-diagram="exercise-steps">
-          <div class="flow"><div class="node node-agent">Test first</div><span class="arrow"></span><div class="node node-agent">Run checks</div><span class="arrow"></span><div class="node node-agent">Fresh check</div><span class="arrow"></span><div class="node node-external">CI gate</div></div>
-          
-        </div><ul class="bullets"><li>Any agent, any language</li><li>Show each check and its outcome</li><li>A red CI blocks the merge</li></ul>
+        </div><ul class="bullets"><li>Tests written after code agree with it</li><li>e.g. "Rejects empty name" fails first</li><li>e.g. Two services need an integration test</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
