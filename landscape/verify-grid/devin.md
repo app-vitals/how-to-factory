@@ -116,3 +116,53 @@ All fetched 2026-10-23 (index first: https://docs.devin.ai/llms.txt). Condensed 
 - **Memory and Dreaming, Voice mode, Data Analyst, DeepWiki, Ask Devin, Stacked PRs**: not about checking work. Stacked PRs was not fetched, so any gating there is unchecked.
 - **CLI Sandbox, Permissions, Subagents, Models, Fusion**: not fetched; agent-safety and model features judged off-topic by title. CLI Essential Commands says nothing on testing or a review command.
 - **Session Insights**: read; it reviews how a session went and lists no test or CI verification, so it feeds no cell.
+
+## Added dimensions: hidden tests and test quality (fetched 2026-10-29)
+
+Two new dimensions, plus property-based and fuzz testing where documented. The dimensions above are not repeated. Method: the docs
+index (https://docs.devin.ai/llms.txt, 2026-10-29) was fetched first, and every page that could touch testing, coverage, review,
+workflows or session analysis was fetched again and asked about these topics only. As above, the fetch tool returns a condensed
+extraction, so each "not documented" rests on that tool reporting the topic absent from the page. Surfaces covered: the cloud
+session, testing mode, Devin Review, managed sessions and Dynamic Workflows, Code Scans, and playbooks.
+
+| Surface | HIDDEN OR HELD-OUT TESTS | TEST-QUALITY MEASURE (mutation score or similar) | PROPERTY-BASED OR FUZZ TESTING |
+| --- | --- | --- | --- |
+| **Cloud session, self-check before the PR** | Not documented (checked: SDLC integration, Instructing Devin Effectively, Best Practices, Code Coverage tutorial, Testing & Refactoring prompts). Every page describes the same session writing and running its own tests; none keeps a check out of its sight. ([SDLC integration](https://docs.devin.ai/essential-guidelines/sdlc-integration.md), 2026-10-29) | Only coverage and assertion style. The SDLC page reports coverage typically rising 1.5 to 2 times, often past 90%. The coverage tutorial's success measure is the share of functions covered. Not documented beyond that: no check that the new tests would catch a bug (checked: SDLC integration, Code Coverage tutorial, Best Practices). ([Code Coverage tutorial](https://docs.devin.ai/use-cases/tutorials/code-coverage.md), 2026-10-29) | Not documented (checked: SDLC integration, Code Coverage tutorial, Testing & Refactoring prompts, Instructing Devin Effectively). |
+| **Coverage playbook** (gallery recipe) | Not documented (checked: Test-Coverage Playbook). | Coverage target of 90% lines or better and a summary of lines, branches and functions. The recipe also asks for specific matchers and an arrange-act-assert shape, which is style guidance, not a measurement. Mutation score: not documented (checked: Test-Coverage Playbook). ([Test-Coverage Playbook](https://docs.devin.ai/use-cases/gallery/test-coverage-playbook.md), 2026-10-29) | Not documented (checked: Test-Coverage Playbook). |
+| **Testing mode** | Not documented. The page does not say whether the post-PR test plan runs in a separate session or with fresh context (checked: Testing & Recordings). ([Testing & Recordings](https://docs.devin.ai/work-with-devin/testing-and-recordings.md), 2026-10-29) | Not documented. It is described as a quick sanity check of one flow, and the page points to existing suites and CI for thorough coverage (checked: Testing & Recordings). | Not documented (checked: Testing & Recordings). |
+| **Devin Review** | Not documented as a hidden check. The page treats review as a separate platform from the coding agent, but says nothing about tests it keeps from the author (checked: Devin Review). ([Devin Review](https://docs.devin.ai/work-with-devin/devin-review.md), 2026-10-29) | Not documented: no review of whether a PR's tests are weak or missing (checked: Devin Review). | Not documented (checked: Devin Review). |
+| **Code Scans** | Not documented (checked: Code Scans). | A "test coverage" scan type looks for flows and components that no test covers. That is a coverage gap finder, not a quality measure of existing tests. ([Code Scans](https://docs.devin.ai/work-with-devin/code-scans.md), 2026-10-29) | Not documented (checked: Code Scans). |
+| **Managed sessions and Dynamic Workflows** | Not documented. Child sessions are described as delegated workers, and the only verify example is a pipeline stage the script author writes (checked: Advanced Capabilities, Dynamic Workflows). So independence from the builder is possible to build but is not a feature. ([Dynamic Workflows](https://docs.devin.ai/work-with-devin/dynamic-workflows.md), 2026-10-29) | Not documented (checked: Advanced Capabilities, Dynamic Workflows). | Not documented (checked: Advanced Capabilities, Dynamic Workflows). |
+| **Playbooks and Session Insights** | Not documented (checked: Creating Playbooks, Session Insights). | Not documented. Session Insights files "test generation" as a task category and reviews efficiency and prompts, not how good the tests are (checked: Session Insights). ([Session Insights](https://docs.devin.ai/product-guides/session-insights.md), 2026-10-29) | Not documented (checked: Creating Playbooks, Session Insights). |
+
+Takeaways for the lesson, all from the cells above:
+
+- No page documents held-out tests: wherever a page says who writes the tests, it is the session that wrote the code. (checked pages: see the cells above.)
+- Test quality is measured, where at all, as coverage. No page documents mutation score or a similar check that the tests would fail on a broken change. ([Code Coverage tutorial](https://docs.devin.ai/use-cases/tutorials/code-coverage.md), [Test-Coverage Playbook](https://docs.devin.ai/use-cases/gallery/test-coverage-playbook.md), 2026-10-29)
+- Property-based and fuzz testing are not documented on any page read.
+
+### Pages read (added dimensions)
+
+All fetched 2026-10-29, index first (https://docs.devin.ai/llms.txt). Condensed extraction, see Method above.
+
+- https://docs.devin.ai/use-cases/tutorials/code-coverage.md
+- https://docs.devin.ai/use-cases/gallery/test-coverage-playbook.md
+- https://docs.devin.ai/use-cases/testing-refactoring.md
+- https://docs.devin.ai/work-with-devin/code-scans.md
+- https://docs.devin.ai/work-with-devin/testing-and-recordings.md
+- https://docs.devin.ai/work-with-devin/devin-review.md
+- https://docs.devin.ai/work-with-devin/advanced-capabilities.md
+- https://docs.devin.ai/work-with-devin/dynamic-workflows.md
+- https://docs.devin.ai/use-cases/best-practices.md
+- https://docs.devin.ai/essential-guidelines/sdlc-integration.md
+- https://docs.devin.ai/product-guides/creating-playbooks.md
+- https://docs.devin.ai/product-guides/session-insights.md
+- https://docs.devin.ai/essential-guidelines/instructing-devin-effectively.md
+
+### Ruled out (why), added dimensions
+
+- **Devin CLI pages (hooks, skills, subagents, sandbox) and the CLI changelog**: not fetched for these dimensions. The CLI hook and skill pages were read on 2026-10-23 for the first grid and held no test content. A newer changelog entry could still mention something; that is a gap, not a finding.
+- **Release notes (2026, 2025)**: not searched; they might announce a test-quality feature that the docs pages do not yet describe.
+- **Security 2.0, Oncall, Auto-triage, Security Profiles**: security and triage products; not about checking the tests an agent wrote (judged from titles in the index).
+- **Other gallery pages, migrations and tutorials**: domain recipes; not opened, so a test-quality example there would be missed.
+- **Linear, Jira, Slack, GitLab and Bitbucket integrations, Stacked PRs, Memory and Dreaming**: entry points and context features; not fetched.
