@@ -3,6 +3,7 @@ export interface RunResult {
   task: string;
   run: number;
   score: number | null; // mutation score percent; null = nothing scoreable
+  status?: "failed"; // scoring aborted (e.g. no passing tests); recorded with score 0
 }
 
 export interface Cell {
@@ -23,10 +24,11 @@ export function median(values: number[]): number {
 export function aggregate(results: RunResult[]): Map<string, Map<string, Cell>> {
   const buckets = new Map<string, Map<string, number[]>>();
   for (const r of results) {
-    if (r.score === null) continue;
+    // register the variant even when every score is null, so renderTable still shows its row
     const row = buckets.get(r.variant) ?? new Map<string, number[]>();
-    row.set(r.task, [...(row.get(r.task) ?? []), r.score]);
     buckets.set(r.variant, row);
+    if (r.score === null) continue;
+    row.set(r.task, [...(row.get(r.task) ?? []), r.score]);
   }
   const out = new Map<string, Map<string, Cell>>();
   for (const [variant, row] of buckets) {

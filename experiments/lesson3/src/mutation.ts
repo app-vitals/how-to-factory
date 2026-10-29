@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 
@@ -61,8 +61,10 @@ export function runStryker(worktree: string, mutate: string[], testCommand: stri
   const cfgPath = join(cfgDir, "scorer.config.json");
   writeFileSync(cfgPath, JSON.stringify(strykerConfig(mutate, testCommand, useChecker), null, 2));
   const args = ["run", cfgPath, ...mutate.flatMap((f) => ["--mutate", f])];
-  const res = spawnSync(bin, args, { cwd: worktree, stdio: "inherit" });
   const reportPath = join(worktree, "reports/mutation/mutation.json");
+  // a report left by an earlier scoring of this worktree must not be mistaken for this run's
+  rmSync(reportPath, { force: true });
+  const res = spawnSync(bin, args, { cwd: worktree, stdio: "inherit" });
   if (!existsSync(reportPath)) throw new Error(`stryker produced no report (exit ${res.status})`);
   return scoreFromReport(JSON.parse(readFileSync(reportPath, "utf8")));
 }

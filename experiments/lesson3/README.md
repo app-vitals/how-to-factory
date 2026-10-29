@@ -58,3 +58,8 @@ minimal `ps` shim on `PATH` (the `ps` caveat above): Stryker's process-kill help
 to `ps -o pid --no-headers --ppid <pid>`, and with no `ps` at all the run aborts with
 `spawn ps ENOENT`. A real `ps` (procps) is the proper fix. The score is read from the JSON
 report, so a crash during Stryker's shutdown after the report is written does not lose it.
+
+A run whose own tests fail (or that wrote no tests) makes Stryker's initial dry run abort. `score.ts`
+catches that, appends the row with `score: 0` and `status: "failed"` so it counts toward the
+variant's median, and exits 1. Any report left over from a previous scoring of the same worktree is
+deleted before Stryker starts, so a stale report is never read as this run's score.

@@ -27,7 +27,22 @@ describe("aggregate", () => {
   });
 });
 
+describe("aggregate keeps all-null variants", () => {
+  test("a variant with only null scores stays in the aggregate with no cells", () => {
+    const agg = aggregate([r("v1", "t1", 1, null), r("v2", "t1", 1, 50)]);
+    expect(agg.get("v1")?.size).toBe(0);
+  });
+  test("failed runs recorded as score 0 count toward the median", () => {
+    const agg = aggregate([r("v1", "t1", 1, 0), r("v1", "t1", 2, 80), r("v1", "t1", 3, 0)]);
+    expect(agg.get("v1")?.get("t1")?.median).toBe(0);
+  });
+});
+
 describe("renderTable", () => {
+  test("shows a row of — for a variant whose runs are all null", () => {
+    const out = renderTable([r("v1", "a", 1, null), r("v2", "a", 1, 50)]);
+    expect(out.split("\n")).toContain("| v1 | — |");
+  });
   test("renders a variant x task markdown table with — for missing cells", () => {
     const out = renderTable([r("v1", "a", 1, 50), r("v1", "a", 2, 70), r("v2", "b", 1, 90)]);
     expect(out.split("\n")).toEqual([
