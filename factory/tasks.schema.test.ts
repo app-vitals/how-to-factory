@@ -30,6 +30,19 @@ describe("validateTasks", () => {
     expect(validateTasks([valid({ dependencies: ["a"] })]).join()).toContain("depends on itself");
   });
 
+  test("createdAt is optional and must be a parseable date string", () => {
+    expect(validateTasks([valid()])).toEqual([]);
+    expect(validateTasks([valid({ createdAt: "2026-10-29T18:46:00.000Z" })])).toEqual([]);
+    const badDate = validateTasks([valid({ createdAt: "not a date" })]);
+    expect(badDate).toHaveLength(1);
+    expect(badDate[0]).toContain("(a)");
+    expect(badDate[0]).toContain("createdAt");
+    const badType = validateTasks([valid({ createdAt: 123 as never })]);
+    expect(badType).toHaveLength(1);
+    expect(badType[0]).toContain("(a)");
+    expect(badType[0]).toContain("createdAt");
+  });
+
   test("rejects dependency cycles", () => {
     const errors = validateTasks([valid({ dependencies: ["b"] }), valid({ id: "b", dependencies: ["a"] })]);
     expect(errors.join()).toContain("cycle");

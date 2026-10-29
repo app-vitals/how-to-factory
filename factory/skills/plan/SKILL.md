@@ -18,6 +18,8 @@ Each task is an object with:
 - `acceptanceCriteria`: array of statements written as checks that can be run or inspected, not as intentions.
 - `dependencies`: array of task `id`s that must finish first (`[]` if none).
 - `status`: always `"pending"` when you write it. The loop owns it from there (`pending` -> `in_progress` -> `pr`).
+- `createdAt`: optional ISO 8601 timestamp (e.g. `2026-10-29T18:46:00.000Z`). Stamp it with the current time at
+  append time (step 5). Existing tasks without it stay valid; do not backfill them.
 
 Each task must be small enough to deliver as one PR.
 
@@ -33,7 +35,7 @@ Each task must be small enough to deliver as one PR.
    dependency order. Revise until they approve. **Do not write to `tasks.json` before explicit approval.**
 5. **Append.** After approval, add the tasks to the array in `factory/tasks.json` (create it as `[]` first if it
    does not exist). Never modify or remove existing tasks. If an id collides with an existing one, rename the new task.
-   New tasks may depend on existing ids.
+   New tasks may depend on existing ids. Stamp each new task's `createdAt` with the current time as you append it.
 6. **Validate.** Re-read the file and confirm: it is valid JSON, ids are unique, every dependency id exists, and
    there are no dependency cycles. Fix anything that fails before reporting.
 7. **Summarize.** List the tasks added and their dependency order.

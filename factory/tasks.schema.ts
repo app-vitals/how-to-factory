@@ -11,6 +11,8 @@ export interface Task {
   dependencies: string[];
   /** Owned by the loop: pending -> in_progress -> pr (terminal). */
   status: TaskStatus;
+  /** Optional ISO 8601 timestamp, stamped by the plan skill when the task is appended. */
+  createdAt?: string;
 }
 
 const isStringArray = (v: unknown): v is string[] => Array.isArray(v) && v.every((x) => typeof x === "string");
@@ -33,6 +35,9 @@ export function validateTasks(raw: unknown): string[] {
     if (!isStringArray(o.dependencies)) errors.push(`${at}: dependencies must be an array of strings`);
     if (!TASK_STATUSES.includes(o.status as TaskStatus)) {
       errors.push(`${at}: status must be one of ${TASK_STATUSES.join(", ")}`);
+    }
+    if (o.createdAt !== undefined && (typeof o.createdAt !== "string" || Number.isNaN(Date.parse(o.createdAt)))) {
+      errors.push(`${at}: createdAt must be an ISO 8601 date string`);
     }
   });
   if (errors.length > 0) return errors;
