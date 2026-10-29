@@ -95,3 +95,53 @@ Fetched 2026-10-23 as raw Markdown (`<url>.md`). Read in full unless noted.
 - **Sandbox, Run Modes, security and network, OIDC, self-hosted machines**: where work runs and what it may touch.
 - **Pricing and billing pages, Origin, other source-control integrations**: not verification content.
 - **Help-centre pages**: repeat the docs pages read above.
+
+## Added dimensions: hidden tests and test quality (fetched 2026-10-29)
+
+Two new dimensions, plus property-based and fuzz testing where documented. The dimensions above are not repeated. Method: the
+docs index (https://cursor.com/docs/llms.txt, 2026-10-29) was fetched first and its 326 page links scanned; the pages that could
+touch tests, checks, review, hooks, subagents, evals or security verification were then downloaded as raw Markdown
+(`<url>.md`, plain HTTP, no summarising tool) and read, and the whole set was searched for held-out, hidden, mutation,
+property-based, fuzz, coverage and flaky-test wording. The index now lists an Agent SDK section with an Evals page and a
+Hillclimbing page that the first grid did not cover; both were read. Surfaces covered: Subagents (verifier example),
+Security Agents (remediation agents), Bugbot, Agent Review, Approval agents, Hooks, Cloud agents, Agent SDK evals.
+
+| Surface | HIDDEN OR HELD-OUT TESTS | TEST-QUALITY MEASURE (mutation score or similar) | PROPERTY-BASED OR FUZZ TESTING |
+| --- | --- | --- | --- |
+| **Verifier subagent** | Partly, as isolation and not as hidden tests. A subagent "start[s] with a clean context" and gets only what the parent puts in the prompt, and the page recommends a verifier for "independent verification of work". Nothing says the verifier holds checks the writing agent cannot see, and the parent can hand it the same tests. ([Subagents](https://cursor.com/docs/subagents.md), 2026-10-29) | Not documented. The verifier example runs "relevant tests" and looks for missed edge cases; it does not judge whether the existing tests are any good (checked: subagents). | Not documented (checked: subagents). |
+| **Security Agents, remediation** | Closest design found, and still not hidden. A verification agent writes exploit tests against the real code path, and a separate patch agent then writes the fix and "checks it against the tests". The writer of the tests and the writer of the fix are different agents, but the tests are opened first as a draft PR, so the patch agent and the person can read them. Nothing is withheld. ([Security Agents](https://cursor.com/docs/security-agents.md), 2026-10-29) | Not documented as a measure of tests. The verdicts are Confirmed, Refuted or Inconclusive per finding; the tests are meant to fail until the fix lands (checked: security-agents). | Not documented (checked: security-agents). The tests are exploit tests for one finding. |
+| **Bugbot** | Not documented (checked: bugbot). | Not a quality measure. A written rule can raise a blocking finding when backend files change and no test files do ("Missing tests for backend changes"); that checks that tests exist in the diff, not that they would catch a fault. Mutation score or similar: not documented (checked: bugbot). ([Bugbot](https://cursor.com/docs/bugbot.md), 2026-10-29) | Not documented (checked: bugbot). |
+| **Agent Review** | Not documented (checked: agent/agent-review). | Not documented (checked: agent/agent-review). ([Agent Review](https://cursor.com/docs/agent/agent-review.md), 2026-10-29) | Not documented (checked: agent/agent-review). |
+| **PR Routing & Approval** | Not documented (checked: approval-agents). | Not documented. Approval rests on risk scoring, the person's `APPROVAL_POLICY.md` and Bugbot and Security Agent findings, with no check on how good the PR's tests are (checked: approval-agents). ([Approval agents](https://cursor.com/docs/approval-agents.md), 2026-10-29) | Not documented (checked: approval-agents). |
+| **Hooks** | Not documented. No page mentions hiding or protecting test files; hooks could be written to do it, but the page does not say so (checked: hooks). ([Hooks](https://cursor.com/docs/hooks.md), 2026-10-29) | Not documented (checked: hooks). The only "coverage" wording is a sample hook output string, not a feature. | Not documented (checked: hooks). |
+| **Cloud agent and Automations** | Not documented. The cloud-agent pages describe the agent testing its own work in its VM, and an Automation runs a saved prompt; nothing keeps checks from the agent (checked: cloud-agent, capabilities, best-practices, automations). ([Cloud agents](https://cursor.com/docs/cloud-agent.md), 2026-10-29) | Not documented (checked: the same four pages). | Not documented (checked: the same four pages). |
+| **Agent SDK evals and Hillclimbing** | Not about tests of the agent's code, but it is the only place a fixed hidden-looking set appears. Evals run fixed cases against an agent a team builds with the SDK and check tool calls and answers, from files in `evals/`. The agent under test is not described as being kept from them, and the Hillclimbing page says to hold fixtures fixed and never loosen an existing eval to make a change pass. ([Evals](https://cursor.com/docs/agent-sdk/evals.md), [Hillclimbing](https://cursor.com/docs/agent-sdk/hillclimbing.md), 2026-10-29) | Evals have gate, soft and `atLeast` scoring and a judge model for answer quality. These score an agent's answers, not tests it wrote. Mutation score or similar: not documented (checked: agent-sdk/evals, reference/evals, hillclimbing, guides/improve). ([Evals reference](https://cursor.com/docs/agent-sdk/reference/evals.md), 2026-10-29) | Not documented (checked: agent-sdk/evals, reference/evals). Datasets are fixed JSON, JSONL or YAML rows. |
+
+Takeaways for the lesson, all from the cells above:
+
+- No page documents held-out tests. The nearest design is the Security Agents split, where one agent writes the tests and another writes the fix, but the tests are published first and nothing is hidden. The verifier subagent gives a clean context, not hidden checks.
+- Test quality is checked only as presence (Bugbot's missing-tests rule). No page documents mutation score or a check that new tests would fail on a broken change.
+- Property-based and fuzz testing are not documented on any page read.
+
+### Pages read (added dimensions)
+
+All fetched 2026-10-29 as raw Markdown, index first (https://cursor.com/docs/llms.txt). Read in full unless noted.
+
+- https://cursor.com/docs/subagents.md
+- https://cursor.com/docs/security-agents.md
+- https://cursor.com/docs/bugbot.md (searched for test, coverage and quality wording; rules and examples read)
+- https://cursor.com/docs/agent/agent-review.md
+- https://cursor.com/docs/approval-agents.md
+- https://cursor.com/docs/hooks.md (searched)
+- https://cursor.com/docs/cloud-agent.md, cloud-agent/capabilities.md, cloud-agent/best-practices.md, cloud-agent/automations.md (searched)
+- https://cursor.com/docs/agent-sdk/evals.md, agent-sdk/reference/evals.md, agent-sdk/hillclimbing.md, agent-sdk/guides/improve.md
+- https://cursor.com/docs/skills.md, rules.md, agent/overview.md, agent/prompting.md, agent/plan-mode.md (searched)
+- https://cursor.com/docs/cli/headless.md, cli/github-actions.md, agent/debug-mode.md, agent/tools/browser.md, agent/tools/terminal.md (searched)
+
+### Ruled out (why), added dimensions
+
+- **`/docs/agent-review.md`**: returned 404; the page is `agent/agent-review.md`.
+- **Agent SDK guides and templates (jev, reviews, github, slack, webhooks and the rest)**: jev and the reviews template were read and are about building review agents, with no test content. The others are integrations and were not fetched, so a test remark there would be missed.
+- **Cloud-agent API endpoints, webhooks, builds, identity, self-hosted pages, security and network pages**: programmatic wrappers and where work runs, not verification.
+- **CLI changelog and Agent SDK changelog**: not searched; a newer entry could announce a held-out or test-quality feature the pages above do not describe. That is a gap, not a finding.
+- **Pricing, account, admin and analytics APIs, Origin, enterprise pages, Grok bot pages**: not verification content.
