@@ -45,7 +45,8 @@ Takes one task and produces one pull request, built test-first: red, green, refa
    and a short output excerpt. If a check fails because of your change, fix the cause and rerun all the checks; never
    skip or weaken a check (or the test or config it runs) to get green. If a check already fails on the base branch,
    confirm it there and record it as such. Then walk each `acceptanceCriteria` item and confirm it is met, naming the
-   covering test or check. If a criterion cannot be met, stop and report instead of opening the PR.
+   covering test or check. If you already know a criterion cannot be met, stop and report instead of opening the PR.
+   A criterion the step 9 verifier later marks `fail` is handled in step 9, not here.
 8. **Check for weakened tests.** After the last code change, run `git diff <red-sha> -- <test files and check config>`
    (no `..HEAD`, so uncommitted edits show too) and read it against the weakening list in step 4. The expected result is no change. Every change must trace to a
    `test: fix <what> in <task title>` commit with a reason. If a change is unexplained, or matches the weakening list,
@@ -82,8 +83,9 @@ Takes one task and produces one pull request, built test-first: red, green, refa
 - The criteria verdicts come from the fresh subagent, not from you; never change one.
 - Stage specific files, never everything; do not commit unrelated changes.
 - Do not edit `factory/tasks.json`; tasks are added by the plan skill and `status` is moved by the loop.
-- An unfixable check failure still opens the PR, marked failing locally; an unmet acceptance criterion stops the run
-  with no PR.
+- An unfixable check failure still opens the PR, marked failing locally. A criterion you know cannot be met before
+  verification stops the run with no PR; a criterion the step 9 verifier still marks `fail` after the retries opens
+  the PR with that criterion marked failing.
 - Exit non-zero if the PR was not opened; the loop reads exit 0 as "PR open".
 - Edit files with the Edit and Write tools, never via `python3`, heredocs or `sed -i`.
 - The session starts in the repo root, so `cd` is not needed.
