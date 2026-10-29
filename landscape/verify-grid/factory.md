@@ -128,3 +128,58 @@ Triage was read and has no verification content (it classifies and routes intake
 - **Enterprise, pricing, models, BYOK, Factory Router, telemetry, audit log, compliance**: not verification content.
 - **Benchmarks (Agent Arena, Legacy Bench, NextJS, Review Benchmark, Terminal Bench)**: product evaluations, not the
   verification a user's work gets.
+
+## Added dimensions: hidden tests and test quality (fetched 2026-10-29)
+
+Two new dimensions, plus property-based and fuzz testing where documented. The dimensions above are not repeated. Method: the docs
+index (https://docs.factory.com/llms.txt, 2026-10-29) was fetched first, then every page that could touch testing, QA, review,
+hooks, readiness or test generation was fetched again and asked about these topics only. As above, the fetch tool returns a condensed
+extraction, so each "not documented" rests on that tool reporting the topic absent from the page. Surfaces covered: Missions
+(validation workers), the `/qa` skill, the daily docs-and-tests `droid exec` recipe, the Test Coverage automation starter, CI code
+review, hooks, Droid Control and Agent Readiness. The index now lists the QA, review and automations pages under `/automations/`;
+the earlier grid cites them under `/software-factory/`, and the `/software-factory/automations` page was still served on 2026-10-29.
+
+| Surface | HIDDEN OR HELD-OUT TESTS | TEST-QUALITY MEASURE (mutation score or similar) | PROPERTY-BASED OR FUZZ TESTING |
+| --- | --- | --- | --- |
+| **Mission validation workers** | Not documented as a hidden check. The pages say validation workers check each milestone after the feature workers, and the news post describes workers reviewing accumulated work, so the validator is a different worker from the builder. Whether it is a separate session, or whether any criteria are kept from the builder, is not stated (checked: missions/overview, planning, reference, running-app, factory.com/news/missions). The overview also describes the Mission running user-facing QA to "self-correct as it goes", which reads as the same system checking its own work. ([Missions planning](https://docs.factory.com/missions/planning.md), [news post](https://factory.com/news/missions), 2026-10-29) | Not documented (checked: missions/overview, planning, reference, running-app, factory.com/news/missions). The news post says validators run tests, look for regressions and check integration; nothing measures how good the tests are. | Not documented (checked: the same five pages). |
+| **`/qa` skill** | Not documented (checked: automations/automated-qa). The skill derives its flows from the diff and the generated config, and nothing says they are kept from the coding agent. ([Automated QA](https://docs.factory.com/automations/automated-qa.md), 2026-10-29) | Not documented: the report is pass, fail or blocked per case, with no measure of the checks themselves (checked: automations/automated-qa). | Not documented (checked: automations/automated-qa). |
+| **Daily docs-and-tests recipe (`droid exec`)** | Partly, and not about tests. The recipe splits the work into a `draft` job that writes code and a `verify` job that runs the tests without credentials, so the run step is separate from the writing step. The tests the draft job wrote are the ones that run; nothing is held back. If they fail, the PR opens as a draft with a note. ([Daily docs and tests recipe](https://docs.factory.com/droid-exec/recipes/daily-docs-tests.md), 2026-10-29) | Only "do the new tests run and pass". No measure of whether they would catch a bug (checked: droid-exec/recipes/daily-docs-tests). | Not documented (checked: droid-exec/recipes/daily-docs-tests). |
+| **Test Coverage automation starter** | Not documented (checked: software-factory/automations). | Coverage only: the starter adds tests for what a PR changes and comments on what is now covered. Mutation score or similar: not documented. ([Automations](https://docs.factory.com/software-factory/automations.md), 2026-10-29) | Not documented (checked: software-factory/automations). |
+| **CI code review** | Not documented (checked: automations/code-review-ci). | Not documented: no assessment of whether a PR's tests are weak or missing (checked: automations/code-review-ci). ([CI code review](https://docs.factory.com/automations/code-review-ci.md), 2026-10-29) | Not documented (checked: automations/code-review-ci). |
+| **Hooks** | Not documented. No page mentions protecting or hiding test files; a hook could be written to do it, but the page does not say so (checked: harness/hooks). ([Hooks](https://docs.factory.com/harness/hooks.md), 2026-10-29) | Not documented (checked: harness/hooks). | Not documented (checked: harness/hooks). |
+| **Droid Control** | Not documented as a hidden check. The page frames the droid as an investigator that reports a claim as refuted when it is false, with rules against staging evidence to fit the expected result. That is honesty of evidence, not a check kept from the builder (checked: software-factory/droid-control). ([Droid Control](https://docs.factory.com/software-factory/droid-control.md), 2026-10-29) | Not documented: it reports CONFIRMED, REFUTED or INCONCLUSIVE per claim, not a measure of tests (checked: software-factory/droid-control). | Not documented (checked: software-factory/droid-control). |
+| **Agent Readiness** | Not documented (checked: agent-readiness/overview). | The nearest thing is the Testing pillar (criteria such as unit tests existing, integration tests existing and tests running locally) and flaky-test detection, named at Level 4. Both describe the repository, not the tests an agent just wrote; mutation score is not documented. ([Agent Readiness](https://docs.factory.com/agent-readiness/overview.md), 2026-10-29) | Not documented (checked: agent-readiness/overview). |
+| **`droid exec`** | Not documented (checked: droid-exec/overview). | Not documented (checked: droid-exec/overview). ([droid exec](https://docs.factory.com/droid-exec/overview.md), 2026-10-29) | Not documented (checked: droid-exec/overview). |
+
+Takeaways for the lesson, all from the cells above:
+
+- No page documents held-out tests. The closest design is the Mission's validation workers, a different worker from the builder, but nothing says they use criteria the builder cannot see. The daily recipe separates the test run from the writing, not the tests from the writer.
+- Test quality is measured, where at all, as coverage (Test Coverage starter) or as a repository property (Agent Readiness). No page documents mutation score or a check that the new tests would fail on a broken change.
+- Property-based and fuzz testing are not documented on any page read.
+
+### Pages read (added dimensions)
+
+All fetched 2026-10-29, index first (https://docs.factory.com/llms.txt). Condensed extraction, see Method above.
+
+- https://docs.factory.com/missions/overview.md
+- https://docs.factory.com/missions/planning.md
+- https://docs.factory.com/missions/reference.md
+- https://docs.factory.com/missions/running-app.md
+- https://factory.com/news/missions
+- https://docs.factory.com/automations/automated-qa.md
+- https://docs.factory.com/automations/code-review-ci.md
+- https://docs.factory.com/software-factory/automations.md
+- https://docs.factory.com/droid-exec/recipes/daily-docs-tests.md
+- https://docs.factory.com/droid-exec/overview.md
+- https://docs.factory.com/harness/hooks.md
+- https://docs.factory.com/software-factory/droid-control.md
+- https://docs.factory.com/agent-readiness/overview.md
+
+### Ruled out (why), added dimensions
+
+- **`/automations/automations.md`**: returned 404 on 2026-10-29; the `/software-factory/automations` page was read instead.
+- **automations/code-review, security-review, wiki/auto-refresh**: local review, security review and wiki refresh; the CI review page stood in for review, and none is about tests the agent wrote. Not fetched, so a test-quality remark there would be missed.
+- **agent-readiness/readiness-report, dashboard, api-reference/readiness-reports**: report and dashboard wrappers of the overview; not fetched.
+- **Benchmarks (Agent Arena, Legacy Bench, NextJS, Review Benchmark, Terminal Bench)**: product evaluations, not a check applied to a user's work.
+- **Release notes and changelog**: not searched; a newer entry could announce a test-quality or held-out-test feature that the pages above do not yet describe. That is a gap, not a finding.
+- **Missions running-cli and the delegation pages**: read for the first grid with no test-quality content; not fetched again here.
