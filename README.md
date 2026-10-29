@@ -28,7 +28,7 @@ and inputs, not a syllabus.
 
 ## Status
 
-Early. The lessons are tool-neutral: the sample factory in `factory/` shows one concrete toolchain, and yours can use any agent, language or runner. The component map, lesson backlog and landscape comparison are in place. Lessons 1 and 2 are written; lesson 3 (verification) is in draft. The sample factory is built live as the course runs.
+Early. The lessons are tool-neutral: the sample factory in `factory/` shows one concrete toolchain, and yours can use any agent, language or runner. The component map, lesson backlog and landscape comparison are in place. Lessons 1 and 2 are written; lesson 3 (verification) has been redone and is in draft. The sample factory is built live as the course runs.
 
 ## What is in this repo
 

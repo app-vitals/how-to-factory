@@ -98,7 +98,7 @@ time is short. The run then shows a patch, a re-review, and the cap.
 - Lesson 2: the stage vocabulary (capabilities grouped by stage, one stage slide, then one slide per capability).
 - Lesson 2: the capability slide pattern (title `Stage: capability`, one why-or-prevents bullet, two "e.g." bullets, one
   diagram, the illustration caption) and the run-of-show format.
-- Lesson 3: checks that gate a PR, so a red CI result is something the loop can read.
+- Lesson 3: a PR that carries an evidence table and a CI result gated by a person-set branch-protection rule, so a red CI result is something the loop can read.
 - The deck rules, the expected / common / crucial ranking, and the Tier A / Tier B split.
 
 **New this time**
@@ -135,7 +135,7 @@ to move to a walk-through. From lessons 1 to 3, revisit after lesson 4.
 ## Prerequisites
 
 - Lesson 1: the plan and dev-task skills and the loop that ends at open PRs.
-- Lesson 3: checks that gate a PR, so there is a CI result to read.
+- Lesson 3: a PR with an evidence table and a required CI result to read.
 - Open PRs on GitHub to route (the lesson's checklist plans the setup, including a reviewer that cannot formally approve
   its own PR).
 
