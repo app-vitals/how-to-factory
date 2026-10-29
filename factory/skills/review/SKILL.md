@@ -21,7 +21,10 @@ request changes) and its URL.
    problems you can point to, with the file and line.
 5. **Post one review.** Use `gh pr review <pr>` exactly once. Approve (`--approve`) when there are no findings.
    Otherwise request changes (`--request-changes`) with a body that lists each finding as a specific, actionable item
-   with file and line. Report the review outcome.
+   with file and line. GitHub rejects `--approve` and `--request-changes` on your own PR ("Can not approve your own pull
+   request"), which happens when the reviewer and the PR author share a `gh` login. In that case post the same body with
+   `--comment` instead, and start the body with a `Verdict: APPROVE` or `Verdict: CHANGES` line so the outcome is still
+   readable. Report the review URL.
 
 ## Rules
 
