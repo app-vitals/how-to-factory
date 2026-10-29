@@ -393,6 +393,10 @@ describe("ALLOWED_TOOLS", () => {
     for (const t of expected) expect(ALLOWED_TOOLS).toContain(t);
   });
 
+  test("includes Agent so dev-task can launch the independent verifier subagent", () => {
+    expect(ALLOWED_TOOLS).toContain("Agent");
+  });
+
   test("excludes broad or dangerous entries", () => {
     for (const t of ["Bash(*)", "Bash(python3 *)", "Bash(sed *)", "Bash(rm *)", "Bash(curl *)"]) {
       expect(ALLOWED_TOOLS).not.toContain(t);
