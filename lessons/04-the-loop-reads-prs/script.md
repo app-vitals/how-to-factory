@@ -66,6 +66,9 @@ Trim order if the cut runs long, first to last:
    - Reassess: a patch changes the PR, so the old review no longer applies.
    - Stop: after a few rounds, hand the PR to a person and leave it alone.
    - New vocabulary to land: a review belongs to a commit; state is read live, not remembered; three outcomes for every PR.
+   - Who does what: the loop is plain code and does all four stages (list, decide, count, skip). The agent is called only
+     for the chosen work, the stub review or the stub patch. On the diagrams violet is the loop's own code and green is an
+     agent.
 3. **See** (about 2 min). One stage slide, then one beat per capability. Each capability: concept, one line on why or
    prevents, two spoken examples _(illustration)_, what it takes to build, then "in our demo we use..." and "yours can be
    anything". Built live in beat 7.

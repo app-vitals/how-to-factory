@@ -50,9 +50,9 @@
       <h2 class="slide-title">Loop: see, decide, reassess, stop</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="concept">
-          <div class="flow"><div class="node node-external">See</div><span class="arrow"></span><div class="node node-agent">Decide</div><span class="arrow"></span><div class="node node-agent">Reassess</div><span class="arrow"></span><div class="node node-human">Stop</div></div>
+          <div class="flow"><div class="node node-external">See</div><span class="arrow"></span><div class="node node-job">Decide</div><span class="arrow"></span><div class="node node-job">Reassess</div><span class="arrow"></span><div class="node node-human">Stop</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><p class="caption">Input is an open PR; output is one outcome.</p>
+        </div><p class="caption">The loop decides; the agent only does the work.</p>
       </div>
       <div class="facecam-zone"></div>
     </div>
@@ -62,7 +62,7 @@
       <h2 class="slide-title">What we build today</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="build-flow">
-          <div class="flow"><div class="node node-external">List PRs</div><span class="arrow"></span><div class="node node-agent">Decide</div><span class="arrow"></span><div class="node node-agent">Review stub</div><span class="arrow"></span><div class="node node-agent">Patch stub</div><span class="arrow"></span><div class="node node-human">Round cap</div></div>
+          <div class="flow"><div class="node node-external">List PRs</div><span class="arrow"></span><div class="node node-job">Decide</div><span class="arrow"></span><div class="node node-agent">Review stub</div><span class="arrow"></span><div class="node node-agent">Patch stub</div><span class="arrow"></span><div class="node node-human">Round cap</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div><p class="caption">Eight capabilities across four stages.</p>
       </div>
@@ -101,7 +101,7 @@
       <h2 class="slide-title">See: state read live each tick</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="stage-see">
-          <div class="flow"><div class="node node-job">Tick</div><span class="arrow"></span><div class="node node-external">List open PRs</div><span class="arrow"></span><div class="node node-agent">Skip drafts</div><span class="arrow"></span><div class="node node-agent">Read verdict</div></div>
+          <div class="flow"><div class="node node-job">Tick</div><span class="arrow"></span><div class="node node-external">List open PRs</div><span class="arrow"></span><div class="node node-job">Skip drafts</div><span class="arrow"></span><div class="node node-job">Read verdict</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div><p class="caption">Three capabilities: list, skip, read the verdict.</p>
       </div>
@@ -113,7 +113,7 @@
       <h2 class="slide-title">See: list every open PR from GitHub</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="cap-a1">
-          <div class="flow"><div class="node node-external">GitHub</div><span class="arrow"></span><div class="node node-agent">List open PRs</div><span class="arrow"></span><div class="node node-agent">Read each one</div><span class="arrow"></span><div class="node node-store">Facts per PR</div></div>
+          <div class="flow"><div class="node node-external">GitHub</div><span class="arrow"></span><div class="node node-job">List open PRs</div><span class="arrow"></span><div class="node node-job">Read each one</div><span class="arrow"></span><div class="node node-store">Facts per PR</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div><ul class="bullets"><li>Prevents deciding from a stale copy</li><li>e.g. Own file says PR 12 reviewed</li><li>e.g. A closed PR drops out</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
       </div>
@@ -125,7 +125,7 @@
       <h2 class="slide-title">See: skip drafts and its own PRs</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="cap-a2">
-          <div class="flow"><div class="node node-external">Open PRs</div><span class="arrow"></span><div class="node node-agent">Drop drafts</div><span class="arrow"></span><div class="node node-agent">Drop own PRs</div><span class="arrow"></span><div class="node node-store">Candidates</div></div>
+          <div class="flow"><div class="node node-external">Open PRs</div><span class="arrow"></span><div class="node node-job">Drop drafts</div><span class="arrow"></span><div class="node node-job">Drop own PRs</div><span class="arrow"></span><div class="node node-store">Candidates</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div><ul class="bullets"><li>Prevents reviewing work nobody asked for</li><li>e.g. Half-finished draft costs a review</li><li>e.g. Marked ready, picked up next tick</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
       </div>
@@ -151,8 +151,8 @@
         <div class="visual diagram" data-diagram="stage-decide">
           <svg viewBox="0 0 640 300" role="img" aria-label="Routing state diagram"><defs><marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0 0 L10 4 L0 8 z" fill="rgba(255,255,255,0.5)"/></marker></defs>
             <g class="node node-external"><rect x="20" y="127" width="140" height="46"/><text x="90.0" y="150">Open PR</text></g>
-            <g class="node node-agent"><rect x="440" y="20" width="180" height="46"/><text x="530.0" y="43">Needs review</text></g>
-            <g class="node node-agent"><rect x="440" y="127" width="180" height="46"/><text x="530.0" y="150">Needs patch</text></g>
+            <g class="node node-job"><rect x="440" y="20" width="180" height="46"/><text x="530.0" y="43">Needs review</text></g>
+            <g class="node node-job"><rect x="440" y="127" width="180" height="46"/><text x="530.0" y="150">Needs patch</text></g>
             <g class="node node-human"><rect x="440" y="234" width="180" height="46"/><text x="530.0" y="257">Waiting for human</text></g>
             <path class="link" d="M160 140 Q300 43 440 43"/><path class="link" d="M160 150 L440 150"/><path class="link" d="M160 160 Q300 257 440 257"/>
           </svg>
@@ -167,7 +167,7 @@
       <h2 class="slide-title">Decide: no verdict on the head, review</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="cap-a3">
-          <div class="flow"><div class="node node-agent">Read head</div><span class="arrow"></span><div class="node node-agent">Find verdict</div><span class="arrow"></span><div class="node node-agent">None for head</div><span class="arrow"></span><div class="node node-agent">Review</div></div>
+          <div class="flow"><div class="node node-job">Read head</div><span class="arrow"></span><div class="node node-job">Find verdict</div><span class="arrow"></span><div class="node node-job">None for head</div><span class="arrow"></span><div class="node node-agent">Review</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div><ul class="bullets"><li>Prevents reviewing one commit twice</li><li>e.g. Verdict on a1b2c3, head d4e5f6</li><li>e.g. Same head, same verdict: skip</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
       </div>
@@ -183,7 +183,7 @@
             <g class="node node-agent"><rect x="20" y="20" width="140" height="46"/><text x="90.0" y="43">Findings</text></g>
             <g class="node node-external"><rect x="20" y="127" width="140" height="46"/><text x="90.0" y="150">Red CI</text></g>
             <g class="node node-external"><rect x="20" y="234" width="140" height="46"/><text x="90.0" y="257">Conflict</text></g>
-            <g class="node node-agent"><rect x="440" y="127" width="180" height="46"/><text x="530.0" y="150">Needs patch</text></g>
+            <g class="node node-job"><rect x="440" y="127" width="180" height="46"/><text x="530.0" y="150">Needs patch</text></g>
             <path class="link" d="M160 43 Q300 43 440 140"/><path class="link" d="M160 150 L440 150"/><path class="link" d="M160 257 Q300 257 440 160"/>
           </svg>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
@@ -228,7 +228,7 @@
       <h2 class="slide-title">Stop: cap the rounds, flag a person</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="cap-a7">
-          <div class="flow"><div class="node node-agent">Patch round</div><span class="arrow"></span><div class="node node-store">Count rounds</div><span class="arrow"></span><div class="node node-agent">At the cap</div><span class="arrow"></span><div class="node node-human">Flag a person</div><span class="arrow"></span><div class="node node-agent">Skip the PR</div></div>
+          <div class="flow"><div class="node node-agent">Patch round</div><span class="arrow"></span><div class="node node-store">Count rounds</div><span class="arrow"></span><div class="node node-job">At the cap</div><span class="arrow"></span><div class="node node-human">Flag a person</div><span class="arrow"></span><div class="node node-job">Skip the PR</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div><ul class="bullets"><li>Prevents an unfixable PR looping all night</li><li>e.g. Flaky test: review, patch, repeat</li><li>e.g. At 3 rounds, label needs human</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
       </div>
@@ -358,7 +358,7 @@
       <div class="slide-body">
         <div class="eyebrow">Exercise</div>
         <div class="visual diagram" data-diagram="exercise-steps">
-          <div class="flow"><div class="node node-external">Read PRs</div><span class="arrow"></span><div class="node node-agent">Route each</div><span class="arrow"></span><div class="node node-agent">Re-review</div><span class="arrow"></span><div class="node node-human">Round cap</div></div>
+          <div class="flow"><div class="node node-external">Read PRs</div><span class="arrow"></span><div class="node node-job">Route each</div><span class="arrow"></span><div class="node node-agent">Re-review</div><span class="arrow"></span><div class="node node-human">Round cap</div></div>
           
         </div><ul class="bullets"><li>Any agent, any language</li><li>Each PR gets exactly one outcome</li><li>A capped PR flags a person</li></ul>
       </div>
