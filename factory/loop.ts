@@ -1,6 +1,9 @@
 // The factory loop: pick one ready task, hand it to Claude Code running the dev-task skill, repeat.
 // The loop owns status: pending -> in_progress -> pr. `pr` is terminal.
 
+import { pickCandidate } from "./candidates.ts";
+import { attemptsStore, type AttemptsStore } from "./pr-attempts.ts";
+import { ghPrSource, type PrSource, type PullRequest } from "./prs.ts";
 import type { Task } from "./tasks.schema.ts";
 import { fileStore, type TaskStore } from "./tasks.store.ts";
 
@@ -26,6 +29,10 @@ export const ALLOWED_TOOLS: string[] = [
 
 export const AGENT_CMD: string[] = ["claude", "-p", "/dev-task {id}", "--allowedTools", ALLOWED_TOOLS.join(",")];
 
+/** Claude Code headless, reviewing or patching one open PR. `{pr}` is substituted with the PR number. */
+export const REVIEW_CMD: string[] = ["claude", "-p", "/review {pr}", "--allowedTools", ALLOWED_TOOLS.join(",")];
+export const PATCH_CMD: string[] = ["claude", "-p", "/patch {pr}", "--allowedTools", ALLOWED_TOOLS.join(",")];
+
 /** First pending task whose dependencies have all reached `pr`, else null. */
 export function pickNext(tasks: Task[]): Task | null {
   const done = new Set(tasks.filter((t) => t.status === "pr").map((t) => t.id));
@@ -44,7 +51,23 @@ interface LoopResult {
 /** How long the loop sleeps before re-polling when no task is ready. */
 export const LOOP_IDLE_MS = 60_000;
 
+/** Runs the agent to review or patch one PR; resolves to the process exit code. */
+export type PrRunner = (pr: PullRequest, action: "review" | "patch") => Promise<number>;
+
+/** Stands in for the attempts store when no PR source is wired, so the loop works on tasks alone. */
+const NO_ATTEMPTS: AttemptsStore = {
+  get: () => undefined,
+  record: () => {},
+  exceeded: () => false,
+  flagForHuman: async () => {},
+  sync: () => {},
+};
+
 export interface LoopOptions {
+  /** Open PRs to review or patch. Without it (and `attempts`, `runPr`) the loop works on tasks only. */
+  prs?: PrSource;
+  attempts?: AttemptsStore;
+  runPr?: PrRunner;
   /** Defaults to Bun.sleep; tests inject a fake so they never wait real time. */
   sleep?: (ms: number) => Promise<unknown>;
   /** Aborting stops the loop: immediately when idle, after the current task otherwise. */
@@ -75,15 +98,57 @@ export async function runLoop(
   store: TaskStore,
   run: Runner,
   log: (msg: string) => void = () => {},
-  { sleep = Bun.sleep, signal }: LoopOptions = {},
+  { sleep = Bun.sleep, signal, prs, attempts = NO_ATTEMPTS, runPr }: LoopOptions = {},
 ): Promise<LoopResult> {
   const ran: string[] = [];
   let stuckKey = "";
   let idle = false;
+  const errMsg = (err: unknown) => (err instanceof Error ? err.message : String(err));
 
   while (!signal?.aborted) {
     const tasks = store.load();
-    const next = pickNext(tasks);
+
+    let open: PullRequest[] = [];
+    if (prs) {
+      try {
+        open = await prs.list();
+        attempts.sync(open);
+      } catch (err) {
+        log(`could not list PRs, continuing with tasks only: ${errMsg(err)}`);
+        open = [];
+      }
+    }
+
+    const { candidate, newlyExceeded } = pickCandidate(tasks, open, attempts);
+    for (const pr of newlyExceeded) {
+      try {
+        await attempts.flagForHuman(pr.number);
+        log(`PR #${pr.number} hit the attempt limit; flagged for a human`);
+      } catch (err) {
+        log(`could not flag PR #${pr.number} for a human: ${errMsg(err)}`);
+      }
+    }
+
+    if (candidate?.kind === "pr") {
+      idle = false;
+      const { pr, action } = candidate;
+      log(`${action} PR #${pr.number}: ${pr.title}`);
+      let code: number;
+      try {
+        if (!runPr) throw new Error("no PR runner configured");
+        code = await runPr(pr, action);
+      } catch (err) {
+        log(`PR #${pr.number} ${action} threw: ${errMsg(err)}`);
+        code = -1;
+      }
+      // Every run counts, pass or fail, so a PR that never settles ends up with a human.
+      // A failed write is not caught: without the count the same PR would be rerun forever.
+      attempts.record(pr.number, action, pr.headSha);
+      if (code !== 0) log(`PR #${pr.number} ${action} failed (exit ${code}); continuing`);
+      continue;
+    }
+
+    const next = candidate?.task ?? null;
 
     if (!next) {
       const stuck = tasks.filter((t) => t.status === "in_progress").map((t) => t.id);
@@ -133,10 +198,26 @@ export function agentRunner(template: string[]): Runner {
   };
 }
 
+/** Builds a PR runner from the review and patch argv templates, with `{pr}` substituted in each arg. */
+export function prRunner(reviewCmd: string[], patchCmd: string[]): PrRunner {
+  return async (pr, action) => {
+    const template = action === "review" ? reviewCmd : patchCmd;
+    const cmd = template.map((a) => a.replaceAll("{pr}", String(pr.number)));
+    const proc = Bun.spawn(cmd, { stdin: "inherit", stdout: "inherit", stderr: "inherit" });
+    return proc.exited;
+  };
+}
+
+export interface PrCommands {
+  reviewCmd?: string[];
+  patchCmd?: string[];
+}
+
 export async function main(
   store: TaskStore = fileStore(),
   agentCmd: string[] = AGENT_CMD,
-  { sleep, signal }: LoopOptions = {},
+  { sleep, signal, prs, attempts, runPr }: LoopOptions = {},
+  { reviewCmd = REVIEW_CMD, patchCmd = PATCH_CMD }: PrCommands = {},
 ): Promise<number> {
   store.load(); // validate up front
   const controller = new AbortController();
@@ -149,6 +230,9 @@ export async function main(
     const { stoppedOn } = await runLoop(store, agentRunner(agentCmd), (m) => console.log(`[loop] ${m}`), {
       sleep,
       signal: controller.signal,
+      prs,
+      attempts,
+      runPr: runPr ?? prRunner(reviewCmd, patchCmd),
     });
     return stoppedOn ? 1 : 0;
   } finally {
@@ -158,4 +242,6 @@ export async function main(
   }
 }
 
-if (import.meta.main) process.exit(await main());
+if (import.meta.main) {
+  process.exit(await main(fileStore(), AGENT_CMD, { prs: ghPrSource(), attempts: attemptsStore() }));
+}

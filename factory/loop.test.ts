@@ -1,5 +1,23 @@
 import { describe, expect, test } from "bun:test";
-import { AGENT_CMD, agentRunner, ALLOWED_TOOLS, LOOP_IDLE_MS, main, pickNext, runLoop, type Runner } from "./loop.ts";
+import { mkdtempSync, readFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import {
+  AGENT_CMD,
+  agentRunner,
+  ALLOWED_TOOLS,
+  LOOP_IDLE_MS,
+  main,
+  PATCH_CMD,
+  pickNext,
+  prRunner,
+  REVIEW_CMD,
+  runLoop,
+  type PrRunner,
+  type Runner,
+} from "./loop.ts";
+import { attemptsStore, MAX_PR_ATTEMPTS, type AttemptsStore } from "./pr-attempts.ts";
+import type { PrSource, PullRequest } from "./prs.ts";
 import type { Task, TaskStatus } from "./tasks.schema.ts";
 import type { TaskStore } from "./tasks.store.ts";
 
@@ -11,6 +29,14 @@ const task = (id: string, status: TaskStatus = "pending", dependencies: string[]
   dependencies,
   status,
 });
+
+const NOOP_ATTEMPTS: AttemptsStore = {
+  get: () => undefined,
+  record: () => {},
+  exceeded: () => false,
+  flagForHuman: async () => {},
+  sync: () => {},
+};
 
 /** In-memory store that records every status transition. */
 function memStore(tasks: Task[]) {
@@ -183,6 +209,113 @@ describe("runLoop", () => {
       return 0;
     };
     expect((await runLoop(store, run, undefined, fakeSleep())).ran).toEqual(["A", "B"]);
+  });
+});
+
+describe("runLoop PR routing", () => {
+  const ok: Runner = async () => 0;
+  const pr = (number: number, over: Partial<PullRequest> = {}): PullRequest => ({
+    number,
+    title: `PR ${number}`,
+    branch: `feat/other-${number}`,
+    createdAt: "2026-10-29T10:00:00.000Z",
+    isDraft: false,
+    headSha: `sha${number}`,
+    ci: "pass",
+    mergeable: "clean",
+    reviewDecision: "none",
+    labels: [],
+    ...over,
+  });
+  const stamped = (id: string, createdAt: string): Task => ({ ...task(id), createdAt });
+
+  /** PR source whose list reflects what the fake runner has done: reviewed PRs get approved, patched ones go green. */
+  function world(prs: PullRequest[]) {
+    const calls: string[] = [];
+    const flagged: number[] = [];
+    const source: PrSource = { list: async () => prs.map((p) => ({ ...p })) };
+    const real = attemptsStore(join(mkdtempSync(join(tmpdir(), "loop-")), "attempts.json"));
+    const attempts: AttemptsStore = {
+      ...real,
+      flagForHuman: async (n) => {
+        flagged.push(n);
+        await real.flagForHuman(n, async () => ({ exitCode: 0, stdout: "", stderr: "" }));
+        const p = prs.find((x) => x.number === n)!;
+        p.labels = [...p.labels, "needs-human"];
+      },
+    };
+    return { source, attempts, calls, flagged, prs };
+  }
+
+  test("runs the oldest candidate first across tasks and PRs", async () => {
+    const w = world([pr(7, { createdAt: "2026-10-29T10:00:00.000Z" }), pr(9, { createdAt: "2026-10-29T12:00:00.000Z" })]);
+    const { store } = memStore([stamped("T1", "2026-10-29T11:00:00.000Z")]);
+    const order: string[] = [];
+    const run: Runner = async (t) => (order.push(`task ${t.id}`), 0);
+    const runPr: PrRunner = async (p, a) => (order.push(`${a} ${p.number}`), 0);
+    await runLoop(store, run, undefined, { ...fakeSleep(), prs: w.source, attempts: w.attempts, runPr });
+    expect(order.slice(0, 3)).toEqual(["review 7", "task T1", "review 9"]);
+  });
+
+  test("a review and a patch route to their own command with {pr} substituted", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "loop-cmd-"));
+    const reviewOut = join(dir, "review");
+    const patchOut = join(dir, "patch");
+    const reviewCmd = ["sh", "-c", `echo "$0" > ${reviewOut}`, "{pr}"];
+    const patchCmd = ["sh", "-c", `echo "$0" > ${patchOut}`, "{pr}"];
+    const run = prRunner(reviewCmd, patchCmd);
+    expect(await run(pr(12), "review")).toBe(0);
+    expect(await run(pr(34), "patch")).toBe(0);
+    expect(readFileSync(reviewOut, "utf8").trim()).toBe("12");
+    expect(readFileSync(patchOut, "utf8").trim()).toBe("34");
+    expect(REVIEW_CMD.some((a) => a.includes("{pr}"))).toBe(true);
+    expect(PATCH_CMD.some((a) => a.includes("{pr}"))).toBe(true);
+  });
+
+  test("a failed patch does not stop the loop and counts as an attempt", async () => {
+    const w = world([pr(5, { ci: "fail" })]);
+    const { store } = memStore([task("A")]);
+    const s = fakeSleep();
+    const runPr: PrRunner = async (p, a) => (w.calls.push(`${a} ${p.number}`), 1);
+    const result = await runLoop(store, ok, undefined, { ...s, prs: w.source, attempts: w.attempts, runPr });
+    expect(result.stoppedOn).toBeNull();
+    expect(w.calls[0]).toBe("patch 5");
+    expect(w.attempts.get(5)?.patches).toBeGreaterThanOrEqual(1);
+    expect(result.ran).toEqual(["A"]);
+  });
+
+  test("a PR reaching the limit is flagged once and never run again", async () => {
+    const w = world([pr(5, { ci: "fail" })]);
+    const { store } = memStore([]);
+    const runPr: PrRunner = async (p, a) => (w.calls.push(`${a} ${p.number}`), 1);
+    await runLoop(store, ok, undefined, { ...fakeSleep(2), prs: w.source, attempts: w.attempts, runPr });
+    expect(w.calls).toHaveLength(MAX_PR_ATTEMPTS);
+    expect(w.flagged).toEqual([5]);
+    expect(w.attempts.get(5)?.flagged).toBe(true);
+  });
+
+  test("a throwing PrSource still lets a pending task run", async () => {
+    const { store, history } = memStore([task("A")]);
+    const logs: string[] = [];
+    const prs: PrSource = {
+      list: async () => {
+        throw new Error("gh down");
+      },
+    };
+    const result = await runLoop(store, ok, (m) => logs.push(m), { ...fakeSleep(), prs, attempts: NOOP_ATTEMPTS });
+    expect(result.ran).toEqual(["A"]);
+    expect(history).toEqual(["A:in_progress", "A:pr"]);
+    expect(logs.some((m) => m.includes("gh down"))).toBe(true);
+  });
+
+  test("sleeps only when there are no candidates", async () => {
+    const w = world([pr(5, { ci: "fail" })]);
+    const { store } = memStore([]);
+    const runPr: PrRunner = async () => 0;
+    const s = fakeSleep();
+    await runLoop(store, ok, undefined, { ...s, prs: w.source, attempts: w.attempts, runPr });
+    // three patch runs, then the limit leaves nothing to do: exactly one sleep
+    expect(s.calls).toEqual([LOOP_IDLE_MS]);
   });
 });
 
