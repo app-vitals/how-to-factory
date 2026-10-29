@@ -14,6 +14,7 @@ export const ALLOWED_TOOLS: string[] = [
   "Write",
   "Glob",
   "Grep",
+  "Agent",
   "Bash(git *)",
   "Bash(gh *)",
   "Bash(bun *)",
