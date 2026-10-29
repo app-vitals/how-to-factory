@@ -52,6 +52,14 @@ describe("counts", () => {
     expect(attemptsStore(path).get(7)).toEqual({ reviews: 1, patches: 1, reviewedSha: "sha1" });
   });
 
+  test("a failed review counts but does not set reviewedSha", () => {
+    const s = attemptsStore(path);
+    s.record(7, "review", "sha1", false);
+    expect(s.get(7)).toEqual({ reviews: 1, patches: 0 });
+    s.record(7, "review", "sha1", true);
+    expect(s.get(7)?.reviewedSha).toBe("sha1");
+  });
+
   test("exceeded flips exactly at the 3rd recorded attempt", () => {
     expect(MAX_PR_ATTEMPTS).toBe(3);
     const s = attemptsStore(path);

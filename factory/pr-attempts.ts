@@ -20,7 +20,8 @@ export interface PrAttempts {
 
 export interface AttemptsStore {
   get(pr: number): PrAttempts | undefined;
-  record(pr: number, kind: AttemptKind, sha: string): void;
+  /** Counts the attempt either way; a review only marks `sha` as reviewed when it succeeded, so a crashed one is retried. */
+  record(pr: number, kind: AttemptKind, sha: string, succeeded?: boolean): void;
   exceeded(pr: number): boolean;
   /** Adds the `needs-human` label and one comment, only if this PR has not been flagged already. */
   flagForHuman(pr: number, gh?: GhRunner): Promise<void>;
@@ -66,11 +67,11 @@ export function attemptsStore(path: string = PR_ATTEMPTS_PATH): AttemptsStore {
   };
   return {
     get: (pr) => readEntries(path)[key(pr)],
-    record(pr, kind, sha) {
+    record(pr, kind, sha, succeeded = true) {
       update(pr, (e) => {
         if (kind === "review") {
           e.reviews += 1;
-          e.reviewedSha = sha;
+          if (succeeded) e.reviewedSha = sha;
         } else {
           e.patches += 1;
         }
