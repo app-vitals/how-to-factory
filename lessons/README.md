@@ -180,13 +180,19 @@ _Depends on: Observability / ops._
 ### Observability / ops
 _A labelled sub-section of Feedback / maintenance, as in [components](../docs/components.md), not a component of its own._
 
-- Read a run transcript to see why the agent did what it did
-- Keep a run log of what each tick did
-- Track token and cost spend per task and per day
-- Detect a stalled loop (stuck claims, growing queue age)
-- Alert when the factory goes quiet
+- Read a run transcript to see why the agent did what it did (a follow-on candidate, see below)
+- Keep a run log of what each tick did, and show the queue with the reason each item is waiting. Taught by [lesson 5, See what the factory is doing](05-see-what-the-factory-is-doing/brief.md) (Tier A: record, queue, log, history; one local agent, built live; not yet taught)
+- Track token and cost spend per task and per day (a follow-on candidate)
+- Detect a stalled loop (stuck claims, growing queue age) (a follow-on candidate)
+- Alert when the factory goes quiet (a follow-on candidate)
 - Run the factory itself: secrets, sandboxing, rolling out a new agent image
 - Write an on-call runbook for an agent
+
+Follow-on candidates from lesson 5, unordered, none scheduled:
+- Transcript reading and the investigation skill: read a run's transcript to answer why the agent did what it did, then package that as a skill
+- Token and cost spend per task and per day
+- Stall detection: stuck claims and growing queue age
+- Alerts when the factory goes quiet
 
 ### Memory / learning
 - Write an instructions file and improve it from corrections
