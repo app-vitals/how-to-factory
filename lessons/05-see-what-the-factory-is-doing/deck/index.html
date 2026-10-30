@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lesson 5: See what the factory is doing</title>
+<link rel="stylesheet" href="../../../decks/deck.css" />
+</head>
+<body>
+<!-- SKETCH (LOQ-2.1): title, factory map, one stage slide, one capability slide. The rest is written after review. -->
+<div id="counter"></div>
+<main>
+  <section class="slide slide-title-slide" data-kind="title">
+    <div class="slide-inner">
+      <h1 class="slide-title">See What the Factory Is Doing</h1>
+      <div class="slide-body">
+        <p class="subtitle">Observability / ops: record, queue, log, history</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Factory map: the factory explains itself</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="factory-map">
+          <div class="grid-arch">
+            <div class="node node-human is-built">Intake</div><div class="node node-agent is-built">Planning</div><div class="node node-agent is-built">Execution</div><div class="node node-agent is-built">Verification</div>
+            <div class="node node-agent is-planned">Review</div><div class="node node-external is-planned">Release</div><div class="node node-job is-built">Loop</div><div class="node node-store is-active">Observability / ops</div>
+          </div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><p class="caption">Governance, feedback and memory support all of these.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Observability: record, queue, log, history</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="concept">
+          <div class="flow"><div class="node node-agent">Record</div><span class="arrow"></span><div class="node node-store">Queue</div><span class="arrow"></span><div class="node node-store">Log</div><span class="arrow"></span><div class="node node-human">History</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><p class="caption">Each tick leaves a record a person can read.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Queue: an Upcoming view in pick order</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="queue-item">
+          <div class="flow"><div class="node node-store">PR #12</div><span class="arrow"></span><div class="node node-job">Round cap reached</div><span class="arrow"></span><div class="node node-human">Needs a person</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>A person sees what is next and why</li><li>e.g. A PR waits: round cap reached</li><li>e.g. A task waits: dependency not merged</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+</main>
+<script src="../../../decks/deck.js"></script>
+</body>
+</html>
