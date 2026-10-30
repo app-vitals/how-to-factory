@@ -179,6 +179,42 @@
     {
       "id": "route-state",
       "label": "Where PR state lives"
+    },
+    {
+      "id": "act-list",
+      "label": "Shows a list of current work"
+    },
+    {
+      "id": "act-status",
+      "label": "Shows a status per item"
+    },
+    {
+      "id": "act-reason",
+      "label": "States why an item is waiting"
+    },
+    {
+      "id": "act-log",
+      "label": "Keeps a run or activity log"
+    },
+    {
+      "id": "act-history",
+      "label": "Keeps history of finished work"
+    },
+    {
+      "id": "act-pr-link",
+      "label": "Links an item to its PR"
+    },
+    {
+      "id": "act-why",
+      "label": "Shows why the agent did something"
+    },
+    {
+      "id": "act-cost",
+      "label": "Shows cost or usage per item"
+    },
+    {
+      "id": "act-local",
+      "label": "Works as one local agent, no account"
     }
   ],
   "products": [
@@ -484,6 +520,78 @@
           "asOf": "2026-10-29",
           "short": "Coverage only; nothing checks test strength",
           "chip": "◐"
+        },
+        "act-list": {
+          "name": "Sessions list",
+          "summary": "Sessions are listed through the API and the Devin MCP; a web-app sessions list is not documented. Other surface (Automations): events that wait for a free concurrency slot show as Queued in the Activity tab.",
+          "sourceUrl": "https://docs.devin.ai/product-guides/automations.md",
+          "asOf": "2026-10-30",
+          "short": "API and MCP list; Automations show Queued",
+          "chip": "◐"
+        },
+        "act-status": {
+          "name": "Session status",
+          "summary": "Each session record carries a status (new, claimed, running, exit, error, suspended, resuming) plus a finer detail such as working, waiting for user or waiting for approval.",
+          "sourceUrl": "https://docs.devin.ai/api-reference/v3/sessions/get-organizations-session.md",
+          "asOf": "2026-10-30",
+          "short": "Status plus detail on each session",
+          "chip": "✓"
+        },
+        "act-reason": {
+          "name": "Status detail",
+          "summary": "Partly: the session status detail names waiting for the user, waiting for approval, inactivity or a named limit. Automation skips are covered on another surface (Activity tab), with gaps; whether the Activity tab shows a skip reason is not documented.",
+          "sourceUrl": "https://docs.devin.ai/api-reference/v3/sessions/get-organizations-session.md",
+          "asOf": "2026-10-30",
+          "short": "Detail names the wait; skip reason gaps",
+          "chip": "◐"
+        },
+        "act-log": {
+          "name": "Progress tab",
+          "summary": "A Progress tab logs shell commands, code edits and browser activity per session, with a command history to jump to a point. Other surface (Automations): an Activity tab lists invocations.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-session-tools.md",
+          "asOf": "2026-10-30",
+          "short": "Progress tab logs commands, edits, browser",
+          "chip": "✓"
+        },
+        "act-history": {
+          "name": "Archive",
+          "summary": "Finished sessions stay listable and can be archived. How long sessions, logs or Activity entries are kept is not documented.",
+          "sourceUrl": "https://docs.devin.ai/integrations/slack.md",
+          "asOf": "2026-10-30",
+          "short": "Listable and archivable; retention not documented",
+          "chip": "◐"
+        },
+        "act-pr-link": {
+          "name": "Session pull requests",
+          "summary": "The session record lists its pull requests; Linear and Slack show them too.",
+          "sourceUrl": "https://docs.devin.ai/api-reference/v3/sessions/get-organizations-session.md",
+          "asOf": "2026-10-30",
+          "short": "Session record lists its PRs",
+          "chip": "✓"
+        },
+        "act-why": {
+          "name": "Session Insights",
+          "summary": "The Progress tab and command history show what was run and edited; Session Insights builds a timeline of key events after the session. A raw reasoning transcript export is not documented.",
+          "sourceUrl": "https://docs.devin.ai/product-guides/session-insights.md",
+          "asOf": "2026-10-30",
+          "short": "Progress tab, then Insights timeline",
+          "chip": "◐"
+        },
+        "act-cost": {
+          "name": "ACUs",
+          "summary": "Usage in ACUs is shown per session in Session Insights and on the session record. Cost per automation run is not documented.",
+          "sourceUrl": "https://docs.devin.ai/product-guides/session-insights.md",
+          "asOf": "2026-10-30",
+          "short": "ACUs per session; per run not documented",
+          "chip": "◐"
+        },
+        "act-local": {
+          "name": "Devin CLI",
+          "summary": "Partly: the CLI keeps conversation history locally and can resume it, but cloud sessions from the CLI need a Devin account. A queue or status view for local CLI sessions is not documented.",
+          "sourceUrl": "https://docs.devin.ai/cli/essential-commands.md",
+          "asOf": "2026-10-30",
+          "short": "CLI history is local; no status view",
+          "chip": "◐"
         }
       },
       "demoable": {
@@ -774,6 +882,78 @@
         },
         "verify-test-quality": {
           "omitted": "Pages checked: missions overview, planning, reference, running-app, factory.com/news/missions. Validators run tests and look for regressions; nothing measures the tests. Not documented; checked on 2026-10-29."
+        },
+        "act-list": {
+          "name": "Mission Control",
+          "summary": "A left sidebar lists active and completed workers and you can open any feature. A queue of waiting features is not documented.",
+          "sourceUrl": "https://docs.factory.com/missions/running-app.md",
+          "asOf": "2026-10-30",
+          "short": "Sidebar lists workers; no queue documented",
+          "chip": "◐"
+        },
+        "act-status": {
+          "name": "Automation run states",
+          "summary": "Not documented as a status vocabulary for Mission Control. Other surface (Automations): automations have states from Creating to Failed. Other surface (Sessions API): sessions are idle, pending or running.",
+          "sourceUrl": "https://docs.factory.com/automations/custom.md",
+          "asOf": "2026-10-30",
+          "short": "Statuses only on Automations and API",
+          "chip": "◐"
+        },
+        "act-reason": {
+          "name": "Events feed",
+          "summary": "Not documented on Mission Control beyond a freeze or retry-limit warning to investigate. Other surface (Automations): the Events feed names the cause of each skipped delivery and automatic pause.",
+          "sourceUrl": "https://docs.factory.com/automations/custom.md",
+          "asOf": "2026-10-30",
+          "short": "Causes named on Automations only",
+          "chip": "◐"
+        },
+        "act-log": {
+          "name": "Progress log",
+          "summary": "A right sidebar keeps a live progress log of every worker and milestone.",
+          "sourceUrl": "https://docs.factory.com/missions/running-app.md",
+          "asOf": "2026-10-30",
+          "short": "Live progress log of every worker",
+          "chip": "✓"
+        },
+        "act-history": {
+          "name": "Mission Control tab",
+          "summary": "Past missions are found on the Mission Control tab. How long they are kept is not documented; retention is stated only elsewhere (30 days for webhook deliveries, 7 days for Slack code channels).",
+          "sourceUrl": "https://docs.factory.com/missions/running-app.md",
+          "asOf": "2026-10-30",
+          "short": "Past missions listed; retention not documented",
+          "chip": "◐"
+        },
+        "act-pr-link": {
+          "name": "Session artifacts",
+          "summary": "A PR link on a Mission Control feature or mission is not documented. Other surface (Sessions API): artifacts list the pull requests a session touched.",
+          "sourceUrl": "https://docs.factory.com/api-reference/sessions.md",
+          "asOf": "2026-10-30",
+          "short": "PR links only via Sessions API",
+          "chip": "◐"
+        },
+        "act-why": {
+          "name": "Worker view",
+          "summary": "Open a worker to see its terminal output, thought process and sub-tasks.",
+          "sourceUrl": "https://docs.factory.com/missions/running-app.md",
+          "asOf": "2026-10-30",
+          "short": "Open a worker for its thought process",
+          "chip": "✓"
+        },
+        "act-cost": {
+          "name": "Credits",
+          "summary": "Mission-level time and credits are shown in the top bar. Per feature or per worker cost is not documented. Other surface (Sessions API): total credits per session.",
+          "sourceUrl": "https://docs.factory.com/missions/running-app.md",
+          "asOf": "2026-10-30",
+          "short": "Mission-level credits; per worker not documented",
+          "chip": "◐"
+        },
+        "act-local": {
+          "name": "Droid CLI",
+          "summary": "The CLI runs Mission Control, but the richer dashboard is in the Factory App, which requires sign-in. Running with no Factory account is not documented.",
+          "sourceUrl": "https://docs.factory.com/missions/running-cli.md",
+          "asOf": "2026-10-30",
+          "short": "CLI runs Mission Control; no-account unknown",
+          "chip": "◐"
         }
       },
       "demoable": {
@@ -1071,6 +1251,78 @@
         },
         "verify-test-quality": {
           "omitted": "Pages checked: get-the-best-results, improve-a-project (docs.github.com). Code Quality coverage thresholds exist on another surface; coverage, not strength. Not documented; checked on 2026-10-29."
+        },
+        "act-list": {
+          "name": "Agent sessions",
+          "summary": "An agents panel, the Copilot home page and the repository Agents tab list sessions. A queue of issues waiting for Copilot is not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents.md",
+          "asOf": "2026-10-30",
+          "short": "Panel and Agents tab; no queue documented",
+          "chip": "◐"
+        },
+        "act-status": {
+          "name": "Agent tasks API",
+          "summary": "Status names in the session list are not documented. Other surface (Agent tasks API): a task state is queued, in_progress, completed, failed, idle, waiting_for_user, timed_out or cancelled.",
+          "sourceUrl": "https://docs.github.com/en/rest/agent-tasks/agent-tasks.md",
+          "asOf": "2026-10-30",
+          "short": "State names only in the Agent tasks API",
+          "chip": "◐"
+        },
+        "act-reason": {
+          "name": "Troubleshooting",
+          "summary": "Partly and scattered: a firewall warning on the PR, an Approve and run workflows button, and a one-hour timeout. A reason in the session list is not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/troubleshoot-cloud-agent.md",
+          "asOf": "2026-10-30",
+          "short": "Scattered reasons; none in session list",
+          "chip": "◐"
+        },
+        "act-log": {
+          "name": "Session log",
+          "summary": "A session log shows the agent's reasoning and the tools it used, streamed live while it works.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents.md",
+          "asOf": "2026-10-30",
+          "short": "Live session log of reasoning and tools",
+          "chip": "✓"
+        },
+        "act-history": {
+          "name": "Archived sessions",
+          "summary": "An Actions session's log stays on GitHub.com, and sessions can be archived but not deleted. How long chat data is kept is stated differently on two pages.",
+          "sourceUrl": "https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/session-data.md",
+          "asOf": "2026-10-30",
+          "short": "Archive only; retention pages disagree",
+          "chip": "◐"
+        },
+        "act-pr-link": {
+          "name": "Copilot started work",
+          "summary": "A Copilot started work event on the PR links to the session, and each Copilot commit message links to the session logs.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents.md",
+          "asOf": "2026-10-30",
+          "short": "PR event and commits link to session",
+          "chip": "✓"
+        },
+        "act-why": {
+          "name": "Session log",
+          "summary": "The session log is the answer, and the commit-message link is described as the way to trace why a change was made. A rationale per decision outside issue triage is not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents.md",
+          "asOf": "2026-10-30",
+          "short": "Session log and commit link; no rationale",
+          "chip": "◐"
+        },
+        "act-cost": {
+          "name": "Session overview",
+          "summary": "The session overview shows token usage and session length. A per-session credit figure in the session list is not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents.md",
+          "asOf": "2026-10-30",
+          "short": "Tokens and length; no credit figure",
+          "chip": "◐"
+        },
+        "act-local": {
+          "name": "Copilot CLI",
+          "summary": "Not on the pages read for cloud sessions, which run in a GitHub-hosted sandbox or an Actions job. Other surface (Copilot CLI): runs on the person's machine by default but asks for a GitHub login; use with no GitHub account is not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/overview.md",
+          "asOf": "2026-10-30",
+          "short": "Cloud no; CLI local but needs GitHub login",
+          "chip": "◐"
         }
       },
       "demoable": {
@@ -1359,6 +1611,78 @@
         },
         "verify-test-quality": {
           "omitted": "Page checked: Goal Completion Loop (docs.openhands.dev). Nothing grades the tests. Not documented; checked on 2026-10-29."
+        },
+        "act-list": {
+          "name": "Agent Canvas sidebar",
+          "summary": "The sidebar lists conversations and the Automate view lists automations. A queue of waiting issues or tasks is not documented.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/agent-canvas/conversations.md",
+          "asOf": "2026-10-30",
+          "short": "Sidebar lists conversations; no queue documented",
+          "chip": "◐"
+        },
+        "act-status": {
+          "name": "Run statuses",
+          "summary": "Automation runs show PENDING, RUNNING, COMPLETED, FAILED, CANCELLED or SKIPPED; goal runs have their own four statuses.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/agent-canvas/managing-automations.md",
+          "asOf": "2026-10-30",
+          "short": "Six automation run statuses",
+          "chip": "✓"
+        },
+        "act-reason": {
+          "name": "Disabled banner",
+          "summary": "Partly: a SKIPPED run can occur at the concurrency limit (whether the run says so is not documented), and a disabled automation shows a banner with a reason.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/agent-canvas/managing-automations.md",
+          "asOf": "2026-10-30",
+          "short": "Disabled banner; skip reason not documented",
+          "chip": "◐"
+        },
+        "act-log": {
+          "name": "Activity Log",
+          "summary": "Each automation has an Activity Log with run phase, status and cost, exportable as CSV or JSON; a live chip shows the current action while an agent works.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/agent-canvas/managing-automations.md",
+          "asOf": "2026-10-30",
+          "short": "Per-automation Activity Log, CSV or JSON",
+          "chip": "✓"
+        },
+        "act-history": {
+          "name": "Conversation archive",
+          "summary": "Conversations stay in the list; archiving hides without deleting, and history is stored locally until removed. A retention period is not documented.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/agent-canvas/conversations.md",
+          "asOf": "2026-10-30",
+          "short": "Kept until removed; retention not documented",
+          "chip": "◐"
+        },
+        "act-pr-link": {
+          "name": "Issue to Pull Request",
+          "summary": "Issue to PR posts the PR link on the issue. A link from an Activity Log run row to a PR is not documented.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/agent-canvas/prebuilt/issue-to-pr.md",
+          "asOf": "2026-10-30",
+          "short": "PR link posted on issue; run row unknown",
+          "chip": "◐"
+        },
+        "act-why": {
+          "name": "Export transcript",
+          "summary": "Each conversation keeps messages, tool calls and file changes; Export transcript downloads Markdown or HTML.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/agent-canvas/conversations.md",
+          "asOf": "2026-10-30",
+          "short": "Conversation plus transcript export",
+          "chip": "✓"
+        },
+        "act-cost": {
+          "name": "Activity Log cost",
+          "summary": "Cost per automation run in USD appears in the Activity Log and its exports, and a usage panel in a conversation shows token usage.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/agent-canvas/managing-automations.md",
+          "asOf": "2026-10-30",
+          "short": "USD cost per automation run",
+          "chip": "✓"
+        },
+        "act-local": {
+          "name": "Agent Canvas",
+          "summary": "On the pages read, the default install runs a local backend on the person's machine with their own model key, and conversations are stored locally; a Cloud account is a prerequisite only for the Cloud backend.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/agent-canvas/setup.md",
+          "asOf": "2026-10-30",
+          "short": "Default install is a local backend",
+          "chip": "✓"
         }
       },
       "demoable": {
@@ -1673,6 +1997,73 @@
         },
         "verify-test-quality": {
           "omitted": "Pages checked: cloud-agent, capabilities, best-practices, automations, subagents (cursor.com). A Bugbot rule can require that tests exist in a diff: presence, not strength. Not documented; checked on 2026-10-29."
+        },
+        "act-list": {
+          "name": "Agents Window",
+          "summary": "A sidebar lists parallel agents, and messages to a running agent queue in order. A queue of waiting tasks across agents is not documented.",
+          "sourceUrl": "https://cursor.com/docs/agent/agents-window.md",
+          "asOf": "2026-10-30",
+          "short": "Sidebar lists agents; no task queue documented",
+          "chip": "◐"
+        },
+        "act-status": {
+          "name": "Cloud Agents API",
+          "summary": "Status values are not documented in the app. Other surface (API): an agent is ACTIVE, IDLE or ARCHIVED, and a run goes from CREATING to FINISHED, ERROR, CANCELLED or EXPIRED.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent/api/endpoints.md",
+          "asOf": "2026-10-30",
+          "short": "Status values only in the API",
+          "chip": "◐"
+        },
+        "act-reason": {
+          "name": "Cloud agent events",
+          "summary": "Partly: an agent waits on a named event, and setup and PR-creation failures are named. A general reason a given agent is waiting is not documented.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent/capabilities.md",
+          "asOf": "2026-10-30",
+          "short": "Named events and failures; no wait field",
+          "chip": "◐"
+        },
+        "act-log": {
+          "name": "Agent page",
+          "summary": "The agent page is the run record: conversation, code changes and artifacts. A combined automations log is not documented.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent/capabilities.md",
+          "asOf": "2026-10-30",
+          "short": "Agent page is the run record",
+          "chip": "✓"
+        },
+        "act-history": {
+          "name": "Cloud history",
+          "summary": "Cloud conversation history is kept indefinitely by default, and environment snapshots are deleted after 30 days unused.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent/security-network.md",
+          "asOf": "2026-10-30",
+          "short": "History kept indefinitely; snapshots 30 days",
+          "chip": "✓"
+        },
+        "act-pr-link": {
+          "name": "Run page PR",
+          "summary": "The run page and the iOS review view tie an agent to its PR. Other surface (API): a run's git branches carry a prUrl.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent/capabilities.md",
+          "asOf": "2026-10-30",
+          "short": "Run page ties agent to its PR",
+          "chip": "✓"
+        },
+        "act-why": {
+          "name": "Agent conversation",
+          "summary": "The conversation holds the agent's messages and tool calls; checkpoints restore files, and chats can be shared as read-only transcripts.",
+          "sourceUrl": "https://cursor.com/docs/agent/overview.md",
+          "asOf": "2026-10-30",
+          "short": "Conversation with tool calls; checkpoints",
+          "chip": "✓"
+        },
+        "act-cost": {
+          "name": "Usage endpoint",
+          "summary": "Per-agent cost shown in the app is not documented. Other surface (API): token usage per agent from the usage endpoint.",
+          "sourceUrl": "https://cursor.com/docs/cloud-agent/api/endpoints.md",
+          "asOf": "2026-10-30",
+          "short": "Token usage per agent via API only",
+          "chip": "◐"
+        },
+        "act-local": {
+          "omitted": "Not documented as working without an account (checked: Agents Window, Cloud agents, Models & pricing on cursor.com). The Cloud agents page says they need a paid plan and a connected source-control account."
         }
       },
       "demoable": {
@@ -1999,6 +2390,78 @@
           "asOf": "2026-10-29",
           "short": "Only when the prompt asks, as coverage",
           "chip": "◐"
+        },
+        "act-list": {
+          "name": "Agent view",
+          "summary": "Agent view (a research preview) shows one row per background session, grouped Pinned, Ready for review, Needs input, Working and Completed; messages sent to a working session join its queue.",
+          "sourceUrl": "https://code.claude.com/docs/en/agent-view.md",
+          "asOf": "2026-10-30",
+          "short": "One row per background session, grouped",
+          "chip": "✓"
+        },
+        "act-status": {
+          "name": "Row states",
+          "summary": "Row states are Working, Needs input, Idle, Completed, Failed and Stopped.",
+          "sourceUrl": "https://code.claude.com/docs/en/agent-view.md",
+          "asOf": "2026-10-30",
+          "short": "Six row states",
+          "chip": "✓"
+        },
+        "act-reason": {
+          "name": "Needs input",
+          "summary": "A Needs input row shows the exact question or a short cause, and a failed delete says why. A reason for skipped is not documented.",
+          "sourceUrl": "https://code.claude.com/docs/en/agent-view.md",
+          "asOf": "2026-10-30",
+          "short": "Needs input shows question; skipped unknown",
+          "chip": "◐"
+        },
+        "act-log": {
+          "name": "claude logs",
+          "summary": "Each row's one-line summary refreshes from the session, `claude logs` prints recent output, and attaching posts a recap of what happened meanwhile.",
+          "sourceUrl": "https://code.claude.com/docs/en/agent-view.md",
+          "asOf": "2026-10-30",
+          "short": "Row summary, claude logs, attach recap",
+          "chip": "✓"
+        },
+        "act-history": {
+          "name": "Completed rows",
+          "summary": "Completed rows stay until deleted, and idle processes stop after about an hour with the conversation kept on disk. Other surface (CLI): transcripts are cleaned after 30 days by default.",
+          "sourceUrl": "https://code.claude.com/docs/en/agent-view.md",
+          "asOf": "2026-10-30",
+          "short": "Rows stay until deleted; CLI 30 days",
+          "chip": "✓"
+        },
+        "act-pr-link": {
+          "name": "PR link on row",
+          "summary": "A #N link on the row is coloured by check and review state; detection relies on gh seeing the PR.",
+          "sourceUrl": "https://code.claude.com/docs/en/agent-view.md",
+          "asOf": "2026-10-30",
+          "short": "PR link on row, needs gh",
+          "chip": "✓"
+        },
+        "act-why": {
+          "name": "Attach",
+          "summary": "Attach opens the full conversation; the peek panel shows only the latest output or question, and there is no step log beyond the transcript.",
+          "sourceUrl": "https://code.claude.com/docs/en/agent-view.md",
+          "asOf": "2026-10-30",
+          "short": "Attach opens the full conversation",
+          "chip": "✓"
+        },
+        "act-cost": {
+          "name": "/usage",
+          "summary": "Agent view shows nothing per row. Other surface (CLI): /usage shows session cost estimated at list price, as an estimate.",
+          "sourceUrl": "https://code.claude.com/docs/en/costs.md",
+          "asOf": "2026-10-30",
+          "short": "No cost per row; CLI /usage estimates",
+          "chip": "◐"
+        },
+        "act-local": {
+          "name": "Agent view",
+          "summary": "On the page read, agent view runs entirely on the machine with the same stored credentials as interactive sessions (login or an API key); no plan is named.",
+          "sourceUrl": "https://code.claude.com/docs/en/agent-view.md",
+          "asOf": "2026-10-30",
+          "short": "Runs on the machine with stored credentials",
+          "chip": "✓"
         }
       },
       "demoable": {
