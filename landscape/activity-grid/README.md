@@ -133,7 +133,7 @@ Counts are "N of 6" shown surfaces only (the tables above), judged from the cell
 | A list of running work in the product | **5 of 6** (Factory, OpenHands, Cursor, Copilot, Claude Code as a sidebar, panel or rows); Devin's is documented through the API and MCP only |
 | A documented queue of waiting work | **1 of 6** on the shown surface (Claude Code's queued messages are per session); Devin's Queued is on **another surface**; the other four: not documented |
 | A named status vocabulary on the shown surface | **3 of 6** (Devin on the record, OpenHands, Claude Code); Factory, Cursor and Copilot name theirs on **another surface** only |
-| A stated reason for waiting on the shown surface | **2 of 6** plain (Devin, Claude Code); 3 partial (OpenHands, Cursor, Copilot); Factory on **another surface** |
+| A stated reason for waiting on the shown surface | **0 of 6** plain; 5 partial (Devin, OpenHands, Cursor, Copilot, Claude Code, each with a "not documented" statement beside the reason); Factory on **another surface** |
 | A log of what ran | **6 of 6**, in six different forms (progress tab, sidebar log, exportable log, run record, session log, summary plus `claude logs`) |
 | PR link on the shown surface | **5 of 6**; Factory only through the Sessions API (**other surface**) |
 | Retention stated in days or a rule | **3 of 6** (Cursor, Claude Code, Copilot's 28 days with a conflict); Devin, Factory (shown surface) and OpenHands: not documented |
@@ -148,7 +148,7 @@ Counts are "N of 6" shown surfaces only (the tables above), judged from the cell
 | --- | --- | --- |
 | List of work | **Common, but a list of sessions** | Five of six list sessions or conversations, not work items; none shows a queue of waiting issues on the shown surface. |
 | Status | **Uneven, often API-only** | Three of six name statuses on the shown surface; for the other three the names sit on another surface or in an API. |
-| Reason for waiting | **Uneven** | Strongest where work is scheduled or unattended (automation skips and pauses, Needs input rows); thin for a plain waiting session. |
+| Reason for waiting | **Uneven** | No product's cell is plain (five partial, Factory on another surface). Strongest where work is scheduled or unattended (automation skips and pauses, Needs input rows); thin for a plain waiting session. |
 | Log | **Common** | Every product has one; they differ in grain (per worker, per run, per session). |
 | History and retention | **Uneven; retention rare** | Items stay listable everywhere; a stated retention period is the exception. |
 | PR link | **Common, often a display** | Five of six link on the shown surface; in Claude Code it is drawn from what the session did, not stored. |
