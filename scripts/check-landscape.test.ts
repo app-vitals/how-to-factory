@@ -65,6 +65,15 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
     { id: "route-fix-conflicts", label: "route-fix-conflicts" },
     { id: "route-limits", label: "route-limits" },
     { id: "route-state", label: "route-state" },
+    { id: "act-list", label: "act-list" },
+    { id: "act-status", label: "act-status" },
+    { id: "act-reason", label: "act-reason" },
+    { id: "act-log", label: "act-log" },
+    { id: "act-history", label: "act-history" },
+    { id: "act-pr-link", label: "act-pr-link" },
+    { id: "act-why", label: "act-why" },
+    { id: "act-cost", label: "act-cost" },
+    { id: "act-local", label: "act-local" },
   ],
   products: [
     {
@@ -118,6 +127,15 @@ const make = (over: Partial<Cell> = {}): Landscape => ({
         "route-fix-conflicts": cell({ chip: "✓" }),
         "route-limits": cell({ chip: "✓" }),
         "route-state": cell({ chip: "GitHub" }),
+        "act-list": cell({ chip: "✓" }),
+        "act-status": cell({ chip: "✓" }),
+        "act-reason": cell({ chip: "✓" }),
+        "act-log": cell({ chip: "✓" }),
+        "act-history": cell({ chip: "✓" }),
+        "act-pr-link": cell({ chip: "✓" }),
+        "act-why": cell({ chip: "✓" }),
+        "act-cost": cell({ chip: "✓" }),
+        "act-local": cell({ chip: "✓" }),
       },
       demoable: { kind: "unknown" },
       destination: { summary: "unknown" },
@@ -174,7 +192,7 @@ describe("validateLandscape", () => {
     expect(validateLandscape(e, TODAY).join()).toContain("cell verify-runs-app");
   });
   test("every component cell is required for a factory", () => {
-    for (const id of ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks", "plan-clarify", "plan-assumptions", "plan-editable", "plan-saved", "plan-ordering", "plan-parallel", "plan-replan", "plan-critique", "plan-readonly", "plan-tracker", "plan-human-only", "plan-rollout", "verify-checks", "verify-criteria", "verify-test-plan", "verify-ci-gate", "verify-limits", "verify-test-guard", "verify-evidence", "verify-pr-fix", "verify-hidden-tests", "verify-test-quality", "route-trigger", "route-rereview", "route-approve", "route-fix-comments", "route-fix-ci", "route-fix-conflicts", "route-limits", "route-state"]) {
+    for (const id of ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks", "plan-clarify", "plan-assumptions", "plan-editable", "plan-saved", "plan-ordering", "plan-parallel", "plan-replan", "plan-critique", "plan-readonly", "plan-tracker", "plan-human-only", "plan-rollout", "verify-checks", "verify-criteria", "verify-test-plan", "verify-ci-gate", "verify-limits", "verify-test-guard", "verify-evidence", "verify-pr-fix", "verify-hidden-tests", "verify-test-quality", "route-trigger", "route-rereview", "route-approve", "route-fix-comments", "route-fix-ci", "route-fix-conflicts", "route-limits", "route-state", "act-list", "act-status", "act-reason", "act-log", "act-history", "act-pr-link", "act-why", "act-cost", "act-local"]) {
       const d = make();
       delete (factory(d).cells as Record<string, unknown>)[id];
       expect(validateLandscape(d, TODAY).join()).toContain(`cell ${id}: missing`);
