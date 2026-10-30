@@ -12,6 +12,7 @@ the standard.
 - `landscape/` — factory x component comparison matrix (`matrix.json`) plus per-product research grids (`plan-grid/`, `verify-grid/`, `field-grid/`, `routing-grid/`, `activity-grid/`)
 - `decks/` — shared lesson deck framework (`deck.css`, `deck.js`, `deck.config.json`, `_template/`, `DIAGRAMS.md`); each lesson's deck is `lessons/<lesson>/deck/index.html`
 - `factory/` — the sample factory, built by the factory itself as the course runs
+- `experiments/` — pre-filming tools outside `factory/` (own `package.json`, not run in CI), e.g. `experiments/lesson3/` mutation scorer
 - `planning/` — plan-session output
 
 ## Commands
