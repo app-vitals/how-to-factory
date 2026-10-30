@@ -7,12 +7,11 @@
 <link rel="stylesheet" href="../../../decks/deck.css" />
 </head>
 <body>
-<!-- SKETCH (LOQ-2.1): title, factory map, one stage slide, one capability slide. The rest is written after review. -->
 <div id="counter"></div>
 <main>
   <section class="slide slide-title-slide" data-kind="title">
     <div class="slide-inner">
-      <h1 class="slide-title">See What the Factory Is Doing</h1>
+      <h2 class="slide-title">See What the Factory Is Doing</h2>
       <div class="slide-body">
         <p class="subtitle">Observability / ops: record, queue, log, history</p>
       </div>
@@ -36,6 +35,18 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
+      <h2 class="slide-title">Three questions the loop cannot answer</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="three-questions">
+          <div class="flow"><div class="node node-human">Why no PR?</div><span class="arrow"></span><div class="node node-human">Why no review?</div><span class="arrow"></span><div class="node node-human">Why no patch?</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>The answer exists, then is thrown away</li><li>Today you read the loop's code</li><li>Look at the view before you debug</li></ul>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
       <h2 class="slide-title">Observability: record, queue, log, history</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="concept">
@@ -48,12 +59,277 @@
   </section>
   <section class="slide slide-content" data-kind="content">
     <div class="slide-inner">
+      <h2 class="slide-title">What we build today</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="build-flow">
+          <div class="flow"><div class="node node-job">Tick</div><span class="arrow"></span><div class="node node-store">Run record</div><span class="arrow"></span><div class="node node-agent">Reasons</div><span class="arrow"></span><div class="node node-human">Web view</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><p class="caption">Six capabilities across four stages.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-demo" data-kind="demo">
+    <div class="slide-inner">
+      <h2 class="slide-title">DEMO</h2>
+      <div class="slide-body">
+        <div class="demo-label">DEMO: write one record per tick</div>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Record: one line per tick, a reason each</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="stage-record">
+          <div class="flow"><div class="node node-job">Tick</div><span class="arrow"></span><div class="node node-store">Run record</div><span class="arrow"></span><div class="node node-agent">Reason</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><p class="caption">Two capabilities: the record and the reason.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Record: one run record per tick</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-a1">
+          <div class="flow"><div class="node node-job">Tick</div><span class="arrow"></span><div class="node node-agent">Pick item</div><span class="arrow"></span><div class="node node-agent">Outcome</div><span class="arrow"></span><div class="node node-store">JSONL line</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>Prevents a skipped tick leaving no trace</li><li>e.g. Agent skipped a PR; nothing says so</li><li>e.g. A thrown error is logged as failed</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Record: a reason on every item</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-a2">
+          <div class="flow"><div class="node node-external">Candidate</div><span class="arrow"></span><div class="node node-job">Pick or skip</div><span class="arrow"></span><div class="node node-agent">Reason string</div><span class="arrow"></span><div class="node node-store">Stored</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>Prevents every row reading just queued</li><li>e.g. Waiting: round cap reached, needs person</li><li>e.g. No work is not a reason</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-demo" data-kind="demo">
+    <div class="slide-inner">
+      <h2 class="slide-title">DEMO</h2>
+      <div class="slide-body">
+        <div class="demo-label">DEMO: add a reason to every candidate</div>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Queue: what the loop picks next</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="stage-queue">
+          <div class="flow"><div class="node node-store">Candidates</div><span class="arrow"></span><div class="node node-job">Pick order</div><span class="arrow"></span><div class="node node-human">Upcoming page</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><p class="caption">One capability: an Upcoming view.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
       <h2 class="slide-title">Queue: an Upcoming view in pick order</h2>
       <div class="slide-body">
-        <div class="visual diagram" data-diagram="queue-item">
-          <div class="flow"><div class="node node-store">PR #12</div><span class="arrow"></span><div class="node node-job">Round cap reached</div><span class="arrow"></span><div class="node node-human">Needs a person</div></div>
+        <div class="visual diagram" data-diagram="cap-a3">
+          <div class="flow"><div class="node node-store">Candidates</div><span class="arrow"></span><div class="node node-job">Sort by pick</div><span class="arrow"></span><div class="node node-agent">Add reason</div><span class="arrow"></span><div class="node node-human">Upcoming page</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
-        </div><ul class="bullets"><li>A person sees what is next and why</li><li>e.g. A PR waits: round cap reached</li><li>e.g. A task waits: dependency not merged</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+        </div><ul class="bullets"><li>Shows what is next and why, without code</li><li>e.g. Type, item, age, reason per row</li><li>e.g. Three questions answered on one page</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-demo" data-kind="demo">
+    <div class="slide-inner">
+      <h2 class="slide-title">DEMO</h2>
+      <div class="slide-body">
+        <div class="demo-label">DEMO: serve the Upcoming page</div>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Log: what already ran</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="stage-log">
+          <div class="flow"><div class="node node-store">JSONL file</div><span class="arrow"></span><div class="node node-job">Newest first</div><span class="arrow"></span><div class="node node-human">Past page</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><p class="caption">One capability: a Past view of runs.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Log: a Past view, filterable by outcome</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-a4">
+          <div class="flow"><div class="node node-store">JSONL file</div><span class="arrow"></span><div class="node node-job">Filter outcome</div><span class="arrow"></span><div class="node node-human">Past page</div><span class="arrow"></span><div class="node node-agent">Read reason</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>Prevents one failed run lost among hundreds</li><li>e.g. Filter to skipped, read the reasons</li><li>e.g. Reason sits in a detail column</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-demo" data-kind="demo">
+    <div class="slide-inner">
+      <h2 class="slide-title">DEMO</h2>
+      <div class="slide-body">
+        <div class="demo-label">DEMO: serve the Past page and filter</div>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">History: finished work stays visible</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="stage-history">
+          <div class="flow"><div class="node node-store">Task file</div><span class="arrow"></span><div class="node node-external">PRs</div><span class="arrow"></span><div class="node node-human">Completed page</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><p class="caption">Two capabilities: Completed and links.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">History: a Completed view survives restarts</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-a5">
+          <div class="flow"><div class="node node-store">Task file</div><span class="arrow"></span><div class="node node-job">Finished only</div><span class="arrow"></span><div class="node node-human">Completed page</div><span class="arrow"></span><div class="node node-job">Restart</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>Prevents a restart erasing the story</li><li>e.g. Restart empties the view; work vanishes</li><li>e.g. Every task built today, with its PR</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">History: link every item to its PR</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="cap-a6">
+          <div class="flow"><div class="node node-human">Row</div><span class="arrow"></span><div class="node node-job">Link helper</div><span class="arrow"></span><div class="node node-external">PR on GitHub</div><span class="arrow"></span><div class="node node-store">Task record</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><ul class="bullets"><li>Puts the PR one click away</li><li>e.g. Why no review? Row, then PR</li><li>e.g. A run row links to its task</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-demo" data-kind="demo">
+    <div class="slide-inner">
+      <h2 class="slide-title">DEMO</h2>
+      <div class="slide-body">
+        <div class="demo-label">DEMO: link rows and show Completed</div>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-demo" data-kind="demo">
+    <div class="slide-inner">
+      <h2 class="slide-title">DEMO</h2>
+      <div class="slide-body">
+        <div class="demo-label">DEMO: ask the three questions of the view</div>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">After: the loop explains itself</h2>
+      <div class="slide-body">
+        <div class="visual diagram" data-diagram="slice">
+          <div class="flow"><div class="node node-store">Tasks</div><span class="arrow"></span><div class="node node-job">Loop</div><span class="arrow"></span><div class="node node-external">PRs</div><span class="arrow"></span><div class="node node-store">Run record</div><span class="arrow"></span><div class="node node-human">Web view</div></div>
+          <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
+        </div><p class="caption">Three pages, one record, kept across restarts.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Waiting work with a reason is rare</h2>
+      <div class="slide-body">
+        <div class="visual">
+          <table class="comp-table">
+            <thead><tr><th>Checked 10/2026</th><th>Lists work</th><th>Says why waiting</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>◐</td><td>◐</td></tr><tr><td>Factory</td><td>◐</td><td>◐</td></tr><tr><td>OpenHands</td><td>◐</td><td>◐</td></tr><tr><td>Cursor</td><td>◐</td><td>◐</td></tr><tr><td>GitHub Copilot</td><td>◐</td><td>◐</td></tr><tr><td>Claude Code</td><td>✓</td><td>◐</td></tr><tr><td>This sample</td><td>✓</td><td>✓</td></tr></tbody>
+          </table>
+          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
+        </div><p class="caption">Links in the video description.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Finished work stays; PR links vary</h2>
+      <div class="slide-body">
+        <div class="visual">
+          <table class="comp-table">
+            <thead><tr><th>Checked 10/2026</th><th>Keeps finished</th><th>Links to PR</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>◐</td><td>✓</td></tr><tr><td>Factory</td><td>◐</td><td>◐</td></tr><tr><td>OpenHands</td><td>◐</td><td>◐</td></tr><tr><td>Cursor</td><td>✓</td><td>✓</td></tr><tr><td>GitHub Copilot</td><td>◐</td><td>✓</td></tr><tr><td>Claude Code</td><td>✓</td><td>✓</td></tr><tr><td>This sample</td><td>✓</td><td>✓</td></tr></tbody>
+          </table>
+          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
+        </div><p class="caption">Links in the video description.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Same job, different names</h2>
+      <div class="slide-body">
+        <div class="visual">
+          <table class="comp-table">
+            <thead><tr><th>Checked 10/2026</th><th>Where the log lives</th></tr></thead>
+            <tbody><tr><td>Devin</td><td>Activity tab</td></tr><tr><td>Factory</td><td>Events feed</td></tr><tr><td>OpenHands</td><td>Activity Log</td></tr><tr><td>Cursor</td><td>Agent page</td></tr><tr><td>GitHub Copilot</td><td>Session log</td></tr><tr><td>Claude Code</td><td>Agent view</td></tr><tr><td>This sample</td><td>Past page</td></tr></tbody>
+          </table>
+          <div class="legend"><span>✓ yes</span><span>✗ no</span><span>◐ partly</span><span>– not in their docs</span></div>
+        </div><p class="caption">Links in the video description.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Where factories take it</h2>
+      <div class="slide-body">
+        <div class="visual options-grid">
+          <div class="option"><h3>Transcripts</h3><div class="pick">Session link, investigate</div></div><div class="option"><h3>Cost</h3><div class="pick">Tokens per run</div></div><div class="option"><h3>Alerts</h3><div class="pick">Stall detection</div></div><div class="option"><h3>Many agents</h3><div class="pick">Fleet views</div></div>
+        </div><p class="caption">Destinations, not prescriptions.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-content" data-kind="content">
+    <div class="slide-inner">
+      <h2 class="slide-title">Around the view, later</h2>
+      <div class="slide-body">
+        <div class="visual options-grid">
+          <div class="option"><h3>Event log</h3><div class="pick">Per task and PR</div></div><div class="option"><h3>Dashboards</h3><div class="pick">Throughput, cycle time</div></div><div class="option"><h3>Access</h3><div class="pick">Auth and hosting</div></div>
+        </div><p class="caption">Destinations, not prescriptions.</p>
+      </div>
+      <div class="facecam-zone"></div>
+    </div>
+  </section>
+  <section class="slide slide-exercise" data-kind="exercise">
+    <div class="slide-inner">
+      <h2 class="slide-title">Your turn: make the loop explain itself</h2>
+      <div class="slide-body">
+        <div class="eyebrow">Exercise</div>
+        <div class="visual diagram" data-diagram="exercise-steps">
+          <div class="flow"><div class="node node-agent">Record</div><span class="arrow"></span><div class="node node-job">Reason</div><span class="arrow"></span><div class="node node-store">Queue and log</div><span class="arrow"></span><div class="node node-human">Completed</div></div>
+        </div><ul class="bullets"><li>Any agent, any language</li><li>Every skipped item says why</li><li>Finished work survives a restart</li></ul>
       </div>
       <div class="facecam-zone"></div>
     </div>
