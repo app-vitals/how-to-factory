@@ -241,7 +241,7 @@ Model: `planning/lesson4-pr-routing/shipwright-inventory.md`.
 
 #### 29. PR to task link, and PR origin fields
 - **What:** a PR record is keyed by repo and PR number and stores title, head branch, author, and an `origin` (where the PR came from). It does not carry a task id column in the lines read; the loop derives a PR's age from its linked task by branch (lesson 4 inventory #12).
-- **Source:** SCH `PullRequest` L256-L330 (origin and metrics comment, POM-1.1); the PR age rule in CR/CP headers (lesson 4 inventory).
+- **Source:** SCH `PullRequest` L256-L330 (origin and metrics comment, POM-1.1); the PR age rule is taken from the lesson 4 inventory (item 12), which cites the headers of `agent/src/coding/check-review.ts` and `agent/src/coding/check-patch.ts`. Those two files were not read for this doc.
 - **Why:** *documented* for `origin` (SCH comment). The absence of a task id column is *my reading of the lines read*; I did not search the whole schema for a relation.
 - **Answers:** why no review, why no patch (which task and branch the PR belongs to).
 - **Tier:** common. The link has to exist somewhere; a local agent can put the task id in the branch name.
