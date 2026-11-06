@@ -50,7 +50,7 @@
       <h2 class="slide-title">Observability: record, queue, log, history</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="concept">
-          <div class="flow"><div class="node node-agent">Record</div><div class="node node-store">Queue</div><div class="node node-store">Log</div><div class="node node-store">History</div></div>
+          <div class="flow"><div class="node node-store">Record</div><div class="node node-store">Queue</div><div class="node node-store">Log</div><div class="node node-store">History</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div><p class="caption">Each tick leaves a record a person can read.</p>
       </div>
@@ -62,7 +62,7 @@
       <h2 class="slide-title">What we build today</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="build-flow">
-          <div class="flow"><div class="node node-job">Tick</div><span class="arrow"></span><div class="node node-agent">Pick or skip</div><span class="arrow"></span><div class="node node-store">Run record</div></div>
+          <div class="flow"><div class="node node-job">Tick</div><span class="arrow"></span><div class="node node-job">Pick or skip</div><span class="arrow"></span><div class="node node-agent">Agent</div><span class="arrow"></span><div class="node node-store">Run record</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div><p class="caption">One record. Queue, Log and History read it.</p>
       </div>
@@ -95,7 +95,7 @@
       <h2 class="slide-title">Record: one run record per tick</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="cap-a1">
-          <div class="flow"><div class="node node-job">Tick</div><span class="arrow"></span><div class="node node-agent">Pick item</div><span class="arrow"></span><div class="node node-agent">Outcome</div><span class="arrow"></span><div class="node node-store">JSONL line</div></div>
+          <div class="flow"><div class="node node-job">Tick</div><span class="arrow"></span><div class="node node-job">Pick item</div><span class="arrow"></span><div class="node node-agent">Agent</div><span class="arrow"></span><div class="node node-agent">Outcome</div><span class="arrow"></span><div class="node node-store">JSONL line</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div><ul class="bullets"><li>Prevents a skipped tick leaving no trace</li><li>e.g. Agent skipped a PR; nothing says so</li><li>e.g. A thrown error is logged as failed</li></ul><p class="caption">Examples are illustrations, not product claims.</p>
       </div>
@@ -128,7 +128,7 @@
       <h2 class="slide-title">Queue: pickable work, oldest first</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="cap-a3">
-          <div class="flow"><div class="node node-store">Candidates</div><span class="arrow"></span><div class="node node-job">Sort by pick</div></div>
+          <div class="flow"><div class="node node-store">Candidates</div><span class="arrow"></span><div class="node node-job">Sort by age</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div><ul class="bullets"><li>Shows what is next, without code</li><li>e.g. Type, item, age per row</li><li>e.g. Blocked work is a later view</li></ul>
       </div>
@@ -182,7 +182,7 @@
       <h2 class="slide-title">History: finished work survives restarts</h2>
       <div class="slide-body">
         <div class="visual diagram" data-diagram="cap-a5">
-          <div class="flow"><div class="node node-store">Task file</div><span class="arrow"></span><div class="node node-job">Finished only</div><span class="arrow"></span><div class="node node-job">Restart</div><span class="arrow"></span><div class="node node-store">Task file</div></div>
+          <div class="flow"><div class="node node-store">Task file</div><span class="arrow"></span><div class="node node-job">Finished only</div><span class="arrow"></span><div class="node node-store">History</div></div>
           <div class="legend"><span class="legend-item legend-human">human</span><span class="legend-item legend-agent">agent</span><span class="legend-item legend-store">store / queue</span><span class="legend-item legend-external">external service</span><span class="legend-item legend-job">scheduled job</span></div>
         </div><ul class="bullets"><li>Prevents a restart erasing the story</li><li>e.g. Restart empties the view; work vanishes</li><li>e.g. Every task built today, with its PR</li></ul>
       </div>
@@ -304,7 +304,7 @@
       <div class="slide-body">
         <div class="eyebrow">Exercise</div>
         <div class="visual diagram" data-diagram="exercise-steps">
-          <div class="flow"><div class="node node-agent">Record</div><span class="arrow"></span><div class="node node-job">Reason</div><span class="arrow"></span><div class="node node-store">Queue and log</div><span class="arrow"></span><div class="node node-store">Finished work</div></div>
+          <div class="flow"><div class="node node-store">Record</div><span class="arrow"></span><div class="node node-job">Reason</div><span class="arrow"></span><div class="node node-store">Queue and log</div><span class="arrow"></span><div class="node node-store">Finished work</div></div>
         </div><ul class="bullets"><li>Any agent, any language</li><li>Every skipped run says why</li><li>Finished work survives a restart</li></ul>
       </div>
       <div class="facecam-zone"></div>
