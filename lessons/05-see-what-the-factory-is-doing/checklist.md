@@ -14,13 +14,13 @@
 - [ ] Every claim about another product has a first-party URL and an as-of date; dates re-checked (grid says 2026-10-30)
 - [ ] All links resolve (the lesson 4 video URL stays a placeholder until Dan supplies it)
 - [ ] Factory map slide highlights the component taught (observability / ops)
-- [ ] Slide count is in line with the lesson's capabilities (guidance, not a target) (28); same vendors in the same order on every comparison slide, plus a "This sample" row
+- [ ] Slide count is in line with the lesson's capabilities (guidance, not a target) (26); same vendors in the same order on every comparison slide, plus a "This sample" row
 - [ ] Demo run through once on a scratch repo (this lesson runs things on camera, so it is not build-only): the factory writing the run record, the reasons and the three pages, then the three questions and the Completed page
 - [ ] Nothing for the demo is pre-queued in `factory/`; the live beat is planned and built during the run
 - [ ] Exercise run by following only its text; outcomes listed, no required tool
 - [ ] Every changed slide rendered at 1920x1080; no wrapped rows, overflow or face-cam intrusion
-- [ ] Differs slides (23-24) contain only marks and chips (no sentences)
-- [ ] Open item in [run-of-show.md](run-of-show.md) settled: the DEMO slides' position (deck slides 6, 10, 13, 16 and 20) and the field comparison's position against the script's beat order
+- [ ] Differs slides (21-22) contain only marks and chips (no sentences)
+- [ ] Open item in [run-of-show.md](run-of-show.md) settled: the DEMO slides' position (deck slides 6, 10, 12, 14 and 18) and the field comparison's position against the script's beat order
 
 ## Demo run-through plan
 

@@ -41,11 +41,11 @@ The reason is a sentence a person can read, and "no work" is not one.
 
 ### 3. A queue view shows what the loop picks next
 
-You can see what is next, and why each item waits, without opening code.
+You can see what is next without opening code.
 
-- [ ] the view lists the candidates in the order the loop would pick them, with the type, the item, how long it has waited and the reason
+- [ ] the view lists the candidates in the order the loop would pick them, with the type, the item, and how long it has waited
 - [ ] change a task or a PR by hand (open a PR, push a commit, flag one): the view shows the change on the next load
-- [ ] answer the three questions by pointing at three rows of this view, one per question
+- [ ] answer the three questions by pointing at three rows of the run log, one per question
 
 ### 4. A log view shows what already ran
 

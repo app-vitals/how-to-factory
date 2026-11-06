@@ -37,12 +37,12 @@ product has one").
 Tier A: built and exercised. Every row of the capability table below.
 
 - **Record:** each tick writes one record (start, end, the item picked, outcome, error); every candidate and every skipped
-  run carries a reason string. "No work" is not a reason.
-- **Queue:** an Upcoming page in pick order: type, item, age, and why it is waiting.
+  run carries a reason string, written into the run record the Log shows. "No work" is not a reason.
+- **Queue:** an Upcoming page of pickable work in pick order (oldest first): type, item and age; no reason column.
 - **Log:** a Past page of runs, newest first, filterable by outcome, with the reason in a detail column.
 - **History:** a Completed page of finished work that survives a restart.
 - **Link:** every row links to its PR or task, and a run row links to its item.
-- The payoff: the three questions (no PR, no review, no patch) each map to a specific reason string in the Queue view.
+- The payoff: the three questions (no PR, no review, no patch) each map to a specific reason string in the Log.
 
 ## Out of scope
 
@@ -58,8 +58,8 @@ Tier B: named on one slide, each with the lesson that owns it. None is built her
 - Throughput and cycle-time dashboards: owned by the feedback and maintenance lesson.
 - Fleet views, named agents, claims and stale-claim recovery: owned by the multi-agent coordination deep dive.
 - UI auth and hosting for the web view (the sample's server binds to the local machine): owned by the governance lesson.
-- Attempt caps, skip counters and auto-block, and redispatch cooldown in their production forms: owned by a later loop
-  lesson. Lesson 4's round cap already ships; this lesson only shows it.
+- Attempt caps, skip counters and auto-block, redispatch cooldown in their production forms, and a blocked list of work
+  waiting on a person: owned by a later loop lesson. Lesson 4's round cap already ships; this lesson only shows it.
 
 ## The sample's concrete steps
 
@@ -67,11 +67,11 @@ Tier B: named on one slide, each with the lesson that owns it. None is built her
    any error (Record).
 2. For every candidate task and PR, return the item and the reason it was or was not picked, reusing lesson 4's
    candidate and PR-state logic; a run that does nothing stores why (Record).
-3. Serve a Queue page that lists what the loop would pick next, in pick order, with type, item, age and reason (Queue).
+3. Serve a Queue page that lists what the loop would pick next, in pick order, with type, item and age (Queue).
 4. Serve a Log page that reads the JSONL, newest first, with an outcome filter in the query string (Log).
 5. Serve a Completed page that lists finished tasks and PRs from the task file, so it survives a restart (History).
 6. Turn every task id and `org/repo#n` into a link, on all three pages (Link).
-7. Run the loop on the lesson's own tasks and PRs, ask the three questions of the Queue view, and finish on the Completed
+7. Run the loop on the lesson's own tasks and PRs, ask the three questions of the Log, and finish on the Completed
    page showing the full history of the lesson's work.
 
 ## What the factory builds in this lesson
@@ -116,8 +116,8 @@ move to a walk-through. From lessons 1 to 4, revisit after lesson 5.
 | Stage | Capability | Concept | Why it exists or what it prevents | Examples | What it takes to build |
 |---|---|---|---|---|---|
 | Record | A1. One run record per tick | Each tick appends one line to a JSONL file: start, end, duration, the item picked (task or PR and its id), the outcome and any error. Expected: high. A log of what ran in 6 of 6, at six different grains; one record per tick of a polling loop is documented by 0 (not a grid dimension). Crucial: high; the outcome and error fields are documented. | A skipped or crashed tick leaves no trace, and a crashing item cannot be told from an idle one. | The agent skipped a PR three ticks ago and nothing says so; the person guesses. (illustration) A tick that throws is recorded as failed with its error, so it shows up in the Log. (illustration) | A small writer called from the tick. Small. |
-| Record | A2. A reason on every queue item and every skipped run | Every candidate carries a reason string, and a run that did nothing stores why; "no work" is not a reason. Expected: high. A stated reason for waiting on the main surface is documented plainly by 0 and partly by 6; a reason for a skip on another surface by 1 (Factory). Crucial: high; the reasons are documented. | Without a reason, every row says "queued" and a stuck item looks the same as an idle one. | A PR sits for a day with no review and the view says only "queued". (illustration) The row says "waiting: round cap reached (3), needs a person". (illustration) | Reuse lesson 4's candidate and PR-state logic to return `{item, reason}`. Medium. |
-| Queue | A3. An Upcoming view in pick order | A page listing what the loop would pick next: type, item, age and the A2 reason. Expected: high. A list of running work in 5 of 6 (sessions, not work items); a documented queue of waiting work on the main surface by 0. Crucial: medium; the purpose is inferred. | A person sees what is next and why without reading the loop's code. | The only way to learn what is next is to read the loop's code. (illustration) The three questions are answered from one page. (illustration) | One route rendering the current candidate list. Small. |
+| Record | A2. A reason on every run record | Every candidate carries a reason string, and a run that did nothing stores why; "no work" is not a reason. Expected: high. A stated reason for waiting on the main surface is documented plainly by 0 and partly by 6; a reason for a skip on another surface by 1 (Factory). Crucial: high; the reasons are documented. | Without a reason, every row says "queued" and a stuck item looks the same as an idle one. | A PR sits for a day with no review and the view says only "queued". (illustration) The row says "waiting: round cap reached (3), needs a person". (illustration) | Reuse lesson 4's candidate and PR-state logic to return `{item, reason}`. Medium. |
+| Queue | A3. An Upcoming view in pick order | A page listing what the loop would pick next: type, item and age. Expected: high. A list of running work in 5 of 6 (sessions, not work items); a documented queue of waiting work on the main surface by 0. Crucial: medium; the purpose is inferred. | A person sees what is next without reading the loop's code. | The only way to learn what is next is to read the loop's code. (illustration) The Log answers the three questions. (illustration) | One route rendering the current candidate list. Small. |
 | Log | A4. A Past view of runs, filterable by outcome | A page of past runs, newest first, with an outcome filter and the reason in a detail column. Expected: high. A log in 6 of 6; a filter by outcome is not a grid dimension (0). Crucial: medium; the filter's purpose is inferred. | One failed run is not lost among hundreds of ticks, and the reason is read first. | Hundreds of ticks in one file and the one failed run lost in them. (illustration) Filter to `skipped` and read the reasons in a column. (illustration) | One route reading the JSONL with a query-string filter. Small. |
 | History | A5. A Completed view that survives restarts | A page of finished tasks and PRs with when each started, when its PR opened and when it merged, read from the task file. Expected: high. Finished work stays listable in 6 of 6; a retention period is stated by 3. Crucial: medium; the purpose is inferred. | A restart does not erase the story; the lesson's own work is still there at the end. | A restart empties the view and the lesson's work vanishes. (illustration) The Completed page lists every task the lesson built, with its PR. (illustration) | Read finished tasks from the task file. Small. |
 | History | A6. Link every item to its PR and task | Every row's id is a link: a task to its record, a PR to GitHub; a run row links to its item. Expected: high. A PR link on the shown surface in 5 of 6; run row to item is not a grid dimension (0). Crucial: high; the reason is documented. | You find the row and the PR is one click away instead of a copy-paste. | The answer to "why no review" is in the row, and the PR is a hunt away. (illustration) A run row links back to the task it worked on. (illustration) | One helper that turns `org/repo#n` or a task id into a URL, used by all three pages. Small. |
@@ -134,7 +134,7 @@ Outcomes only; no required tool, language or runner. Each covers one or more Tie
 
 - Each tick leaves a record of what was picked, the outcome and any error (A1).
 - Every candidate and every skipped run carries a reason a person can read (A2).
-- A page shows what the loop would pick next, with age and reason (A3).
+- A page shows what the loop would pick next, with type, item and age (A3).
 - A page shows past runs and can be narrowed by outcome (A4).
 - Finished work is still listed after a restart (A5).
 - Every task and PR on every page links to its record (A6).
