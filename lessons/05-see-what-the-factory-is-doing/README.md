@@ -33,7 +33,7 @@ Four stages, with a [brief](brief.md) that ranks each capability by expected, co
 
 - **Record:** each tick appends one line (start, end, the item picked, outcome, error) (A1), and every candidate and every
   skipped run carries a reason a person can read (A2).
-- **Queue:** an Upcoming page in pick order, with type, item, age and why it is waiting (A3).
+- **Queue:** an Upcoming page in pick order, with type, item and age (A3).
 - **Log:** a Past page of runs, newest first, filterable by outcome, with the reason in a detail column (A4).
 - **History:** a Completed page of finished work that survives a restart (A5), and a link from every row to its PR or
   task (A6).
@@ -48,7 +48,7 @@ Four stages, with a [brief](brief.md) that ranks each capability by expected, co
 
 The existing factory is asked to teach itself to show its work, on camera. It plans the work, the loop picks the tasks, and
 the factory builds the three parts: a run-log writer, reason fields, and the web server with its three pages. The lesson's
-own tasks and PRs flow through the view as they are built, so the run ends by asking the three questions of the Queue page
+own tasks and PRs flow through the view as they are built, so the run ends by asking the three questions of the Log
 and finishing on the Completed page showing the history of the lesson's work.
 
 ## Build steps

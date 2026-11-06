@@ -45,7 +45,7 @@ The table shows what one record holds; A4 shows how a person reads them.
 
 Not compared: one record per tick of a polling loop. The grid has no dimension for it, so nothing is said about the field.
 
-### A2. A reason on every queue item and every skipped run
+### A2. A reason on every run record
 
 Simplest version: every candidate carries a reason string, and a run that did nothing stores why. "No work" is not a reason.
 
@@ -68,7 +68,7 @@ Not compared: a reason stored for a tick that picked nothing. The grid has no di
 
 ### A3. An Upcoming view in pick order
 
-Simplest version: one page listing what the loop would pick next: type, item, age and the A2 reason.
+Simplest version: one page listing what the loop would pick next: type, item and age.
 
 The field's version is a list of current work (matrix dimension "Shows a list of current work"). Five of six list running work on the
 shown surface, as sessions or conversations. A documented queue of waiting work on the shown surface: none of six. Devin's Queued is
