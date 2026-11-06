@@ -78,9 +78,10 @@ Trim order if the cut runs long, first to last:
      called from the tick. Demo: a JSONL file, one line per tick. Yours: any append-only store.
    - **A2. A reason on every run record** (Record). The reason is the payoff of the lesson. Without
      it every record says only what ran. Build: reuse lesson 4's candidate and PR-state logic to return an item and a reason.
-     Spoken example _(illustration)_: "waiting: round cap reached (3), needs a person".
-   - **A3. An Upcoming view in pick order** (Queue). Type, item and age, from one route rendering the
-     current candidate list. Demo: a small local web server. Yours: a terminal table or a file would do the same job.
+     The reason for each skipped candidate is written into the run record, so the Log shows it; the Queue has no reason
+     column. Spoken example _(illustration)_: "waiting: round cap reached (3), needs a person".
+   - **A3. An Upcoming view in pick order** (Queue). Pickable work only, oldest first (the loop's pick
+     order); type, item and age, from one route rendering the current candidate list. Blocked work is a later view. Demo: a small local web server. Yours: a terminal table or a file would do the same job.
    - **A4. A Past view of runs, filterable by outcome** (Log). Newest first, reason in a detail column, an outcome filter in
      the query string. Prevents one failed run being lost among hundreds of ticks. First to become a walk-through if time is
      short.
@@ -132,7 +133,7 @@ Trim order if the cut runs long, first to last:
      (later operations lessons); an event log, queue snapshots and verification rows (a later operations lesson);
      throughput and cycle-time dashboards (feedback and maintenance lesson); fleet views, named agents and claims
      (multi-agent coordination deep dive); UI auth and hosting (governance lesson); attempt caps and cooldowns in their
-     production forms (a later loop lesson).
+     production forms, and a blocked list of work waiting on a person (a later loop lesson).
 8. **Exercise** (about 1 min). The exercise lists outcomes and names no required tool, language or runner. Hand off: your
    own loop, with an agent and language of your choice, gets the same behaviours. Close on the loop delta: the loop
    explains itself, so you open the view before you debug.

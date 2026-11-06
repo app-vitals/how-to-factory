@@ -82,7 +82,7 @@ on another surface.
 | OpenHands | ◐ | **Agent Canvas sidebar**: Lists conversations; the Automate view lists automations. A queue of waiting issues or tasks is not in their docs. ([source](https://docs.openhands.dev/openhands/usage/agent-canvas/conversations.md), as of 2026-10-30) |
 | Cursor | ◐ | **Agents Window**: A sidebar lists parallel agents, and messages to a running agent queue in order. A queue of waiting tasks across agents is not in their docs. ([source](https://cursor.com/docs/agent/agents-window.md), as of 2026-10-30) |
 | Claude Code | ✓ | **Agent view** (research preview): One row per background session, grouped Pinned, Ready for review, Needs input, Working and Completed; messages sent to a working session join its queue. ([source](https://code.claude.com/docs/en/agent-view.md), as of 2026-10-30) |
-| This sample | ✓ | Target: a page in pick order with type, item, age and reason ([source](brief.md)) |
+| This sample | ✓ | Target: a page in pick order with type, item and age ([source](brief.md)) |
 
 Messages queued for one running agent (Cursor, Claude Code) are a per-agent message queue, not a queue of waiting work.
 Not compared: pick order, an age column and a reason column on the list. The grid has no dimension for them.

@@ -37,8 +37,8 @@ product has one").
 Tier A: built and exercised. Every row of the capability table below.
 
 - **Record:** each tick writes one record (start, end, the item picked, outcome, error); every candidate and every skipped
-  run carries a reason string. "No work" is not a reason.
-- **Queue:** an Upcoming page in pick order: type, item and age.
+  run carries a reason string, written into the run record the Log shows. "No work" is not a reason.
+- **Queue:** an Upcoming page of pickable work in pick order (oldest first): type, item and age; no reason column.
 - **Log:** a Past page of runs, newest first, filterable by outcome, with the reason in a detail column.
 - **History:** a Completed page of finished work that survives a restart.
 - **Link:** every row links to its PR or task, and a run row links to its item.
@@ -58,8 +58,8 @@ Tier B: named on one slide, each with the lesson that owns it. None is built her
 - Throughput and cycle-time dashboards: owned by the feedback and maintenance lesson.
 - Fleet views, named agents, claims and stale-claim recovery: owned by the multi-agent coordination deep dive.
 - UI auth and hosting for the web view (the sample's server binds to the local machine): owned by the governance lesson.
-- Attempt caps, skip counters and auto-block, and redispatch cooldown in their production forms: owned by a later loop
-  lesson. Lesson 4's round cap already ships; this lesson only shows it.
+- Attempt caps, skip counters and auto-block, redispatch cooldown in their production forms, and a blocked list of work
+  waiting on a person: owned by a later loop lesson. Lesson 4's round cap already ships; this lesson only shows it.
 
 ## The sample's concrete steps
 
@@ -134,7 +134,7 @@ Outcomes only; no required tool, language or runner. Each covers one or more Tie
 
 - Each tick leaves a record of what was picked, the outcome and any error (A1).
 - Every candidate and every skipped run carries a reason a person can read (A2).
-- A page shows what the loop would pick next, with age and reason (A3).
+- A page shows what the loop would pick next, with type, item and age (A3).
 - A page shows past runs and can be narrowed by outcome (A4).
 - Finished work is still listed after a restart (A5).
 - Every task and PR on every page links to its record (A6).
