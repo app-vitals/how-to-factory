@@ -21,6 +21,8 @@ const pr = (number: number, over: Partial<PullRequest> = {}): PullRequest => ({
   title: `pr ${number}`,
   branch: `feat/unknown-${number}`,
   createdAt: "2026-10-29T12:00:00Z",
+  url: `https://github.com/acme/widgets/pull/${number}`,
+  repo: "acme/widgets",
   isDraft: false,
   headSha: "sha",
   ci: "pass",

@@ -514,6 +514,8 @@ describe("runLoop agent result report", () => {
     title: `PR ${number}`,
     branch: `feat/other-${number}`,
     createdAt: "2026-10-29T10:00:00.000Z",
+    url: `https://github.com/acme/widgets/pull/${number}`,
+    repo: "acme/widgets",
     isDraft: false,
     headSha: `sha${number}`,
     ci: "pass",
@@ -699,7 +701,7 @@ describe("prRunner", () => {
     const stub = ["sh", "-c", `printf '%s' "$0"`, JSON.stringify({ result: "reviewed {pr}", structured_output: { outcome: "skipped", reason: "closed" } })];
     const printed: string[] = [];
     const out = await prRunner(stub, stub, (m) => printed.push(m))(
-      { number: 4, title: "t", branch: "b", createdAt: "x", isDraft: false, headSha: "s", ci: "pass", mergeable: "clean", reviewDecision: "none", labels: [] },
+      { number: 4, title: "t", branch: "b", createdAt: "x", url: "https://github.com/acme/widgets/pull/4", repo: "acme/widgets", isDraft: false, headSha: "s", ci: "pass", mergeable: "clean", reviewDecision: "none", labels: [] },
       "review",
     );
     expect(out).toEqual({ exitCode: 0, report: { outcome: "skipped", reason: "closed" } });
