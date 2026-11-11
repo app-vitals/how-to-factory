@@ -33,6 +33,15 @@ Verification, Review and Release, plus the instructions and standards the factor
 - Have a second agent review the PR
 - Set confidence thresholds for AI review comments
 - Decide what an AI reviewer may post or approve
+- Review signal and convergence: a review worth its signal-to-noise, and a patch that checks a finding before acting so the loop can end. Taught by [lesson 6, Review signal and convergence](06-review-signal-and-convergence/brief.md) (Tier A: graded and capped findings, a base-branch filter, judging against the repo's rules, a verdict computed from the findings, a fresh-context verifier, a diff-only re-review, verify-then-fix with a reject path, CI triage, a no-progress check). The Tier B items are candidates for later deep dives, unordered and none scheduled:
+  - Several reviewers run in parallel, merged, deduplicated and voted on
+  - An incident-based eval set and noise metrics for the reviewer
+  - Risk-tiered human approval, and real approval and merge
+  - An author allowlist before the agent reviews or fixes
+  - Claims and a head-moved check around a review across many workers
+  - Second-round disagreement escalation and a post-push CI check
+  - A same-reason skip streak that auto-blocks, and deferring to a human mid-conversation
+  - Writing a good review guidance file, and staged versus auto-post of a review
 
 ### Release
 _Depends on: Review and Verification._
@@ -147,8 +156,8 @@ _Depends on: the execution environment lesson, before parallel runs._
 - Have the loop read each open PR and route it to a review, a patch or a person. Taught by [lesson 4, The loop reads PRs](04-the-loop-reads-prs/brief.md) (Tier A: see, route and stop; the round cap is shown as a choice, not a rule)
 
 Follow-on candidates from lesson 4, unordered, none scheduled:
-- Review deep dive: finding grading, inline comments, posting policy, reviewing against principles, real approval
-- Patch deep dive: how a finding becomes a commit, reading CI logs, resolving a conflict, a second-round disagreement
+- Review deep dive: taught by [lesson 6](06-review-signal-and-convergence/brief.md) (finding grading, evidence, a computed verdict); the rest of its Tier B items are listed under Review above
+- Patch deep dive: taught by [lesson 6](06-review-signal-and-convergence/brief.md) (verify-then-fix, the reject path, CI triage); second-round disagreement and a post-push CI check stay candidates
 - Starvation across many workers (a backlog of one kind ageing out the others): a destination, owned by the multi-agent coordination deep dive
 - The production round cap (a per-PR cooldown and a skip counter that clears when the head moves): a destination, owned by a later loop lesson
 
