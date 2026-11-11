@@ -142,6 +142,31 @@ export async function runLoop(
     }
   };
 
+  /** Writes tracking fields to a task. A failed write is logged, never fatal: tracking must not stop the factory. */
+  const track = (id: string, patch: Partial<Omit<Task, "id">>) => {
+    try {
+      store.update(id, patch);
+    } catch (err) {
+      log(`could not update tracking for ${id}: ${errMsg(err)}`);
+    }
+  };
+
+  /** Points each `pr`-status task at its open PR, or marks the recorded PR closed once it leaves the list. */
+  const trackPrs = (tasks: Task[], open: PullRequest[]) => {
+    for (const task of tasks) {
+      if (task.status !== "pr") continue;
+      const found = open.find((p) => p.branch.endsWith(`/${task.id}`));
+      if (found) {
+        const next = { repo: found.repo, number: found.number, url: found.url, open: true };
+        const cur = task.pr;
+        const same = cur?.repo === next.repo && cur.number === next.number && cur.url === next.url && cur.open;
+        if (!same) track(task.id, { pr: next });
+      } else if (task.pr?.open) {
+        track(task.id, { pr: { ...task.pr, open: false } });
+      }
+    }
+  };
+
   while (!signal?.aborted) {
     const tasks = store.load();
 
@@ -150,6 +175,7 @@ export async function runLoop(
       try {
         open = await prs.list();
         attempts.sync(open);
+        trackPrs(tasks, open);
       } catch (err) {
         log(`could not list PRs, continuing with tasks only: ${errMsg(err)}`);
         open = [];
@@ -222,9 +248,17 @@ export async function runLoop(
       outcome = { exitCode: -1, report: null };
       threw = true;
     }
-    if (!threw) recordRun("dev-task", next.id, next.title, outcome, startedAt);
-
     const { exitCode: code, report } = outcome;
+    if (!threw) {
+      recordRun("dev-task", next.id, next.title, outcome, startedAt);
+      const runs = (next.runs ?? 0) + 1;
+      if (code === 0 && report?.outcome === "skipped") {
+        track(next.id, { runs, skips: (next.skips ?? 0) + 1, lastSkipReason: report.reason });
+      } else {
+        track(next.id, { runs });
+      }
+    }
+
     if (code !== 0) {
       store.setStatus(next.id, "pending");
       log(`${next.id} failed (exit ${code}); returned to pending, stopping`);
