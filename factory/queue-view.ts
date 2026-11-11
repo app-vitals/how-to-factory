@@ -3,6 +3,7 @@
 
 import { rankCandidates } from "./candidates.ts";
 import type { AttemptsStore } from "./pr-attempts.ts";
+import { escapeHtml, renderPrRef } from "./pr-link.ts";
 import type { PullRequest } from "./prs.ts";
 import type { Task } from "./tasks.schema.ts";
 
@@ -16,6 +17,12 @@ export interface QueueItem {
   ref: string;
   title: string;
   createdAt?: string;
+  /** "owner/name" of the PR (review, patch). */
+  repo?: string;
+  /** Web URL of the PR (review, patch). */
+  url?: string;
+  /** How many runs of this task were skips (dev-task). */
+  skips?: number;
 }
 
 export interface QueueView {
@@ -33,15 +40,30 @@ export interface RenderOptions {
 export function buildQueue(tasks: Task[], prs: PullRequest[], attempts: AttemptsStore): QueueView {
   const queue = rankCandidates(tasks, prs, attempts).map((c, i): QueueItem => {
     if (c.kind === "task") {
-      return { position: i + 1, kind: "dev-task", ref: c.task.id, title: c.task.title, createdAt: c.task.createdAt };
+      return { position: i + 1, kind: "dev-task", ref: c.task.id, title: c.task.title, createdAt: c.task.createdAt, skips: c.task.skips };
     }
-    return { position: i + 1, kind: c.action, ref: `#${c.pr.number}`, title: c.pr.title, createdAt: c.pr.createdAt };
+    return {
+      position: i + 1,
+      kind: c.action,
+      ref: `#${c.pr.number}`,
+      title: c.pr.title,
+      createdAt: c.pr.createdAt,
+      repo: c.pr.repo,
+      url: c.pr.url,
+    };
   });
   return { running: tasks.filter((t) => t.status === "in_progress"), queue };
 }
 
-const ESCAPES: Record<string, string> = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
-const esc = (s: string): string => s.replace(/[&<>"']/g, (c) => ESCAPES[c] ?? c);
+const esc = escapeHtml;
+
+function refCell(q: QueueItem): string {
+  if (q.kind === "dev-task") return esc(q.ref);
+  return renderPrRef({ number: q.ref.replace(/^#/, ""), repo: q.repo, url: q.url, plain: q.ref });
+}
+
+const skipBadge = (q: QueueItem): string =>
+  q.kind === "dev-task" && q.skips !== undefined && q.skips > 0 ? `<span class="tag skips">skipped ${q.skips}×</span>` : "";
 
 function age(iso: string | undefined, now: Date): string {
   if (iso === undefined) return "–";
@@ -83,7 +105,7 @@ export function renderQueueHtml(view: QueueView, opts: RenderOptions = {}): stri
       (q, i) =>
         `<tr${i === 0 ? ' class="next"' : ""}><td>${q.position}</td>` +
         `<td><span class="badge badge-${q.kind}">${q.kind}</span></td>` +
-        `<td><code>${esc(q.ref)}</code></td><td>${esc(q.title)}${i === 0 ? '<span class="tag">next up</span>' : ""}</td>` +
+        `<td><code>${refCell(q)}</code></td><td>${esc(q.title)}${skipBadge(q)}${i === 0 ? '<span class="tag">next up</span>' : ""}</td>` +
         `<td>${age(q.createdAt, now)}</td></tr>`,
     )
     .join("");
