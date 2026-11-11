@@ -37,3 +37,13 @@ branch and a short report of what was fixed.
 - Edit files with the Edit and Write tools, never via `python3`, heredocs or `sed -i`.
 - The session starts in the repo root, so `cd` is not needed.
 - Prefer one command per Bash call; avoid chaining with `&&`, `;` or pipes unless every part is a read-only helper.
+
+## Result
+
+End the run with the structured result. Pick one outcome:
+
+- `processed`: fixes were pushed.
+- `skipped`: you deliberately did nothing, for example the PR is closed or merged, or there is nothing to fix (CI
+  green, no conflicts, no unresolved comments). Give a one-sentence reason.
+
+A failure is not a skip: exit non-zero as the rules above say.
