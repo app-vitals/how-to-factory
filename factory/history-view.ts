@@ -3,6 +3,7 @@
 // HISTORY_CSS adds only what history needs. No client JS, no external requests.
 
 import { AUDIT_OUTCOMES, type AuditEntry, type AuditOutcome } from "./audit-log.ts";
+import { escapeHtml, renderPrRef } from "./pr-link.ts";
 
 export const DEFAULT_HISTORY_LIMIT = 100;
 
@@ -50,8 +51,13 @@ export function buildHistory(entries: AuditEntry[], opts: HistoryOptions): Histo
   return { rows, total: matching.length, shown: rows.length, counts };
 }
 
-const ESCAPES: Record<string, string> = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
-const esc = (s: string): string => s.replace(/[&<>"']/g, (c) => ESCAPES[c] ?? c);
+const esc = escapeHtml;
+
+// dev-task rows stay plain text: there is no task view to link to yet.
+function refCell(e: AuditEntry): string {
+  if (e.action === "dev-task") return esc(String(e.target));
+  return renderPrRef({ number: e.target, repo: e.repo, url: e.url, plain: String(e.target) });
+}
 
 export const HISTORY_CSS = `
 .chips{display:flex;gap:.5rem;margin:.5rem 0 1rem}
@@ -90,7 +96,7 @@ export function renderHistoryHtml(history: HistoryView, opts: HistoryRenderOptio
       (e) =>
         `<tr><td>${esc(e.at)}</td>` +
         `<td><span class="badge badge-${e.action}">${e.action}</span></td>` +
-        `<td><code>${esc(String(e.target))}</code></td><td>${esc(e.title)}</td>` +
+        `<td><code>${refCell(e)}</code></td><td>${esc(e.title)}</td>` +
         `<td><span class="badge badge-${e.outcome}">${e.outcome}</span></td>` +
         `<td>${e.outcome === "success" ? "" : esc(e.reason ?? "")}</td>` +
         `<td>${duration(e.durationMs)}</td></tr>`,
