@@ -215,6 +215,46 @@
     {
       "id": "act-local",
       "label": "Works as one local agent, no account"
+    },
+    {
+      "id": "rev-grade",
+      "label": "Grades findings by severity or confidence"
+    },
+    {
+      "id": "rev-limits",
+      "label": "Caps or thresholds comments posted"
+    },
+    {
+      "id": "rev-verify",
+      "label": "Verifies findings before posting"
+    },
+    {
+      "id": "rev-preexisting",
+      "label": "Filters problems that predate the PR"
+    },
+    {
+      "id": "rev-guidance",
+      "label": "Reads repo guidance files, with ignore rules"
+    },
+    {
+      "id": "rev-evidence",
+      "label": "Requires file and line evidence"
+    },
+    {
+      "id": "rev-rereview",
+      "label": "Re-reviews only new changes, no repeats"
+    },
+    {
+      "id": "rev-pushback",
+      "label": "Lets a person dismiss or teach a finding"
+    },
+    {
+      "id": "rev-noise",
+      "label": "Measures its own noise"
+    },
+    {
+      "id": "rev-verdict",
+      "label": "States a verdict or approves"
     }
   ],
   "products": [
@@ -592,6 +632,81 @@
           "asOf": "2026-10-30",
           "short": "CLI history is local; no status view",
           "chip": "◐"
+        },
+        "rev-grade": {
+          "name": "Severe / Non-severe",
+          "summary": "Bugs are Severe (described as high-confidence) or Non-severe; security findings are Critical or Warning. Investigate and Informational flags are a separate class. The Review page gives no confidence scale beyond the Severe wording.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-review.md",
+          "asOf": "2026-11-11",
+          "short": "Severe or Non-severe; Critical or Warning",
+          "chip": "✓"
+        },
+        "rev-limits": {
+          "name": "Finding types",
+          "summary": "No cap on a count of comments is documented. What exists is a posting switch per finding type: bugs and security are posted by default, investigate and informational flags are not, and an admin can change each, with a per-repository override.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-review.md",
+          "asOf": "2026-11-11",
+          "short": "No count cap; per-type posting switches",
+          "chip": "◐"
+        },
+        "rev-verify": {
+          "name": "Finding triage",
+          "summary": "A named verification step is not documented. Later reviews check for duplicate and already-resolved findings. Other surface: on a PR Devin opened, with direct finding triage turned on, the owning session works through the findings first and only the rest are posted.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-review.md",
+          "asOf": "2026-11-11",
+          "short": "Verification step not documented; triage on own PRs",
+          "chip": "◐"
+        },
+        "rev-preexisting": {
+          "omitted": "Pages checked: Devin Review, Auto-Fix PR Bugs (docs.devin.ai). No filter for problems that existed before the PR is named; nearby, a later push is reviewed for bugs introduced or affected by the changes since the last review, and each PR in a stack is diffed against the layer below. Not documented; checked on 2026-11-11."
+        },
+        "rev-guidance": {
+          "name": "REVIEW.md",
+          "summary": "Reads REVIEW.md, AGENTS.md, CLAUDE.md, CONTRIBUTING.md and other agent or rule files as context, with extra globs in settings. REVIEW.md is the review-specific one; telling it what to ignore is prose there, and exclusion rules can skip whole PRs by author, label, title, branch, changed files or diff size.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-review.md",
+          "asOf": "2026-11-11",
+          "short": "REVIEW.md plus AGENTS.md, CLAUDE.md and more",
+          "chip": "✓"
+        },
+        "rev-evidence": {
+          "name": "Learn more",
+          "summary": "A hard rule that every finding must cite a location is not documented. A finding's detail holds an explanation, an example and a fix, and the gallery example is a Severe bug naming a file and line.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-review.md",
+          "asOf": "2026-11-11",
+          "short": "Location rule not documented; findings show explanation, fix",
+          "chip": "◐"
+        },
+        "rev-rereview": {
+          "name": "Incremental review",
+          "summary": "By default a push is reviewed for changes since the last review, earlier findings are carried forward and checked for duplicates and resolution. A large or changed-purpose PR can be reviewed whole again. A later push is reviewed automatically only if the cadence is Every push.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-review.md",
+          "asOf": "2026-11-11",
+          "short": "Changes since last review; findings carried forward",
+          "chip": "✓"
+        },
+        "rev-pushback": {
+          "name": "Resolve finding",
+          "summary": "A person marks a finding resolved, edits REVIEW.md to teach it, or asks a follow-up in chat. A feedback button or thumbs-down that trains the reviewer is not documented.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-review.md",
+          "asOf": "2026-11-11",
+          "short": "Mark resolved, edit REVIEW.md; thumbs-down not documented",
+          "chip": "◐"
+        },
+        "rev-noise": {
+          "name": "Review analytics",
+          "summary": "The consumption dashboard shows review ACUs, review count and bugs caught (Enterprise). A 2026-10-21 release note says analytics count a finding as resolved only when it was fixed in code. A false-positive rate is not documented.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-review.md",
+          "asOf": "2026-11-11",
+          "short": "Review counts; resolved means fixed in code",
+          "chip": "◐"
+        },
+        "rev-verdict": {
+          "name": "Devin Review status",
+          "summary": "A Devin Review commit status is posted, with a passing condition an admin chooses (review completed, threads resolved or no findings). Other surface: approval is the beta Autoapprover, which can post a real approval or leave the PR to a person.",
+          "sourceUrl": "https://docs.devin.ai/work-with-devin/devin-review.md",
+          "asOf": "2026-11-11",
+          "short": "Commit status; approval is Autoapprover, beta",
+          "chip": "◐"
         }
       },
       "demoable": {
@@ -953,6 +1068,76 @@
           "sourceUrl": "https://docs.factory.com/missions/running-cli.md",
           "asOf": "2026-10-30",
           "short": "CLI runs Mission Control; no-account unknown",
+          "chip": "◐"
+        },
+        "rev-grade": {
+          "name": "P0 to P3",
+          "summary": "CI review severity is not documented on its page. Other surface: local /review gives every finding a priority from P0 (blocks release) to P3 (nice to have), and Security review uses Critical to Low. A confidence score is not documented.",
+          "sourceUrl": "https://docs.factory.com/automations/code-review",
+          "asOf": "2026-11-11",
+          "short": "CI review not documented; /review grades P0-P3",
+          "chip": "◐"
+        },
+        "rev-limits": {
+          "name": "Prompt line",
+          "summary": "No default cap on CI review comments is documented. A prompt line can add one (the page's example is at most 5 comments). Draft PRs are skipped, and a paths filter or skip condition keeps PRs or files out.",
+          "sourceUrl": "https://docs.factory.com/automations/code-review-ci",
+          "asOf": "2026-11-11",
+          "short": "No default cap; prompt can add one",
+          "chip": "◐"
+        },
+        "rev-verify": {
+          "name": "Two passes",
+          "summary": "CI review has no documented verification pass. Other surface: Security review generates candidates, then re-checks each for reachability, exploitability, existing controls and false positives. Local /review has an eight-point test for a finding, not a separate pass.",
+          "sourceUrl": "https://docs.factory.com/automations/security-review",
+          "asOf": "2026-11-11",
+          "short": "CI review none; Security review runs two passes",
+          "chip": "◐"
+        },
+        "rev-preexisting": {
+          "name": "Introduced by change",
+          "summary": "CI review has no documented filter for problems that predate the PR. Other surface: local /review requires a finding to be introduced by the reviewed changes, taken against the merge base.",
+          "sourceUrl": "https://docs.factory.com/automations/code-review",
+          "asOf": "2026-11-11",
+          "short": "CI review not documented; /review requires introduced-by-change",
+          "chip": "◐"
+        },
+        "rev-guidance": {
+          "name": "review-guidelines",
+          "summary": "Reads .factory/skills/review-guidelines/SKILL.md, injected into every review run. Ignoring is done by a workflow paths list, a job condition such as a skip tag, or that skill. Whether AGENTS.md is read by the reviewer is not documented.",
+          "sourceUrl": "https://docs.factory.com/automations/code-review-ci",
+          "asOf": "2026-11-11",
+          "short": "review-guidelines skill; AGENTS.md reading not documented",
+          "chip": "◐"
+        },
+        "rev-evidence": {
+          "name": "Inline comments",
+          "summary": "Findings are inline comments on the lines concerned, with optional code suggestion blocks (default on). A rule requiring proof beyond that is not documented.",
+          "sourceUrl": "https://docs.factory.com/automations/code-review-ci",
+          "asOf": "2026-11-11",
+          "short": "Inline comments on lines; proof rule not documented",
+          "chip": "◐"
+        },
+        "rev-rereview": {
+          "name": "Re-run on push",
+          "summary": "The workflow runs again on each push and reads the existing comments first. Whether it reviews only the new commits or avoids repeating earlier comments is not documented.",
+          "sourceUrl": "https://docs.factory.com/automations/code-review-ci",
+          "asOf": "2026-11-11",
+          "short": "Runs each push; avoiding repeats not documented",
+          "chip": "◐"
+        },
+        "rev-pushback": {
+          "omitted": "Pages checked: Automated Code Review (CI), Security Review, local /review, Automations custom (docs.factory.com). No feedback control for dismissing or teaching a finding is described; the lever shown is editing the guidelines skill or the workflow. Not documented; checked on 2026-11-11."
+        },
+        "rev-noise": {
+          "omitted": "Pages checked: Review Benchmark, Agent Effectiveness overview, dashboard and cost-and-productivity (docs.factory.com). The Review Benchmark Markdown holds only an embedded component, and Agent Effectiveness has no review-comment acceptance or false-positive figure. Not documented; checked on 2026-11-11."
+        },
+        "rev-verdict": {
+          "name": "Approval",
+          "summary": "CI review submits an approval when it finds no issues, and posts inline comments when it does. Whether it requests changes or blocks a merge is not documented.",
+          "sourceUrl": "https://docs.factory.com/automations/code-review-ci",
+          "asOf": "2026-11-11",
+          "short": "Approves when no issues; blocking not documented",
           "chip": "◐"
         }
       },
@@ -1323,6 +1508,71 @@
           "asOf": "2026-10-30",
           "short": "Cloud no; CLI local but needs GitHub login",
           "chip": "◐"
+        },
+        "rev-grade": {
+          "name": "Severity label",
+          "summary": "Each comment is labelled High, Medium or Low. Confidence as a score or label is not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/request-a-code-review/use-code-review",
+          "asOf": "2026-11-11",
+          "short": "High, Medium or Low labels; no confidence",
+          "chip": "◐"
+        },
+        "rev-limits": {
+          "name": "Review effort",
+          "summary": "No count cap or severity threshold is documented. The dial is review effort (Lite, Balanced or Max), with a maximum effort setting at repository, organization and enterprise level.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/set-up-copilot/configure-code-review",
+          "asOf": "2026-11-11",
+          "short": "No comment cap; effort Lite, Balanced, Max",
+          "chip": "◐"
+        },
+        "rev-verify": {
+          "omitted": "Pages checked: the code review concept page, use-code-review, configure-code-review and the responsible-use agents card (docs.github.com). The card lists four steps, none a separate check, and names false positives as a known risk. Not documented; checked on 2026-11-11."
+        },
+        "rev-preexisting": {
+          "omitted": "Pages checked: the code review concept page, use-code-review, configure-code-review, the responsible-use agents card and the customize-code-review tutorial (docs.github.com). The card says only that it reads pull request diffs and metadata. Not documented; checked on 2026-11-11."
+        },
+        "rev-guidance": {
+          "name": "Custom instructions",
+          "summary": "Reads .github/copilot-instructions.md, path-specific *.instructions.md files, and AGENTS.md, CLAUDE.md, GEMINI.md and REVIEW.md. excludeAgent keeps a file away from the reviewer. A path or severity filter on comments is not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/request-a-code-review/use-code-review",
+          "asOf": "2026-11-11",
+          "short": "Instruction files, AGENTS.md, REVIEW.md; excludeAgent",
+          "chip": "◐"
+        },
+        "rev-evidence": {
+          "name": "Line feedback",
+          "summary": "Feedback is tied to specific lines, with a suggested change where possible. A rule that a finding must show proof beyond that is not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/request-a-code-review/use-code-review",
+          "asOf": "2026-11-11",
+          "short": "Tied to lines, suggested change; proof rule undocumented",
+          "chip": "◐"
+        },
+        "rev-rereview": {
+          "name": "Review new pushes",
+          "summary": "Off by default: a push is reviewed again only if Review new pushes is on or a person re-requests. The page says a re-review may repeat comments that were resolved or downvoted; limiting it to new commits is not documented.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/request-a-code-review/use-code-review",
+          "asOf": "2026-11-11",
+          "short": "Off by default; may repeat resolved comments",
+          "chip": "◐"
+        },
+        "rev-pushback": {
+          "name": "React or resolve",
+          "summary": "Comments behave like a person's: react, reply, resolve or hide. Thumbs go to GitHub; replies are not seen by Copilot. Teaching is through instruction files and Copilot Memory.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/request-a-code-review/use-code-review",
+          "asOf": "2026-11-11",
+          "short": "React, reply, resolve or hide; teach via instructions",
+          "chip": "✓"
+        },
+        "rev-noise": {
+          "omitted": "Pages checked: the code review concept page, use-code-review, configure-code-review and the responsible-use agents card (docs.github.com). The card gives overall benchmarks and a false-positive risk note, and thumbs are the only feedback signal described. Not documented; checked on 2026-11-11."
+        },
+        "rev-verdict": {
+          "name": "Approval assessment",
+          "summary": "Every review has an approval assessment in the overview comment. The default review type is Comment; an administrator can turn approvals on (off by default), and a new push dismisses an approval.",
+          "sourceUrl": "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/request-a-code-review/use-code-review",
+          "asOf": "2026-11-11",
+          "short": "Assessment in overview; approvals opt-in",
+          "chip": "✓"
         }
       },
       "demoable": {
@@ -1682,6 +1932,86 @@
           "sourceUrl": "https://docs.openhands.dev/openhands/usage/agent-canvas/setup.md",
           "asOf": "2026-10-30",
           "short": "Default install is a local backend",
+          "chip": "✓"
+        },
+        "rev-grade": {
+          "name": "Priority labels",
+          "summary": "Comments carry a label: Critical, Important, Suggestion or Nit, and a whole-PR Low, Medium or High risk block is always included. A numeric confidence score is not in their docs.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/code-review.md",
+          "asOf": "2026-11-11",
+          "short": "Four labels, risk block; no confidence score",
+          "chip": "◐"
+        },
+        "rev-limits": {
+          "name": "Material finding",
+          "summary": "A numeric cap is not in their docs. Skill text sets a content bar: only a material finding (a concrete failure on the current head, with evidence) may become a thread, and the posting skill says not to post Nits, though the docs page lists Nit as a label; which wins is unresolved.",
+          "sourceUrl": "https://github.com/OpenHands/extensions/blob/main/skills/code-review/SKILL.md",
+          "asOf": "2026-11-11",
+          "short": "No numeric cap; 'material finding' bar",
+          "chip": "◐"
+        },
+        "rev-verify": {
+          "name": "Verify before posting",
+          "summary": "An instructed step in skill text, not a separate system: re-read the file, reproduce the failure, check callers and tests, and drop the finding if any step fails. A second independent model pass is not in their docs.",
+          "sourceUrl": "https://github.com/OpenHands/extensions/blob/main/skills/code-review/SKILL.md",
+          "asOf": "2026-11-11",
+          "short": "Instructed re-read and reproduce step; no second model",
+          "chip": "◐"
+        },
+        "rev-preexisting": {
+          "name": "Current head",
+          "summary": "Skill text says a finding must be present on the current head and not already fixed elsewhere in the PR. A diff-base filter stated on a docs page is not in their docs.",
+          "sourceUrl": "https://github.com/OpenHands/extensions/blob/main/skills/code-review/SKILL.md",
+          "asOf": "2026-11-11",
+          "short": "Present on current head; diff-base filter undocumented",
+          "chip": "◐"
+        },
+        "rev-guidance": {
+          "name": "Repo review skill",
+          "summary": "A repo skill at .agents/skills/custom-codereview-guide.md; skill text also reads AGENTS.md files. A dedicated ignore section or syntax is not in their docs; ignoring is written in prose in the guide.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/code-review.md",
+          "asOf": "2026-11-11",
+          "short": "Repo skill file; no ignore syntax",
+          "chip": "◐"
+        },
+        "rev-evidence": {
+          "name": "Line references",
+          "summary": "Line references are part of the documented output. Skill text requires evidence for a finding and a verified path and line. The optional require-evidence input is evidence from the PR author, not per finding.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/code-review.md",
+          "asOf": "2026-11-11",
+          "short": "Line references and verified path and line",
+          "chip": "✓"
+        },
+        "rev-rereview": {
+          "name": "Manual re-review",
+          "summary": "Pushes do not start a review by default, to avoid noisy re-reviews, and the prompt says not to duplicate unresolved comments. A review-only-new-commits mode is not in their docs.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/code-review.md",
+          "asOf": "2026-11-11",
+          "short": "No push trigger; avoids duplicate comments",
+          "chip": "◐"
+        },
+        "rev-pushback": {
+          "name": "Edit the guide",
+          "summary": "Skill text ends each review with advice to edit the repo guide and re-request review, and invites thumbs reactions. A docs-page description of dismissing a finding is not in their docs.",
+          "sourceUrl": "https://github.com/OpenHands/extensions/blob/main/skills/code-review/SKILL.md",
+          "asOf": "2026-11-11",
+          "short": "Edit the guide and re-request; thumbs invited",
+          "chip": "◐"
+        },
+        "rev-noise": {
+          "name": "Suggestion accuracy",
+          "summary": "The skill-monitoring page gives a recipe: a suggestion-accuracy ratio computed by an LLM judge after merge. The plugin README lists an evaluation workflow. A false-positive rate is not in their docs.",
+          "sourceUrl": "https://docs.openhands.dev/overview/skills/monitoring.md",
+          "asOf": "2026-11-11",
+          "short": "After-merge judge recipe; no false-positive rate",
+          "chip": "◐"
+        },
+        "rev-verdict": {
+          "name": "Review verdict",
+          "summary": "The posting call takes APPROVE, COMMENT or REQUEST_CHANGES, and the prompt says when to use each. Skill text and the posting skill word the Critical case differently; which governs is unresolved.",
+          "sourceUrl": "https://docs.openhands.dev/openhands/usage/use-cases/code-review.md",
+          "asOf": "2026-11-11",
+          "short": "APPROVE, COMMENT or REQUEST_CHANGES",
           "chip": "✓"
         }
       },
@@ -2064,6 +2394,81 @@
         },
         "act-local": {
           "omitted": "Not documented as working without an account (checked: Agents Window, Cloud agents, Models & pricing on cursor.com). The Cloud agents page says they need a paid plan and a connected source-control account."
+        },
+        "rev-grade": {
+          "name": "Severity field",
+          "summary": "Severity exists in the analytics data, with examples high and medium; the scale is not defined and the field can be null. A visible confidence grade on a comment is not documented.",
+          "sourceUrl": "https://cursor.com/docs/bugbot.md",
+          "asOf": "2026-11-11",
+          "short": "Severity in analytics data; no visible confidence",
+          "chip": "◐"
+        },
+        "rev-limits": {
+          "name": "Size limit",
+          "summary": "No cap on a count of comments is documented. Caps exist on whether a review runs: a size limit, a cap on reviews of bot-opened PRs, and an effort setting (Low, Default, High, Smart).",
+          "sourceUrl": "https://cursor.com/docs/bugbot.md",
+          "asOf": "2026-11-11",
+          "short": "No comment cap; size limit and effort setting",
+          "chip": "◐"
+        },
+        "rev-verify": {
+          "name": "Eight passes",
+          "summary": "The docs do not describe the pipeline. A Cursor blog post describes eight passes with a majority vote, a validator model, a category filter and a dedupe against earlier runs; it covers results through January 2026 and may be out of date.",
+          "sourceUrl": "https://cursor.com/blog/building-bugbot",
+          "asOf": "2026-11-11",
+          "short": "Blog: eight passes, majority vote, validator; docs silent",
+          "chip": "◐"
+        },
+        "rev-preexisting": {
+          "omitted": "Pages checked: Bugbot docs, Bugbot help page, Bugbot blog posts (cursor.com). No filter for problems that existed before the PR is named; nearby, it analyzes the PR diff and by default only the changes since its previous review. Not documented; checked on 2026-11-11."
+        },
+        "rev-guidance": {
+          "name": "BUGBOT.md",
+          "summary": "Reads .cursor/BUGBOT.md (root and nested by directory), plus team, learned and manual rules; the repo config is read from the base branch. Ignoring is prose inside these rule files.",
+          "sourceUrl": "https://cursor.com/docs/bugbot.md",
+          "asOf": "2026-11-11",
+          "short": "BUGBOT.md nested; ignore is prose",
+          "chip": "✓"
+        },
+        "rev-evidence": {
+          "name": "Inline comments",
+          "summary": "Comments are inline on the PR with an explanation and a suggested fix. A rule that every finding must cite a location is not documented.",
+          "sourceUrl": "https://cursor.com/docs/bugbot.md",
+          "asOf": "2026-11-11",
+          "short": "Inline with fix; must-cite rule not documented",
+          "chip": "◐"
+        },
+        "rev-rereview": {
+          "name": "Incremental Review",
+          "summary": "By default it reviews only changes since its previous review and reads earlier comments to avoid duplicate suggestions. Turning Incremental Review off reviews the whole diff, and a once-per-PR setting skips later commits.",
+          "sourceUrl": "https://cursor.com/docs/bugbot.md",
+          "asOf": "2026-11-11",
+          "short": "Only changes since last review; reads earlier comments",
+          "chip": "✓"
+        },
+        "rev-pushback": {
+          "name": "@cursor remember",
+          "summary": "Reply @cursor remember with a fact to save a learned rule. Rules are also learned from reactions and replies, and are editable in the dashboard. What a person clicks to dismiss a finding is not described.",
+          "sourceUrl": "https://cursor.com/docs/bugbot.md",
+          "asOf": "2026-11-11",
+          "short": "Remember command, learned rules; dismiss click undescribed",
+          "chip": "◐"
+        },
+        "rev-noise": {
+          "name": "Resolution rate",
+          "summary": "Cursor's own headline measure is a resolution rate (flagged bugs the author fixed by merge), plus per-rule acceptance in the dashboard and analytics API. A false-positive rate by that name is not documented.",
+          "sourceUrl": "https://cursor.com/docs/bugbot.md",
+          "asOf": "2026-11-11",
+          "short": "Resolution rate and per-rule acceptance; no false-positive rate",
+          "chip": "◐"
+        },
+        "rev-verdict": {
+          "name": "Cursor Bugbot check",
+          "summary": "A Cursor Bugbot check is published per run: success for no findings, neutral for findings (the default), failure only if configured. Whether Bugbot itself approves is not documented. Other surface: PR Routing and Approval can approve low-risk PRs.",
+          "sourceUrl": "https://cursor.com/docs/bugbot.md",
+          "asOf": "2026-11-11",
+          "short": "Neutral check by default; approval is other surface",
+          "chip": "◐"
         }
       },
       "demoable": {
@@ -2462,6 +2867,86 @@
           "asOf": "2026-10-30",
           "short": "Runs on the machine with stored credentials",
           "chip": "✓"
+        },
+        "rev-grade": {
+          "name": "Severity markers",
+          "summary": "Three markers: Important (fix before merge), Nit (minor) and Pre-existing (already in the codebase). A visible confidence grade is not in their docs.",
+          "sourceUrl": "https://code.claude.com/docs/en/code-review-pull-requests.md",
+          "asOf": "2026-11-11",
+          "short": "Important, Nit, Pre-existing; no confidence grade",
+          "chip": "◐"
+        },
+        "rev-limits": {
+          "name": "REVIEW.md caps",
+          "summary": "No built-in cap is in their docs. The repo's REVIEW.md can set one (the example is at most five Nits), honored from a protected default branch.",
+          "sourceUrl": "https://code.claude.com/docs/en/code-review-customize.md",
+          "asOf": "2026-11-11",
+          "short": "No built-in cap; REVIEW.md can set one",
+          "chip": "◐"
+        },
+        "rev-verify": {
+          "name": "Verification step",
+          "summary": "Several agents find candidates in parallel, a verification step checks each against the code and drops false positives, then results are deduplicated and ranked.",
+          "sourceUrl": "https://code.claude.com/docs/en/code-review.md",
+          "asOf": "2026-11-11",
+          "short": "Parallel finders, then verification drops false positives",
+          "chip": "✓"
+        },
+        "rev-preexisting": {
+          "name": "Pre-existing",
+          "summary": "Pre-existing is its own severity class, shown separately. Later automatic reviews post fewer of them. Whether the first review suppresses any is not in their docs.",
+          "sourceUrl": "https://code.claude.com/docs/en/code-review-pull-requests.md",
+          "asOf": "2026-11-11",
+          "short": "Own severity class; first-review suppression undocumented",
+          "chip": "◐"
+        },
+        "rev-guidance": {
+          "name": "REVIEW.md",
+          "summary": "Reads CLAUDE.md as project context and a review-only REVIEW.md, both from the base branch. Ignoring and caps are prose in REVIEW.md, honored only from a protected branch.",
+          "sourceUrl": "https://code.claude.com/docs/en/code-review-customize.md",
+          "asOf": "2026-11-11",
+          "short": "CLAUDE.md and REVIEW.md from base branch",
+          "chip": "✓"
+        },
+        "rev-evidence": {
+          "name": "File:Line table",
+          "summary": "Findings are inline comments on the lines concerned, the check run lists severity and File:Line, and a collapsed Why this was flagged section holds the reasoning. REVIEW.md can add a citation rule.",
+          "sourceUrl": "https://code.claude.com/docs/en/code-review-pull-requests.md",
+          "asOf": "2026-11-11",
+          "short": "Inline comments, File:Line table, reasoning section",
+          "chip": "✓"
+        },
+        "rev-rereview": {
+          "name": "Focused re-review",
+          "summary": "A review after a push focuses on what changed since the last one, and the review body says how many findings it left out. Earlier threads are resolved when the issue is judged fixed.",
+          "sourceUrl": "https://code.claude.com/docs/en/code-review-pull-requests.md",
+          "asOf": "2026-11-11",
+          "short": "Focuses on changes; says how many left out",
+          "chip": "✓"
+        },
+        "rev-pushback": {
+          "name": "Resolve thread",
+          "summary": "Resolve the thread to dismiss; replies are read by the next review. To teach it, add a rule to REVIEW.md. A thumbs-up or thumbs-down loop is not in their docs.",
+          "sourceUrl": "https://code.claude.com/docs/en/code-review-pull-requests.md",
+          "asOf": "2026-11-11",
+          "short": "Resolve thread, reply, edit REVIEW.md; no thumbs loop",
+          "chip": "◐"
+        },
+        "rev-noise": {
+          "name": "Analytics page",
+          "summary": "An analytics page shows PRs reviewed, spend, a Feedback card (comments auto-resolved because the issue was addressed) and findings by severity. A false-positive rate is not in their docs.",
+          "sourceUrl": "https://code.claude.com/docs/en/code-review-costs.md",
+          "asOf": "2026-11-11",
+          "short": "Analytics, Feedback card; false-positive rate absent",
+          "chip": "◐"
+        },
+        "rev-verdict": {
+          "name": "Neutral check",
+          "summary": "It does not approve or block: the check run is neutral (or skipped), never failure. Gating is left to a script reading the severity counts.",
+          "sourceUrl": "https://code.claude.com/docs/en/code-review.md",
+          "asOf": "2026-11-11",
+          "short": "Never approves or blocks; neutral check",
+          "chip": "✗"
         }
       },
       "demoable": {
