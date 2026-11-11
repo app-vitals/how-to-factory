@@ -16,6 +16,8 @@ const task = (id: string, over: Partial<Task> = {}): Task => ({
 
 const pr = (number: number, over: Partial<PullRequest> = {}): PullRequest => ({
   number,
+  url: "",
+  repo: "",
   title: `pr ${number}`,
   branch: `feat/unknown-${number}`,
   createdAt: "2026-10-29T12:00:00Z",
@@ -138,5 +140,72 @@ describe("renderQueueHtml", () => {
     expect(html).not.toMatch(/https?:\/\//);
     expect(html).toContain('<meta http-equiv="refresh" content="10">');
     expect(html).not.toContain("<script");
+  });
+});
+
+describe("queue links and skip badge", () => {
+  const URL7 = "https://github.com/acme/widgets/pull/7";
+  const html = (prs: PullRequest[], tasks: Task[] = []) => renderQueueHtml(buildQueue(tasks, prs, fakeAttempts()), { now: NOW });
+
+  test("a review row with a url links to the PR in a new tab", () => {
+    const out = html([pr(7, { url: URL7, repo: "acme/widgets" })]);
+    expect(out).toContain(`<a href="${URL7}" target="_blank" rel="noopener noreferrer"`);
+    expect(out).toContain("acme/widgets#7</a>");
+    expect(out).toContain('title="acme/widgets"');
+  });
+
+  test("a patch row with a url links too", () => {
+    const out = html([pr(8, { url: URL7, repo: "acme/widgets", ci: "fail" })]);
+    expect(out).toContain(`<a href="${URL7}"`);
+  });
+
+  test("a url without a repo links with the text #<number>", () => {
+    const out = html([pr(7, { url: URL7, repo: "" })]);
+    expect(out).toContain(`target="_blank" rel="noopener noreferrer">#7</a>`);
+  });
+
+  test("a row without a url renders plain text", () => {
+    const out = html([pr(7)]);
+    expect(out).not.toContain("<a ");
+    expect(out).toContain("<code>#7</code>");
+  });
+
+  test("a dev-task row never renders a link", () => {
+    const out = html([], [task("a-task")]);
+    expect(out).toContain("a-task");
+    expect(out).not.toContain("<a ");
+  });
+
+  test("a javascript: or http: url is plain text, not an anchor", () => {
+    for (const url of ["javascript:alert(1)", "http://github.com/acme/widgets/pull/7"]) {
+      const out = html([pr(7, { url, repo: "acme/widgets" })]);
+      expect(out).not.toContain("<a ");
+      expect(out).not.toContain("href=");
+      expect(out).toContain("#7");
+    }
+  });
+
+  test("the href is HTML-escaped", () => {
+    const out = html([pr(7, { url: `https://github.com/a/b/pull/7?x="><script>alert(1)</script>&y=1`, repo: "a/b" })]);
+    expect(out).not.toContain("<script>alert");
+    expect(out).toContain("&quot;&gt;&lt;script&gt;");
+    expect(out).toContain("&amp;y=1");
+  });
+
+  test("shows 'skipped 2×' for a dev-task with skips 2", () => {
+    expect(html([], [task("a-task", { skips: 2 })])).toContain("skipped 2×");
+  });
+
+  test("shows no skip badge for 0 or undefined skips", () => {
+    expect(html([], [task("a", { skips: 0 }), task("b")])).not.toContain("skipped");
+  });
+
+  test("buildQueue carries repo and url on PR items and skips on task items", () => {
+    const { queue } = buildQueue([task("a", { skips: 3, createdAt: "2026-10-29T10:00:00Z" })], [pr(7, { url: URL7, repo: "acme/widgets" })], fakeAttempts());
+    const t = queue.find((q) => q.kind === "dev-task") as unknown as Record<string, unknown> | undefined;
+    const r = queue.find((q) => q.kind === "review") as unknown as Record<string, unknown> | undefined;
+    expect(t?.skips).toBe(3);
+    expect(r?.repo).toBe("acme/widgets");
+    expect(r?.url).toBe(URL7);
   });
 });

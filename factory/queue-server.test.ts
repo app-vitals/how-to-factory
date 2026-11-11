@@ -18,6 +18,8 @@ const task = (id: string, over: Partial<Task> = {}): Task => ({
 
 const pr = (number: number, over: Partial<PullRequest> = {}): PullRequest => ({
   number,
+  url: "",
+  repo: "",
   title: `pr ${number}`,
   branch: `feat/unknown-${number}`,
   createdAt: "2026-10-29T12:00:00Z",
@@ -33,6 +35,9 @@ const pr = (number: number, over: Partial<PullRequest> = {}): PullRequest => ({
 const fakeStore = (tasks: Task[]): TaskStore => ({
   load: () => tasks,
   setStatus: () => {
+    throw new Error("the queue server must never write tasks");
+  },
+  update: () => {
     throw new Error("the queue server must never write tasks");
   },
 });
@@ -218,6 +223,31 @@ type HistoryBody = {
   counts: Record<string, number>;
   error?: string;
 };
+
+describe("repo and url in the JSON", () => {
+  const URL7 = "https://github.com/acme/widgets/pull/7";
+
+  test("/api/queue and /api/history items carry repo and url", async () => {
+    const { source } = fakePrs([pr(7, { url: URL7, repo: "acme/widgets", createdAt: "2026-10-29T00:00:00Z" })]);
+    const prEntry: AuditEntry = { ...entry(7, "success", "2026-11-11T13:00:00Z"), action: "review", repo: "acme/widgets", url: URL7 };
+    const { url } = start({ prs: source, audit: fakeAudit([prEntry]).store });
+
+    const queue = (await (await fetch(`${url}/api/queue`)).json()) as { queue: Array<{ ref: string; repo?: string; url?: string }> };
+    const item = queue.queue.find((q) => q.ref === "#7");
+    expect(item?.repo).toBe("acme/widgets");
+    expect(item?.url).toBe(URL7);
+
+    const history = (await (await fetch(`${url}/api/history`)).json()) as HistoryBody;
+    expect(history.rows[0]?.repo).toBe("acme/widgets");
+    expect(history.rows[0]?.url).toBe(URL7);
+  });
+
+  test("GET / links the queued PR", async () => {
+    const { source } = fakePrs([pr(7, { url: URL7, repo: "acme/widgets", createdAt: "2026-10-29T00:00:00Z" })]);
+    const { url } = start({ prs: source });
+    expect(await (await fetch(`${url}/`)).text()).toContain(`<a href="${URL7}"`);
+  });
+});
 
 describe("history section", () => {
   test("GET / renders the history section after the queue", async () => {

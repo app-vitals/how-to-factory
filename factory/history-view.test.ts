@@ -208,3 +208,52 @@ describe("renderHistoryHtml", () => {
     expect(render([entry(1)])).toContain('id="history"');
   });
 });
+
+describe("renderHistoryHtml links", () => {
+  const URL7 = "https://github.com/acme/widgets/pull/7";
+  const prEntry = (over: Partial<AuditEntry> = {}) =>
+    entry(1, { action: "review", target: 7, repo: "acme/widgets", url: URL7, ...over });
+  const render = (entries: AuditEntry[]) =>
+    renderHistoryHtml(buildHistory(entries, { outcome: null }), { outcome: null });
+
+  test("a review row with a url links to the PR in a new tab", () => {
+    const html = render([prEntry()]);
+    expect(html).toContain(`<a href="${URL7}" target="_blank" rel="noopener noreferrer"`);
+    expect(html).toContain("acme/widgets#7</a>");
+    expect(html).toContain('title="acme/widgets"');
+  });
+
+  test("a patch row with a url links too", () => {
+    expect(render([prEntry({ action: "patch" })])).toContain(`<a href="${URL7}"`);
+  });
+
+  test("a PR row without a url renders plain text", () => {
+    const html = render([prEntry({ repo: undefined, url: undefined })]);
+    expect(html).not.toContain('target="_blank"');
+    expect(html).toContain("<code>7</code>");
+  });
+
+  test("a dev-task row never renders a link, even with a url", () => {
+    const html = render([entry(1, { repo: "acme/widgets", url: URL7 })]);
+    expect(html).not.toContain('target="_blank"');
+    expect(html).not.toContain(URL7);
+    expect(html).toContain("task-1");
+  });
+
+  test("a javascript: or http: url is plain text, not an anchor", () => {
+    for (const url of ["javascript:alert(1)", "http://github.com/acme/widgets/pull/7"]) {
+      const html = render([prEntry({ url })]);
+      expect(html).not.toContain('target="_blank"');
+      expect(html).not.toContain('href="javascript');
+      expect(html).not.toContain('href="http:');
+      expect(html).toContain("<code>7</code>");
+    }
+  });
+
+  test("the href is HTML-escaped", () => {
+    const html = render([prEntry({ url: `https://github.com/a/b/pull/7?x="><script>alert(1)</script>&y=1` })]);
+    expect(html).not.toContain("<script>alert");
+    expect(html).toContain("&quot;&gt;&lt;script&gt;");
+    expect(html).toContain("&amp;y=1");
+  });
+});
