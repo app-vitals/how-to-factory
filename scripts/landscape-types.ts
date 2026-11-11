@@ -1,4 +1,4 @@
-export const COMPONENT_IDS = ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks", "plan-clarify", "plan-assumptions", "plan-editable", "plan-saved", "plan-ordering", "plan-parallel", "plan-replan", "plan-critique", "plan-readonly", "plan-tracker", "plan-human-only", "plan-rollout", "verify-checks", "verify-criteria", "verify-test-plan", "verify-ci-gate", "verify-limits", "verify-test-guard", "verify-evidence", "verify-pr-fix", "verify-hidden-tests", "verify-test-quality", "route-trigger", "route-rereview", "route-approve", "route-fix-comments", "route-fix-ci", "route-fix-conflicts", "route-limits", "route-state", "act-list", "act-status", "act-reason", "act-log", "act-history", "act-pr-link", "act-why", "act-cost", "act-local"] as const;
+export const COMPONENT_IDS = ["plan-name", "execute-name", "plan-hitl", "plan-persist", "plan-contents", "verify-judge", "verify-runs-app", "verify-keeps-going", "loop-starts-next", "loop-includes-plan", "design-reads", "design-form", "design-reuse", "design-approval", "design-tasks", "plan-clarify", "plan-assumptions", "plan-editable", "plan-saved", "plan-ordering", "plan-parallel", "plan-replan", "plan-critique", "plan-readonly", "plan-tracker", "plan-human-only", "plan-rollout", "verify-checks", "verify-criteria", "verify-test-plan", "verify-ci-gate", "verify-limits", "verify-test-guard", "verify-evidence", "verify-pr-fix", "verify-hidden-tests", "verify-test-quality", "route-trigger", "route-rereview", "route-approve", "route-fix-comments", "route-fix-ci", "route-fix-conflicts", "route-limits", "route-state", "act-list", "act-status", "act-reason", "act-log", "act-history", "act-pr-link", "act-why", "act-cost", "act-local", "rev-grade", "rev-limits", "rev-verify", "rev-preexisting", "rev-guidance", "rev-evidence", "rev-rereview", "rev-pushback", "rev-noise", "rev-verdict"] as const;
 type ComponentId = (typeof COMPONENT_IDS)[number];
 
 /** Longest `short` a slide cell may carry, in words. */
@@ -75,6 +75,16 @@ export const CHIP_RULES: Record<ComponentId, ChipRule> = {
   "act-why": MARK,
   "act-cost": MARK,
   "act-local": MARK,
+  "rev-grade": MARK,
+  "rev-limits": MARK,
+  "rev-verify": MARK,
+  "rev-preexisting": MARK,
+  "rev-guidance": MARK,
+  "rev-evidence": MARK,
+  "rev-rereview": MARK,
+  "rev-pushback": MARK,
+  "rev-noise": MARK,
+  "rev-verdict": MARK,
 };
 
 /** Task-queue products have no component; their `queue` cell chip is the product's own term. */
