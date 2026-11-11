@@ -2,7 +2,7 @@
 // The loop owns status: pending -> in_progress -> pr. `pr` is terminal.
 
 import { AGENT_RESULT_SCHEMA, parseAgentResult, toAuditOutcome, type AgentResult } from "./agent-result.ts";
-import { auditStore,type AuditAction, type AuditStore } from "./audit-log.ts";
+import { auditStore, type AuditAction, type AuditStore } from "./audit-log.ts";
 import { pickCandidate } from "./candidates.ts";
 import { attemptsStore, type AttemptsStore } from "./pr-attempts.ts";
 import { ghPrSource, type PrSource, type PullRequest } from "./prs.ts";
