@@ -516,8 +516,6 @@ describe("runLoop agent result report", () => {
     title: `PR ${number}`,
     branch: `feat/other-${number}`,
     createdAt: "2026-10-29T10:00:00.000Z",
-    url: `https://github.com/acme/widgets/pull/${number}`,
-    repo: "acme/widgets",
     isDraft: false,
     headSha: `sha${number}`,
     ci: "pass",
