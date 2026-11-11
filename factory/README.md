@@ -27,6 +27,14 @@ ran: a runner that throws, attempt limits, flag failures and idle polls are logg
 failing task is recorded before the loop stops, and a failed audit write is logged without stopping the loop. Without
 an `audit` option the loop records nothing.
 
+## Queue view
+
+`bun run queue` starts a separate, read-only process that shows what the loop will do next: `GET /` is an HTML page
+(running tasks, then the ranked queue) and `GET /api/queue` is the same data as JSON. Anything else is a 404. It binds
+to `127.0.0.1` only, on `QUEUE_PORT` (default `4040`). It reads tasks, open PRs and attempt counts, and never writes or
+calls `attempts.sync`. The PR listing is cached for about 10 seconds; if `gh` fails, the page still returns 200 with
+tasks only and an error banner (and an `error` field in the JSON).
+
 ## Lessons
 
 Lesson 1 builds the `plan` and `dev-task` skills (`skills/`) and the loop (`loop.ts`). A finished copy is tagged
