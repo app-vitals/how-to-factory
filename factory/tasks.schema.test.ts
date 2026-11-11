@@ -49,6 +49,39 @@ describe("validateTasks", () => {
   });
 });
 
+const pr = { repo: "app-vitals/how-to-factory", number: 7, url: "https://github.com/app-vitals/how-to-factory/pull/7", open: true };
+const bad = (over: Record<string, unknown>) => validateTasks([{ ...valid(), ...over }]);
+
+describe("tracking fields", () => {
+  test("tasks without the fields still validate; valid fields are accepted", () => {
+    expect(validateTasks([valid()])).toEqual([]);
+    expect(validateTasks([valid({ runs: 0, skips: 0 })])).toEqual([]);
+    expect(validateTasks([valid({ runs: 3, skips: 2, lastSkipReason: "blocked", pr })])).toEqual([]);
+    expect(validateTasks([valid({ pr: { ...pr, open: false } })])).toEqual([]);
+  });
+
+  test.each(["runs", "skips"])("%s rejects negative, fractional and non-number values", (f) => {
+    for (const v of [-1, 1.5, "2", null, Number.NaN]) {
+      expect(bad({ [f]: v }).join()).toContain(f);
+    }
+  });
+
+  test("lastSkipReason rejects empty and non-string values", () => {
+    expect(bad({ lastSkipReason: "" }).join()).toContain("lastSkipReason");
+    expect(bad({ lastSkipReason: 5 }).join()).toContain("lastSkipReason");
+  });
+
+  test("pr rejects a bad repo, number, url or open flag, and non-objects", () => {
+    for (const repo of ["nope", "a/b/c", "", 3]) expect(bad({ pr: { ...pr, repo } }).join()).toContain("pr");
+    for (const number of [0, -1, 1.5, "7"]) expect(bad({ pr: { ...pr, number } }).join()).toContain("pr");
+    for (const url of ["http://github.com/a/b/pull/1", "not a url", "", 1]) {
+      expect(bad({ pr: { ...pr, url } }).join()).toContain("pr");
+    }
+    for (const open of ["true", 1, undefined]) expect(bad({ pr: { ...pr, open } }).join()).toContain("pr");
+    for (const p of [null, "x", []]) expect(bad({ pr: p }).join()).toContain("pr");
+  });
+});
+
 describe("parseTasks", () => {
   test("returns the tasks or throws with every problem listed", () => {
     expect(parseTasks([valid()])).toHaveLength(1);

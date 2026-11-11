@@ -48,6 +48,9 @@ function memStore(tasks: Task[]) {
       tasks.find((t) => t.id === id)!.status = status;
       history.push(`${id}:${status}`);
     },
+    update(id, patch) {
+      Object.assign(tasks.find((t) => t.id === id)!, patch);
+    },
   };
   return { store, history, tasks };
 }
