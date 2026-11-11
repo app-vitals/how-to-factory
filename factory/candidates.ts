@@ -30,7 +30,12 @@ const stamp = (iso: string | undefined): number => {
   return Number.isNaN(t) ? Number.POSITIVE_INFINITY : t;
 };
 
-export function pickCandidate(tasks: Task[], prs: PullRequest[], attempts: AttemptsStore): Pick {
+interface Ranking {
+  candidates: Candidate[];
+  newlyExceeded: PullRequest[];
+}
+
+function rank(tasks: Task[], prs: PullRequest[], attempts: AttemptsStore): Ranking {
   const done = new Set(tasks.filter((t) => t.status === "pr").map((t) => t.id));
   const ranked: Ranked[] = [];
   const newlyExceeded: PullRequest[] = [];
@@ -55,5 +60,15 @@ export function pickCandidate(tasks: Task[], prs: PullRequest[], attempts: Attem
 
   // Tasks were ranked first, so a timestamp tie (and file order among unstamped tasks) falls to the lower index.
   ranked.sort((a, b) => (a.sortAt === b.sortAt ? a.index - b.index : a.sortAt < b.sortAt ? -1 : 1));
-  return { candidate: ranked[0]?.candidate ?? null, newlyExceeded };
+  return { candidates: ranked.map((r) => r.candidate), newlyExceeded };
+}
+
+/** Every candidate in loop order: oldest first, unstamped tasks last, ties by original order. */
+export function rankCandidates(tasks: Task[], prs: PullRequest[], attempts: AttemptsStore): Candidate[] {
+  return rank(tasks, prs, attempts).candidates;
+}
+
+export function pickCandidate(tasks: Task[], prs: PullRequest[], attempts: AttemptsStore): Pick {
+  const { candidates, newlyExceeded } = rank(tasks, prs, attempts);
+  return { candidate: candidates[0] ?? null, newlyExceeded };
 }
