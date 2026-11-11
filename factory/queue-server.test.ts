@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
+import type { AuditEntry, AuditStore } from "./audit-log";
 import type { AttemptsStore } from "./pr-attempts";
 import type { PrSource, PullRequest } from "./prs";
 import { startQueueServer } from "./queue-server";
@@ -32,6 +33,9 @@ const pr = (number: number, over: Partial<PullRequest> = {}): PullRequest => ({
 const fakeStore = (tasks: Task[]): TaskStore => ({
   load: () => tasks,
   setStatus: () => {
+    throw new Error("the queue server must never write tasks");
+  },
+  update: () => {
     throw new Error("the queue server must never write tasks");
   },
 });
@@ -79,12 +83,45 @@ afterEach(() => {
   servers = [];
 });
 
-function start(opts: { prs: PrSource; attempts?: AttemptsStore; now?: () => Date }) {
+const entry = (target: string | number, outcome: AuditEntry["outcome"], at: string): AuditEntry => ({
+  at,
+  action: "dev-task",
+  target,
+  title: `run ${target}`,
+  outcome,
+  ...(outcome === "success" ? {} : { reason: `why ${target}` }),
+  durationMs: 1500,
+});
+
+const auditEntries = [
+  entry("ok-run", "success", "2026-11-11T10:00:00Z"),
+  entry("bad-run", "failure", "2026-11-11T11:00:00Z"),
+  entry("skip-run", "skip", "2026-11-11T12:00:00Z"),
+];
+
+/** Counts every call so tests can assert nothing but reads happened. */
+const fakeAudit = (entries: AuditEntry[] | Error = auditEntries) => {
+  const calls = { list: 0, record: 0 };
+  const store: AuditStore = {
+    list: () => {
+      calls.list++;
+      if (entries instanceof Error) throw entries;
+      return entries;
+    },
+    record: () => {
+      calls.record++;
+    },
+  };
+  return { store, calls };
+};
+
+function start(opts: { prs: PrSource; attempts?: AttemptsStore; now?: () => Date; audit?: AuditStore }) {
   const server = startQueueServer({
     port: 0,
     store: fakeStore(tasks),
     prs: opts.prs,
     attempts: opts.attempts ?? fakeAttempts().store,
+    audit: opts.audit ?? fakeAudit([]).store,
     now: opts.now,
   });
   servers.push(server);
@@ -174,5 +211,108 @@ describe("startQueueServer", () => {
   test("listens on 127.0.0.1 only", () => {
     const { server } = start({ prs: fakePrs([]).source });
     expect(server.hostname).toBe("127.0.0.1");
+  });
+});
+
+type HistoryBody = {
+  rows: AuditEntry[];
+  total: number;
+  shown: number;
+  counts: Record<string, number>;
+  error?: string;
+};
+
+describe("history section", () => {
+  test("GET / renders the history section after the queue", async () => {
+    const { url } = start({ prs: fakePrs([]).source, audit: fakeAudit().store });
+    const html = await (await fetch(`${url}/`)).text();
+    const queueAt = html.indexOf("Up next");
+    const historyAt = html.indexOf('<section id="history">');
+    expect(queueAt).toBeGreaterThanOrEqual(0);
+    expect(historyAt).toBeGreaterThan(queueAt);
+    expect(html).toContain("run ok-run");
+    expect(html.indexOf("</body>")).toBeGreaterThan(historyAt);
+  });
+
+  test("GET /?outcome=failure shows only failure rows", async () => {
+    const { url } = start({ prs: fakePrs([]).source, audit: fakeAudit().store });
+    const html = await (await fetch(`${url}/?outcome=failure`)).text();
+    const history = html.slice(html.indexOf('<section id="history">'));
+    expect(history).toContain("run bad-run");
+    expect(history).not.toContain("run ok-run");
+    expect(history).not.toContain("run skip-run");
+  });
+
+  test("GET /api/history?outcome=skip returns only skip rows and unfiltered counts", async () => {
+    const { url } = start({ prs: fakePrs([]).source, audit: fakeAudit().store });
+    const res = await fetch(`${url}/api/history?outcome=skip`);
+    expect(res.status).toBe(200);
+    expect(res.headers.get("content-type")).toContain("application/json");
+    const body = (await res.json()) as HistoryBody;
+    expect(body.rows.map((r) => r.target)).toEqual(["skip-run"]);
+    expect(body.total).toBe(1);
+    expect(body.shown).toBe(1);
+    expect(body.counts).toEqual({ success: 1, failure: 1, skip: 1 });
+    expect(body.error).toBeUndefined();
+  });
+
+  test("an unknown outcome returns all rows", async () => {
+    const { url } = start({ prs: fakePrs([]).source, audit: fakeAudit().store });
+    const body = (await (await fetch(`${url}/api/history?outcome=bogus`)).json()) as HistoryBody;
+    expect(body.rows.map((r) => r.target)).toEqual(["skip-run", "bad-run", "ok-run"]);
+    const page = await (await fetch(`${url}/?outcome=bogus`)).text();
+    expect(page).toContain("run ok-run");
+    expect(page).toContain("run skip-run");
+  });
+
+  test("an unreadable audit log keeps the queue and shows an error banner", async () => {
+    const { url } = start({ prs: fakePrs([]).source, audit: fakeAudit(new Error("line 3 is not valid JSON")).store });
+    const page = await fetch(`${url}/`);
+    expect(page.status).toBe(200);
+    const html = await page.text();
+    expect(html).toContain("a-task");
+    const history = html.slice(html.indexOf('<section id="history">'));
+    expect(history).toContain("banner-error");
+    expect(history).toContain("line 3 is not valid JSON");
+    expect(html).toMatch(/<style>[^<]*\.banner-error\{/);
+
+    const api = await fetch(`${url}/api/history`);
+    expect(api.status).toBe(200);
+    const body = (await api.json()) as HistoryBody;
+    expect(body.error).toContain("line 3 is not valid JSON");
+    expect(body.rows).toEqual([]);
+  });
+
+  test("a queue failure and an audit failure are independent", async () => {
+    const { url } = start({ prs: fakePrs(new Error("gh exploded")).source, audit: fakeAudit(new Error("bad log")).store });
+    const html = await (await fetch(`${url}/`)).text();
+    expect(html).toContain("gh exploded");
+    expect(html).toContain("bad log");
+  });
+
+  test("requests never write the audit store", async () => {
+    const { store, calls } = fakeAudit();
+    const { url } = start({ prs: fakePrs([]).source, audit: store });
+    await fetch(`${url}/`);
+    await fetch(`${url}/?outcome=failure`);
+    await fetch(`${url}/api/history?outcome=skip`);
+    await fetch(`${url}/api/queue`);
+    await fetch(`${url}/nope`);
+    expect(calls.record).toBe(0);
+    expect(calls.list).toBeGreaterThan(0);
+  });
+
+  test("the audit log is read per request, not cached", async () => {
+    const { store, calls } = fakeAudit();
+    const { url } = start({ prs: fakePrs([]).source, audit: store });
+    await fetch(`${url}/api/history`);
+    await fetch(`${url}/api/history`);
+    expect(calls.list).toBe(2);
+  });
+
+  test("/api/history rejects non-GET and extra path segments", async () => {
+    const { url } = start({ prs: fakePrs([]).source, audit: fakeAudit().store });
+    expect((await fetch(`${url}/api/history`, { method: "POST" })).status).toBe(404);
+    expect((await fetch(`${url}/api/history/extra`)).status).toBe(404);
   });
 });
