@@ -217,6 +217,8 @@ describe("runLoop PR routing", () => {
   const ok: Runner = async () => 0;
   const pr = (number: number, over: Partial<PullRequest> = {}): PullRequest => ({
     number,
+    url: `https://github.com/acme/widgets/pull/${number}`,
+    repo: "acme/widgets",
     title: `PR ${number}`,
     branch: `feat/other-${number}`,
     createdAt: "2026-10-29T10:00:00.000Z",
@@ -334,6 +336,8 @@ describe("runLoop audit log", () => {
   const ok: Runner = async () => 0;
   const openPr = (number: number, over: Partial<PullRequest> = {}): PullRequest => ({
     number,
+    url: `https://github.com/acme/widgets/pull/${number}`,
+    repo: "acme/widgets",
     title: `PR ${number}`,
     branch: `feat/other-${number}`,
     createdAt: "2026-10-29T10:00:00.000Z",

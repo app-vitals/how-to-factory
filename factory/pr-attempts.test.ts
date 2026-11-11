@@ -26,6 +26,8 @@ function fakeGh(exitCode = 0) {
 function pr(number: number, labels: string[] = []): PullRequest {
   return {
     number,
+    url: `https://github.com/acme/widgets/pull/${number}`,
+    repo: "acme/widgets",
     title: "t",
     branch: "feat/x",
     createdAt: "2026-10-29T00:00:00Z",

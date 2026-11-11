@@ -4,6 +4,8 @@ import type { PullRequest } from "./prs";
 
 const pr = (over: Partial<PullRequest> = {}): PullRequest => ({
   number: 1,
+  url: "https://github.com/acme/widgets/pull/1",
+  repo: "acme/widgets",
   title: "t",
   branch: "feat/x",
   createdAt: "2026-10-29T00:00:00Z",

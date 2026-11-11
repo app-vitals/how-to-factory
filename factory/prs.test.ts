@@ -1,8 +1,9 @@
 import { expect, test } from "bun:test";
-import { type GhRunner, ghPrSource, type PullRequest } from "./prs.ts";
+import { type GhRunner, ghPrSource, PR_JSON_FIELDS, type PullRequest } from "./prs.ts";
 
 const base = {
   number: 7,
+  url: "https://github.com/acme/widgets/pull/7",
   title: "feat: x",
   headRefName: "feat/x",
   createdAt: "2026-10-29T10:00:00Z",
@@ -33,6 +34,8 @@ test("normalizes the base fields and asks gh for open PRs", async () => {
   expect(await src.list()).toEqual([
     {
       number: 7,
+      url: "https://github.com/acme/widgets/pull/7",
+      repo: "acme/widgets",
       title: "feat: x",
       branch: "feat/x",
       createdAt: "2026-10-29T10:00:00Z",
@@ -96,6 +99,25 @@ test("labels become names; draft flag is kept", async () => {
   const pr = await one({ labels: [{ name: "needs-human" }, { name: "bug" }], isDraft: true });
   expect(pr.labels).toEqual(["needs-human", "bug"]);
   expect(pr.isDraft).toBe(true);
+});
+
+test("asks gh for the url field", () => {
+  expect(PR_JSON_FIELDS.split(",")).toContain("url");
+});
+
+test("repo is derived from the PR url", async () => {
+  const pr = await one({ url: "https://github.com/app-vitals/how-to-factory/pull/42" });
+  expect(pr.url).toBe("https://github.com/app-vitals/how-to-factory/pull/42");
+  expect(pr.repo).toBe("app-vitals/how-to-factory");
+});
+
+test("a malformed or missing url is rejected with an error naming the PR number", async () => {
+  for (const url of ["not a url", "https://github.com/acme/widgets/issues/7", "https://example.com/a/b/pull/7", ""]) {
+    await expect(one({ url })).rejects.toThrow(/PR #7.*url/);
+  }
+  const { url: _omit, ...noUrl } = base;
+  const gh: GhRunner = async () => ({ exitCode: 0, stdout: JSON.stringify([noUrl]), stderr: "" });
+  await expect(ghPrSource(gh).list()).rejects.toThrow(/PR #7.*url/);
 });
 
 test("a non-zero gh exit throws an error naming the cause", async () => {
