@@ -99,7 +99,7 @@ describe("startQueueServer", () => {
     expect(res.status).toBe(200);
     expect(res.headers.get("content-type")).toContain("text/html");
     const html = await res.text();
-    const order = ["a-task", "#7", "b-task"].map((ref) => html.indexOf(ref));
+    const order = ["a-task", "#7", "b-task"].map((ref) => html.indexOf(`<code>${ref}</code>`));
     expect(order.every((i) => i >= 0)).toBe(true);
     expect(order).toEqual([...order].sort((a, b) => a - b));
   });
