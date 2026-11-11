@@ -126,7 +126,14 @@ export async function runLoop(
    * Records one run of the agent. A runner that threw never ran the agent, so callers do not record it.
    * A failed write is logged, never fatal: the audit log must not stop the factory.
    */
-  const recordRun = (action: AuditAction, target: string | number, title: string, { exitCode, report }: RunResult, startedAt: number) => {
+  const recordRun = (
+    action: AuditAction,
+    target: string | number,
+    title: string,
+    { exitCode, report }: RunResult,
+    startedAt: number,
+    pr?: Pick<PullRequest, "repo" | "url">,
+  ) => {
     try {
       audit.record({
         at: new Date().toISOString(),
@@ -136,6 +143,7 @@ export async function runLoop(
         ...toAuditOutcome(exitCode, report),
         exitCode,
         durationMs: Math.max(0, Date.now() - startedAt),
+        ...(pr ? { repo: pr.repo, url: pr.url } : {}),
       });
     } catch (err) {
       log(`could not write audit entry for ${action} ${target}: ${errMsg(err)}`);
@@ -208,7 +216,7 @@ export async function runLoop(
         threw = true;
       }
       const code = outcome.exitCode;
-      if (!threw) recordRun(action, pr.number, pr.title, outcome, startedAt);
+      if (!threw) recordRun(action, pr.number, pr.title, outcome, startedAt, pr);
       if (outcome.report?.outcome === "skipped") log(`PR #${pr.number} ${action} skipped: ${outcome.report.reason}`);
       // Every run counts, pass or fail, so a PR that never settles ends up with a human; only a
       // successful review marks the SHA reviewed, so a crashed one is retried.
