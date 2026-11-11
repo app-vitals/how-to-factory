@@ -35,6 +35,15 @@ to `127.0.0.1` only, on `QUEUE_PORT` (default `4040`). It reads tasks, open PRs 
 calls `attempts.sync`. The PR listing is cached for about 10 seconds; if `gh` fails, the page still returns 200 with
 tasks only and an error banner (and an `error` field in the JSON).
 
+### History section
+
+Below the queue, `GET /` shows a **History** section: recent audit-log runs, newest first, with a count chip per
+outcome. Filter with `?outcome=success|failure|skip` (the chips are links); any other value shows all runs.
+`GET /api/history?outcome=` returns `{rows, total, shown, counts}` as JSON; `counts` always covers the whole log, not
+just the filter. The audit log is read on every request and never written. If it cannot be read (for example a corrupt
+line), the history section shows an error banner while the queue still renders with a 200, and `/api/history` returns
+an `error` field with empty rows and a 200.
+
 ## Lessons
 
 Lesson 1 builds the `plan` and `dev-task` skills (`skills/`) and the loop (`loop.ts`). A finished copy is tagged
