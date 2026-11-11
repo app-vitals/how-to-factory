@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { pickCandidate } from "./candidates";
+import { pickCandidate, rankCandidates } from "./candidates";
 import { type AttemptsStore, MAX_PR_ATTEMPTS, type PrAttempts } from "./pr-attempts";
 import type { PullRequest } from "./prs";
 import type { Task } from "./tasks.schema";
@@ -118,5 +118,44 @@ describe("pickCandidate", () => {
     const at = "2026-10-29T12:00:00Z";
     const r = pickCandidate([task("a", { createdAt: at })], [pr(1, { createdAt: at })], fakeAttempts());
     expect(idOf(r.candidate)).toBe("task:a");
+  });
+});
+
+describe("rankCandidates", () => {
+  const tasks = [
+    task("unstamped"),
+    task("owner", { createdAt: "2026-10-29T10:00:00Z" }),
+    task("blocked", { dependencies: ["missing"], createdAt: "2026-10-29T09:00:00Z" }),
+    task("late", { createdAt: "2026-10-29T14:00:00Z" }),
+  ];
+  const prs = [
+    pr(1, { createdAt: "2026-10-29T12:00:00Z" }),
+    pr(2, { branch: "feat/owner" }),
+    pr(3, { createdAt: "2026-10-29T08:00:00Z" }),
+  ];
+  const exceeded: PrAttempts = { reviews: MAX_PR_ATTEMPTS, patches: 0, reviewedSha: "old" } as PrAttempts;
+
+  test("lists tasks and PRs oldest first with unstamped tasks last", () => {
+    const ids = rankCandidates(tasks, prs.filter((p) => p.number !== 3), fakeAttempts()).map(idOf);
+    expect(ids).toEqual(["task:owner", "pr:1", "task:late", "task:unstamped"]);
+  });
+
+  test("omits owned PRs, PRs at the attempt limit and blocked tasks", () => {
+    const ids = rankCandidates(tasks, prs, fakeAttempts({ 3: exceeded })).map(idOf);
+    expect(ids).not.toContain("pr:2");
+    expect(ids).not.toContain("pr:3");
+    expect(ids).not.toContain("task:blocked");
+    expect(ids).toEqual(["task:owner", "pr:1", "task:late", "task:unstamped"]);
+  });
+
+  test("ties keep original order, tasks before PRs", () => {
+    const t = [task("a", { createdAt: "2026-10-29T12:00:00Z" }), task("b", { createdAt: "2026-10-29T12:00:00Z" })];
+    const ids = rankCandidates(t, [pr(1)], fakeAttempts()).map(idOf);
+    expect(ids).toEqual(["task:a", "task:b", "pr:1"]);
+  });
+
+  test("pickCandidate's candidate is the first ranked candidate", () => {
+    const attempts = fakeAttempts();
+    expect(pickCandidate(tasks, prs, attempts).candidate).toEqual(rankCandidates(tasks, prs, attempts)[0] ?? null);
   });
 });
