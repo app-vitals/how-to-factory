@@ -398,33 +398,33 @@ describe("runLoop audit log", () => {
     expect(entries[0]).toMatchObject({ action: "dev-task", outcome: "failure", exitCode: -1 });
   });
 
-  /** Lists the given PRs on the first poll only, so each runs once and the loop then goes idle. */
-  const onceSource = (prs: PullRequest[]): PrSource => {
-    let first = true;
-    return {
-      list: async () => {
-        const out = first ? prs : [];
-        first = false;
-        return out;
-      },
-    };
+  /** Lists the given PRs until each has been run once (the loop runs one candidate per poll), then goes idle. */
+  const onceSource = (prs: PullRequest[]) => {
+    const pending = [...prs];
+    const source: PrSource = { list: async () => pending.map((p) => ({ ...p })) };
+    const done = (n: number) => void pending.splice(0, pending.length, ...pending.filter((p) => p.number !== n));
+    return { source, done };
   };
 
   test("review and patch runs record review and patch entries", async () => {
-    const source = onceSource([openPr(7), openPr(8, { ci: "fail" })]);
+    const { source, done } = onceSource([openPr(7), openPr(8, { ci: "fail" })]);
     const { store } = memStore([]);
     const { audit, entries } = fakeAudit();
-    const runPr: PrRunner = async (p) => (p.number === 8 ? 1 : 0);
+    const runPr: PrRunner = async (p) => {
+      done(p.number);
+      return p.number === 8 ? 1 : 0;
+    };
     await runLoop(store, ok, undefined, { ...fakeSleep(), prs: source, attempts: NOOP_ATTEMPTS, runPr, audit });
     expect(entries).toContainEqual(expect.objectContaining({ action: "review", target: 7, title: "PR 7", outcome: "success", exitCode: 0 }));
     expect(entries).toContainEqual(expect.objectContaining({ action: "patch", target: 8, title: "PR 8", outcome: "failure", exitCode: 1 }));
   });
 
   test("a PR runner that throws records exitCode -1", async () => {
-    const source = onceSource([openPr(7)]);
+    const { source, done } = onceSource([openPr(7)]);
     const { store } = memStore([]);
     const { audit, entries } = fakeAudit();
-    const runPr: PrRunner = async () => {
+    const runPr: PrRunner = async (p) => {
+      done(p.number);
       throw new Error("boom");
     };
     await runLoop(store, ok, undefined, { ...fakeSleep(), prs: source, attempts: NOOP_ATTEMPTS, runPr, audit });
