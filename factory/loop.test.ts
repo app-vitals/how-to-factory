@@ -14,8 +14,10 @@ import {
   REVIEW_CMD,
   runLoop,
   type PrRunner,
+  type RunResult,
   type Runner,
 } from "./loop.ts";
+import { AGENT_RESULT_SCHEMA, type AgentResult } from "./agent-result.ts";
 import type { AuditEntry, AuditStore } from "./audit-log.ts";
 import { attemptsStore, MAX_PR_ATTEMPTS, type AttemptsStore } from "./pr-attempts.ts";
 import type { PrSource, PullRequest } from "./prs.ts";
@@ -30,6 +32,12 @@ const task = (id: string, status: TaskStatus = "pending", dependencies: string[]
   dependencies,
   status,
 });
+
+const PROCESSED: AgentResult = { outcome: "processed" };
+const SKIPPED: AgentResult = { outcome: "skipped", reason: "PR is already merged" };
+
+/** A runner result: exit 0 with a processed report unless told otherwise. */
+const res = (exitCode = 0, report: AgentResult | null = exitCode === 0 ? PROCESSED : null): RunResult => ({ exitCode, report });
 
 const NOOP_ATTEMPTS: AttemptsStore = {
   get: () => undefined,
@@ -96,7 +104,7 @@ describe("pickNext", () => {
 });
 
 describe("runLoop", () => {
-  const ok: Runner = async () => 0;
+  const ok: Runner = async () => res();
 
   test("moves each task pending -> in_progress -> pr, in dependency order", async () => {
     const { store, history } = memStore([task("B", "pending", ["A"]), task("A")]);
@@ -111,7 +119,7 @@ describe("runLoop", () => {
       store,
       async (t) => {
         seen = tasks.find((x) => x.id === t.id)?.status;
-        return 0;
+        return res();
       },
       undefined,
       fakeSleep(),
@@ -122,13 +130,13 @@ describe("runLoop", () => {
   test("passes the picked task to the runner", async () => {
     const { store } = memStore([task("A")]);
     const got: string[] = [];
-    await runLoop(store, async (t) => { got.push(t.title); return 0; }, undefined, fakeSleep());
+    await runLoop(store, async (t) => { got.push(t.title); return res(); }, undefined, fakeSleep());
     expect(got).toEqual(["Task A"]);
   });
 
   test("a non-zero exit returns the task to pending and stops the loop", async () => {
     const { store, tasks } = memStore([task("A"), task("B"), task("C")]);
-    const run: Runner = async (t) => (t.id === "B" ? 1 : 0);
+    const run: Runner = async (t) => res(t.id === "B" ? 1 : 0);
     const s = fakeSleep();
     expect(await runLoop(store, run, undefined, s)).toEqual({ ran: ["A", "B"], stoppedOn: "B" });
     expect(s.calls).toEqual([]);
@@ -148,7 +156,7 @@ describe("runLoop", () => {
 
   test("does not start dependents of a failed task", async () => {
     const { store, history } = memStore([task("A"), task("B", "pending", ["A"])]);
-    await runLoop(store, async () => 1, undefined, fakeSleep());
+    await runLoop(store, async () => res(1), undefined, fakeSleep());
     expect(history).toEqual(["A:in_progress", "A:pending"]);
   });
 
@@ -210,14 +218,14 @@ describe("runLoop", () => {
     const { store, tasks } = memStore([task("A")]);
     const run: Runner = async (t) => {
       if (t.id === "A") tasks.push(task("B", "pending", ["A"]));
-      return 0;
+      return res();
     };
     expect((await runLoop(store, run, undefined, fakeSleep())).ran).toEqual(["A", "B"]);
   });
 });
 
 describe("runLoop PR routing", () => {
-  const ok: Runner = async () => 0;
+  const ok: Runner = async () => res();
   const pr = (number: number, over: Partial<PullRequest> = {}): PullRequest => ({
     number,
     url: `https://github.com/acme/widgets/pull/${number}`,
@@ -257,8 +265,8 @@ describe("runLoop PR routing", () => {
     const w = world([pr(7, { createdAt: "2026-10-29T10:00:00.000Z" }), pr(9, { createdAt: "2026-10-29T12:00:00.000Z" })]);
     const { store } = memStore([stamped("T1", "2026-10-29T11:00:00.000Z")]);
     const order: string[] = [];
-    const run: Runner = async (t) => { order.push(`task ${t.id}`); return 0; };
-    const runPr: PrRunner = async (p, a) => { order.push(`${a} ${p.number}`); return 0; };
+    const run: Runner = async (t) => { order.push(`task ${t.id}`); return res(); };
+    const runPr: PrRunner = async (p, a) => { order.push(`${a} ${p.number}`); return res(); };
     await runLoop(store, run, undefined, { ...fakeSleep(), prs: w.source, attempts: w.attempts, runPr });
     expect(order.slice(0, 3)).toEqual(["review 7", "task T1", "review 9"]);
   });
@@ -270,8 +278,8 @@ describe("runLoop PR routing", () => {
     const reviewCmd = ["sh", "-c", `echo "$0" > ${reviewOut}`, "{pr}"];
     const patchCmd = ["sh", "-c", `echo "$0" > ${patchOut}`, "{pr}"];
     const run = prRunner(reviewCmd, patchCmd);
-    expect(await run(pr(12), "review")).toBe(0);
-    expect(await run(pr(34), "patch")).toBe(0);
+    expect((await run(pr(12), "review")).exitCode).toBe(0);
+    expect((await run(pr(34), "patch")).exitCode).toBe(0);
     expect(readFileSync(reviewOut, "utf8").trim()).toBe("12");
     expect(readFileSync(patchOut, "utf8").trim()).toBe("34");
     expect(REVIEW_CMD.some((a) => a.includes("{pr}"))).toBe(true);
@@ -282,7 +290,7 @@ describe("runLoop PR routing", () => {
     const w = world([pr(5, { ci: "fail" })]);
     const { store } = memStore([task("A")]);
     const s = fakeSleep();
-    const runPr: PrRunner = async (p, a) => { w.calls.push(`${a} ${p.number}`); return 1; };
+    const runPr: PrRunner = async (p, a) => { w.calls.push(`${a} ${p.number}`); return res(1); };
     const result = await runLoop(store, ok, undefined, { ...s, prs: w.source, attempts: w.attempts, runPr });
     expect(result.stoppedOn).toBeNull();
     expect(w.calls[0]).toBe("patch 5");
@@ -293,7 +301,7 @@ describe("runLoop PR routing", () => {
   test("a failed review counts as an attempt but leaves the SHA unreviewed so it is retried", async () => {
     const w = world([pr(5)]);
     const { store } = memStore([]);
-    const runPr: PrRunner = async (p, a) => { w.calls.push(`${a} ${p.number}`); return 1; };
+    const runPr: PrRunner = async (p, a) => { w.calls.push(`${a} ${p.number}`); return res(1); };
     await runLoop(store, ok, undefined, { ...fakeSleep(2), prs: w.source, attempts: w.attempts, runPr });
     expect(w.calls.length).toBeGreaterThan(1);
     expect(w.attempts.get(5)?.reviewedSha).toBeUndefined();
@@ -303,7 +311,7 @@ describe("runLoop PR routing", () => {
   test("a PR reaching the limit is flagged once and never run again", async () => {
     const w = world([pr(5, { ci: "fail" })]);
     const { store } = memStore([]);
-    const runPr: PrRunner = async (p, a) => { w.calls.push(`${a} ${p.number}`); return 1; };
+    const runPr: PrRunner = async (p, a) => { w.calls.push(`${a} ${p.number}`); return res(1); };
     await runLoop(store, ok, undefined, { ...fakeSleep(2), prs: w.source, attempts: w.attempts, runPr });
     expect(w.calls).toHaveLength(MAX_PR_ATTEMPTS);
     expect(w.flagged).toEqual([5]);
@@ -327,7 +335,7 @@ describe("runLoop PR routing", () => {
   test("sleeps only when there are no candidates", async () => {
     const w = world([pr(5, { ci: "fail" })]);
     const { store } = memStore([]);
-    const runPr: PrRunner = async () => 0;
+    const runPr: PrRunner = async () => res();
     const s = fakeSleep();
     await runLoop(store, ok, undefined, { ...s, prs: w.source, attempts: w.attempts, runPr });
     // three patch runs, then the limit leaves nothing to do: exactly one sleep
@@ -336,7 +344,7 @@ describe("runLoop PR routing", () => {
 });
 
 describe("runLoop audit log", () => {
-  const ok: Runner = async () => 0;
+  const ok: Runner = async () => res();
   const openPr = (number: number, over: Partial<PullRequest> = {}): PullRequest => ({
     number,
     url: `https://github.com/acme/widgets/pull/${number}`,
@@ -380,7 +388,7 @@ describe("runLoop audit log", () => {
     const { audit, entries } = fakeAudit();
     const slow: Runner = async () => {
       await Bun.sleep(30);
-      return 0;
+      return res();
     };
     await runLoop(store, slow, undefined, { ...fakeSleep(), audit });
     expect(entries[0]!.durationMs).toBeGreaterThanOrEqual(25);
@@ -389,7 +397,7 @@ describe("runLoop audit log", () => {
   test("a failing task records dev-task/failure before the loop stops", async () => {
     const { store } = memStore([task("A")]);
     const { audit, entries } = fakeAudit();
-    const result = await runLoop(store, async () => 3, undefined, { ...fakeSleep(), audit });
+    const result = await runLoop(store, async () => res(3), undefined, { ...fakeSleep(), audit });
     expect(result.stoppedOn).toBe("A");
     expect(entries).toHaveLength(1);
     expect(entries[0]).toMatchObject({ action: "dev-task", target: "A", outcome: "failure", exitCode: 3 });
@@ -398,7 +406,7 @@ describe("runLoop audit log", () => {
   test("a non-zero exit records failure with reason 'exited with code N'", async () => {
     const { store } = memStore([task("A")]);
     const { audit, entries } = fakeAudit();
-    await runLoop(store, async () => 3, undefined, { ...fakeSleep(), audit });
+    await runLoop(store, async () => res(3), undefined, { ...fakeSleep(), audit });
     expect(entries[0]).toMatchObject({ outcome: "failure", exitCode: 3, reason: "exited with code 3" });
   });
 
@@ -437,7 +445,7 @@ describe("runLoop audit log", () => {
     const { audit, entries } = fakeAudit();
     const runPr: PrRunner = async (p) => {
       done(p.number);
-      return p.number === 8 ? 1 : 0;
+      return res(p.number === 8 ? 1 : 0);
     };
     await runLoop(store, ok, undefined, { ...fakeSleep(), prs: source, attempts: NOOP_ATTEMPTS, runPr, audit });
     expect(entries).toContainEqual(expect.objectContaining({ action: "review", target: 7, title: "PR 7", outcome: "success", exitCode: 0 }));
@@ -450,7 +458,7 @@ describe("runLoop audit log", () => {
     const { audit, entries } = fakeAudit();
     const runPr: PrRunner = async (p) => {
       done(p.number);
-      return 2;
+      return res(2);
     };
     await runLoop(store, ok, undefined, { ...fakeSleep(), prs: source, attempts: NOOP_ATTEMPTS, runPr, audit });
     expect(entries[0]).toMatchObject({ action: "patch", outcome: "failure", exitCode: 2, reason: "exited with code 2" });
@@ -493,22 +501,209 @@ describe("runLoop audit log", () => {
   test("main passes the audit option through to the loop", async () => {
     const { store } = memStore([task("A")]);
     const { audit, entries } = fakeAudit();
-    await main(store, ["sh", "-c", "exit 0"], { ...fakeSleep(), audit });
+    const processed = JSON.stringify({ result: "ok", structured_output: { outcome: "processed" } });
+    await main(store, ["sh", "-c", `printf '%s' "$0"`, processed], { ...fakeSleep(), audit });
     expect(entries).toHaveLength(1);
     expect(entries[0]).toMatchObject({ action: "dev-task", target: "A", outcome: "success" });
   });
 });
 
+describe("runLoop agent result report", () => {
+  const openPr = (number: number, over: Partial<PullRequest> = {}): PullRequest => ({
+    number,
+    title: `PR ${number}`,
+    branch: `feat/other-${number}`,
+    createdAt: "2026-10-29T10:00:00.000Z",
+    isDraft: false,
+    headSha: `sha${number}`,
+    ci: "pass",
+    mergeable: "clean",
+    reviewDecision: "none",
+    labels: [],
+    ...over,
+  });
+
+  function fakeAudit() {
+    const entries: AuditEntry[] = [];
+    const audit: AuditStore = { record: (e) => void entries.push(e), list: () => entries };
+    return { audit, entries };
+  }
+
+  /** Lists the PR as-is until it has been run once, then as approved with green CI so nothing is left to do. */
+  function onceSource(p: PullRequest) {
+    let settled = false;
+    const source: PrSource = {
+      list: async () => [settled ? { ...p, ci: "pass", reviewDecision: "approved" } : { ...p }],
+    };
+    return {
+      source,
+      close: () => {
+        settled = true;
+      },
+    };
+  }
+
+  const realAttempts = () => attemptsStore(join(mkdtempSync(join(tmpdir(), "loop-result-")), "attempts.json"));
+
+  test("a processed task goes to pr and records a success entry", async () => {
+    const { store, tasks } = memStore([task("A")]);
+    const { audit, entries } = fakeAudit();
+    await runLoop(store, async () => res(0, PROCESSED), undefined, { ...fakeSleep(), audit });
+    expect(tasks[0]?.status).toBe("pr");
+    expect(entries).toHaveLength(1);
+    expect(entries[0]).toMatchObject({ action: "dev-task", target: "A", outcome: "success", exitCode: 0 });
+  });
+
+  test("a skipped task returns to pending, stops the loop, and records a skip entry with the reason", async () => {
+    const { store, tasks, history } = memStore([task("A"), task("B")]);
+    const { audit, entries } = fakeAudit();
+    const logs: string[] = [];
+    const s = fakeSleep();
+    const out = await runLoop(store, async () => res(0, { outcome: "skipped", reason: "task already done" }), (m) => logs.push(m), { ...s, audit });
+    expect(out).toEqual({ ran: ["A"], stoppedOn: "A" });
+    expect(tasks.map((t) => t.status)).toEqual(["pending", "pending"]);
+    expect(history).toEqual(["A:in_progress", "A:pending"]);
+    expect(entries).toHaveLength(1);
+    expect(entries[0]).toMatchObject({ action: "dev-task", target: "A", outcome: "skip", reason: "task already done", exitCode: 0 });
+    expect(logs.some((m) => m.includes("skipped") && m.includes("task already done"))).toBe(true);
+  });
+
+  test("exit 0 with no report is audited as failure but the task still goes to pr", async () => {
+    const { store, tasks } = memStore([task("A"), task("B")]);
+    const { audit, entries } = fakeAudit();
+    const out = await runLoop(store, async () => res(0, null), undefined, { ...fakeSleep(), audit });
+    expect(out.stoppedOn).toBeNull();
+    expect(tasks.map((t) => t.status)).toEqual(["pr", "pr"]);
+    expect(entries[0]).toMatchObject({ outcome: "failure", exitCode: 0, reason: "agent returned no result report" });
+  });
+
+  test("a non-zero exit with a report is still a failure that stops the loop", async () => {
+    const { store, tasks } = memStore([task("A")]);
+    const { audit, entries } = fakeAudit();
+    const out = await runLoop(store, async () => res(1, PROCESSED), undefined, { ...fakeSleep(), audit });
+    expect(out.stoppedOn).toBe("A");
+    expect(tasks[0]?.status).toBe("pending");
+    expect(entries[0]).toMatchObject({ outcome: "failure", exitCode: 1 });
+  });
+
+  test("a skipped PR review counts an attempt, marks the SHA handled and records a skip entry", async () => {
+    const { source, close } = onceSource(openPr(7));
+    const attempts = realAttempts();
+    const { store } = memStore([]);
+    const { audit, entries } = fakeAudit();
+    const runPr: PrRunner = async () => {
+      close();
+      return res(0, SKIPPED);
+    };
+    await runLoop(store, async () => res(), undefined, { ...fakeSleep(), prs: source, attempts, runPr, audit });
+    expect(attempts.get(7)?.reviews).toBe(1);
+    expect(attempts.get(7)?.reviewedSha).toBe("sha7");
+    expect(entries).toHaveLength(1);
+    expect(entries[0]).toMatchObject({ action: "review", target: 7, outcome: "skip", reason: "PR is already merged", exitCode: 0 });
+  });
+
+  test("a skipped PR patch counts an attempt and records a skip entry without stopping the loop", async () => {
+    const { source, close } = onceSource(openPr(8, { ci: "fail" }));
+    const attempts = realAttempts();
+    const { store } = memStore([task("A")]);
+    const { audit, entries } = fakeAudit();
+    const runPr: PrRunner = async () => {
+      close();
+      return res(0, SKIPPED);
+    };
+    const out = await runLoop(store, async () => res(), undefined, { ...fakeSleep(), prs: source, attempts, runPr, audit });
+    expect(out.stoppedOn).toBeNull();
+    expect(attempts.get(8)?.patches).toBe(1);
+    expect(entries[0]).toMatchObject({ action: "patch", target: 8, outcome: "skip", reason: "PR is already merged" });
+  });
+
+  test("a PR run with exit 0 and no report is audited as failure but marks the SHA reviewed as before", async () => {
+    const { source, close } = onceSource(openPr(7));
+    const attempts = realAttempts();
+    const { store } = memStore([]);
+    const { audit, entries } = fakeAudit();
+    const runPr: PrRunner = async () => {
+      close();
+      return res(0, null);
+    };
+    await runLoop(store, async () => res(), undefined, { ...fakeSleep(), prs: source, attempts, runPr, audit });
+    expect(attempts.get(7)?.reviewedSha).toBe("sha7");
+    expect(entries[0]).toMatchObject({ action: "review", outcome: "failure", exitCode: 0, reason: "agent returned no result report" });
+  });
+});
+
+describe("agent commands", () => {
+  test("AGENT_CMD, REVIEW_CMD and PATCH_CMD request a JSON envelope with the result schema", () => {
+    for (const cmd of [AGENT_CMD, REVIEW_CMD, PATCH_CMD]) {
+      const format = cmd.indexOf("--output-format");
+      expect(format).toBeGreaterThan(-1);
+      expect(cmd[format + 1]).toBe("json");
+      const schema = cmd.indexOf("--json-schema");
+      expect(schema).toBeGreaterThan(-1);
+      expect(JSON.parse(cmd[schema + 1]!)).toEqual(AGENT_RESULT_SCHEMA);
+    }
+  });
+});
+
 describe("agentRunner", () => {
+  /** A stub command that prints a Claude Code JSON envelope and exits with `code`. */
+  const envelope = (structured: unknown, code = 0, text = "all done") =>
+    ["sh", "-c", `printf '%s' "$0"; exit ${code}`, JSON.stringify({ type: "result", is_error: false, result: text, structured_output: structured })];
+
   test("resolves the child's exit code", async () => {
-    expect(await agentRunner(["sh", "-c", "exit 0"])(task("T1"))).toBe(0);
-    expect(await agentRunner(["sh", "-c", "exit 3"])(task("T1"))).toBe(3);
+    expect((await agentRunner(["sh", "-c", "exit 0"], () => {})(task("T1"))).exitCode).toBe(0);
+    expect((await agentRunner(["sh", "-c", "exit 3"], () => {})(task("T1"))).exitCode).toBe(3);
   });
 
   test("substitutes {id} in every argument", async () => {
     const check = ["sh", "-c", 'test "{id}" = T1 && test "$0" = T1', "{id}"];
-    expect(await agentRunner(check)(task("T1"))).toBe(0);
-    expect(await agentRunner(check)(task("T2"))).not.toBe(0);
+    expect((await agentRunner(check, () => {})(task("T1"))).exitCode).toBe(0);
+    expect((await agentRunner(check, () => {})(task("T2"))).exitCode).not.toBe(0);
+  });
+
+  test("parses the report from the envelope and prints the result text", async () => {
+    const printed: string[] = [];
+    const out = await agentRunner(envelope({ outcome: "processed" }), (m) => printed.push(m))(task("T1"));
+    expect(out).toEqual({ exitCode: 0, report: { outcome: "processed" } });
+    expect(printed).toEqual(["all done"]);
+  });
+
+  test("parses a skipped report with its reason", async () => {
+    const out = await agentRunner(envelope({ outcome: "skipped", reason: "nothing to do" }), () => {})(task("T1"));
+    expect(out).toEqual({ exitCode: 0, report: { outcome: "skipped", reason: "nothing to do" } });
+  });
+
+  test("keeps a non-zero exit code alongside the parsed report", async () => {
+    const out = await agentRunner(envelope({ outcome: "processed" }, 2), () => {})(task("T1"));
+    expect(out.exitCode).toBe(2);
+    expect(out.report).toEqual({ outcome: "processed" });
+  });
+
+  test("stdout that is not an envelope gives a null report and prints nothing", async () => {
+    const printed: string[] = [];
+    const out = await agentRunner(["sh", "-c", "echo not json"], (m) => printed.push(m))(task("T1"));
+    expect(out).toEqual({ exitCode: 0, report: null });
+    expect(printed).toEqual([]);
+  });
+
+  test("an envelope without a valid report gives a null report but still prints the result text", async () => {
+    const printed: string[] = [];
+    const out = await agentRunner(envelope({ outcome: "bogus" }), (m) => printed.push(m))(task("T1"));
+    expect(out.report).toBeNull();
+    expect(printed).toEqual(["all done"]);
+  });
+});
+
+describe("prRunner", () => {
+  test("parses the report and prints the result text for a review", async () => {
+    const stub = ["sh", "-c", `printf '%s' "$0"`, JSON.stringify({ result: "reviewed {pr}", structured_output: { outcome: "skipped", reason: "closed" } })];
+    const printed: string[] = [];
+    const out = await prRunner(stub, stub, (m) => printed.push(m))(
+      { number: 4, title: "t", branch: "b", createdAt: "x", isDraft: false, headSha: "s", ci: "pass", mergeable: "clean", reviewDecision: "none", labels: [] },
+      "review",
+    );
+    expect(out).toEqual({ exitCode: 0, report: { outcome: "skipped", reason: "closed" } });
+    expect(printed).toHaveLength(1);
   });
 });
 
