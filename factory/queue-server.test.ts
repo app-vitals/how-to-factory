@@ -18,6 +18,8 @@ const task = (id: string, over: Partial<Task> = {}): Task => ({
 
 const pr = (number: number, over: Partial<PullRequest> = {}): PullRequest => ({
   number,
+  url: `https://github.com/acme/widgets/pull/${number}`,
+  repo: "acme/widgets",
   title: `pr ${number}`,
   branch: `feat/unknown-${number}`,
   createdAt: "2026-10-29T12:00:00Z",
