@@ -4,6 +4,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "queue": "bun factory/queue-server.ts",
     "typecheck": "tsc --noEmit",
     "lint": "biome lint .",
     "test": "bun test",
@@ -15,7 +16,7 @@
     "pre-public": "bun scripts/check-public.ts --gitleaks"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.6.4",
+    "@biomejs/biome": "2.6.7",
     "@types/bun": "1.4.4",
     "typescript": "^7.0.0"
   }
