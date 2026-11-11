@@ -98,6 +98,7 @@ Entries marked **(proposed)** are candidate additions or splits that are not fin
 - **Simplest version:** you read the diff yourself before merging.
 - **Range:** human-only review; an AI reviewer that comments and a human who approves; confidence thresholds on AI findings; policy files defining what an AI reviewer may post or approve; self-authored changes downgraded to comments.
 - **Shipwright example:** a review command whose posting rights come from a policy file.
+- **Depth:** lesson 6 teaches the review's signal-to-noise and how the loop converges, with Patch as the second act that answers a review. The review grades each finding and posts only those above a threshold, within a count cap, each with a file and line, none on code the PR did not change, judged against the repo's own rules, with a verdict computed from the findings. A fresh-context verifier drops findings it can disprove, and a re-review reads only the new diff and says what became of each earlier finding. The patch checks each finding before editing (accept, modify or reject), answers a wrong finding with a rebuttal and a settled record, and checks whether the base branch is red before fixing CI; a same-state no-progress check sits next to the round cap. Several reviewers voting, an incident eval set and noise metrics, risk-tiered and real approval, an author allowlist, claims across many workers, second-round escalation and a post-push CI check are candidates for later deep dives, unordered and none scheduled.
 
 ## 6. Release
 
