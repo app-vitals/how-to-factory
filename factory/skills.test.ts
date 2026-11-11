@@ -11,7 +11,7 @@ function readSkill(name: string): string {
 /** Text of the `## Result` section, up to the next `## ` heading or the end of the file. */
 function resultSection(text: string): string | null {
   const match = text.match(/^## Result\s*$([\s\S]*?)(?=^## |(?![\s\S]))/m);
-  return match ? match[1] : null;
+  return match?.[1] ?? null;
 }
 
 describe.each(SKILLS)("%s skill", (name) => {
