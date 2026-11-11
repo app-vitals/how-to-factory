@@ -13,6 +13,45 @@ export interface Task {
   status: TaskStatus;
   /** Optional ISO 8601 timestamp, stamped by the plan skill when the task is appended. */
   createdAt?: string;
+  /** Agent runs on this task. */
+  runs?: number;
+  /** How many of those runs were skips. */
+  skips?: number;
+  lastSkipReason?: string;
+  /** The task's own pull request. */
+  pr?: TaskPr;
+}
+
+export interface TaskPr {
+  repo: string;
+  number: number;
+  url: string;
+  open: boolean;
+}
+
+const isCount = (v: unknown): boolean => typeof v === "number" && Number.isInteger(v) && v >= 0;
+
+function isHttpsUrl(v: unknown): boolean {
+  if (typeof v !== "string") return false;
+  try {
+    return new URL(v).protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function isTaskPr(v: unknown): boolean {
+  if (typeof v !== "object" || v === null || Array.isArray(v)) return false;
+  const p = v as Record<string, unknown>;
+  return (
+    typeof p.repo === "string" &&
+    /^[\w.-]+\/[\w.-]+$/.test(p.repo) &&
+    typeof p.number === "number" &&
+    Number.isInteger(p.number) &&
+    p.number > 0 &&
+    isHttpsUrl(p.url) &&
+    typeof p.open === "boolean"
+  );
 }
 
 const isStringArray = (v: unknown): v is string[] => Array.isArray(v) && v.every((x) => typeof x === "string");
@@ -38,6 +77,15 @@ export function validateTasks(raw: unknown): string[] {
     }
     if (o.createdAt !== undefined && (typeof o.createdAt !== "string" || Number.isNaN(Date.parse(o.createdAt)))) {
       errors.push(`${at}: createdAt must be an ISO 8601 date string`);
+    }
+    for (const f of ["runs", "skips"]) {
+      if (o[f] !== undefined && !isCount(o[f])) errors.push(`${at}: ${f} must be a non-negative integer`);
+    }
+    if (o.lastSkipReason !== undefined && (typeof o.lastSkipReason !== "string" || o.lastSkipReason === "")) {
+      errors.push(`${at}: lastSkipReason must be a non-empty string`);
+    }
+    if (o.pr !== undefined && !isTaskPr(o.pr)) {
+      errors.push(`${at}: pr must be {repo: "owner/name", number: positive integer, url: https URL, open: boolean}`);
     }
   });
   if (errors.length > 0) return errors;
