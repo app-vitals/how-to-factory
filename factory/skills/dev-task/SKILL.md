@@ -90,3 +90,13 @@ Takes one task and produces one pull request, built test-first: red, green, refa
 - Edit files with the Edit and Write tools, never via `python3`, heredocs or `sed -i`.
 - The session starts in the repo root, so `cd` is not needed.
 - Prefer one command per Bash call; avoid chaining with `&&`, `;` or pipes unless every part is a read-only helper.
+
+## Result
+
+End the run with the structured result. Pick one outcome:
+
+- `processed`: the PR was opened.
+- `skipped`: you deliberately did nothing, for example the task is already done or its PR is already open or merged.
+  Give a one-sentence reason.
+
+A failure is not a skip: exit non-zero as the rules above say.
