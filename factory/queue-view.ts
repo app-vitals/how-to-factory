@@ -64,7 +64,7 @@ table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:.4rem .6
 `;
 
 // Only included when the banner is shown, so the class name appears in the page only then.
-const BANNER_CSS = ".banner-error{background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;padding:.6rem .8rem;border-radius:.4rem}";
+export const BANNER_CSS = ".banner-error{background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;padding:.6rem .8rem;border-radius:.4rem}";
 
 export function renderQueueHtml(view: QueueView, opts: RenderOptions = {}): string {
   const now = opts.now ?? new Date();
