@@ -23,6 +23,22 @@ export interface AuditEntry {
   /** Why the run failed or was skipped. Required and non-empty for those outcomes, absent on success. */
   reason?: string;
   durationMs: number;
+  /** "owner/name" of the PR (review, patch). Set together with `url`, never alone. */
+  repo?: string;
+  /** https URL of the PR, so a history link still works after it closes. Set together with `repo`. */
+  url?: string;
+}
+
+const REPO_PATTERN = /^[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+$/;
+
+function isHttpsUrl(value: unknown): boolean {
+  if (typeof value !== "string") return false;
+  try {
+    const u = new URL(value);
+    return u.protocol === "https:" && u.hostname !== "";
+  } catch {
+    return false;
+  }
 }
 
 export interface AuditStore {
@@ -48,6 +64,11 @@ function validate(entry: AuditEntry): void {
   } else if (typeof e.reason !== "string" || e.reason.trim() === "") {
     throw new Error(`invalid audit entry: reason is required and non-empty for ${e.outcome}, got ${JSON.stringify(e.reason)}`);
   }
+  if ((e.repo === undefined) !== (e.url === undefined)) throw new Error("invalid audit entry: repo and url must be given together or not at all");
+  if (e.repo !== undefined && !(typeof e.repo === "string" && REPO_PATTERN.test(e.repo))) {
+    throw new Error(`invalid audit entry: repo must be "owner/name", got ${JSON.stringify(e.repo)}`);
+  }
+  if (e.url !== undefined && !isHttpsUrl(e.url)) throw new Error(`invalid audit entry: url must be an https URL, got ${JSON.stringify(e.url)}`);
   if (typeof e.durationMs !== "number" || !Number.isFinite(e.durationMs) || e.durationMs < 0) {
     throw new Error(`invalid audit entry: durationMs must be a non-negative number, got ${JSON.stringify(e.durationMs)}`);
   }

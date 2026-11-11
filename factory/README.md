@@ -18,6 +18,21 @@ Each iteration the loop lists open PRs and picks the single oldest candidate acr
 - The loop sleeps `LOOP_IDLE_MS` only when there is nothing to do. Attempt counts live in `pr-attempts.json` (gitignored).
 - Merging is not part of the loop.
 
+## Stdout reporting contract
+
+`AGENT_CMD`, `REVIEW_CMD` and `PATCH_CMD` run Claude Code with `--output-format json` and `--json-schema` (the
+`AGENT_RESULT_SCHEMA` from `agent-result.ts`). The runner captures stdout (stderr stays inherited), parses the JSON
+envelope and prints its `result` text so the run stays visible. A run resolves to `{ exitCode, report }`, where `report`
+is `{ outcome: "processed" }` or `{ outcome: "skipped", reason }`, or `null` when stdout holds no valid report.
+
+- Exit 0 still means success, except a `skipped` report. A skipped task returns to `pending` and stops the loop like a
+  failure, with a `skip` audit entry carrying the agent's reason.
+- A skipped review or patch counts as an attempt and its head SHA is marked handled, so it is not retried until new
+  commits. It does not stop the loop.
+- Exit 0 with no valid report is audited as `failure` (`agent returned no result report`), but loop control still trusts
+  the exit code.
+- Audit entries are built from the exit code and report by `toAuditOutcome`.
+
 ## Audit log
 
 Every run the loop makes is appended as one JSON line to `factory/audit-log.jsonl` (gitignored): a `dev-task`, `review`

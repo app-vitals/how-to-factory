@@ -1,6 +1,7 @@
 // The factory loop: pick one ready task, hand it to Claude Code running the dev-task skill, repeat.
 // The loop owns status: pending -> in_progress -> pr. `pr` is terminal.
 
+import { AGENT_RESULT_SCHEMA, parseAgentResult, toAuditOutcome, type AgentResult } from "./agent-result.ts";
 import { auditStore, type AuditAction, type AuditStore } from "./audit-log.ts";
 import { pickCandidate } from "./candidates.ts";
 import { attemptsStore, type AttemptsStore } from "./pr-attempts.ts";
@@ -29,11 +30,14 @@ export const ALLOWED_TOOLS: string[] = [
   "Bash(echo *)",
 ];
 
-export const AGENT_CMD: string[] = ["claude", "-p", "/dev-task {id}", "--allowedTools", ALLOWED_TOOLS.join(",")];
+/** Flags that make the agent end with a schema-checked result report in a JSON envelope on stdout. */
+const REPORT_FLAGS: string[] = ["--output-format", "json", "--json-schema", JSON.stringify(AGENT_RESULT_SCHEMA)];
+
+export const AGENT_CMD: string[] = ["claude", "-p", "/dev-task {id}", "--allowedTools", ALLOWED_TOOLS.join(","), ...REPORT_FLAGS];
 
 /** Claude Code headless, reviewing or patching one open PR. `{pr}` is substituted with the PR number. */
-export const REVIEW_CMD: string[] = ["claude", "-p", "/review {pr}", "--allowedTools", ALLOWED_TOOLS.join(",")];
-export const PATCH_CMD: string[] = ["claude", "-p", "/patch {pr}", "--allowedTools", ALLOWED_TOOLS.join(",")];
+export const REVIEW_CMD: string[] = ["claude", "-p", "/review {pr}", "--allowedTools", ALLOWED_TOOLS.join(","), ...REPORT_FLAGS];
+export const PATCH_CMD: string[] = ["claude", "-p", "/patch {pr}", "--allowedTools", ALLOWED_TOOLS.join(","), ...REPORT_FLAGS];
 
 /** First pending task whose dependencies have all reached `pr`, else null. */
 export function pickNext(tasks: Task[]): Task | null {
@@ -41,8 +45,14 @@ export function pickNext(tasks: Task[]): Task | null {
   return tasks.find((t) => t.status === "pending" && t.dependencies.every((d) => done.has(d))) ?? null;
 }
 
-/** Runs the agent for one task; resolves to the process exit code. */
-export type Runner = (task: Task) => Promise<number>;
+/** What one agent run produced: the process exit code and its result report, null when there was no valid one. */
+export interface RunResult {
+  exitCode: number;
+  report: AgentResult | null;
+}
+
+/** Runs the agent for one task. */
+export type Runner = (task: Task) => Promise<RunResult>;
 
 interface LoopResult {
   ran: string[];
@@ -53,8 +63,8 @@ interface LoopResult {
 /** How long the loop sleeps before re-polling when no task is ready. */
 export const LOOP_IDLE_MS = 60_000;
 
-/** Runs the agent to review or patch one PR; resolves to the process exit code. */
-export type PrRunner = (pr: PullRequest, action: "review" | "patch") => Promise<number>;
+/** Runs the agent to review or patch one PR. */
+export type PrRunner = (pr: PullRequest, action: "review" | "patch") => Promise<RunResult>;
 
 /** Stands in for the attempts store when no PR source is wired, so the loop works on tasks alone. */
 const NO_ATTEMPTS: AttemptsStore = {
@@ -116,16 +126,24 @@ export async function runLoop(
    * Records one run of the agent. A runner that threw never ran the agent, so callers do not record it.
    * A failed write is logged, never fatal: the audit log must not stop the factory.
    */
-  const recordRun = (action: AuditAction, target: string | number, title: string, code: number, startedAt: number) => {
+  const recordRun = (
+    action: AuditAction,
+    target: string | number,
+    title: string,
+    { exitCode, report }: RunResult,
+    startedAt: number,
+    pr?: Pick<PullRequest, "repo" | "url">,
+  ) => {
     try {
       audit.record({
         at: new Date().toISOString(),
         action,
         target,
         title,
-        ...(code === 0 ? { outcome: "success" } : { outcome: "failure", reason: `exited with code ${code}` }),
-        exitCode: code,
+        ...toAuditOutcome(exitCode, report),
+        exitCode,
         durationMs: Math.max(0, Date.now() - startedAt),
+        ...(pr ? { repo: pr.repo, url: pr.url } : {}),
       });
     } catch (err) {
       log(`could not write audit entry for ${action} ${target}: ${errMsg(err)}`);
@@ -160,18 +178,20 @@ export async function runLoop(
       idle = false;
       const { pr, action } = candidate;
       log(`${action} PR #${pr.number}: ${pr.title}`);
-      let code: number;
+      let outcome: RunResult;
       let threw = false;
       const startedAt = Date.now();
       try {
         if (!runPr) throw new Error("no PR runner configured");
-        code = await runPr(pr, action);
+        outcome = await runPr(pr, action);
       } catch (err) {
         log(`PR #${pr.number} ${action} threw: ${errMsg(err)}`);
-        code = -1;
+        outcome = { exitCode: -1, report: null };
         threw = true;
       }
-      if (!threw) recordRun(action, pr.number, pr.title, code, startedAt);
+      const code = outcome.exitCode;
+      if (!threw) recordRun(action, pr.number, pr.title, outcome, startedAt, pr);
+      if (outcome.report?.outcome === "skipped") log(`PR #${pr.number} ${action} skipped: ${outcome.report.reason}`);
       // Every run counts, pass or fail, so a PR that never settles ends up with a human; only a
       // successful review marks the SHA reviewed, so a crashed one is retried.
       // A failed write is not caught: without the count the same PR would be rerun forever.
@@ -200,21 +220,27 @@ export async function runLoop(
     store.setStatus(next.id, "in_progress");
     ran.push(next.id);
 
-    let code: number;
+    let outcome: RunResult;
     let threw = false;
     const startedAt = Date.now();
     try {
-      code = await run(next);
+      outcome = await run(next);
     } catch (err) {
       log(`${next.id} runner threw: ${errMsg(err)}`);
-      code = -1;
+      outcome = { exitCode: -1, report: null };
       threw = true;
     }
-    if (!threw) recordRun("dev-task", next.id, next.title, code, startedAt);
+    if (!threw) recordRun("dev-task", next.id, next.title, outcome, startedAt);
 
+    const { exitCode: code, report } = outcome;
     if (code !== 0) {
       store.setStatus(next.id, "pending");
       log(`${next.id} failed (exit ${code}); returned to pending, stopping`);
+      return { ran, stoppedOn: next.id };
+    }
+    if (report?.outcome === "skipped") {
+      store.setStatus(next.id, "pending");
+      log(`${next.id} skipped: ${report.reason}; returned to pending, stopping`);
       return { ran, stoppedOn: next.id };
     }
     store.setStatus(next.id, "pr");
@@ -225,22 +251,38 @@ export async function runLoop(
   return { ran, stoppedOn: null };
 }
 
+/** The envelope's human-readable `result` text, or null when stdout is not an envelope. */
+function envelopeText(stdout: string): string | null {
+  try {
+    const { result } = JSON.parse(stdout) as { result?: unknown };
+    return typeof result === "string" && result !== "" ? result : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Spawns the command with stdout captured and stderr inherited, parses the JSON envelope for the
+ * result report and prints its result text through `print` so the run stays visible.
+ */
+async function spawnAgent(cmd: string[], print: (text: string) => void): Promise<RunResult> {
+  const proc = Bun.spawn(cmd, { stdin: "inherit", stdout: "pipe", stderr: "inherit" });
+  const [stdout, exitCode] = await Promise.all([new Response(proc.stdout).text(), proc.exited]);
+  const text = envelopeText(stdout);
+  if (text !== null) print(text);
+  return { exitCode, report: parseAgentResult(stdout) };
+}
+
 /** Builds a runner that spawns the given argv template with `{id}` substituted in each arg. */
-export function agentRunner(template: string[]): Runner {
-  return async (task) => {
-    const cmd = template.map((a) => a.replaceAll("{id}", task.id));
-    const proc = Bun.spawn(cmd, { stdin: "inherit", stdout: "inherit", stderr: "inherit" });
-    return proc.exited;
-  };
+export function agentRunner(template: string[], print: (text: string) => void = console.log): Runner {
+  return (task) => spawnAgent(template.map((a) => a.replaceAll("{id}", task.id)), print);
 }
 
 /** Builds a PR runner from the review and patch argv templates, with `{pr}` substituted in each arg. */
-export function prRunner(reviewCmd: string[], patchCmd: string[]): PrRunner {
-  return async (pr, action) => {
+export function prRunner(reviewCmd: string[], patchCmd: string[], print: (text: string) => void = console.log): PrRunner {
+  return (pr, action) => {
     const template = action === "review" ? reviewCmd : patchCmd;
-    const cmd = template.map((a) => a.replaceAll("{pr}", String(pr.number)));
-    const proc = Bun.spawn(cmd, { stdin: "inherit", stdout: "inherit", stderr: "inherit" });
-    return proc.exited;
+    return spawnAgent(template.map((a) => a.replaceAll("{pr}", String(pr.number))), print);
   };
 }
 

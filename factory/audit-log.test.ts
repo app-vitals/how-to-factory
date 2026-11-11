@@ -142,4 +142,45 @@ describe("auditStore", () => {
     const store = auditStore(path);
     expect(() => store.record(entry({ outcome: "skip", reason: "x", exitCode: 1.5 }))).toThrow(/exitCode/);
   });
+
+  describe("repo and url", () => {
+    const pr = { action: "review" as const, target: 7, repo: "acme/widgets", url: "https://github.com/acme/widgets/pull/7" };
+
+    test("accepts repo and url together and round-trips them", () => {
+      const store = auditStore(path);
+      store.record(entry(pr));
+      expect(store.list()[0]).toMatchObject({ repo: "acme/widgets", url: "https://github.com/acme/widgets/pull/7" });
+    });
+
+    test("still accepts entries with neither", () => {
+      const store = auditStore(path);
+      store.record(entry());
+      expect(store.list()).toHaveLength(1);
+      expect(store.list()[0]).not.toHaveProperty("repo");
+      expect(store.list()[0]).not.toHaveProperty("url");
+    });
+
+    test("rejects repo without url, and url without repo", () => {
+      const store = auditStore(path);
+      expect(() => store.record(entry({ ...pr, url: undefined }))).toThrow(/repo and url/);
+      expect(() => store.record(entry({ ...pr, repo: undefined }))).toThrow(/repo and url/);
+      expect(store.list()).toEqual([]);
+    });
+
+    test("rejects a repo that is not owner/name", () => {
+      const store = auditStore(path);
+      for (const repo of ["widgets", "acme/", "/widgets", "a/b/c", "acme widgets/x", "", 5]) {
+        expect(() => store.record(entry({ ...pr, repo: repo as string }))).toThrow(/repo/);
+      }
+      expect(store.list()).toEqual([]);
+    });
+
+    test("rejects a url that is not https", () => {
+      const store = auditStore(path);
+      for (const url of ["http://github.com/a/b/pull/1", "javascript:alert(1)", "github.com/a/b/pull/1", "https://", "", 5]) {
+        expect(() => store.record(entry({ ...pr, url: url as string }))).toThrow(/url/);
+      }
+      expect(store.list()).toEqual([]);
+    });
+  });
 });

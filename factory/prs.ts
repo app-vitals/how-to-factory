@@ -6,6 +6,10 @@ export type ReviewDecision = "approved" | "changes_requested" | "none";
 
 export interface PullRequest {
   number: number;
+  /** Web URL of the PR. */
+  url: string;
+  /** "owner/name"; with number it identifies the PR, since a number alone is not unique across repos. */
+  repo: string;
   title: string;
   branch: string;
   createdAt: string;
@@ -31,7 +35,7 @@ export interface GhResult {
 export type GhRunner = (args: string[]) => Promise<GhResult>;
 
 export const PR_JSON_FIELDS =
-  "number,title,headRefName,createdAt,isDraft,headRefOid,statusCheckRollup,mergeable,reviewDecision,labels";
+  "number,url,title,headRefName,createdAt,isDraft,headRefOid,statusCheckRollup,mergeable,reviewDecision,labels";
 
 export const bunGh: GhRunner = async (args) => {
   const proc = Bun.spawn(["gh", ...args], { stdout: "pipe", stderr: "pipe" });
@@ -72,6 +76,15 @@ function normalizeReview(v: unknown): ReviewDecision {
   return "none";
 }
 
+const PR_URL = /^https:\/\/github\.com\/([^/\s]+)\/([^/\s]+)\/pull\/\d+\/?$/;
+
+/** Derives "owner/name" from https://github.com/<owner>/<name>/pull/<n>; null when the URL does not match. */
+function repoFromUrl(url: unknown): string | null {
+  if (typeof url !== "string") return null;
+  const m = PR_URL.exec(url);
+  return m ? `${m[1]}/${m[2]}` : null;
+}
+
 function normalizePr(raw: unknown, index: number): PullRequest {
   if (typeof raw !== "object" || raw === null) throw new Error(`gh pr list: entry ${index} is not an object`);
   const r = raw as Record<string, unknown>;
@@ -81,9 +94,16 @@ function normalizePr(raw: unknown, index: number): PullRequest {
     return r[k] as string;
   };
   const labels = Array.isArray(r.labels) ? (r.labels as { name?: unknown }[]) : [];
+  const title = str("title");
+  const repo = repoFromUrl(r.url);
+  if (repo === null) {
+    throw new Error(`gh pr list: PR #${r.number} has a missing or malformed url: ${JSON.stringify(r.url)}`);
+  }
   return {
     number: r.number,
-    title: str("title"),
+    url: r.url as string,
+    repo,
+    title,
     branch: str("headRefName"),
     createdAt: str("createdAt"),
     isDraft: r.isDraft === true,
