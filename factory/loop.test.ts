@@ -522,11 +522,13 @@ describe("runLoop agent result report", () => {
     return { audit, entries };
   }
 
-  /** Lists the PR until it has been run once, then goes idle. */
+  /** Lists the PR as-is until it has been run once, then as approved with green CI so nothing is left to do. */
   function onceSource(p: PullRequest) {
-    let open = true;
-    const source: PrSource = { list: async () => (open ? [{ ...p }] : []) };
-    return { source, close: () => void (open = false) };
+    let settled = false;
+    const source: PrSource = {
+      list: async () => [settled ? { ...p, ci: "pass", reviewDecision: "approved" } : { ...p }],
+    };
+    return { source, close: () => void (settled = true) };
   }
 
   const realAttempts = () => attemptsStore(join(mkdtempSync(join(tmpdir(), "loop-result-")), "attempts.json"));
