@@ -16,6 +16,7 @@ import {
   type PrRunner,
   type Runner,
 } from "./loop.ts";
+import type { AuditEntry, AuditStore } from "./audit-log.ts";
 import { attemptsStore, MAX_PR_ATTEMPTS, type AttemptsStore } from "./pr-attempts.ts";
 import type { PrSource, PullRequest } from "./prs.ts";
 import type { Task, TaskStatus } from "./tasks.schema.ts";
@@ -326,6 +327,136 @@ describe("runLoop PR routing", () => {
     await runLoop(store, ok, undefined, { ...s, prs: w.source, attempts: w.attempts, runPr });
     // three patch runs, then the limit leaves nothing to do: exactly one sleep
     expect(s.calls).toEqual([LOOP_IDLE_MS]);
+  });
+});
+
+describe("runLoop audit log", () => {
+  const ok: Runner = async () => 0;
+  const openPr = (number: number, over: Partial<PullRequest> = {}): PullRequest => ({
+    number,
+    title: `PR ${number}`,
+    branch: `feat/other-${number}`,
+    createdAt: "2026-10-29T10:00:00.000Z",
+    isDraft: false,
+    headSha: `sha${number}`,
+    ci: "pass",
+    mergeable: "clean",
+    reviewDecision: "none",
+    labels: [],
+    ...over,
+  });
+
+  /** Fake store that keeps what it was given; `failWith` makes every write throw. */
+  function fakeAudit(failWith?: Error) {
+    const entries: AuditEntry[] = [];
+    const audit: AuditStore = {
+      record(entry) {
+        if (failWith) throw failWith;
+        entries.push(entry);
+      },
+      list: () => entries,
+    };
+    return { audit, entries };
+  }
+
+  test("a successful task records one dev-task/success entry", async () => {
+    const { store } = memStore([task("A")]);
+    const { audit, entries } = fakeAudit();
+    await runLoop(store, ok, undefined, { ...fakeSleep(), audit });
+    expect(entries).toHaveLength(1);
+    expect(entries[0]).toMatchObject({ action: "dev-task", target: "A", title: "Task A", outcome: "success", exitCode: 0 });
+    expect(Number.isNaN(Date.parse(entries[0]!.at))).toBe(false);
+  });
+
+  test("measures durationMs around the runner call", async () => {
+    const { store } = memStore([task("A")]);
+    const { audit, entries } = fakeAudit();
+    const slow: Runner = async () => {
+      await Bun.sleep(30);
+      return 0;
+    };
+    await runLoop(store, slow, undefined, { ...fakeSleep(), audit });
+    expect(entries[0]!.durationMs).toBeGreaterThanOrEqual(25);
+  });
+
+  test("a failing task records dev-task/failure before the loop stops", async () => {
+    const { store } = memStore([task("A")]);
+    const { audit, entries } = fakeAudit();
+    const result = await runLoop(store, async () => 3, undefined, { ...fakeSleep(), audit });
+    expect(result.stoppedOn).toBe("A");
+    expect(entries).toHaveLength(1);
+    expect(entries[0]).toMatchObject({ action: "dev-task", target: "A", outcome: "failure", exitCode: 3 });
+  });
+
+  test("a thrown runner records exitCode -1", async () => {
+    const { store } = memStore([task("A")]);
+    const { audit, entries } = fakeAudit();
+    const boom: Runner = async () => {
+      throw new Error("boom");
+    };
+    await runLoop(store, boom, undefined, { ...fakeSleep(), audit });
+    expect(entries[0]).toMatchObject({ action: "dev-task", outcome: "failure", exitCode: -1 });
+  });
+
+  /** Lists the given PRs until each has been run once (the loop runs one candidate per poll), then goes idle. */
+  const onceSource = (prs: PullRequest[]) => {
+    const pending = [...prs];
+    const source: PrSource = { list: async () => pending.map((p) => ({ ...p })) };
+    const done = (n: number) => void pending.splice(0, pending.length, ...pending.filter((p) => p.number !== n));
+    return { source, done };
+  };
+
+  test("review and patch runs record review and patch entries", async () => {
+    const { source, done } = onceSource([openPr(7), openPr(8, { ci: "fail" })]);
+    const { store } = memStore([]);
+    const { audit, entries } = fakeAudit();
+    const runPr: PrRunner = async (p) => {
+      done(p.number);
+      return p.number === 8 ? 1 : 0;
+    };
+    await runLoop(store, ok, undefined, { ...fakeSleep(), prs: source, attempts: NOOP_ATTEMPTS, runPr, audit });
+    expect(entries).toContainEqual(expect.objectContaining({ action: "review", target: 7, title: "PR 7", outcome: "success", exitCode: 0 }));
+    expect(entries).toContainEqual(expect.objectContaining({ action: "patch", target: 8, title: "PR 8", outcome: "failure", exitCode: 1 }));
+  });
+
+  test("a PR runner that throws records exitCode -1", async () => {
+    const { source, done } = onceSource([openPr(7)]);
+    const { store } = memStore([]);
+    const { audit, entries } = fakeAudit();
+    const runPr: PrRunner = async (p) => {
+      done(p.number);
+      throw new Error("boom");
+    };
+    await runLoop(store, ok, undefined, { ...fakeSleep(), prs: source, attempts: NOOP_ATTEMPTS, runPr, audit });
+    expect(entries[0]).toMatchObject({ action: "review", target: 7, outcome: "failure", exitCode: -1 });
+  });
+
+  test("an audit.record that throws is logged and the loop continues", async () => {
+    const { store, history } = memStore([task("A"), task("B")]);
+    const { audit } = fakeAudit(new Error("disk full"));
+    const logs: string[] = [];
+    const result = await runLoop(store, ok, (m) => logs.push(m), { ...fakeSleep(), audit });
+    expect(result.ran).toEqual(["A", "B"]);
+    expect(history).toEqual(["A:in_progress", "A:pr", "B:in_progress", "B:pr"]);
+    expect(logs.some((m) => m.includes("disk full"))).toBe(true);
+  });
+
+  test("idle ticks record nothing: only the task run is in the log after three idle polls", async () => {
+    const { store } = memStore([task("A")]);
+    const { audit, entries } = fakeAudit();
+    const s = fakeSleep(3);
+    await runLoop(store, ok, undefined, { ...s, audit });
+    expect(s.calls).toHaveLength(3);
+    expect(entries).toHaveLength(1);
+    expect(entries[0]).toMatchObject({ action: "dev-task", target: "A" });
+  });
+
+  test("main passes the audit option through to the loop", async () => {
+    const { store } = memStore([task("A")]);
+    const { audit, entries } = fakeAudit();
+    await main(store, ["sh", "-c", "exit 0"], { ...fakeSleep(), audit });
+    expect(entries).toHaveLength(1);
+    expect(entries[0]).toMatchObject({ action: "dev-task", target: "A", outcome: "success" });
   });
 });
 
