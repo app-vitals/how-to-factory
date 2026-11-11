@@ -3,3 +3,4 @@ node_modules/
 .DS_Store
 factory/pr-attempts.json
 factory/pr-attempts.json.tmp
+factory/audit-log.jsonl
