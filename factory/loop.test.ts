@@ -528,7 +528,12 @@ describe("runLoop agent result report", () => {
     const source: PrSource = {
       list: async () => [settled ? { ...p, ci: "pass", reviewDecision: "approved" } : { ...p }],
     };
-    return { source, close: () => void (settled = true) };
+    return {
+      source,
+      close: () => {
+        settled = true;
+      },
+    };
   }
 
   const realAttempts = () => attemptsStore(join(mkdtempSync(join(tmpdir(), "loop-result-")), "attempts.json"));
