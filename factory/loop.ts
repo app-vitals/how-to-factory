@@ -1,6 +1,7 @@
 // The factory loop: pick one ready task, hand it to Claude Code running the dev-task skill, repeat.
 // The loop owns status: pending -> in_progress -> pr. `pr` is terminal.
 
+import { auditStore, type AuditAction, type AuditStore } from "./audit-log.ts";
 import { pickCandidate } from "./candidates.ts";
 import { attemptsStore, type AttemptsStore } from "./pr-attempts.ts";
 import { ghPrSource, type PrSource, type PullRequest } from "./prs.ts";
@@ -64,7 +65,12 @@ const NO_ATTEMPTS: AttemptsStore = {
   sync: () => {},
 };
 
+/** Stands in for the audit log when none is wired, so the loop records nothing by default. */
+const NO_AUDIT: AuditStore = { record: () => {}, list: () => [] };
+
 export interface LoopOptions {
+  /** Where every task, review and patch run is recorded. Defaults to a no-op. */
+  audit?: AuditStore;
   /** Open PRs to review or patch. Without it (and `attempts`, `runPr`) the loop works on tasks only. */
   prs?: PrSource;
   attempts?: AttemptsStore;
@@ -99,12 +105,29 @@ export async function runLoop(
   store: TaskStore,
   run: Runner,
   log: (msg: string) => void = () => {},
-  { sleep = Bun.sleep, signal, prs, attempts = NO_ATTEMPTS, runPr }: LoopOptions = {},
+  { sleep = Bun.sleep, signal, prs, attempts = NO_ATTEMPTS, runPr, audit = NO_AUDIT }: LoopOptions = {},
 ): Promise<LoopResult> {
   const ran: string[] = [];
   let stuckKey = "";
   let idle = false;
   const errMsg = (err: unknown) => (err instanceof Error ? err.message : String(err));
+
+  /** Records one run. A failed write is logged, never fatal: the audit log must not stop the factory. */
+  const recordRun = (action: AuditAction, target: string | number, title: string, code: number, startedAt: number) => {
+    try {
+      audit.record({
+        at: new Date().toISOString(),
+        action,
+        target,
+        title,
+        outcome: code === 0 ? "success" : "failure",
+        exitCode: code,
+        durationMs: Math.max(0, Date.now() - startedAt),
+      });
+    } catch (err) {
+      log(`could not write audit entry for ${action} ${target}: ${errMsg(err)}`);
+    }
+  };
 
   while (!signal?.aborted) {
     const tasks = store.load();
@@ -135,6 +158,7 @@ export async function runLoop(
       const { pr, action } = candidate;
       log(`${action} PR #${pr.number}: ${pr.title}`);
       let code: number;
+      const startedAt = Date.now();
       try {
         if (!runPr) throw new Error("no PR runner configured");
         code = await runPr(pr, action);
@@ -142,6 +166,7 @@ export async function runLoop(
         log(`PR #${pr.number} ${action} threw: ${errMsg(err)}`);
         code = -1;
       }
+      recordRun(action, pr.number, pr.title, code, startedAt);
       // Every run counts, pass or fail, so a PR that never settles ends up with a human; only a
       // successful review marks the SHA reviewed, so a crashed one is retried.
       // A failed write is not caught: without the count the same PR would be rerun forever.
@@ -171,12 +196,14 @@ export async function runLoop(
     ran.push(next.id);
 
     let code: number;
+    const startedAt = Date.now();
     try {
       code = await run(next);
     } catch (err) {
-      log(`${next.id} runner threw: ${err instanceof Error ? err.message : String(err)}`);
+      log(`${next.id} runner threw: ${errMsg(err)}`);
       code = -1;
     }
+    recordRun("dev-task", next.id, next.title, code, startedAt);
 
     if (code !== 0) {
       store.setStatus(next.id, "pending");
@@ -218,7 +245,7 @@ export interface PrCommands {
 export async function main(
   store: TaskStore = fileStore(),
   agentCmd: string[] = AGENT_CMD,
-  { sleep, signal, prs, attempts, runPr }: LoopOptions = {},
+  { sleep, signal, prs, attempts, runPr, audit }: LoopOptions = {},
   { reviewCmd = REVIEW_CMD, patchCmd = PATCH_CMD }: PrCommands = {},
 ): Promise<number> {
   store.load(); // validate up front
@@ -235,6 +262,7 @@ export async function main(
       prs,
       attempts,
       runPr: runPr ?? prRunner(reviewCmd, patchCmd),
+      audit,
     });
     return stoppedOn ? 1 : 0;
   } finally {
@@ -245,5 +273,5 @@ export async function main(
 }
 
 if (import.meta.main) {
-  process.exit(await main(fileStore(), AGENT_CMD, { prs: ghPrSource(), attempts: attemptsStore() }));
+  process.exit(await main(fileStore(), AGENT_CMD, { prs: ghPrSource(), attempts: attemptsStore(), audit: auditStore() }));
 }

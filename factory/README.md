@@ -18,6 +18,13 @@ Each iteration the loop lists open PRs and picks the single oldest candidate acr
 - The loop sleeps `LOOP_IDLE_MS` only when there is nothing to do. Attempt counts live in `pr-attempts.json` (gitignored).
 - Merging is not part of the loop.
 
+## Audit log
+
+Every run the loop makes is appended as one JSON line to `factory/audit-log.jsonl` (gitignored): a `dev-task`, `review`
+or `patch` entry with the target, outcome, exit code (`-1` if the runner threw) and duration. A failing task is
+recorded before the loop stops. Idle polls are not recorded, and a failed audit write is logged without stopping the
+loop. Without an `audit` option the loop records nothing.
+
 ## Lessons
 
 Lesson 1 builds the `plan` and `dev-task` skills (`skills/`) and the loop (`loop.ts`). A finished copy is tagged
