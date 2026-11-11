@@ -33,6 +33,7 @@ is `{ outcome: "processed" }` or `{ outcome: "skipped", reason }`, or `null` whe
   the exit code.
 - Audit entries are built from the exit code and report by `toAuditOutcome`.
 
+
 ## Audit log
 
 Every run the loop makes is appended as one JSON line to `factory/audit-log.jsonl` (gitignored): a `dev-task`, `review`
