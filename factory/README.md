@@ -21,9 +21,11 @@ Each iteration the loop lists open PRs and picks the single oldest candidate acr
 ## Audit log
 
 Every run the loop makes is appended as one JSON line to `factory/audit-log.jsonl` (gitignored): a `dev-task`, `review`
-or `patch` entry with the target, outcome, exit code (`-1` if the runner threw) and duration. A failing task is
-recorded before the loop stops. Idle polls are not recorded, and a failed audit write is logged without stopping the
-loop. Without an `audit` option the loop records nothing.
+or `patch` entry with the target, outcome (`success`, `failure` or `skip`), exit code and duration. `failure` and `skip`
+entries carry a `reason` (a non-zero exit records `exited with code N`). The log holds only what the agent did when it
+ran: a runner that throws, attempt limits, flag failures and idle polls are logged to the console, not recorded. A
+failing task is recorded before the loop stops, and a failed audit write is logged without stopping the loop. Without
+an `audit` option the loop records nothing.
 
 ## Lessons
 
