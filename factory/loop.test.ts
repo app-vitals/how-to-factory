@@ -449,6 +449,28 @@ describe("runLoop audit log", () => {
     expect(entries).toContainEqual(expect.objectContaining({ action: "patch", target: 8, title: "PR 8", outcome: "failure", exitCode: 1 }));
   });
 
+  test("review and patch entries carry the PR's repo and url", async () => {
+    const { source, done } = onceSource([openPr(7), openPr(8, { ci: "fail", repo: "acme/gadgets", url: "https://github.com/acme/gadgets/pull/8" })]);
+    const { store } = memStore([]);
+    const { audit, entries } = fakeAudit();
+    const runPr: PrRunner = async (p) => {
+      done(p.number);
+      return res();
+    };
+    await runLoop(store, ok, undefined, { ...fakeSleep(), prs: source, attempts: NOOP_ATTEMPTS, runPr, audit });
+    expect(entries.find((e) => e.action === "review")).toMatchObject({ repo: "acme/widgets", url: "https://github.com/acme/widgets/pull/7" });
+    expect(entries.find((e) => e.action === "patch")).toMatchObject({ repo: "acme/gadgets", url: "https://github.com/acme/gadgets/pull/8" });
+  });
+
+  test("dev-task entries carry neither repo nor url", async () => {
+    const { store } = memStore([task("A")]);
+    const { audit, entries } = fakeAudit();
+    await runLoop(store, ok, undefined, { ...fakeSleep(), audit });
+    expect(entries[0]?.action).toBe("dev-task");
+    expect(entries[0]).not.toHaveProperty("repo");
+    expect(entries[0]).not.toHaveProperty("url");
+  });
+
   test("a PR run with a non-zero exit records failure with reason 'exited with code N'", async () => {
     const { source, done } = onceSource([openPr(8, { ci: "fail" })]);
     const { store } = memStore([]);
