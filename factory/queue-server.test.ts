@@ -35,6 +35,9 @@ const fakeStore = (tasks: Task[]): TaskStore => ({
   setStatus: () => {
     throw new Error("the queue server must never write tasks");
   },
+  update: () => {
+    throw new Error("the queue server must never write tasks");
+  },
 });
 
 /** Counts every call, so tests can assert nothing but reads happened. */
