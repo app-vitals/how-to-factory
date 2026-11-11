@@ -112,7 +112,10 @@ export async function runLoop(
   let idle = false;
   const errMsg = (err: unknown) => (err instanceof Error ? err.message : String(err));
 
-  /** Records one run. A failed write is logged, never fatal: the audit log must not stop the factory. */
+  /**
+   * Records one run of the agent. A runner that threw never ran the agent, so callers do not record it.
+   * A failed write is logged, never fatal: the audit log must not stop the factory.
+   */
   const recordRun = (action: AuditAction, target: string | number, title: string, code: number, startedAt: number) => {
     try {
       audit.record({
@@ -120,7 +123,7 @@ export async function runLoop(
         action,
         target,
         title,
-        outcome: code === 0 ? "success" : "failure",
+        ...(code === 0 ? { outcome: "success" } : { outcome: "failure", reason: `exited with code ${code}` }),
         exitCode: code,
         durationMs: Math.max(0, Date.now() - startedAt),
       });
@@ -158,6 +161,7 @@ export async function runLoop(
       const { pr, action } = candidate;
       log(`${action} PR #${pr.number}: ${pr.title}`);
       let code: number;
+      let threw = false;
       const startedAt = Date.now();
       try {
         if (!runPr) throw new Error("no PR runner configured");
@@ -165,8 +169,9 @@ export async function runLoop(
       } catch (err) {
         log(`PR #${pr.number} ${action} threw: ${errMsg(err)}`);
         code = -1;
+        threw = true;
       }
-      recordRun(action, pr.number, pr.title, code, startedAt);
+      if (!threw) recordRun(action, pr.number, pr.title, code, startedAt);
       // Every run counts, pass or fail, so a PR that never settles ends up with a human; only a
       // successful review marks the SHA reviewed, so a crashed one is retried.
       // A failed write is not caught: without the count the same PR would be rerun forever.
@@ -196,14 +201,16 @@ export async function runLoop(
     ran.push(next.id);
 
     let code: number;
+    let threw = false;
     const startedAt = Date.now();
     try {
       code = await run(next);
     } catch (err) {
       log(`${next.id} runner threw: ${errMsg(err)}`);
       code = -1;
+      threw = true;
     }
-    recordRun("dev-task", next.id, next.title, code, startedAt);
+    if (!threw) recordRun("dev-task", next.id, next.title, code, startedAt);
 
     if (code !== 0) {
       store.setStatus(next.id, "pending");

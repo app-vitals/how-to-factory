@@ -41,7 +41,7 @@ describe("auditStore", () => {
   test("lists entries in append order", () => {
     const store = auditStore(path);
     store.record(entry({ target: "a" }));
-    store.record(entry({ action: "review", target: 12, outcome: "failure", exitCode: 1 }));
+    store.record(entry({ action: "review", target: 12, outcome: "failure", exitCode: 1, reason: "exited with code 1" }));
     store.record(entry({ action: "patch", target: 12 }));
     expect(store.list().map((e) => e.target)).toEqual(["a", 12, 12]);
   });
@@ -99,9 +99,47 @@ describe("auditStore", () => {
     expect(store.list()).toEqual([]);
   });
 
-  test("accepts exitCode -1 (runner threw)", () => {
+  test("accepts a skip with a reason", () => {
     const store = auditStore(path);
-    store.record(entry({ outcome: "failure", exitCode: -1 }));
-    expect(store.list()[0]?.exitCode).toBe(-1);
+    const e = entry({ outcome: "skip", reason: "nothing to do" });
+    store.record(e);
+    expect(store.list()).toEqual([e]);
+  });
+
+  test("accepts a skip without an exitCode", () => {
+    const store = auditStore(path);
+    const { exitCode: _omitted, ...rest } = entry({ outcome: "skip", reason: "nothing to do" });
+    store.record(rest);
+    expect(store.list()[0]?.exitCode).toBeUndefined();
+  });
+
+  test("rejects a failure without a reason", () => {
+    const store = auditStore(path);
+    expect(() => store.record(entry({ outcome: "failure", exitCode: 1 }))).toThrow(/reason/);
+    expect(store.list()).toEqual([]);
+  });
+
+  test("rejects a skip without a reason", () => {
+    const store = auditStore(path);
+    expect(() => store.record(entry({ outcome: "skip" }))).toThrow(/reason/);
+    expect(store.list()).toEqual([]);
+  });
+
+  test("rejects a success with a reason", () => {
+    const store = auditStore(path);
+    expect(() => store.record(entry({ outcome: "success", reason: "because" }))).toThrow(/reason/);
+    expect(store.list()).toEqual([]);
+  });
+
+  test("rejects an empty reason", () => {
+    const store = auditStore(path);
+    expect(() => store.record(entry({ outcome: "failure", exitCode: 1, reason: "" }))).toThrow(/reason/);
+    expect(() => store.record(entry({ outcome: "skip", reason: "" }))).toThrow(/reason/);
+    expect(store.list()).toEqual([]);
+  });
+
+  test("still rejects a non-integer exitCode when one is given", () => {
+    const store = auditStore(path);
+    expect(() => store.record(entry({ outcome: "skip", reason: "x", exitCode: 1.5 }))).toThrow(/exitCode/);
   });
 });

@@ -388,14 +388,32 @@ describe("runLoop audit log", () => {
     expect(entries[0]).toMatchObject({ action: "dev-task", target: "A", outcome: "failure", exitCode: 3 });
   });
 
-  test("a thrown runner records exitCode -1", async () => {
+  test("a non-zero exit records failure with reason 'exited with code N'", async () => {
     const { store } = memStore([task("A")]);
     const { audit, entries } = fakeAudit();
+    await runLoop(store, async () => 3, undefined, { ...fakeSleep(), audit });
+    expect(entries[0]).toMatchObject({ outcome: "failure", exitCode: 3, reason: "exited with code 3" });
+  });
+
+  test("a successful run records no reason", async () => {
+    const { store } = memStore([task("A")]);
+    const { audit, entries } = fakeAudit();
+    await runLoop(store, ok, undefined, { ...fakeSleep(), audit });
+    expect(entries[0]).not.toHaveProperty("reason");
+  });
+
+  test("a thrown runner records no audit entry, logs to the console and is handled as before", async () => {
+    const { store, history } = memStore([task("A")]);
+    const { audit, entries } = fakeAudit();
+    const logs: string[] = [];
     const boom: Runner = async () => {
-      throw new Error("boom");
+      throw new Error("spawn ENOENT");
     };
-    await runLoop(store, boom, undefined, { ...fakeSleep(), audit });
-    expect(entries[0]).toMatchObject({ action: "dev-task", outcome: "failure", exitCode: -1 });
+    const result = await runLoop(store, boom, (m) => logs.push(m), { ...fakeSleep(), audit });
+    expect(entries).toEqual([]);
+    expect(logs.some((m) => m.includes("runner threw") && m.includes("spawn ENOENT"))).toBe(true);
+    expect(result.stoppedOn).toBe("A");
+    expect(history).toEqual(["A:in_progress", "A:pending"]);
   });
 
   /** Lists the given PRs until each has been run once (the loop runs one candidate per poll), then goes idle. */
@@ -419,16 +437,30 @@ describe("runLoop audit log", () => {
     expect(entries).toContainEqual(expect.objectContaining({ action: "patch", target: 8, title: "PR 8", outcome: "failure", exitCode: 1 }));
   });
 
-  test("a PR runner that throws records exitCode -1", async () => {
-    const { source, done } = onceSource([openPr(7)]);
+  test("a PR run with a non-zero exit records failure with reason 'exited with code N'", async () => {
+    const { source, done } = onceSource([openPr(8, { ci: "fail" })]);
     const { store } = memStore([]);
     const { audit, entries } = fakeAudit();
     const runPr: PrRunner = async (p) => {
       done(p.number);
-      throw new Error("boom");
+      return 2;
     };
     await runLoop(store, ok, undefined, { ...fakeSleep(), prs: source, attempts: NOOP_ATTEMPTS, runPr, audit });
-    expect(entries[0]).toMatchObject({ action: "review", target: 7, outcome: "failure", exitCode: -1 });
+    expect(entries[0]).toMatchObject({ action: "patch", outcome: "failure", exitCode: 2, reason: "exited with code 2" });
+  });
+
+  test("a PR runner that throws records no audit entry and logs to the console", async () => {
+    const { source, done } = onceSource([openPr(7)]);
+    const { store } = memStore([]);
+    const { audit, entries } = fakeAudit();
+    const logs: string[] = [];
+    const runPr: PrRunner = async (p) => {
+      done(p.number);
+      throw new Error("spawn ENOENT");
+    };
+    await runLoop(store, ok, (m) => logs.push(m), { ...fakeSleep(), prs: source, attempts: NOOP_ATTEMPTS, runPr, audit });
+    expect(entries).toEqual([]);
+    expect(logs.some((m) => m.includes("PR #7") && m.includes("spawn ENOENT"))).toBe(true);
   });
 
   test("an audit.record that throws is logged and the loop continues", async () => {

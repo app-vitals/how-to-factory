@@ -5,7 +5,7 @@ import { appendFileSync, existsSync, readFileSync } from "node:fs";
 
 export const AUDIT_LOG_PATH = new URL("./audit-log.jsonl", import.meta.url).pathname;
 export const AUDIT_ACTIONS = ["dev-task", "review", "patch"] as const;
-export const AUDIT_OUTCOMES = ["success", "failure"] as const;
+export const AUDIT_OUTCOMES = ["success", "failure", "skip"] as const;
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[number];
 export type AuditOutcome = (typeof AUDIT_OUTCOMES)[number];
@@ -18,8 +18,10 @@ export interface AuditEntry {
   target: string | number;
   title: string;
   outcome: AuditOutcome;
-  /** -1 when the runner threw instead of exiting. */
-  exitCode: number;
+  /** The agent's exit code, when there was one. */
+  exitCode?: number;
+  /** Why the run failed or was skipped. Required and non-empty for those outcomes, absent on success. */
+  reason?: string;
   durationMs: number;
 }
 
@@ -38,7 +40,14 @@ function validate(entry: AuditEntry): void {
   if (!targetOk) throw new Error(`invalid audit entry: target must be a task id or PR number, got ${JSON.stringify(e.target)}`);
   if (typeof e.title !== "string") throw new Error("invalid audit entry: title must be a string");
   if (!AUDIT_OUTCOMES.includes(e.outcome as AuditOutcome)) throw new Error(`invalid audit entry: unknown outcome ${JSON.stringify(e.outcome)}`);
-  if (!Number.isInteger(e.exitCode)) throw new Error(`invalid audit entry: exitCode must be an integer, got ${JSON.stringify(e.exitCode)}`);
+  if (e.exitCode !== undefined && !Number.isInteger(e.exitCode)) {
+    throw new Error(`invalid audit entry: exitCode must be an integer when given, got ${JSON.stringify(e.exitCode)}`);
+  }
+  if (e.outcome === "success") {
+    if (e.reason !== undefined) throw new Error("invalid audit entry: reason is not allowed on a success");
+  } else if (typeof e.reason !== "string" || e.reason.trim() === "") {
+    throw new Error(`invalid audit entry: reason is required and non-empty for ${e.outcome}, got ${JSON.stringify(e.reason)}`);
+  }
   if (typeof e.durationMs !== "number" || !Number.isFinite(e.durationMs) || e.durationMs < 0) {
     throw new Error(`invalid audit entry: durationMs must be a non-negative number, got ${JSON.stringify(e.durationMs)}`);
   }
