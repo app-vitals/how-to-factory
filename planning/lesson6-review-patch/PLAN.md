@@ -36,7 +36,7 @@ Additions only: new grid directory, new matrix columns, a new lesson directory, 
 ### Assumptions
 1. Component is Review with Patch as the second act, in one lesson, numbered 6 (lesson 5 is written, not yet filmed).
 2. Six-product research on review quality; patch facts reuse the routing grid.
-3. Dan reviews the sketch PR (LRV-2.1); the deck and script tasks stay blocked until it merges.
+3. No sketch review gate (changed 2026-11-11, Dan): the factory makes the design calls itself and Dan reviews the finished lesson and iterates. LRV-2.1 is cancelled; the deck and script depend on the brief and options directly.
 4. Length target 30 to 40 minutes.
 
 ## Tasks
@@ -53,9 +53,9 @@ Additions only: new grid directory, new matrix columns, a new lesson directory, 
 | LRV-1.13 | docs: add the lesson 6 brief | 1.12 | | yes |
 | LRV-1.14 | docs: write lesson 6 options from the grid and article | 1.13, 1.11 | | yes |
 | LRV-1.15 | docs: update the lesson backlog and components map for lesson 6 | 1.13 | | yes |
-| LRV-2.1 | docs: sketch the lesson 6 deck for review | 1.13, 1.14 | | yes |
-| LRV-2.2 | docs: build the lesson 6 deck | 2.1 | | yes |
-| LRV-2.3 | docs: write the lesson 6 script and README | 2.1 | | yes |
+| LRV-2.1 | ~~docs: sketch the lesson 6 deck for review~~ cancelled, no sketch gate | none | | yes |
+| LRV-2.2 | docs: build the lesson 6 deck | 1.13, 1.14 | | yes |
+| LRV-2.3 | docs: write the lesson 6 script and README | 1.13, 1.14 | | yes |
 | LRV-2.4 | docs: write the lesson 6 exercise, run-of-show and checklist | 2.2, 2.3 | | yes |
 
 ```
@@ -64,14 +64,14 @@ Additions only: new grid directory, new matrix columns, a new lesson directory, 
         ├─ LRV-1.3 ──────────────────────────────────┤
         └─ LRV-1.4..1.9 (parallel) → 1.10 ─┬─ 1.11 ──────────────┐
                                             └─ 1.12 (+1.1,1.2,1.3) → 1.13 ─┬─ 1.15
-                                                                              └─ 1.14 (+1.11) → 2.1 → 2.2, 2.3 → 2.4
+                                                                              └─ 1.14 (+1.11) → 2.2, 2.3 → 2.4
 ```
 
 HITL scan: no tasks require human steps (no `.claude/**` files, no CI workflow secrets).
 
 ## Open items
 - Lesson 5 is not yet filmed; the backlog update (LRV-1.15) must not mark it taught.
-- The sketch review (LRV-2.1) is a human gate: Dan reviews before the deck and script are written.
+- No human gate before the deck and script. Dan reviews the finished lesson and iterates; the deck and script PR descriptions list the design calls made (Decisions section).
 - Lesson 6 video URL is added after filming; not invented.
 
 ## Decision Log
@@ -80,4 +80,4 @@ HITL scan: no tasks require human steps (no `.claude/**` files, no CI workflow s
 - Added an article-verification task (LRV-1.3): numbers are quoted only after checking the raw page.
 - Research limited to review quality; patch facts come from the existing routing grid.
 - Length target 30 to 40 minutes, as the filmed lessons.
-- Sketch review gates the deck and script: lesson-creation recipe step 5.
+- Sketch review gate removed on Dan's request (2026-11-11), a deliberate departure from lesson-creation recipe step 5: the factory decides, Dan reviews the finished product.
