@@ -22,6 +22,7 @@ the standard.
 - `bun run lint` — Biome lint (`biome.json`; lint only, no formatter)
 - `bun test` — run tests
 - `bun scripts/check-decks.ts` — enforce the deck rules below
+- `bun run queue` — read-only factory queue/history viewer (`factory/queue-server.ts`; see `factory/README.md`)
 - `bun run check:landscape` — validate `landscape/matrix.json` (sources, dates, chip formats); `bun run render:landscape` regenerates `landscape/README.md` from it
 - `bun run check:landscape-urls` — fetch every cited URL in `landscape/` and report dead/redirected ones with file:line (network; not part of `bun test` or CI)
 
